@@ -1,0 +1,56 @@
+/* Font */
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,700');
+
+
+.bg {
+  /*background-color: #ecf9ff;*/
+  /*background-image: linear-gradient(gray, white);*/
+  background-color: #ecf9ff;
+  opacity: 1;
+  background-image:  linear-gradient(#e3e3e3 2px, transparent 2px), linear-gradient(90deg, #e3e3e3 2px, transparent 2px), linear-gradient(#e3e3e3 1px, transparent 1px), linear-gradient(90deg, #e3e3e3 1px, #ecf9ff 1px);
+  background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+}
+
+body {
+  /*font-family: 'Courier New', sans-serif;*/
+  color: #272727;
+  font-family: 'Quicksand', serif;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0;
+  padding: 1rem;
+}
+h1 {
+    font-size: 24px;
+    font-weight: 400;
+    text-align: center;
+}
+#card {
+  box-shadow: 7px 7px 5px -5px rgba(0,0,0,0.24);
+  background-color:white
+  }
+table, th, td {
+  border:0px solid black;
+  background-color:white
+}
+a {text-decoration:none;}
+#bg_yellow {background-color:yellow;text-decoration:none;}
+#bg_cyan {background-color:cyan;text-decoration:none;}
+#bg_lime {background-color:lime;text-decoration:none;}
+
+.tumblr_title{font-weight: bold;}
+.post_media_photo{width:50%;}
+li
+{
+  list-style-type: none;
+  padding:10px;
+  margin:10px;
+  width:50%;
+  box-shadow: 7px 7px 5px -5px rgba(0,0,0,0.24);
+  background-color:white
+  }
+  
+
+
+
