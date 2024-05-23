@@ -1,0 +1,34 @@
+
+html{
+    background-image:url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fsteamprofiledesign.com%2Fwp-content%2Fuploads%2F2018%2F09%2FBlood-1.jpg&f=1&nofb=1&ipt=39c71b8d415974a6a32445b79f983c61450757faaf4d55a3daf9ea03a46134f3&ipo=images");
+    background-color:#333333;
+    font-family: Arial, Helvetica, sans-serif;}
+body{
+    padding-left: 15%;
+    padding-right: 15%;}
+table{
+    background-color: black;
+    border-spacing: 10px;
+    color: white;}
+
+/* td{text-align: center;} */
+td video{width:100%;}
+
+.img{width: 100%;}
+
+.btn-link{
+    background-color: transparent;color: orange;
+    border-radius: 1px;
+    border-color: rgba(255, 0, 0, 0.582);}
+.btn{
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    }
+a{text-decoration: none;color: orange;}
+
+.card{box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);}
+.mini-card-title{color:black;background-color: white; border-radius: 10px;border-spacing: 1px;}
+.mini-card-container{background-color: white; border-radius: 10px;border-spacing: 1px;}
+.mini-card-content{background-color: black; border-radius: 10px;}
+.header{font-weight: bold; color:white;background: linear-gradient(180deg, rgba(76,84,91,1) 0%, rgba(72,80,87,1) 41%, rgba(38,42,46,1) 67%, rgba(34,38,41,1) 100%);}
