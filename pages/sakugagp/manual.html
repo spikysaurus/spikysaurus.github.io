@@ -1,0 +1,422 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link href="../../assets/css/style.css" rel="stylesheet" type="text/css" media="all">
+</head>
+<body>
+    <center>
+        <a href="../../index.html" target="_self"><button class="btn-link">Home</button></a>
+        <a target="_blank" href="https://sadewoo.gumroad.com/l/SakugaGP"><button class="btn-link">Download Addon</button></a>
+    </center>
+    <div class="card">
+        <table width="100%"class="header">
+            <tr ><td>Introduction</td></tr>
+        </table>
+        <table width=100%>  
+            <tr>
+                <td>
+                    SakugaGP is a Blender Grease Pencil Addon for 2D Animator, I'm using it specially for Anime work.
+                    
+                </td>
+             </tr>
+    </div>
+    <div class="card">
+        <table width="100%"class="header">
+            <tr ><td>Changelogs</td></tr>
+        </table>
+        <left>
+            
+            <table width=100%>  
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>🔃 = Changes</td>
+                                <td>🪲 = Bugs</td>
+                                <td>✨ = New</td>
+                                <td>🧪 = Experimental</td>
+                            </tr>
+                        </table>
+
+                        <details>
+                            <summary>SakugaGP v1.0.5 - v1.0.5c </summary>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <li>🔃"Commands" Panel is now called "Touch Buttons"</li>
+                                        <b>View and Regions Panel</b>
+                                        <ul>
+                                            <li>✨New Lock 3D View's Rotation toggle (Locking 3D View's Rotation so you wont accidentally rotating the view when moving your canvas)</li>
+                                        </ul>
+                                        <b>Preferences :</b>
+                                        <ul>
+                                            <li>the old "Commands" popover is now called "Preferences"</li>
+                                            <li>🔃Moved "Preferences" to the top (Gear Icon) for easier access</li>
+                                            <li>✨New "Default Opacity" input in SakugaGP's Preferences . After "Enable Opacity" button is pressed Grease Pencil Object/Image Reference/Image Plane's default opacity will set to that "Default Opacity" value.</li>
+                                        </ul>
+                                        
+                                        <b>Camera Panel :</b>
+                                        <ul>
+                                            <li>🔃Hides "Draw Outline Button" when Grease Pencil Object is hidden in viewport</li>
+                                            <li>Render :</li>
+                                            <ul><li>🪲Fixed "Render GPencil Keyframes" not targeting other object's Active Layer</li></ul>
+                                        </ul>
+                                        <b>Grease Pencils Panel :</b>
+                                        <ul>
+                                            <li>🪲Fixed error when adding new GPencil from other mode</li>
+                                            <li>🔃Y location row's values are now converted from float to integer</li>
+                                            <li>Hamburger menu :</li>
+                                            <ul><li>🔃Buttons wont be disabled anymore when isn't in object mode</li></ul>
+                                        </ul> 
+                                        <b>Layer Panel :</b>
+                                        <ul>
+                                            <li>✨Toggle "Auto-Lock Layers" now will set it's value to every Grease Pencil Objects instead of Active Grease Pencil Object. (Default : False)</li>
+                                        </ul>
+                                        <b>Tools Panel > Text > Add Text :</b>
+                                        <ul>
+                                            <li>✨New Text input , Click "Check button" to update the Text Object's text</li>
+                                        </ul>
+                                        <b>Materials Panel :</b>
+                                        <ul>
+                                            <li>🔃Improved UI</li>
+                                            <li>🪲Fixed Error for "Unlink All Material" button</li>
+                                            <li>✨New Toggle "Auto Select Active Material" will change the Active Material to the selected Material in the Material Panel even after selecting another GPencil Object (Default : False)</li>
+                                        </ul>
+                                        <b>Dopesheet's Addon Panel:</b>
+                                        <ul>
+                                            <li>🔃Hides Layer Panel if Active Object isn't Grease Pencil</li>
+                                            <li>✨New Layer Panel > Added Add/Remove/MoveUp/MoveDown Layer buttons and its other options in "more"</li>
+                                        </ul>
+                                        <b>Preferences :</b>
+                                        <ul>
+                                            <li>🧪Tools > Show/Hide Floating Buttons , a new toggle to show/hide Floating Tools Panel. Still a work in progress, it will dissapear after Full View is pressed (Toggle Maximize Area) due to Blender Bug : </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                        </details>
+                        
+                        <details>
+                            <summary>SakugaGP v1.0.4 - 1.0.4c </summary>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <b>Tools Panel : </b>
+                                        <ul>
+                                            <li>🔃Hide Tools when Grease Pencil is hidden</li>
+                                            <li>🪲Fixed Dopesheet wont update after selecting Grease Pencil</li>
+                                            <li>✨New row to display GPencil Object's Depth (Y Location)</li>
+                                            <li>✨Added button to move GPencil Object to front or back, these buttons will increase/decrease the Y Location value by 0.001</li>
+                                            <li>Hamburger Menu :</li>
+                                            <ul>
+                                                <li>✨Added button to create new GPencil (Linking All the available Gpencil materials)</li>
+                                                <li>✨Added button to create new GPencil (Empty Materials)</li>
+                                            </ul>
+                                        </ul>
+                                        <b>Grease Pencil Panel :</b>
+                                        <ul>
+                                            <li>✨New Button to Enable/Disable Opacity for :</li>
+                                            <ul>
+                                                <li>Image Plane Object</li>
+                                                <li>Image Reference Object</li>
+                                                <li>Grease Pencil Object</li>
+                                            </ul>
+                                        </ul>
+                                        <b>Commands pop-over :</b>
+                                        <ul>
+                                            <li>✨Added toggle to show/hide that new Y Location Row in the hamburger menu</li>
+                                        </ul>
+
+                                        <b>✨ Dope Sheet > Actions Panel : </b>
+                                        <ul>
+                                            <li>Action Selector from Camera Panel now moved to this Panel in the Dope Sheet</li>
+                                            <li>✨New Buttons :</li>
+                                            <ul>
+                                                <li>Auto-keying button in the Panel Header (normally can be found in Timeline Editor)</li>
+                                                <li>Improved Select Action , you can type in to search actions.</li>
+                                                <li>New Textfield to display Active Action, you can rename Active Action here</li>
+                                                <li>Plus Button to Create new Action</li>
+                                                <li>Fake-user toggle (Will automatically set to True after created new Action)</li>
+                                                <li>Duplicate Action</li>
+                                                <li>Unlink Action</li>
+                                                <li>Delete Action (Deletes Blender Data)</li>
+                                            </ul>
+                                        </ul>
+                                        <b>Camera Panel :</b>
+                                        <ul>
+                                            <li>✨New "Templates" pop-over is where you can save your camera resolution and Action name as .json file saved inside this Addon. I use this feature to switch Camera size and it's position</li>
+                                            <li>✨New "Render" pop-over</li>
+                                            <ul>
+                                                <li>Buttons to set Output setting to MP4, MOV(RGBA) and PNG(RGBA)</li>
+                                                <li>New Render Grease Pencil Keyframes feature.</li>
+                                                
+                                            </ul>
+                                            <li>Added Transparent toggle , Anti-Aliasing Slider and Render Resolution Slider</li>
+                                        </ul>
+
+
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                        </details>
+
+                        <details>
+                            <summary>SakugaGP v1.0.0 - v1.0.3c</summary>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <iframe width="424" height="238" src="https://www.youtube.com/embed/StuRQL6mgEY" title="SakugaGP Blender Addon - Video Guide (v1.0.3c)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                    </td>
+                                </tr>
+                            </table>
+                        </details>
+                    </td>
+                </tr>
+            </table>
+        </left>
+    </div>
+    <div class="card">
+        <table width="100%"class="header">
+            <tr ><td>Highlighted Features</td></tr>
+        </table>
+        <left>
+            
+            <table width=100%>  
+                <tr>
+                    <td>
+                        <ul>
+                            <details>
+                                <summary>
+                                    <b>Draw Camera's Outline (Like Clip Studio Paint's Camera Path)</b>
+                                </summary>
+                                To Render it, watch <b>Render Grease Pencil Keyframes</b> video.
+                                <video controls src="assets/videos/cam_outline.mp4" type="video/mp4"></video>
+                            </details>
+
+                            <details>
+                                <summary>
+                                   <b>Render Grease Pencil Keyframes (For exporting Cels)</b>
+                                </summary>
+                                <ul>
+                                    <li>1. Select a Layer</li>
+                                    <li>2. Choose a Render Path and name your Cel</li>
+                                    <li>3. Click <b>Render GPencil Keyframes</b></li>
+                                </ul>
+                                <p>
+                                To Render Specific Cels , You may disable some Objects in Render also hide unwanted Layers before Rendering.<br>
+                                The video below shows how to Render GPencil Keyframes , Set output to PNG , Set Background to Transparent and Render a Single Cel using F12.<br>
+                                </p>
+                                <video controls src="assets/videos/render_gpencil_keyframes.mp4" type="video/mp4"></video>
+                            </details>
+                            
+                            <details>
+                                <summary>
+                                   <b>Flip Camera Horizontally/Vertically and Rotate Camera Slider</b>
+                                </summary>
+                                Button to Flip Camera Horizontally/Vertically and Rotate Camera Slider with a button to Reset Camera's Rotation.
+                                <video controls src="assets/videos/cam_flip_rotate.mp4" type="video/mp4"></video>
+                            </details>
+
+                            <details>
+                                <summary>
+                                    <b>Insert a Grease Pencil Text</b>
+                                </summary>
+                                <ul>
+                                    <li>1. Select a Layer</li>
+                                    <li>2. Choose a Material</li>
+                                    <li>3. Click <b>Add Text</b> button in the <b>Tools Panel</b></li>
+                                    <li>4. You can Import Fonts by clicking (+) button</li>
+                                    <li>5. Select a Font by clicking the dropdown next to that (+) button</li>
+                                    <li>6. You can type the text directly in the Viewport or using the Text Field below the (+) button</li>
+                                    <li>7. To edit the Text using Text Field, click (✅) button</li>
+                                    <li>8. Click <b>Apply Text</b> button to apply it to your previously selected Grease Pencil Layer</li>
+                                    <li>9. You may need to manually select the Text's holes and change it's Material to Holdout </li>
+                                    <video controls src="assets/videos/add_text.mp4" type="video/mp4"></video>
+                                </ul>
+                            </details>
+                            <details>
+                                <summary>
+                                    <b>Move Grease Pencil Object to Front/Back</b>
+                                </summary>
+                                Moves Grease Pencil Object or other Object type to Front/Back.<br>
+                                (To change the order in the list you have to manually rename the Grease Pencil Object)
+                                <video controls src="assets/videos/move.mp4" type="video/mp4"></video>
+                            </details>
+                            <details>
+                                <summary>
+                                    <b>Quickly Enable/Disable opacity for <i> Images as Planes, References</i> and <i>Grease Pencil</i></b>
+                                </summary>
+                                You can change the <b>Default Opacity</b> in <b>Preferences</b>.
+                                <video controls src="assets/videos/opacity.mp4" type="video/mp4"></video>
+                            </details>
+                            <details>
+                                <summary>
+                                    <b>Normalize Strokes size and opacity to current brush settings</b>
+                                </summary>
+                                Normalize Strokes size and opacity to current brush settings instead of Blender's slider popup 
+                                <video controls src="assets/videos/normalize.mp4" type="video/mp4"></video>
+                            </details>
+                            <details>
+                                <summary>
+                                    <b>Link All & Unlink All Grease Pencil Materials</b>
+                                </summary>
+                                <img width=30% src="assets/images/materiallink.jpg"/>
+                            </details>
+                            <details>
+                                <summary>
+                                    <b>Increase/Decrease Frame Steps Button</b>
+                                </summary>
+                                <img width=30% src="assets/images/step.gif"/>
+                            </details>
+                            <details>
+                                <summary>
+                                    <b>Set Start and Set End the the playback range to current frame</b>
+                                </summary>
+                                <img width=30% src="assets/images/setstrtend.gif"/>
+                            </details>
+                            <details>
+                                <summary>
+                                    <b>Add/Change/Remove Object's Action without going to Action Editor</b>
+                                </summary>
+                                <ul>
+                                    <li>Creating Action will Automatically enable <b>Fake User</b> and <b>Delete Action</b> will also deletes that Action's <b>Blender Data</b>.</li>
+                                    <li>To change Object's Action simply search using that Search Text Field above</li>
+                                    <img width=30% src="assets/images/action.gif"/>
+                                </ul>
+                            </details>
+                            <details>
+                                <summary>
+                                    <b>Touch Buttons for Touch Screen Users</b>
+                                </summary>
+                                <ul>
+                                    Undo/Redo and Timeline Navigation Buttons are disabled by default, go to <b>Preferences</b> to Enable it.<br>
+                                    <img width=30% src="assets/images/touchbuttons.jpg"/>
+                                </ul>
+                            </details>
+
+                            <details>
+                                <summary>
+                                    <b>Toggle Lock Viewport's Rotation</b>
+                                </summary>
+                                To disable Viewport's Rotation , so you wont accidentally rotating it while moving the Viewport.<br>
+                                <img width=30% src="assets/images/region.jpg"/>
+                            </details>
+                            
+                            <details>
+                                <summary>
+                                    <b>Making Anime Template</b>
+                                </summary>
+                                <hr noshade size=2 color=white width=100%>
+                                <b>Installing Camera Overscan Addon and Enable Import Images as Planes Addon</b>
+                                <ul>
+                                    <li>
+                                        First, Enable <b>Import Images as Planes Addon</b> in Blender Preferences > Add-ons and search for "Import Images as Planes"
+                                    </li>
+                                    <li>
+                                        Second, you'll need to download and install this <a href="https://archive.blender.org/developer/F12890960/camera_overscan.py" target="_blank"><b>Camera Overscan</b></a> Addon
+                                    </li>
+                                    <li>Go to <b>Output Properties</b> and <b>Enable Overscan</b></li>
+                                    <img width=30% src="assets/images/tempoutputproperties.jpg"/>
+                                </ul>
+
+                                <hr noshade size=2 color=white width=100%>
+                                <b>Checking Camera Overscan Addon</b>
+                                <ul>
+                                    <li>
+                                        Go to <b>Camera Panel</b>, Click <b>Templates</b> popover and then click <b>Check Addon</b><br>
+                                        <img width=30% src="assets/images/tempcheckaddon.jpg"/>
+                                    </li>
+                                    <li>
+                                        If you have installed Camera Ovescan, <b>Templates</b> popover will look like this :<br>
+                                        <img width=30% src="assets/images/tempcheckaddonchecked.jpg"/>
+                                    </li>
+                                </ul>
+
+                                <hr noshade size=2 color=white width=100%>
+                                <b>Creating Overscan Template and Import Anime Layout Template</b>
+                                <ul>
+                                    <li>
+                                        Check your LO Image Template's dimensions in the File Explorer<br>
+                                        If you don't have the Template, download <a href="assets/images/template.png" target="_blank">here</a><br>
+                                        <img width=30% src="assets/images/tempexplorerdimension.jpg"/>
+                                    </li>
+                                    <li>
+                                        Go back to <b>Templates</b> popover and change the Dimension's value<br>
+                                        <img width=50% src="assets/images/tempnew.jpg"/>
+                                    </li>
+                                    <li>
+                                        Then name it "LO_Overscan" or something else, This Template will be used for rendering the Cels
+                                    </li>
+                                    <li>
+                                        Select your Camera Object and Add a new Action, name it "cam_overscan"<br>
+                                        <img width=30% src="assets/images/tempnewactionover.jpg"/>
+                                    </li>
+                                    <li>
+                                        Go to the first frame and insert a keyframe 
+                                    </li>
+                                    <li>
+                                        Go back to <b>Templates</b> popover and select that "cam_overscan" Action<br>
+                                        <img width=30% src="assets/images/tempsave.jpg"/>
+                                    </li>
+                                    <li>
+                                        Click <b>Save/Update</b>
+                                    </li>
+                                    <li>
+                                        Go to File > Import > Images as Planes and find your LO Image Template<br>
+                                        <img width=30% src="assets/images/tempimportimgasplane.jpg"/>
+                                    </li>
+                                    <li>
+                                        Find Plane Dimensions and Set it to <b>Camera Relative</b> then click <b>Import Images as Planes</b>
+                                    </li>
+                                </ul>
+                                <hr noshade size=2 color=white width=100%>
+                                <b>Creating Camera Focus Template</b>
+                                <ul>
+                                    <li>
+                                        Same as like Creating Overscan Template but change the Dimension to 16:9 (example:1920x1080)
+                                        
+                                    </li>
+                                    <li>
+                                        And Create a new action for the Camera , name it "cam_normal"<br>
+                                        <img width=30% src="assets/images/tempnewactionnorm.jpg"/>
+                                    </li>
+                                    <li>
+                                        Move the Camera's Location to fit to your LO Image Template's Camera Frame<br>
+                                        <img width=30% src="assets/images/tempcamnormlocation.jpg"/>
+                                    </li>
+                                    <li>
+                                        Go to the first frame and insert a keyframe
+                                    </li>
+                                    <li>
+                                        Go back to Go back to <b>Templates</b> popover and click <b>Save/Update</b>
+                                    </li>
+                                <hr noshade size=2 color=white width=100%>
+                                <b>Done!</b>
+                                Now it should work like this : <br>
+                                <video controls src="assets/videos/template.mp4" type="video/mp4"></video>
+                                </ul>
+                                
+                                Templates are saved in the location below :
+                                <table style="background-color: brown;">
+                                    <tr>
+                                        <td><b>JSON PATH :</b></td>
+                                        <td>C:\Users\[CURRENT_USER]\AppData\Roaming\Blender Foundation\Blender\[BLENDER_VERSION]\scripts\addons\sakugagp\assets\templates.json</td>
+                                    </tr>
+                                </table>
+                                ⚠️ Before you Installing a new update for SakugaGP. Be sure to backup that JSON file first. unless it'll get overwrited by a default JSON Template.
+                            </details>
+                            
+                            
+                        </ul>
+                        
+                        
+
+                        
+                    </td>
+                </tr>
+            </table>
+        </left>
+    </div>
+</body>
+</html>
