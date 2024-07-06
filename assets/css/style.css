@@ -1,9 +1,13 @@
 
 html{
-    background-image:url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fsteamprofiledesign.com%2Fwp-content%2Fuploads%2F2018%2F09%2FBlood-1.jpg&f=1&nofb=1&ipt=39c71b8d415974a6a32445b79f983c61450757faaf4d55a3daf9ea03a46134f3&ipo=images");
-    background-color:#333333;
+    background-image:url("https://opengameart.org/sites/default/files/space-tiled%20background-256x256%20by%20alpha%20rats_1.png");
+    background-color:black;
     font-family: Arial, Helvetica, sans-serif;}
+
+
 body{
+
+
     padding-left: 15%;
     padding-right: 15%;}
 table{
