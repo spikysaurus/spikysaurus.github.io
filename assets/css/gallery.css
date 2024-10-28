@@ -32,7 +32,7 @@
 
   /* (C3) IMAGE RESIZE */
   /* cover | contain | fill | scale-down */
-  object-fit: cover;
+  object-fit: scale-down ;
 }
 
 /* (D) ON SMALL SCREENS - 2 IMAGES PER ROW */
