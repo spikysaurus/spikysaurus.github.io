@@ -1,261 +1,257 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-	<link rel="stylesheet" href="assets/css/gallery.css">
-	<script src="assets/js/gallery.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link href="assets/css/style.css" rel="stylesheet" type="text/css" media="all">
-	<link href="assets/css/style_grid.css" rel="stylesheet" type="text/css" media="all">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="assets/css/gallery.css">
+  <script src="assets/js/gallery.js"></script>
+
+<style>
+  @font-face {
+  font-family: Raglan;
+  src: url("assets/font/RaglanPunch.otf");
+}
+.xx{font-family: Raglan;color: rgb(174, 0, 0);font-size: 72pt;line-height: 1;}
+.yy{font-family: Raglan;color:rgb(174, 0, 0);font-size: 36pt;line-height: 1;}
+a{all:unset;color:orange}
+a:hover{color:yellow;cursor:pointer;}
+ 
+body{
+  padding-top: 5%;
+  padding-bottom: 5%;
+  padding-left: 10%;
+  padding-right: 10%;
+  text-align: center;
+  /* background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)),
+    url("https://png.pngtree.com/thumb_back/fw800/background/20221102/pngtree-seamless-texture-of-a-printed-circuit-board-image_1421387.jpg"); */
+  background-color: #0c1820;
+  /* background-image: url(""); */
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  
+  margin:0;
+}
+.sns{width:auto;height:50px;background-color:transparent;}
+.sns:hover{opacity:0.5;}
+/* Style the tab */
+table{border-width: 0;}
+tr{border-width: 0;}
+td{border-width: 0;}
+iframe{border-width: 0;}
+.tab {
+  
+  overflow: hidden;
+  border: 0px solid #ccc;
+  background-color: transparent;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  
+  background-color: #1d3b4e;
+  /* float: left; */
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #386b8f;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 0px solid #ccc;
+  border-top: none;
+}
+
+.poster{width:100px;height:150px;}
+.poster:hover{filter: brightness(0.5);}
+.poster_2{width:210px;height:118;}
+.poster_2:hover{opacity:0.5;}
+</style>
+
 </head>
 <body>
 
-   
-        <style>
-        .intro{
-		color:black;
-        background-image:url("https://freepngimg.com/thumb/silver/70615-plate-skin-metal-texture-signs-silver.png");
-        background-size:cover;
-		}
-        </style>
-        <table width=100% class="intro">
-                <td width=50% style="text-align:center;">
-				<br>
-                <p>Welcome to my website ! I'm a Freelance 2D animator known as <b>Sadewoo</b><br>Who've worked on Video Game Trailers, Cartoons, Animes and more</p>
-						<a target="_blank" href="mailto:sade.animation@gmail.com"><img class="sns" src="https://img.icons8.com/?size=50&id=12580&format=png"></a>
-						<a target="_blank" href="https://www.tumblr.com/sadewoo"><img class="sns" src="https://img.icons8.com/?size=50&id=2882&format=png"></a>
-						<a target="_blank" href="https://bsky.app/profile/spikysaurus.bsky.social"><img class="sns" src="https://img.icons8.com/?size=50&id=5040&format=png"></a>
-						<a target="_blank" href="https://www.instagram.com/sadewoo0"><img class="sns" src="https://img.icons8.com/?size=50&id=32292&format=png"></a>
-						<a target="_blank" href="https://www.linkedin.com/in/sadewa-dika-sadewoo-b1722a11b/"><img class="sns" src="https://img.icons8.com/?size=50&id=447&format=png"></a>
-						<a target="_blank" href="https://sadewoo.gumroad.com/"><img class="sns" src="https://img.icons8.com/?size=80&id=e90aLjKRpMjx&format=png"></a>
-						<a target="_blank" href="https://sadewoo.newgrounds.com/"><img class="sns" src="https://img.icons8.com/?size=50&id=15630&format=png"></a>
-						<a target="_blank" href="https://www.youtube.com/sadewoo0"><img class="sns" src="https://img.icons8.com/?size=50&id=25654&format=png"></a>
-						    <center>
-        <a href="../../index.html" target="_self"><button class="btn-link">Home</button></a>
-        <a href="#animation" target="_self"><button class="btn-link">Animation</button></a>
-        <a href="#art" target="_self"><button class="btn-link">Art</button></a>
-        <a target="_self" href="pages/sakugagp/manual.html"><button class="btn-link">SakugaGP (Blender Addon)</button></a>
-    </center>
-			   </td>
-            </tr>
-			
-        </table>
-		
-    <style>
-    .button_bg{
-        background-image: url('https://media1.tenor.com/m/jdc4anUgEpMAAAAC/explosion-explode.gif');
-        background-size:cover;
-        background-position:center;
-        color:white;
-        border:none;
-        -webkit-text-stroke-color:black;
-        -webkit-text-stroke-width:1px;
-        width:100%;
-        cursor:hand;
-    }
-    </style>
-    <div id="animation"></div>
-
-
-
-    <style>
-     .galleryX{
-		align:left;
-        background: black;
-      }
-        .style{
-          float: left;
-          padding: 10px;
-        }
-        img {
-      height: 150px;
-      width: 100%;
-  }
+  <br>
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'Home')" id="defaultOpen">Animation</button>
+  <button class="tablinks" onclick="openCity(event, 'Artwork')">Artwork</button>
+  <button class="tablinks" onclick="openCity(event, 'SNS')">SNS</button>
+  <button class="tablinks" onclick="openCity(event, 'Contact')">Contact</button>
   
-  .viewport-width-method iframe {
-  width: calc(100vw - 30px);
-  height: calc((100vw - 30px) * 0.5625);
-  max-width: 700px;
-  max-height: calc(700px * 0.5625);
-  border:none;
-}
+</div>
 
-section {
-	
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 0px;
-}
 
-  </style>
-
-  <div style="">
+<div id="Home" class="tabcontent">
+  <div class="yy">SADEWOO's</div>
+  <div class="xx">ANIMATION WORKS</div>
+  <div class="yy"><a href="https://www.youtube.com/embed/videoseries?si=wasjbgMcgpvEuvTI&amp;list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ">「WATCH REEL」</a></div>
     <div class="card">
-	
-        <table width="100%"class="hazard-background" style="text-align:center;">
-            <tr ><td>Animation Works</td></tr>
-        </table>
-		<section class="viewport-width-method">
-			<iframe src="https://www.youtube.com/embed/videoseries?si=wasjbgMcgpvEuvTI&amp;list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ">
-			</iframe>
-		</section>
-		
-		<table width="100%" style="text-align:center;">
-            <tr ><td>Western</td></tr>
-        </table>
-		
+     
+      <p style="color:#4a89c3;">COMMERCIAL WORKS : CARTOON - ANIME - VIDEO GAME PV/CUTSCENES</p>
+
         <table width=100%>
-            <div style="text-align:center;" >
-				<a href="https://www.youtube.com/watch?v=O3kACEkvySI" target="_blank"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BOGExYmQ1N2QtYzE2YS00ZTE2LWEwZTItZjUwNTNhYzJiYjdlXkEyXkFqcGc@._V1_.jpg" alt=""></a>
+             <!-- WESTERN -->
+             <a href="https://www.youtube.com/watch?v=O3kACEkvySI" target="_blank"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BOGExYmQ1N2QtYzE2YS00ZTE2LWEwZTItZjUwNTNhYzJiYjdlXkEyXkFqcGc@._V1_.jpg"></a>
 		<a href="https://www.youtube.com/watch?v=p5pbg6SNWDg"target="_blank"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BYjhmNTAzYmQtMzFkMi00NzEyLWJhMzctZmM2NzRmYmE3MTU4XkEyXkFqcGc@._V1_.jpg" alt=""></a>
 		<a href="https://www.youtube.com/watch?v=00_sb0h2mRQ&list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ&index=6&pp=gAQBiAQB" target="_blank"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BMjkxOWUzNmEtZTMyMC00Y2Y2LTk2OGUtZjQzNTc0NDg2NGQ5XkEyXkFqcGc@._V1_.jpg" alt=""></a>
 		<a href="https://www.youtube.com/watch?v=IeXNLjLW2FY" target="_blank"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BZTg4MDRiMTktOWYyZS00YTIwLTg5ODItYWFmNGExZTg1NWEzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt=""></a>
 		<a href="https://www.youtube.com/watch?v=ZArlzeNNAEs" target="_blank"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BM2E4MDU4NDctNjIxZC00ZWM5LTkyNDQtOGU0MTRhYWVmNzQ5XkEyXkFqcGc@._V1_.jpg" alt=""></a>
 		<a href="https://www.youtube.com/watch?v=eH-ujKvm4Pc&pp=ygUPcG9ydCBieSB0aGUgc2Vh" target="_blank"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BZjI1OTUxYmUtYzZjYy00MmYwLTliNjMtMDdmMmU1NGIxNDJjXkEyXkFqcGdeQXVyNjgwMTM2Njk@._V1_FMjpg_UX1000_.jpg" alt=""></a>
-			</div>
-        </table>
-    </div>
-    <div class="card" >
-        <table width="100%" style="text-align:center;">
-            <tr ><td>Anime</td></tr>
-        </table>
-
-        <table width=100%>
-             <div style="text-align:center;">
-                   <a href="https://www.youtube.com/watch?v=Bi_s_g2l1Yk" target="_blank"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BNWI5YmIwNGMtYmZlMS00NmJjLWJkMjAtNTQ3NjVlMGVmNzUwXkEyXkFqcGc@._V1_.jpg" alt=""></a>
-                   <a href="https://x.com/sadewoo0/status/1831290864435429642" target="_blank"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BNGVmZWZmYjctYTQyNS00NTVkLWIxNTctZGQwMzQzMGJkMzIyXkEyXkFqcGc@._V1_.jpg" alt=""></a>
-             </div>
-        </table>
-    </div>
-    <div class="card" style="">
-        <table width="100%" style="text-align:center;">
-            <tr ><td>Video Game Trailer and Cutscenes</td></tr>
-        </table>
-
-        <table width=100%>
-		
-             <div style="text-align:center;">
+    <!-- ANIME -->
+        <a href="https://www.youtube.com/watch?v=Bi_s_g2l1Yk" target="_blank"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BNWI5YmIwNGMtYmZlMS00NmJjLWJkMjAtNTQ3NjVlMGVmNzUwXkEyXkFqcGc@._V1_.jpg" alt=""></a>
+        <a href="https://x.com/sadewoo0/status/1831290864435429642" target="_blank"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BNGVmZWZmYjctYTQyNS00NTVkLWIxNTctZGQwMzQzMGJkMzIyXkEyXkFqcGc@._V1_.jpg" alt=""></a>
+    
 				<a href="https://www.youtube.com/watch?v=YgDx3x98qnM"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BMmMwYzZjMzAtN2I3Ny00MTdhLTg1Y2YtNDZiMzhhODY3ZjJjXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt=""></a>
 				<a href="https://www.youtube.com/watch?v=XhhEXK3NkzU" target="_blank"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BZWJlZTM2OWYtYTkxZC00OTQyLThjOWEtN2VkOGE1MTFmNGQxXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt=""></a>
 				<a href="https://sadewoo.tumblr.com/post/732936987201404928/post-animation-little-goody-two-shoes-trailer" target="_blank"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BZjkwNDkwMzEtZDZhZC00MGI1LTk0YmUtMzE0NWUzZjdlYjM1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt=""></a>
 				<a href="https://www.youtube.com/watch?v=akaQ1tarUQo" target="_blank"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BOTU2MmNmYmUtYTViNS00Y2I5LTliYzUtMjBiOTFiOTdkYTg0XkEyXkFqcGc@._V1_UX67_CR0,0,67,98_AL_.jpg" alt=""></a>
 				<a href="https://www.youtube.com/watch?v=YQXp2gEoevs" target="_blank"><img class="poster" src="https://images.igdb.com/igdb/image/upload/t_cover_big/co30qj.jpg" alt=""></a>
-				
-				
-			</div>
+		
         </table>
-    
-		<table width="100%" style="text-align:center;">
-            <tr ><td>Personal Animation and Commissions</td></tr>
-        </table>
-		<section class="viewport-width-method">
-		<iframe src="https://www.youtube.com/embed/videoseries?si=l6klKTXXTn6qx0zi&amp;list=PLdk56EjsMhfj6a9J9RT5HNcWPZWDDycAR">
-		</iframe>
-		</section>
-		<br>
-<style>
-		div.item {
-    vertical-align: top;
-    display: inline-block;
-    text-align: center;
-}
-img {
-    width: 100px;
-    height: 100px;
-    background-color: grey;
-}
-.caption {
-    display: block;
-	color:white;
-	
-}
-		</style>
-		<div style="text-align:center;">
-		<div class="item">
-		<a href="assets/videos/bulltransform.mp4">
-		<img class="poster_2" src="https://i.ytimg.com/vi/QMRCFCVoNao/hqdefault.jpg?sqp=-oaymwEcCPYBEIoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC7H6xcSRKJJAia2snMKXLIHDZyRA"/>
-		</a>
-		<span class="caption"><b>Beast Rising</b></span>
-		<span class="caption"><i>Personal - Collab</i></span>
-		</div>
-
-		<div class="item">
-		<a href="assets/videos/bulltransform.mp4">
-		<img class="poster_2" src="https://i.ytimg.com/vi/9ifBDyVCeAY/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLAfjI6BQJD-D-OKkUzveP5Y38NFFQ"/>
-		</a>
-		<span class="caption"><b>Bull Transformation</b></span>
-		<span class="caption"><i>Commission - Indie</i></span>
-		</div>
-		
-		<div class="item">
-		<a href="assets/videos/gibes1.mp4">
-		<img class="poster_2" src="https://i.ytimg.com/vi/IMfoLtP4nAQ/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBk3-tOoDzd4q_55uYw4nDXZTI9DA"/>
-		</a>
-		<span class="caption"><b>Gibes</b></span>
-		<span class="caption"><i>Commission - Youtube Intro</i></span>
-		</div>
-		
-		<br>
-		
-		<div class="item">
-		<a href="assets/videos/stratera.mp4">
-		<img class="poster_2" src="https://i.ytimg.com/vi/SU9tRkYD_vE/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLAug8jJeCamuyVW9N7kcBJpZ4zmtw"/>
-		</a>
-		<span class="caption"><b>Stratera</b></span>
-		<span class="caption"><i>Commission - Youtube Intro</i></span>
-		</div>
-		
-		<div class="item">
-		<a href="assets/videos/eldorado.mp4">
-		<img class="poster_2" src="https://i.ytimg.com/vi/C_CuRekPF4k/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBqT9yBZMUkOFqsQhzRlpujgcC9AA"/>
-		</a>
-		<span class="caption"><b>Road to El Dorado</b></span>
-		<span class="caption"><i>Personal - Collab</i></span>
-		</div>
-		
-		<div class="item">
-		<a href="assets/thumbs/100df.jpeg">
-		<img class="poster_2" src="assets/thumbs/100df.jpeg"/>
-		</a>
-		<span class="caption"><b>100 Demon Fantasia</b></span>
-		<span class="caption"><i>Commission - Short Animation</i></span>
-		</div>
-		</div>
-		</div>
-
-    <div class="card" id="art">
-        <table width="100%"class="hazard-background" style="text-align:center;">
-            <tr ><td>Personal Art</td></tr>
-        </table>
-		
-
-
-        <div class="gallery">
-		
-			<img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreifrscyzemiirjaj4uxf2g6cvcxt4y52mzqfzwjpfzbzbltjovgsie@jpeg">
-            <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreifp6leljj5xru3bq6bmy27bmvols4ziz7gxgua452gawxge377wra@jpeg">
-			
-			<img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreibvlcwqzauvlyqzfvjps245gy7lhg2pr23xcscurcydjizswhvsfy@jpeg">
-			<img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreidszxxutr4s7b7pfrtqzdrfjiquej4dxwh7ha5ln66bmkiw62s6pm@jpeg">
-			<img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreiedfpgbeots6fnpg26357zmyya2lwafarkjzgttpyt7vlin3q7da4@jpeg">
-			<img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreiclojwo47mmb2h72hbpzzcsp7razsbyqamogihr4aru5jemkpo6xy@jpeg">
-			<img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreigpjgzu6ccmlinr4i7gx44o63riuntpp7cwipjarsemfdhvlrzsma@jpeg">
-			<img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreiegizsdhcvrppijdzfdwgpqidmlo3nuethazxcurortlmcstgpqea@jpeg">
-			
-			<img src="https://spikysaurus.github.io/works/assets/drawings/reinz.png">
-			<img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreih72acdn6akin24y46irpvnttjnndijr3whm6g4xenpdwmsvtvn3u@jpeg">
-			<img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreifsjyoha6nic6h3iof337gfthkfuzpcvlvj3f26qoqnax7xkb2c6u@jpeg">
-			<img src="https://spikysaurus.github.io/works/assets/drawings/ga_2.png">
-			<img src="https://spikysaurus.github.io/works/assets/drawings/ga_3.png">
-			<img src="https://spikysaurus.github.io/works/assets/drawings/ga.webp">
-			<img src="https://spikysaurus.github.io/works/assets/drawings/pupududu.png">
-			<img src="https://spikysaurus.github.io/works/assets/drawings/MLAATR_Characters_01.png">
-			<img src="https://spikysaurus.github.io/works/assets/drawings/MLAATR_Characters_02.png">
-
-        </div>
-		
     </div>
-    <br>
+   
+     <p style="color:#4a89c3;">PERSONAL WORKS AND COMMISSIONS</p>
+    <style>
+      .item {
+      vertical-align: top;
+      display: inline-block;
+      text-align: center;
+  }
+  .caption {
+      display: block;
+    color:white;
+    
+  }
+      </style>
+      <div style="text-align:center;">
+      <div class="item">
+      <a href="assets/videos/bulltransform.mp4">
+      <img class="poster_2" src="https://i.ytimg.com/vi/QMRCFCVoNao/hqdefault.jpg?sqp=-oaymwEcCPYBEIoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLC7H6xcSRKJJAia2snMKXLIHDZyRA"/>
+      </a>
+      <span class="caption"><b>Beast Rising</b></span>
+      <span class="caption"><i>Personal - Collab</i></span>
+      </div>
+  
+      <div class="item">
+      <a href="assets/videos/bulltransform.mp4">
+      <img class="poster_2" src="https://i.ytimg.com/vi/9ifBDyVCeAY/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLAfjI6BQJD-D-OKkUzveP5Y38NFFQ"/>
+      </a>
+      <span class="caption"><b>Bull Transformation</b></span>
+      <span class="caption"><i>Commission - Indie</i></span>
+      </div>
+      
+      <div class="item">
+      <a href="assets/videos/gibes1.mp4">
+      <img class="poster_2" src="https://i.ytimg.com/vi/IMfoLtP4nAQ/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBk3-tOoDzd4q_55uYw4nDXZTI9DA"/>
+      </a>
+      <span class="caption"><b>Gibes</b></span>
+      <span class="caption"><i>Commission - Youtube Intro</i></span>
+      </div>
+      
+      <br>
+      
+      <div class="item">
+      <a href="assets/videos/stratera.mp4">
+      <img class="poster_2" src="https://i.ytimg.com/vi/SU9tRkYD_vE/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLAug8jJeCamuyVW9N7kcBJpZ4zmtw"/>
+      </a>
+      <span class="caption"><b>Stratera</b></span>
+      <span class="caption"><i>Commission - Youtube Intro</i></span>
+      </div>
+      
+      <div class="item">
+      <a href="assets/videos/eldorado.mp4">
+      <img class="poster_2" src="https://i.ytimg.com/vi/C_CuRekPF4k/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBqT9yBZMUkOFqsQhzRlpujgcC9AA"/>
+      </a>
+      <span class="caption"><b>Road to El Dorado</b></span>
+      <span class="caption"><i>Personal - Collab</i></span>
+      </div>
+      
+      <div class="item">
+      <a href="assets/thumbs/100df.jpeg">
+      <img class="poster_2" src="assets/thumbs/100df.jpeg"/>
+      </a>
+      <span class="caption"><b>100 Demon Fantasia</b></span>
+      <span class="caption"><i>Commission - Short Animation</i></span>
+      </div>
+      </div>
+      </div>
+  </div>
+</div> 
+
+
+<div id="Artwork" class="tabcontent">
+  <div class="yy">SADEWOO's</div>
+  <div class="xx">ARTWORKS</div>
+  <p style="color:#4a89c3;">FANART/ORIGINAL CHARACTER DESIGNS</p>
+  <div class="gallery">
+    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreifrscyzemiirjaj4uxf2g6cvcxt4y52mzqfzwjpfzbzbltjovgsie@jpeg" />
+    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreifp6leljj5xru3bq6bmy27bmvols4ziz7gxgua452gawxge377wra@jpeg">
+    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreibvlcwqzauvlyqzfvjps245gy7lhg2pr23xcscurcydjizswhvsfy@jpeg">
+    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreidszxxutr4s7b7pfrtqzdrfjiquej4dxwh7ha5ln66bmkiw62s6pm@jpeg">
+    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreiedfpgbeots6fnpg26357zmyya2lwafarkjzgttpyt7vlin3q7da4@jpeg">
+    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreiclojwo47mmb2h72hbpzzcsp7razsbyqamogihr4aru5jemkpo6xy@jpeg">
+    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreigpjgzu6ccmlinr4i7gx44o63riuntpp7cwipjarsemfdhvlrzsma@jpeg">
+    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreiegizsdhcvrppijdzfdwgpqidmlo3nuethazxcurortlmcstgpqea@jpeg">
+    <img src="https://spikysaurus.github.io/works/assets/drawings/reinz.png">
+    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreih72acdn6akin24y46irpvnttjnndijr3whm6g4xenpdwmsvtvn3u@jpeg">
+    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreifsjyoha6nic6h3iof337gfthkfuzpcvlvj3f26qoqnax7xkb2c6u@jpeg">
+    <img src="https://spikysaurus.github.io/works/assets/drawings/ga_2.png">
+    <img src="https://spikysaurus.github.io/works/assets/drawings/ga_3.png">
+    <img src="https://spikysaurus.github.io/works/assets/drawings/ga.webp">
+    <img src="https://spikysaurus.github.io/works/assets/drawings/pupududu.png">
+    <img src="https://spikysaurus.github.io/works/assets/drawings/MLAATR_Characters_01.png">
+    <img src="https://spikysaurus.github.io/works/assets/drawings/MLAATR_Characters_02.png">
+ </div>
+</div>
+
+<div id="SNS" class="tabcontent">
+  <br>
+  <a target="_blank" href="https://www.youtube.com/sadewoo0"><img class="sns" src="https://blinkies.cafe/b/display/0203-youtubelogo.gif"></a>
+  <a target="_blank" href="https://sadewoo.newgrounds.com/"><img class="sns" src="https://blinkies.cafe/b/blinkiesCafe-9N.gif"></a>
+  <a target="_blank" href="https://bsky.app/profile/spikysaurus.bsky.social"><img class="sns" src="https://blinkies.cafe/b/blinkiesCafe-8v.gif"></a>
+  <a target="_blank" href="https://www.instagram.com/sadewoo0"><img class="sns" src="https://blinkies.cafe/b/display/0199-instagramlogo.gif"/></a>
+  <a target="_blank" href="https://www.tumblr.com/sadewoo"><img class="sns" src="https://blinkies.cafe/b/display/0200-tumblrlogo.gif"></a>
+  <a target="_blank" href="https://www.linkedin.com/in/sadewa-dika-sadewoo-b1722a11b/"><img class="sns" src="https://blinkies.cafe/b/blinkiesCafe-gG.gif"></a>
+  <a target="_blank" href="https://sadewoo.gumroad.com/"><img class="sns" src="https://blinkies.cafe/b/blinkiesCafe-Pl.gif"></a>
+    
+   
+</div>
+
+<div id="Contact" class="tabcontent">
+  <br>
+  <a target="_blank" href="mailto:sade.animation@gmail.com"><img class="sns" src="https://img.icons8.com/?size=50&id=12580&format=png"></a>
+</div>
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+</script>
+   
 </body>
-</html>
+</html> 
