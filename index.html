@@ -9,118 +9,11 @@
   <meta property="og:image:width" content="1920" />
   <meta property="og:image:height" content="1080"/>
   <meta property="og:type" content="website"/> 
+  <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/gallery.css">
   <script src="assets/js/gallery.js"></script>
 
-
-<style>
-  @font-face {
-  font-family: Raglan;
-  src: url("assets/font/RaglanPunch.otf");
-}
-.xx{font-family: Raglan;color: rgb(174, 0, 0);font-size: 72pt;line-height: 1;}
-.yy{font-family: Raglan;color:rgb(174, 0, 0);font-size: 36pt;line-height: 1;}
-
-.rainbow {
-    text-align: center;
-    text-decoration: underline;
-    font-size: 32px;
-    font-family: monospace;
-    letter-spacing: 5px;
-}
-.rainbow_text_animated {
-    background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: rainbow_animation 6s ease-in-out infinite;
-    background-size: 400% 100%;
-}
-
-@keyframes rainbow_animation {
-    0%,100% {
-        background-position: 0 0;
-    }
-
-    50% {
-        background-position: 100% 0;
-    }
-}
-
-a{all:unset;color:orange}
-a:hover{color:yellow;cursor:pointer;}
-ul {
-    list-style-type: none;
-}
-body{
-  padding-top: 2%;
-  padding-bottom:2%;
-  padding-left: 0%;
-  padding-right: 0%;
-  text-align: center;
-  /* background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)),
-    url("https://png.pngtree.com/thumb_back/fw800/background/20221102/pngtree-seamless-texture-of-a-printed-circuit-board-image_1421387.jpg"); */
-  background-color: #0c1820;
-  /* background-image: url(""); */
-  font-family: Arial, Helvetica, sans-serif;
-  box-sizing: border-box;
-  
-  margin:0;
-}
-.sns{width:auto;height:50px;background-color:transparent;}
-.sns:hover{opacity:0.5;}
-/* Style the tab */
-table{border-width: 0;}
-tr{border-width: 0;}
-td{border-width: 0;}
-iframe{border-width: 0;}
-.tab {
-  
-  overflow: hidden;
-  border: 0px solid #ccc;
-  background-color: transparent;
-}
-
-/* Style the buttons inside the tab */
-.tab button {
-  
-  background-color: #1d3b4e;
-  /* float: left; */
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  font-size: 17px;
-}
-
-/* Change background color of buttons on hover */
-.tab button:hover {
-  background-color: #ddd;
-}
-
-/* Create an active/current tablink class */
-.tab button.active {
-  background-color: #386b8f;
-}
-
-/* Style the tab content */
-.tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border: 0px solid #ccc;
-  border-top: none;
-}
-
-.poster{width:100px;height:150px;}
-.poster:hover{filter: brightness(0.5);}
-.poster_2{width:210px;height:118;}
-.poster_2:hover{opacity:0.5;}
-
-</style>
-
 </head>
-
 <body>
   <center>
   <table style="color:#4a89c3; ">
@@ -139,16 +32,14 @@ iframe{border-width: 0;}
   <br>
 <div class="tab">
   <button class="tablinks" onclick="openCity(event, 'Home')" id="defaultOpen">Animation</button>
-  <button class="tablinks" onclick="openCity(event, 'Drawings')">Drawings</button>
-  <button class="tablinks" onclick="openCity(event, 'Links')">Links</button>
-  <button class="tablinks" onclick="openCity(event, 'Contact')">Contact</button>
+  <a href="pages/gallery.html"><button>Drawings</button></a>
+  <a href="pages/links.html"><button>Links</button></a>
+  <a href="pages/contact.html"><button>Contact</button></a>
   
 </div>
 
 
 <div id="Home" class="tabcontent">
-  <!-- <div class="yy">SADEWOO's</div>
-  <div class="xx">ANIMATION WORKS</div> -->
   <a href="https://youtube.com/playlist?list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ&si=CdKYLRL_zAYk-BXc"> <h3 class="rainbow rainbow_text_animated">WATCH ANIMATION REEL</h3></a>
     <div class="card">
      
@@ -179,20 +70,7 @@ iframe{border-width: 0;}
     </div>
    
      <p style="color:#4a89c3;">PERSONAL WORKS AND COMMISSIONS</p>
-    <style>
-      
 
-      .item {
-      vertical-align: top;
-      display: inline-block;
-      text-align: center;
-  }
-  .caption {
-      display: block;
-    color:white;
-    
-  }
-      </style>
       <div style="text-align:center;">
       <div class="item">
       <a href="https://www.youtube.com/watch?v=QMRCFCVoNao">
@@ -249,89 +127,6 @@ iframe{border-width: 0;}
 </div> 
 
 
-<div id="Drawings" class="tabcontent">
-  <!-- <div class="yy">SADEWOO's</div>
-  <div class="xx">DRAWINGS</div> -->
-  <p style="color:#4a89c3;">FANART</p>
-  <div class="gallery">
-    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreigcexyiom6woscxypk2xkabjeog6dbbtmbps5autinsggmffni2we@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreibzonbv4psias2jvevcu7cr4g43755bfvaecaiy25wkvwbbll6lge@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreiazfkynibko3gwmsftcikkfezviw5xp3rjztb6pmlhatdhzcctqza@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreibshrzppjg3spuqsxbh7wd6lssv7fciihqcee2mxhfk2nq5sg4le4@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreifrclnjpygpwlyvsc4spq6t3467ck53nowp6h3lijnj3psju6wg7u@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreigvcvynddu5bkpv5dnvx5ance4b76bdtmsfjgrdr5fe2vyjpw6vj4@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreifs527rmhggruooftizeaavdwmtvgmke22qtj2sndbkdlelsfzv4q@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreib3eil4hqbyc7jkf42lw2ovbqmkde3fszcbrhun6sbh3xnlk6jubi@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreihtsr5honh3ocax2twrsz2atpzt6l57s4ppbdfp4s6h6ntw26vkym@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreidtuid3mayzy4k6nuaehsbkfu7q66lb6hbrbo3ery74k2yylkmj4e@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreidomix6gsfmyomgnbazugbfwhzfxtvu6i7m4iuyaoiudtgu2v46uq@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreiehmna4wp5agodmtm7clo5nbkgnyv23rlklesg7k3k2uap74lgwre@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreid7kuwsc4cfuuqdvjwb4lvorje2ttlosfytur7idlmmoai4jy6i5u@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreiaxnudcflcpc4ugxhhmpiy4avtryco67zrwwr3lokvud5vga5vwj4@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreifalckvox4cgwlazfjz53trdwjso4iwh3cv2xdvnb5c2bevrnecha@jpeg">
-    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreiflk4c6zknqggpvazdznxa7d2jjs5vyvep36mhc4umsaw5mw4oqzq@jpeg">
-  </div>
- <p style="color:#4a89c3;">CHARACTER DESIGNS</p>
-    <div class="gallery">
-      <img src="assets/drawings/reinz.png">
-      <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreicvlz7txzno5zrgfguamb2orhbjnndkfu34dws2utmfgbo2z6dvzi@jpeg">
-      <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreiextmxgozaxvrqau5qhxbohuxjyktrke7bj3hvjqmh4av4i5sw4d4@jpeg">
-      <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreial4dijjtmftawygnelbjaqenqrppz7t4c7s3znpjxfvg7ecp7ubm@jpeg">
-      
-      <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreiaox2ymhnmlejeolmccrvzw2u5hivrjopkg3mu4vairalmunwgyri@jpeg">
-      <img src="https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreie5exbl2x37jclpnqlalxvuy7m634i5h5m7j5h2ykqgc3b6bzltzq@jpeg">
-      <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreih7vj6pkdjwk5rucjpqjx5r3mimskek5kz3tbuyxu3smidejhvh3m@jpeg">
-      <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreid3daz2yzspnki75duubdofhrxt2hv6ssh2wp2p55moq2qdt7vbwq@jpeg">
-      <img src="assets/drawings/MLAATR_Characters_01.png">
-      <img src="assets/drawings/MLAATR_Characters_02.png">
-      <img src="assets/drawings/pupududu.png">
-      <img src="assets/drawings/XD999.png">
-      <img src="https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreie5tgeyls6vjhr2td7rfsnzhh7pabyyeaq6zfyphy4qvaxj3ccady@jpeg">
-    </div>
-    <p style="color:#4a89c3;"> GIF LOOPS </a></p>
-    <div class="gallery">
-      <img src="assets/drawings/Matatabi.gif">
-      <img src="assets/drawings/Matatabi2.gif">
-      <img src="assets/drawings/walk.gif">
-      <img src="assets/drawings/crew.gif">
-      <img src="assets/drawings/iyaiya.gif">
-      <img src="assets/drawings/iyaiya2.gif">
-      <img src="assets/drawings/kofi.gif">
-      <img src="assets/drawings/VSxCV_Sade.gif">
-    </div>
-</div>
-
-
-<div id="Links" class="tabcontent">
-  <br>
-  <a target="_blank" href="https://www.youtube.com/sadewoo0"><img class="sns" src="assets/blinkies/youtube.gif"></a>
-  <a target="_blank" href="https://sadewoo.newgrounds.com/"><img class="sns" src="assets/blinkies/newgrounds.gif"></a>
-  <a target="_blank" href="https://bsky.app/profile/spikysaurus.bsky.social"><img class="sns" src="assets/blinkies/bluesky.gif"></a>
-  <a target="_blank" href="https://www.instagram.com/sadewoo0"><img class="sns" src="assets/blinkies/instagram.gif"/></a>
-  <a target="_blank" href="https://www.tumblr.com/sadewoo"><img class="sns" src="assets/blinkies/tumblr.gif"></a>
-  <a target="_blank" href="https://www.linkedin.com/in/sadewa-dika-sadewoo-b1722a11b/"><img class="sns" src="assets/blinkies/linkedin.gif"></a>
-  <a target="_blank" href="https://sadewoo.gumroad.com/"><img class="sns" src="assets/blinkies/gumroad.gif"></a>
-  <br>
-  <a href="https://spikysaurus.github.io/works/pages/sakugagp/manual.html"><img width="500px" src="https://public-files.gumroad.com/lfl5qk6a02wj1crsnkkqvwv32d5l"></a>
-  <div class="yy"><a>ARTICLES ARCHIVE</a></div>
-  <p style="color:#4a89c3;">COLLECTION OF ARTICLES I'M MENTIONED IN!</p>
-  <ul>
-    
-    <li><a href="https://kubuka.id/animator-indonesia-ini-buat-animasi-keren-untuk-acara-friday-night-funkin/">Kutu Buku Kartun : Friday Night Funkin' </a></li>
-    <li><a href="https://kubuka.id/dengarkan-moxxie-nge-opera-di-lagu-baru-helluva-boss-moxxies-bad-trip-episode-6/">Kutu Buku Kartun : Artikel Helluvaboss </a></li>
-    <li><a href="https://charhttps://characterdesignreferences.com/blog-interviews-6/douglas-de-azevedo-rogerioacterdesignreferences.com/blog-interviews-6/douglas-de-azevedo-rogerio">Douglas De Azevedo Rogerio Interview</a></li>
-    <li> <a href="https://www.crunchyroll.com/news/features/2020/11/20/feature-the-animaniacs-animators-who-love-anime">Crunchyroll : Animeniacs</a></li>
-  </ul>
- 
-</div>
-
-<div id="Contact" class="tabcontent">
-  <br>
-  <div class="yy"><a target="_blank" href="mailto:sade.animation@gmail.com">「EMAIL ME!」</a></div>
-  <p style="color:#4a89c3;">ART/ANIMATION COMMISSIONS? WORK AVAILABILITY? TALK ABOUT THE WEBSITE? <br> OR JUST TO SAY HI? ASK ME ANYTHING!</p>
-  <img width="200px" src="assets/drawings/salam_tai.png">
-</div>
-
 <script>
 function openCity(evt, cityName) {
   var i, tabcontent, tablinks;
@@ -350,46 +145,6 @@ function openCity(evt, cityName) {
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
 </script>
-
-
-<!-- The Gallery as lightbox dialog, should be a document body child element -->
-<div
-  id="blueimp-gallery"
-  class="blueimp-gallery"
-  aria-label="image gallery"
-  aria-modal="true"
-  role="dialog"
->
-  <div class="slides" aria-live="polite"></div>
-  <h3 class="title"></h3>
-  <a
-    class="prev"
-    aria-controls="blueimp-gallery"
-    aria-label="previous slide"
-    aria-keyshortcuts="ArrowLeft"
-  ></a>
-  <a
-    class="next"
-    aria-controls="blueimp-gallery"
-    aria-label="next slide"
-    aria-keyshortcuts="ArrowRight"
-  ></a>
-  <a
-    class="close"
-    aria-controls="blueimp-gallery"
-    aria-label="close"
-    aria-keyshortcuts="Escape"
-  ></a>
-  <a
-    class="play-pause"
-    aria-controls="blueimp-gallery"
-    aria-label="play slideshow"
-    aria-keyshortcuts="Space"
-    aria-pressed="false"
-    role="button"
-  ></a>
-  <ol class="indicator"></ol>
-</div>
 
 
 </body>
