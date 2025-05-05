@@ -52,6 +52,7 @@ body{
   a:hover{color:yellow;cursor:pointer;}
   ul {
       list-style-type: none;
+      padding: 0;
   }
   .sns{width:auto;height:50px;background-color:transparent;}
   .sns:hover{opacity:0.5;}
