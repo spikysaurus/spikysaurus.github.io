@@ -9,7 +9,7 @@
 .gallery {
   /* (B1) GRID LAYOUT - 3 IMAGES PER ROW */
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-gap: 0px;
 
   /* (B2) OPTIONAL WIDTH RESTRICT */
@@ -24,7 +24,7 @@
   cursor: pointer;
   /* (C1) DIMENSION */
   width: 100%;
-  height: 180px; /* optional */
+  height: 300px; /* optional */
   padding: 0px;
 
   /* (C2) COLORS */
