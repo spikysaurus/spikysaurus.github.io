@@ -1,0 +1,39 @@
+ <html>
+ <head>
+ </head>
+ <body>
+
+Art by Sadewoo/Spikysaurus , visit my website for more <a href="https://spikysaurus.github.io/pages/gallery.html">https://spikysaurus.github.io/pages/gallery.html</a><br>
+<img id="myImg"></img>
+
+<script>
+let params = new URL(document.location.toString()).searchParams;
+let name = params.get("img");
+const imageUrl = name;
+var img = document.getElementById("myImg")
+img.src = imageUrl;
+
+document.querySelector('meta[name="image"]').setAttribute("content", imageUrl);
+
+</script>
+<style>
+#myImg{width:1024px;}
+body{text-align:center;}
+</style>
+
+<script>
+function imgDisplay() {
+var imgurl = document.getElementById('imgUrl').value;
+var encodedParam = encodeURI(imgurl);
+const urlParams = new URLSearchParams(window.location.search);
+urlParams.set('img', encodedParam);
+window.location.search = urlParams;
+}
+</script>
+
+<p><input id="imgUrl" type="text"/>
+<button onclick="imgDisplay()">Display</button>
+
+ </body>
+
+ </html>
