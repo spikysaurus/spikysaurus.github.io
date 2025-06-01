@@ -54,9 +54,16 @@ fetch('../assets/json/data_projects.json')
                 td1.appendChild(td2);
 
 
+
                 const anchor = document.createElement('a');
                 anchor.setAttribute('href', sub_val);
+                if (sub_val.length > 25) {
+                anchor.textContent = sub_val.substring(0, 24) + "...";
+                }
+                else{
                 anchor.textContent = sub_val;
+                }
+
                 anchor.setAttribute('target', '_blank');
 
                 td2.appendChild(anchor);
