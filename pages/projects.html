@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/gallery.css">
+</head>
+<body>
+<div class="tab">
+  <a href="../index.html"><button>BACK TO HOME</button></a><br><br>
+</div>
+
+
+<script>
+
+fetch('../assets/json/data_projects.json')
+.then(response => response.json())
+.then(data => {
+    // table_studio(Object.keys(data));
+    tb = document.getElementById('tb');
+    // table = document.createElement("table");
+    for(var i in data){
+        var key = i;
+
+
+        tr = document.createElement('tr');
+        // tb.appendChild(table);
+        tb.appendChild(tr);
+
+        td0 = document.createElement('td');
+        tr.appendChild(td0);
+        td0.innerText = i;
+
+        tr1 = document.createElement('td');
+        tr.appendChild(tr1);
+
+        var val = data[i];
+        for(var j in val){
+            var sub_key = j;
+            var sub_val = val[j];
+
+
+
+                tr2 = document.createElement('ul');
+                tr1.appendChild(tr2);
+
+                td1 = document.createElement('li');
+                tr2.appendChild(td1);
+                td1.innerText = sub_key;
+
+
+                td2 = document.createElement('li');
+                td2.style.color = 'red';
+                td2.style.listStyleType = 'none';
+                td1.appendChild(td2);
+
+
+                const anchor = document.createElement('a');
+                anchor.setAttribute('href', sub_val);
+                anchor.textContent = sub_val;
+                anchor.setAttribute('target', '_blank');
+
+                td2.appendChild(anchor);
+        }}
+}
+);
+
+</script>
+
+<style>
+table,tr,td{border:1px solid purple;border-collapse: collapse;padding:10px;}
+table{width:100%;color:white;}
+
+</style>
+
+<p style="color:#4a89c3;">THE LIST OF THE STUDIOS I WORKED WITH AND PROJECTS I PARTICIPATED IN (UNDER CONSTRUCTION!)</p>
+
+<table id="tb">
+</table>
+
+</body>
+</html>
