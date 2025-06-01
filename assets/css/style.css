@@ -1,52 +1,43 @@
+  @font-face {
+    font-family: SuperSquad;
+    src: url('font/SuperSquad.ttf') format('truetype');
+  }
 
 
 body{
-    padding-top: 2%;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-top: 0%;
     padding-bottom:2%;
     padding-left: 0%;
     padding-right: 0%;
     text-align: center;
     background-color: #0c1820;
-    font-family: Arial, Helvetica, sans-serif;
     box-sizing: border-box;
     margin:0;
     }
     
-  
-  
+.text {
+  font-family: SuperSquad;
+  color:white;
+  -webkit-text-stroke:1px purple;
+}
+.htab{background-color:black;}
+.hbtn{
+  background-color: transparent;
+  /* float: left; */
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+.hbtn:hover{
+  color:white;
+}
+.hbtn_on{color:white;}
+.hbtn_off{color:purple;}
 
-  @font-face {
-    font-family: Raglan;
-    src: url("assets/font/RaglanPunch.otf");
-  }
-  .xx{font-family: Raglan;color: rgb(174, 0, 0);font-size: 72pt;line-height: 1;}
-  .yy{font-family: Raglan;color:rgb(174, 0, 0);font-size: 36pt;line-height: 1;}
-  
-  .rainbow {
-      text-align: center;
-      text-decoration: underline;
-      font-size: 32px;
-      font-family: monospace;
-      letter-spacing: 5px;
-  }
-  .rainbow_text_animated {
-      background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: rainbow_animation 6s ease-in-out infinite;
-      background-size: 400% 100%;
-  }
-  
-  @keyframes rainbow_animation {
-      0%,100% {
-          background-position: 0 0;
-      }
-  
-      50% {
-          background-position: 100% 0;
-      }
-  }
   
   a{all:unset;color:orange}
   a:hover{color:yellow;cursor:pointer;}
@@ -99,7 +90,7 @@ body{
     border-top: none;
   }
   
-  .poster{width:100px;height:150px;}
+  .poster{width:150px;height:200px;}
   .poster:hover{filter: brightness(0.5);}
   .poster_2{width:210px;height:118;}
   .poster_2:hover{opacity:0.5;}

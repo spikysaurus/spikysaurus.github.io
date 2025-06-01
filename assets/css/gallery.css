@@ -1,6 +1,7 @@
 /* (A) WHOLE PAGE */
 * {
-  font-family: Arial, Helvetica, sans-serif;
+
+/*   font-family: Arial, Helvetica, sans-serif; */
   box-sizing: border-box;
 }
 /*body { background: #eee; }*/

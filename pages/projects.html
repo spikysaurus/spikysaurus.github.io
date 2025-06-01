@@ -2,11 +2,19 @@
 <html>
 <head>
 <link rel="stylesheet" href="../assets/css/style.css">
-<link rel="stylesheet" href="../assets/css/gallery.css">
+<!-- <link rel="stylesheet" href="../assets/css/gallery.css"> -->
 </head>
 <body>
-<div class="tab">
-  <a href="../index.html"><button>BACK TO HOME</button></a><br><br>
+
+<div class="htab">
+<a href="../index.html"><button class="hbtn hbtn_off">Home</button></a>
+<a href="projects.html"><button class="hbtn hbtn_on">Projects</button></a>
+<a href="gallery.html"><button class="hbtn hbtn_off">Drawings</button></a>
+<a href="links.html"><button class="hbtn hbtn_off">Links</button></a>
+<a href="contact.html"><button class="hbtn hbtn_off">Contact</button></a>
+</div>
+<div style="float:left;position:absolute;top:0px;">
+<button class="hbtn"><b style="color:white;">SADE</b><b style="color:orange;">WOO</b></button>
 </div>
 
 
@@ -75,14 +83,16 @@ fetch('../assets/json/data_projects.json')
 
 <style>
 table,tr,td{border:1px solid purple;border-collapse: collapse;padding:10px;}
-table{width:100%;color:white;}
+table{width:90%;color:white;}
 
 </style>
 
 <p style="color:#4a89c3;">THE LIST OF THE STUDIOS I WORKED WITH AND PROJECTS I PARTICIPATED IN (UNDER CONSTRUCTION!)</p>
 
+<center>
 <table id="tb">
 </table>
+</center>
 
 </body>
 </html>
