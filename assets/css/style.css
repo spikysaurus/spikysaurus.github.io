@@ -19,8 +19,8 @@ body{
 .text {
   font-family: SuperSquad;
   color:white;
-  -webkit-text-stroke:1px purple;
 }
+.text h1{-webkit-text-stroke:1px purple;}
 .htab{background-color:black;}
 .hbtn{
   background-color: transparent;
