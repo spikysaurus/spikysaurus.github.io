@@ -30,21 +30,20 @@ h1:hover{color:gold;}
 .table-bg{width:900px;text-align:center;}
 .htab{background-color:black;}
 .hbtn{
-/*   font-weight:bold; */
-/*   font-style:italic; */
   background-color: transparent;
-  /* float: left; */
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 14px 16px;
+  padding-top: 12px;
+  padding-bottom:12px;
   transition: 0.3s;
   font-size: 20px;
 }
 .hbtn:hover{
-  color:white;
+  color:black;
+  background-color: gold;
 }
-.hbtn_on{color:white;}
+.hbtn_on{color:gold;}
 .hbtn_off{color:purple;}
 
   
