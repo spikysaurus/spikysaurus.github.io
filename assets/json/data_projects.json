@@ -1,80 +1,305 @@
 {
     "Commissions and Personal":{
-        "Comission - Bull Transformation":"https://www.youtube.com/watch?v=9ifBDyVCeAY",
-        "Commission - Stratera Youtube Intro":"https://www.youtube.com/watch?v=SU9tRkYD_vE",
-        "Commission - Gibes Youtube Intro":"https://www.youtube.com/watch?v=MRIpPvY7-JQ",
-        "Commission - Batman Animatic":"https://www.youtube.com/watch?v=l8Yrg3vXusk",
-        "Collab - Beast Rising":"https://www.youtube.com/watch?v=QMRCFCVoNao",
-        "Collab - Road to El Dorado":"https://www.youtube.com/watch?v=C_CuRekPF4k",
-        "HypnosisSoft - Game (PV)(TBA)":"https://x.com/hypnosissoft/status/1803133436623986990"
+        "Comission - Bull Transformation":
+        {
+        "link":"https://www.youtube.com/watch?v=9ifBDyVCeAY",
+        "color":""
         },
+
+        "Commission - Stratera Youtube Intro":
+        {
+        "link":"https://www.youtube.com/watch?v=SU9tRkYD_vE",
+        "color":""
+        },
+
+        "Commission - Gibes Youtube Intro":
+        {
+        "link":"https://www.youtube.com/watch?v=MRIpPvY7-JQ",
+        "color":""
+        },
+
+        "Commission - Batman Animatic":
+        {
+        "link":"https://www.youtube.com/watch?v=l8Yrg3vXusk",
+        "color":""
+        },
+
+        "Collab - Beast Rising":
+        {
+        "link":"https://www.youtube.com/watch?v=QMRCFCVoNao",
+        "color":""
+        },
+
+        "Collab - Road to El Dorado":
+        {
+        "link":"https://www.youtube.com/watch?v=C_CuRekPF4k",
+        "color":""
+        },
+
+        "HypnosisSoft - Game (PV)":
+        {
+        "link":"https://x.com/hypnosissoft/status/1803133436623986990",
+        "color":"#500000"
+        }
+    },
+
     "Atomic Cartoons":{
-        "Cartoon (PV)":"TBA"
+        "Cartoon (PV)":
+        {
+        "link":"TBA",
+        "color":"#500000"
+        }
         },
     "Studio WIT":{
-        "Yaiba:Samurai Legend (E10)":"TBA"
+        "Yaiba:Samurai Legend (E10)(LO)":
+        {
+        "link":"TBA",
+        "color":"#500000"
+        }
         },
     "Studio MAF":{
-        "Anime":"TBA"
+        "Anime (LO)":
+        {
+        "link":"TBA",
+        "color":"#500000"
+        }
+
         },
     "Production I.G":{
-        "Kinnikuman (S1:E6)":"https://www.youtube.com/watch?v=Bi_s_g2l1Yk"
+        "Kinnikuman (S1:E6)(LO)":
+        {
+        "link":"https://www.youtube.com/watch?v=Bi_s_g2l1Yk",
+        "color":""
+        }
+
         },
     "AstralShiftPro":{
-        "Little Goody Two Shoes (PV)":"https://sadewoo.tumblr.com/post/732936987201404928/post-animation-little-goody-two-shoes-trailer"
+        "Little Goody Two Shoes (PV)":
+        {
+        "link":"https://sadewoo.tumblr.com/post/732936987201404928/post-animation-little-goody-two-shoes-trailer",
+        "color":""
+        }
+
         },
     "Newgrounds":{
-        "Friday Night Funkin' (Cutscene)":"https://www.youtube.com/watch?v=BLUcapqwyuU"
+        "Friday Night Funkin' (Cutscene)":
+        {
+        "link":"https://www.youtube.com/watch?v=BLUcapqwyuU",
+        "color":""
+        }
+
         },
     "Studio Yotta":{
-        "Game (PV)" : "TBA",
-        "Cartoon (PV)🪰" : "TBA",
-        "Digimon Ghost Game (S1:E3 & S1:E9)":"https://x.com/StudioYotta/status/1467329919352901633",
-        "Boruto (E232)":"https://media.licdn.com/dms/image/v2/C562DAQFIsAc_D1fv6g/profile-treasury-image-shrink_800_800/profile-treasury-image-shrink_800_800/0/1643688073585?e=1749344400&v=beta&t=-2DejMfN4qFjM7uRBrUfSm2-cRbslTrSu6xgd3Xphz4",
-        "Animaniacs (2020)(S1:E4)(Anime)":"https://www.youtube.com/watch?v=DudZFZ2n9iI",
-        "VShojo x GFuel (PV)":"https://www.youtube.com/watch?v=iZw1_2PFsZE",
-        "Craig Before the Creek Movie (2023)":"https://www.youtube.com/watch?v=DudZFZ2n9iI",
-        "Vampire Survivors x SAGA (PV)":"https://www.youtube.com/watch?v=iZw1_2PFsZE",
-        "Vampire Survivors x Contra (PV)":"https://www.youtube.com/watch?v=iZw1_2PFsZE",
-        "Vampire Survivors x Castlevania (PV)":"https://www.youtube.com/watch?v=iZw1_2PFsZE",
-        "Vampire Survivors x Among Us (PV)":"https://www.youtube.com/watch?v=iZw1_2PFsZE",
-        "Nova Island (PV)":"https://www.youtube.com/watch?v=iZw1_2PFsZE",
-        "Starlight Re:Volvers (PV)(TBA)":"https://www.youtube.com/watch?v=o8WkNXMExSw",
-        "Inkbound (PV)":"https://www.youtube.com/watch?v=iZw1_2PFsZE",
-        "Grotto Beasts (PV)":"https://www.youtube.com/watch?v=gPm4DxaD6Wc",
-        "Neon White (PV)":"https://www.youtube.com/watch?v=lxWmFEuE6Y0",
-        "Smiling Friends (S2:E3 & S2:E4)" : "https://www.youtube.com/watch?v=DudZFZ2n9iI",
-        "Biggie: I Got a Story to Tell (PV)":"https://www.youtube.com/watch?v=5QBUlcajrEY"
+        "Game (PV)" :
+        {
+        "link":"TBA",
+        "color":"#500000"
+        },
+
+        "Cartoon (PV)🪰" :
+        {
+        "link":"TBA",
+        "color":"#500000"
+        },
+
+        "Digimon Ghost Game (S1:E3 & S1:E9)":
+        {
+        "link":"https://x.com/StudioYotta/status/1467329919352901633",
+        "color":"#484400"
+        },
+
+        "Boruto (E232)":
+        {
+        "link":"https://media.licdn.com/dms/image/v2/C562DAQFIsAc_D1fv6g/profile-treasury-image-shrink_800_800/profile-treasury-image-shrink_800_800/0/1643688073585?e=1749344400&v=beta&t=-2DejMfN4qFjM7uRBrUfSm2-cRbslTrSu6xgd3Xphz4",
+        "color":"#484400"
+        },
+
+        "Animaniacs (2020)(S1:E4)(Anime)":
+        {
+        "link":"https://www.youtube.com/watch?v=DudZFZ2n9iI",
+        "color":""
+        },
+
+        "VShojo x GFuel (PV)":
+        {
+        "link":"https://www.youtube.com/watch?v=iZw1_2PFsZE",
+        "color":""
+        },
+
+        "Craig Before the Creek Movie (2023)":
+        {
+        "link":"https://www.youtube.com/watch?v=DudZFZ2n9iI",
+        "color":""
+        },
+
+        "Vampire Survivors x SAGA (PV)":
+        {
+        "link":"https://www.youtube.com/watch?v=iZw1_2PFsZE",
+        "color":""
+        },
+
+        "Vampire Survivors x Contra (PV)":
+        {
+        "link":"https://www.youtube.com/watch?v=iZw1_2PFsZE",
+        "color":""
+        },
+
+        "Vampire Survivors x Castlevania (PV)":
+        {
+        "link":"https://www.youtube.com/watch?v=iZw1_2PFsZE",
+        "color":""
+        },
+
+        "Vampire Survivors x Among Us (PV)":
+        {
+        "link":"https://www.youtube.com/watch?v=iZw1_2PFsZE",
+        "color":""
+        },
+
+        "Nova Island (PV)":
+        {
+        "link":"https://www.youtube.com/watch?v=iZw1_2PFsZE",
+        "color":""
+        },
+
+        "Starlight Re:Volvers (PV)":
+        {
+        "link":"https://www.youtube.com/watch?v=o8WkNXMExSw",
+        "color":"#1f3e53"
+        },
+
+        "Inkbound (PV)":
+        {
+        "link":"https://www.youtube.com/watch?v=iZw1_2PFsZE",
+        "color":""
+        },
+
+        "Grotto Beasts (PV)":
+        {
+        "link":"https://www.youtube.com/watch?v=gPm4DxaD6Wc",
+        "color":"#1f3e53"
+        },
+
+        "Neon White (PV)":
+        {
+        "link":"https://www.youtube.com/watch?v=lxWmFEuE6Y0",
+        "color":"#1f3e53"
+        },
+
+        "Smiling Friends (S2:E3 & S2:E4)" :
+        {
+        "link":"https://www.youtube.com/watch?v=DudZFZ2n9iI",
+        "color":""
+        },
+
+        "Biggie: I Got a Story to Tell (PV)":
+        {
+        "link":"https://www.youtube.com/watch?v=5QBUlcajrEY",
+        "color":"#1f3e53"
+        }
+
         },
 
     "Chaos Emporium":{
-        "Helluvaboss (S1:E6)":"https://www.youtube.com/watch?v=ZArlzeNNAEs&list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ&index=12"
-        },
-    "Titmouse":{
-        "Hi-Fi Rush (Cutscene)":"https://www.youtube.com/watch?v=ZArlzeNNAEs&list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ&index=12",
-        "I Heart Arlo (S1:E19)":"https://www.youtube.com/watch?v=ZArlzeNNAEs&list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ&index=12",
-        "Area 21 (MV)(FX Only)":"https://www.youtube.com/watch?v=DudZFZ2n9iI",
-        "Agent King":"..."
+        "Helluvaboss (S1:E6)":
+        {
+        "link":"https://www.youtube.com/watch?v=ZArlzeNNAEs",
+        "color":""
+        }
+
         },
 
+    "Titmouse":{
+        "Hi-Fi Rush (Cutscene)":
+        {
+        "link":"https://www.youtube.com/watch?v=B_BOYNky24w",
+        "color":""
+        },
+
+        "I Heart Arlo (S1:E19)":
+        {
+        "link":"https://www.youtube.com/watch?v=ZArlzeNNAEs&list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ&index=12",
+        "color":""
+        },
+
+        "Area 21 (MV)(FX Only)":
+        {
+        "link":"https://www.youtube.com/watch?v=DudZFZ2n9iI",
+        "color":"#1f3e53"
+        },
+
+        "Agent King":
+        {
+        "link":"...",
+        "color":"#500000"
+        }
+
+        },
+
+
     "Portside Studios":{
-        "Port by the sea":"https://www.youtube.com/watch?v=F5yHNCQYEAY"
+        "Port by the sea":
+        {
+        "link":"https://www.youtube.com/watch?v=F5yHNCQYEAY",
+        "color":""
+        }
         },
     "Tampar Production":{
-        "Movie":"TBA",
-        "Wanara Teaser":"TBA",
-        "Iklan Mie Sedap (PV)(FX Only)":"...",
-        "Yellow Claw - Amsterdamned (MV)":"https://www.youtube.com/watch?v=NtYPh5Lh9HA",
-        "Arus Merah (MV)":"https://www.youtube.com/watch?v=OMd0sFVKvUI"
+        "Tinggal Meninggal (2D Animations)":
+        {
+        "link":"https://www.youtube.com/watch?v=K3jH6Wb3WNM",
+        "color":"#500000"
+        },
+        "Wanara Teaser":
+        {
+        "link":"TBA",
+        "color":"#500000"
+        },
+        "Iklan Mie Sedap (PV)(FX Only)":
+        {
+        "link":"...",
+        "color":"#500000"
+        },
+        "Yellow Claw - Amsterdamned (MV)":
+        {
+        "link":"https://www.youtube.com/watch?v=NtYPh5Lh9HA",
+        "color":"#1f3e53"
+        },
+        "Arus Merah (MV)":
+        {
+        "link":"https://www.youtube.com/watch?v=OMd0sFVKvUI",
+        "color":"#1f3e53"
+        }
+
         },
     "Cuatrodia Creative":{
-        "Iklan Go Pay":"..."
+        "Iklan Go Pay":
+        {
+        "link":"...",
+        "color":"#500000"
+        }
         },
     "Zettai Absolute":{
-        "Qtp vs T1 (Imaqtpie vs Tyler1 anime battle 60FPS English Dub)":"https://www.youtube.com/watch?v=J6g1kD7Yyyo",
-        "Ambition's Journey // RISE Music Video Parody | League of Legends Worlds 2018":"Ambition's Journey // RISE Music Video Parody | League of Legends Worlds 2018",
-        "Ryze’s 10-Year Realm Warp | League of Legends Community Collaboration":"https://www.youtube.com/watch?v=n_-kANpqetM",
-        "LCS 2020 Spring Finals Opening Ceremony Community Animation":"https://www.youtube.com/watch?v=Rkx_2Jybed4"
+        "Qtp vs T1 (Imaqtpie vs Tyler1 anime battle 60FPS English Dub)":
+        {
+        "link":"https://www.youtube.com/watch?v=J6g1kD7Yyyo",
+        "color":"#1f3e53"
+        },
+        "Ambition's Journey // RISE Music Video Parody | League of Legends Worlds 2018":
+        {
+        "link":"https://www.youtube.com/watch?v=QdSXrlQWTX8",
+        "color":"#1f3e53"
+        },
+        "Ryze’s 10-Year Realm Warp | League of Legends Community Collaboration":
+        {
+        "link":"https://www.youtube.com/watch?v=n_-kANpqetM",
+        "color":"#1f3e53"
+        },
+        "LCS 2020 Spring Finals Opening Ceremony Community Animation":
+        {
+        "link":"https://www.youtube.com/watch?v=Rkx_2Jybed4",
+        "color":"#1f3e53"
+        }
         }
 
 }

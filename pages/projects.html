@@ -18,6 +18,7 @@
 </div>
 
 
+
 <script>
 
 fetch('../assets/json/data_projects.json')
@@ -25,6 +26,7 @@ fetch('../assets/json/data_projects.json')
 .then(data => {
     // table_studio(Object.keys(data));
     tb = document.getElementById('tb');
+
     // table = document.createElement("table");
     for(var i in data){
         var key = i;
@@ -48,28 +50,26 @@ fetch('../assets/json/data_projects.json')
 
 
 
-                tr2 = document.createElement('ul');
+                tr2 = document.createElement('div');
                 tr1.appendChild(tr2);
 
-                td1 = document.createElement('li');
+                td1 = document.createElement('div');
+
+                td1.style.backgroundColor = sub_val["color"];
                 tr2.appendChild(td1);
                 td1.innerText = sub_key;
 
 
-                td2 = document.createElement('li');
-                td2.style.color = 'red';
-                td2.style.listStyleType = 'none';
+                td2 = document.createElement('div');
                 td1.appendChild(td2);
 
-
-
                 const anchor = document.createElement('a');
-                anchor.setAttribute('href', sub_val);
-                if (sub_val.length > 25) {
-                anchor.textContent = sub_val.substring(0, 24) + "...";
+                anchor.setAttribute('href', sub_val["link"]);
+                if (sub_val["link"].length > 25) {
+                anchor.textContent = sub_val["link"].substring(0, 24) + "...";
                 }
                 else{
-                anchor.textContent = sub_val;
+                anchor.textContent = sub_val["link"];
                 }
 
                 anchor.setAttribute('target', '_blank');
@@ -82,13 +82,19 @@ fetch('../assets/json/data_projects.json')
 </script>
 
 <style>
-table,tr,td{border:1px solid purple;border-collapse: collapse;padding:10px;}
+table,tr,td{border:1px dashed purple;border-collapse: collapse;padding:0px;border-spacing:0px;}
 table{width:90%;color:white;}
+button{border:1px solid gold;color:white;}
 
 </style>
-
-<p style="color:#4a89c3;">THE LIST OF THE STUDIOS I WORKED WITH AND PROJECTS I PARTICIPATED IN (UNDER CONSTRUCTION!)</p>
-
+<div style="color:#4a89c3;">
+<br>THE LIST OF THE STUDIOS I WORKED WITH AND PROJECTS I PARTICIPATED IN
+<br><br>
+<button style="background-color:black;">TRANSPARENT : My animations only</button>
+<button style="background-color:#4e0000;">RED : To be Added</button><br>
+<button style="background-color:#464200;">YELLOW : Credit screenshot only (no permission to upload)</button>
+<button style="background-color:#1d3b4f;">BLUE : Full project</button>
+<br><br>
 <center>
 <table id="tb">
 </table>
