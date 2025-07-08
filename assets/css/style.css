@@ -2,7 +2,12 @@
     font-family: SuperSquad;
     src: url('font/SuperSquad.ttf') format('truetype');
   }
-
+html,body{
+  text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+}
 body{
 /*   background-image:url('https://www.g-gundam.net/common/img/bg1.png'); */
     font-family: Arial, Helvetica, sans-serif;
@@ -36,8 +41,8 @@ h1:hover{color:gold;}
   cursor: pointer;
   padding-top: 12px;
   padding-bottom:12px;
-  transition: 0.3s;
-  font-size: 18px;
+/*   transition: 0.3s; */
+  font-size: 20px;
 }
 .hbtn:hover{
   color:black;
