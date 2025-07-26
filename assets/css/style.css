@@ -104,7 +104,7 @@ h1:hover{color:gold;}
   }
   
   .poster{width:130px;height:180px;}
-  .poster:hover{filter: brightness(0.5);}
+  .hvr:hover{filter: brightness(0.5);}
   .poster_2{width:210px;height:118;}
   .poster_2:hover{opacity:0.5;}
   
