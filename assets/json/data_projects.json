@@ -57,13 +57,26 @@
         "color":""
         }
         },
+    "J.C.Staff":{
+        "Anime (LO)":
+        {
+        "link":"TBA",
+        "color":"#500000"
+        }
+        },
+    "E&H Productions":{
+        "Anime (LO)":
+        {
+        "link":"TBA",
+        "color":"#500000"
+        }
+        },
     "Studio MAF":{
         "Anime (LO)":
         {
         "link":"TBA",
         "color":"#500000"
         }
-
         },
     "Production I.G":{
         "Kinnikuman (S1:E6)(LO)":
@@ -245,7 +258,7 @@
         }
         },
     "Tampar Production":{
-        "Tinggal Meninggal(Movie)(Animated Ninja Cat at 1:44)":
+        "Tinggal Meninggal (Movie)(Animated Ninja Cat at 1:44)":
         {
         "link":"https://youtu.be/Z_G2cU5-vSk?t=104",
         "color":"#1f3e53"
