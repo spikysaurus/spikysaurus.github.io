@@ -16,11 +16,17 @@ body{
     padding-left: 0%;
     padding-right: 0%;
     text-align: center;
-    background-color: #0c1820;
+    /*background-color: #0c1820;*/
+background: #fdf6e3;
+background-size:180px 180px;
+background-image:url('https://rayearth-anime.com/assets/img/bg_cross_02.svg');
+
     box-sizing: border-box;
     margin:0;
     }
-    
+.logo-top{
+float:left;position:absolute;top:5px;left:10px;
+}
 .text {
   font-family: SuperSquad;
   color:white;
@@ -32,8 +38,16 @@ h1{
 }
 h1:hover{color:gold;}
 
-.table-bg{width:900px;text-align:center;}
-.htab{background-color:black;}
+.table-bg{
+width:900px;text-align:center;
+
+}
+.htab{
+background-color:#9b7a2f;
+border: 0px solid red;
+padding:5px;
+
+}
 .hbtn{
   background-color: transparent;
   border: none;
@@ -48,8 +62,8 @@ h1:hover{color:gold;}
   color:black;
   background-color: gold;
 }
-.hbtn_on{color:gold;}
-.hbtn_off{color:purple;}
+.hbtn_on{color:gold;font-weight: bold;}
+.hbtn_off{color:white;}
 
   
   a{all:unset;color:darkviolet;}
