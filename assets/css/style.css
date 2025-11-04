@@ -8,8 +8,19 @@ html,body{
   -moz-text-size-adjust: none;
   -ms-text-size-adjust: none;
 }
+
+@keyframes infiniteScrollBg {
+  0% {
+    background-position: 50% 0;
+  }
+  100%{
+    background-position: 50% (-$background-size * 2);
+  }
+}
+
 body{
-/*   background-image:url('https://www.g-gundam.net/common/img/bg1.png'); */
+   background-image:url('https://opengameart.org/sites/default/files/styles/medium/public/space_prev.jpg');
+animation: infiniteScrollBg 35s linear infinite;
     font-family: Arial, Helvetica, sans-serif;
     padding-top: 0%;
     padding-bottom:2%;
@@ -17,9 +28,6 @@ body{
     padding-right: 0%;
     text-align: center;
     /*background-color: #0c1820;*/
-background: #fdf6e3;
-background-size:180px 180px;
-background-image:url('https://rayearth-anime.com/assets/img/bg_cross_02.svg');
 
     box-sizing: border-box;
     margin:0;
@@ -43,7 +51,7 @@ width:900px;text-align:center;
 
 }
 .htab{
-background-color:#9b7a2f;
+background-color:none;
 border: 0px solid red;
 padding:5px;
 

@@ -30,7 +30,7 @@
 
   /* (C2) COLORS */
   border: 0px solid #ddd;
-  background: #fff;
+  background: none;
 
   /* (C3) IMAGE RESIZE */
   /* cover | contain | fill | scale-down */
