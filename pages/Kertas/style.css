@@ -140,7 +140,7 @@ canvas {
 }
 
 #draw {
-  z-index:1;
+  z-index:0;
 }
 
 button {
@@ -158,19 +158,19 @@ button.activePan {
 
 /* Mobile tweak: stack vertically */
 @media (max-width: 600px) {
-#bar button,
-#bar label,
-#bar input[type="text"] {
-  flex: 1 1 auto;
-  min-width: 32px;
-  padding: 0.1rem;
-/*  font-size: 1rem;*/
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background: #fff;
-  cursor: pointer;
-  text-align: center;
-}
+/*#bar button,*/
+/*#bar label,*/
+/*#bar input[type="text"] {*/
+/*  flex: 1 1 auto;*/
+/*  min-width: 32px;*/
+/*  padding: 0.1rem;*/
+/*/*  font-size: 1rem;*/*/
+/*  border-radius: 6px;*/
+/*  border: 1px solid #ccc;*/
+/*  background: #fff;*/
+/*  cursor: pointer;*/
+/*  text-align: center;*/
+/*}*/
 
   #bar {
     flex-direction: column;

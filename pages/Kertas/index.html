@@ -1,87 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Kertas</title>
-  <link rel="stylesheet" href="style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-</head>
-<body >
-  <div id="bar">
-   <div class="group">
-    <div class="group">
-    	
-		 <button id="export">⬆️</button>
-		 <button id="import">⬇️</button>
-		 <button id="pdf">📄</button>
-		 
-		 <button id="save">📸</button>
-	</div>
-	
-	<div class="group">
-		 <input id="url" type="text" placeholder="Image URL">
-		 <button id="load">📥</button>
-		 <button onclick="window.open('https://spikysaurus.github.io', '_blank');" id="home">🏠</button>
-		 <button onclick="window.open('https://traditionalanimatorindonesia.github.io/pages/Templates/index.html', '_blank');" id="templates">📜</button>
-	  </div>
-	
-	
-	 
-    
-		 
-
-<!-- Grouped color buttons -->
-
-    
-			 <div class="group">
-				<input id="col" type="color" value="#000000">
-				<button id="black" style="color:black">BL</button>
-				<button id="white" style="color:black;">WH</button>
-				<button id="red" style="color:red">R</button>
-				<button id="green" style="color:green">G</button>
-				<button id="blue" style="color:blue">B</button>
-			 </div>
-			 <!-- end of group -->
-
-			<div class="group">
-			 <button id="brush">✏️</button>
-			 <button id="add">📝</button>
-			 <button id="clr">🗑️</button>
-			 <button id="select">🔲</button>
-<button id="copy">📋</button>
-<button id="cut">✂️</button>
-<button id="paste">🕹️</button>
-
-			 </div>
-		 
-		 <div class="group">
-    <label><input id="sz" type="range" min="2" max="50" value="12"></label>
-    <label><input id="op" type="range" min="0.1" max="1" step="0.05" value="1"></label>
-    </div>
-    
-    <div class="group">
-		 <button id="pan">✋</button>
-		 <button id="zoomIn">➕</button>
-		 <button id="zoomOut">➖</button>
-		 </div>
-		 
-		 
-     </div>
-    
-	  <div id="line"></div>
-	  <div id="stage">
-		 <div id="stack">
-		   <canvas id="bg"></canvas>
-		   <canvas id="draw"></canvas>
-		   <canvas id="overlay"></canvas>
-		 </div>
-	  </div>
-
-
-
-
-  <script src="script.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</body>
+   <head>
+      <meta charset="UTF-8">
+      <title>Kertas</title>
+      <link rel="stylesheet" href="style.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+   </head>
+   <body >
+      <div id="bar">
+      <div class="group">
+         <div class="group">
+            <button id="export">⬆️</button>
+            <button id="import">⬇️</button>
+            <button id="pdf">📄</button>
+            <button id="save">📸</button>
+         </div>
+         <div class="group">
+            <input id="url" type="text" placeholder="Image URL">
+            <button id="load">📥</button>
+            <button onclick="window.open('https://spikysaurus.github.io', '_blank');" id="home">🏠</button>
+            <button onclick="window.open('https://traditionalanimatorindonesia.github.io/pages/Templates/index.html', '_blank');" id="templates">📜</button>
+         </div>
+         <!-- Grouped color buttons -->
+         <div class="group">
+            <input id="col" type="color" value="#000000">
+            <button id="black" style="color:black">BL</button>
+            <button id="white" style="color:black;">WH</button>
+            <button id="red" style="color:red">R</button>
+            <button id="green" style="color:green">G</button>
+            <button id="blue" style="color:blue">B</button>
+         </div>
+         <!-- end of group -->
+         <div class="group">
+            <button id="brush">✏️</button>
+            <button id="add">📝</button>
+            <button id="clr">🗑️</button>
+            <button id="select">🔲</button>
+            <button id="copy">📋</button>
+            <button id="cut">✂️</button>
+            <button id="paste">🕹️</button>
+         </div>
+         <div class="group">
+            <label><input id="sz" type="range" min="2" max="50" value="12"></label>
+            <label><input id="op" type="range" min="0.1" max="1" step="0.05" value="1"></label>
+         </div>
+         <div class="group">
+            <button id="pan">✋</button>
+            <button id="zoomIn">➕</button>
+            <button id="zoomOut">➖</button>
+         </div>
+      </div>
+      <div id="line"></div>
+      <div id="stage">
+         <div id="stack">
+            <canvas id="bg"></canvas>
+            <canvas id="draw"></canvas>
+            <canvas id="overlay"></canvas>
+         </div>
+      </div>
+      <script src="script.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+   </body>
 </html>
 
