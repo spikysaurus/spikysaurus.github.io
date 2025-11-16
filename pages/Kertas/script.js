@@ -417,7 +417,7 @@ document.getElementById('paste').onclick = () => {
 const brushBtn = document.getElementById('brush')
 brushBtn.onclick = () => {
     eras = !eras;
-    brushBtn.textContent = eras ? '🧽' : '✏️'
+    brushBtn.textContent = eras ? 'Eraser' : 'Pen'
 }
 const panBtn = document.getElementById('pan')
 panBtn.onclick = () => {
@@ -431,19 +431,19 @@ panBtn.onclick = () => {
 }
 
 //Color Buttons
-document.getElementById("black").onclick=()=>{col.value="#000000"},
-document.getElementById("white").onclick=()=>{col.value="#ffffff"},
-document.getElementById("red").onclick=()=>{col.value="#ff0000"},
-document.getElementById("green").onclick=()=>{col.value="#00ff00"},
-document.getElementById("blue").onclick=()=>{col.value="#0000ff"};
-document.getElementById('clr').onclick = () => {
-    const confirmClear = confirm("Clear the canvas?");
-    if (confirmClear) {
-        drx.clearRect(0, 0, dr.width, dr.height);
-        frames[cur] = dr.toDataURL();
-        render();
-    }
-};
+//document.getElementById("black").onclick=()=>{col.value="#000000"},
+//document.getElementById("white").onclick=()=>{col.value="#ffffff"},
+//document.getElementById("red").onclick=()=>{col.value="#ff0000"},
+//document.getElementById("green").onclick=()=>{col.value="#00ff00"},
+//document.getElementById("blue").onclick=()=>{col.value="#0000ff"};
+//document.getElementById('clr').onclick = () => {
+//    const confirmClear = confirm("Clear the canvas?");
+//    if (confirmClear) {
+//        drx.clearRect(0, 0, dr.width, dr.height);
+//        frames[cur] = dr.toDataURL();
+//        render();
+//    }
+//};
 
 //Save Button
 document.getElementById('save').onclick = () => {
@@ -576,13 +576,15 @@ document.getElementById('import').onclick = () => {
                     document.getElementById('url').value = obj.background
                     const img = new Image()
                     img.crossOrigin = "anonymous"
+                    img.src = obj.background
                     img.onload = () => {
                         resize(img.width, img.height)
                         bgx.clearRect(0, 0, bg.width, bg.height)
                         bgx.drawImage(img, 0, 0)
                         drx.clearRect(0, 0, dr.width, dr.height)
                     }
-                    img.src = obj.background
+                    
+                    
                 }
                 if (obj.frames) {
                     frames.length = 0
@@ -590,8 +592,8 @@ document.getElementById('import').onclick = () => {
                     cur = 0
                     show(cur)
                     render()
-                     render()
                 }
+                
             } catch (err) {
                 console.error("Invalid JSON", err)
             }
