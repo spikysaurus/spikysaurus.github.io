@@ -59,6 +59,8 @@ function init() {
     cur = frames.length - 1;
     render()
 }
+resize(640, 360);
+init()
 
 function getCanvasCoords(e, canvas) {
     const rect = canvas.getBoundingClientRect();
@@ -171,16 +173,40 @@ document.addEventListener('pointermove', e => {
 }, {
     passive: true
 })
-zoomIn.onclick = () => {
- targetSc *= 1.1
-//    targetSc = Math.min(targetSc * 1.1, 3)
-//    targetSc = Math.max(targetSc * 1.1, 0.0001);// prevent collapse to 0
-}
-zoomOut.onclick = () => {
- targetSc *= 0.9
-//    targetSc = Math.max(targetSc * 0.9, 0.5)
-//    targetSc = Math.max(targetSc * 0.9, 0.0001);// prevent collapse to 0
-}
+//zoomIn.onclick = () => {
+// targetSc *= 1.1
+//}
+//zoomOut.onclick = () => {
+// targetSc *= 0.9
+//}
+
+let zoomInterval;
+
+// Zoom In (hold to repeat)
+zoomIn.onmousedown = () => {
+    zoomInterval = setInterval(() => {
+        targetSc *= 1.1;
+        // redraw or update canvas here if needed
+    }, 100); // every 100ms
+};
+
+zoomIn.onmouseup = zoomIn.onmouseleave = () => {
+    clearInterval(zoomInterval);
+};
+
+// Zoom Out (hold to repeat)
+zoomOut.onmousedown = () => {
+    zoomInterval = setInterval(() => {
+        targetSc *= 0.9;
+        // redraw or update canvas here if needed
+    }, 100);
+};
+
+zoomOut.onmouseup = zoomOut.onmouseleave = () => {
+    clearInterval(zoomInterval);
+};
+
+
 document.addEventListener('wheel', e => {
     e.preventDefault()
     if (e.ctrlKey) {
@@ -374,17 +400,17 @@ document.getElementById('cut').onclick = () => {
     frames[cur] = dr.toDataURL();
     render();
 };
-// Paste clipboard at mouse position
-document.getElementById('paste').onclick = () => {
-    if (clipboard) {
-        dr.addEventListener('click', function pasteOnce(e) {
-            drx.drawImage(clipboard, e.offsetX, e.offsetY);
-            frames[cur] = dr.toDataURL();
-            render();
-            dr.removeEventListener('click', pasteOnce);
-        });
-    }
-};
+//// Paste clipboard at mouse position
+//document.getElementById('paste').onclick = () => {
+//    if (clipboard) {
+//        dr.addEventListener('click', function pasteOnce(e) {
+//            drx.drawImage(clipboard, e.offsetX, e.offsetY);
+//            frames[cur] = dr.toDataURL();
+//            render();
+//            dr.removeEventListener('click', pasteOnce);
+//        });
+//    }
+//};
 
 
 
@@ -665,6 +691,5 @@ document.getElementById('load').onclick = () => {
     };
     img.src = u
 }
-resize(640, 360);
-init()
+
 
