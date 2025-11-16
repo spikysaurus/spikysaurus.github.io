@@ -2,103 +2,276 @@
 <html>
 <head>
 <link rel="stylesheet" href="../assets/css/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <!-- <link rel="stylesheet" href="../assets/css/gallery.css"> -->
 </head>
 <body>
 
-<div class="htab">
-<a href="../index.html"><button class="hbtn hbtn_off">Home</button></a>
-<a href="projects.html"><button class="hbtn hbtn_on">Projects</button></a>
-<a href="gallery.html"><button class="hbtn hbtn_off">Drawings</button></a>
-<a href="links.html"><button class="hbtn hbtn_off">Links</button></a>
-<a href="contact.html"><button class="hbtn hbtn_off">Contact</button></a>
-</div>
-<div class="logo-top">
-<button class="hbtn"><b style="color:white;">SADE</b><b style="color:pink;">WOO</b></button>
-</div>
+<!-- Navigation Bar -->
 
+<nav class="nav-bar">
+  <ul>
+    <li>
+      <a href="../index.html" class="wii">
+        <span><img class="nav-icon" src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Google_material_icons_arrow_back_24px.svg">Back</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+<p class="content-space"></p>
 
+<style>
+
+  /* Toggle button */
+  #toggleLayout {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    background: #4a89c3;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  #toggleLayout:hover {
+    background: #357ab8;
+  }
+
+  /* Container for all cards */
+  #tb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 1000px;
+  }
+
+  /* Each top-level card */
+  .card {
+    flex: 1 1 300px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card h3 {
+    margin: 0 0 12px;
+    font-size: 1.2rem;
+    color: #4a89c3;
+    text-align: center;
+  }
+
+  /* Grid of sub-items inside each card */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  /* Each sub-item card */
+  .item {
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  .item span {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+
+  .item a {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #4a89c3;
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: background 0.2s ease;
+  }
+
+  .item a:hover {
+    background: #357ab8;
+  }
+
+  /* List layout styles */
+  .list-layout {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .list-layout .card {
+    flex: 1 1 100%;
+  }
+  .list-layout .grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .list-layout .item {
+    text-align: left;
+  }
+
+  /* Mobile tweaks */
+  @media (max-width: 480px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .tag{border:1px solid pink;padding:5px;border-radius:10px;}
+</style>
+</head>
+<body>
+
+<center>
+<h1>Animation Works</h1>
+<button class="tag" style="background-color:white;color:black;">My animations only</button>
+<button class="tag" style="background-color:orange;">To be Added</button>
+<button class="tag" style="background-color:yellow;color:black;">Credit screenshot only</button>
+<button class="tag" style="background-color:lightgreen;color:black;">Full project</button>
+<button id="toggleLayout">Switch to List View</button>
+<br><br>
+
+<div id="tb"></div>
+</center>
 
 <script>
-
 fetch('../assets/json/data_projects.json')
 .then(response => response.json())
 .then(data => {
-    // table_studio(Object.keys(data));
-    tb = document.getElementById('tb');
+    const tb = document.getElementById('tb');
 
-    // table = document.createElement("table");
-    for(var i in data){
-        var key = i;
+    for (const key in data) {
+        // Create card for each key
+        const card = document.createElement('div');
+        card.className = 'card';
 
+        const title = document.createElement('h3');
+        title.textContent = key;
+        card.appendChild(title);
 
-        tr = document.createElement('tr');
-        // tb.appendChild(table);
-        tb.appendChild(tr);
+        const grid = document.createElement('div');
+        grid.className = 'grid';
+        card.appendChild(grid);
 
-        td0 = document.createElement('td');
-        tr.appendChild(td0);
-        td0.innerText = i;
+        const val = data[key];
+        for (const sub_key in val) {
+            const sub_val = val[sub_key];
 
-        tr1 = document.createElement('td');
-        tr.appendChild(tr1);
+            const item = document.createElement('div');
+            item.className = 'item';
+            item.style.backgroundColor = sub_val["color"] || "#fff";
 
-        var val = data[i];
-        for(var j in val){
-            var sub_key = j;
-            var sub_val = val[j];
+            const label = document.createElement('span');
+            label.textContent = sub_key;
+            item.appendChild(label);
 
+            const anchor = document.createElement('a');
+            anchor.href = sub_val["link"];
+            anchor.target = "_blank";
+            anchor.textContent = "Watch";
+            item.appendChild(anchor);
 
+            grid.appendChild(item);
+        }
 
-                tr2 = document.createElement('div');
-                tr1.appendChild(tr2);
+        tb.appendChild(card);
+    }
+});
 
-                td1 = document.createElement('div');
-
-                td1.style.backgroundColor = sub_val["color"];
-                tr2.appendChild(td1);
-                td1.innerText = sub_key;
-
-
-                td2 = document.createElement('div');
-                td1.appendChild(td2);
-
-                const anchor = document.createElement('a');
-                anchor.setAttribute('href', sub_val["link"]);
-                if (sub_val["link"].length > 25) {
-                anchor.textContent = sub_val["link"].substring(0, 24) + "...";
-                }
-                else{
-                anchor.textContent = sub_val["link"];
-                }
-
-                anchor.setAttribute('target', '_blank');
-
-                td2.appendChild(anchor);
-        }}
-}
-);
-
+// Toggle layout
+const toggleBtn = document.getElementById('toggleLayout');
+toggleBtn.addEventListener('click', () => {
+  const tb = document.getElementById('tb');
+  tb.classList.toggle('list-layout');
+  if (tb.classList.contains('list-layout')) {
+    toggleBtn.textContent = "Switch to Grid View";
+  } else {
+    toggleBtn.textContent = "Switch to List View";
+  }
+});
 </script>
 
-<style>
-table,tr,td{border-top:1px solid purple;border-collapse: collapse;padding:10px;border-spacing:0px;border-radius:10px;}
-table{width:90%;color:black;background: rgba(255, 255, 255, .8);}
-button{border:1px solid gold;color:white;}
 
-</style>
-<div style="color:#4a89c3;">
-<br>HISTORY OF PROJECTS I PARTICIPATED IN
-<br><br>
-<button style="background-color:white;color:black;">Uncolored : My animations only</button>
-<button style="background-color:red;">ORANGE : To be Added</button><br>
-<button style="background-color:yellow;color:black;">YELLOW : Credit screenshot only (no permission to upload)</button>
-<button style="background-color:lightgreen;color:black;">GREEN : Full project</button>
-<br><br>
-<center>
-<table id="tb">
-</table>
-</center>
+
+<!--<script>-->
+
+<!--fetch('../assets/json/data_projects.json')-->
+<!--.then(response => response.json())-->
+<!--.then(data => {-->
+<!--    // table_studio(Object.keys(data));-->
+<!--    tb = document.getElementById('tb');-->
+
+<!--    // table = document.createElement("table");-->
+<!--    for(var i in data){-->
+<!--        var key = i;-->
+
+
+<!--        tr = document.createElement('tr');-->
+<!--        // tb.appendChild(table);-->
+<!--        tb.appendChild(tr);-->
+
+<!--        td0 = document.createElement('td');-->
+<!--        tr.appendChild(td0);-->
+<!--        td0.innerText = i;-->
+
+<!--        tr1 = document.createElement('td');-->
+<!--        tr.appendChild(tr1);-->
+
+<!--        var val = data[i];-->
+<!--        for(var j in val){-->
+<!--            var sub_key = j;-->
+<!--            var sub_val = val[j];-->
+
+
+
+<!--                tr2 = document.createElement('div');-->
+<!--                tr1.appendChild(tr2);-->
+
+<!--                td1 = document.createElement('div');-->
+
+<!--                td1.style.backgroundColor = sub_val["color"];-->
+<!--                tr2.appendChild(td1);-->
+<!--                td1.innerText = sub_key;-->
+
+
+<!--                td2 = document.createElement('div');-->
+<!--                td1.appendChild(td2);-->
+
+<!--                const anchor = document.createElement('a');-->
+<!--                anchor.setAttribute('href', sub_val["link"]);-->
+<!--                if (sub_val["link"].length > 25) {-->
+<!--                anchor.textContent = sub_val["link"].substring(0, 24) + "...";-->
+<!--                }-->
+<!--                else{-->
+<!--                anchor.textContent = sub_val["link"];-->
+<!--                }-->
+
+<!--                anchor.setAttribute('target', '_blank');-->
+
+<!--                td2.appendChild(anchor);-->
+<!--        }}-->
+<!--}-->
+<!--);-->
+
+<!--</script>-->
+
+<!--<style>-->
+<!--table,tr,td{border-top:1px solid purple;border-collapse: collapse;padding:10px;border-spacing:0px;border-radius:10px;}-->
+<!--table{width:90%;color:black;background: rgba(255, 255, 255, .8);}-->
+<!--button{border:1px solid gold;color:white;}-->
+
+<!--</style>-->
+
 
 </body>
 </html>

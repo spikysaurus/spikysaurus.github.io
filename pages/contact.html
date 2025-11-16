@@ -6,28 +6,58 @@
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/gallery.css">
   <script src="../assets/js/gallery.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 
 <body>
-<div class="htab">
-<a href="../index.html"><button class="hbtn hbtn_off">Home</button></a>
-<a href="projects.html"><button class="hbtn hbtn_off">Projects</button></a>
-<a href="gallery.html"><button class="hbtn hbtn_off">Drawings</button></a>
-<a href="links.html"><button class="hbtn hbtn_off">Links</button></a>
-<a href="contact.html"><button class="hbtn hbtn_on">Contact</button></a>
-</div>
-<div class="logo-top">
-<button class="hbtn"><b style="color:white;">SADE</b><b style="color:pink;">WOO</b></button>
-</div>
+
+<nav class="nav-bar">
+  <ul>
+    <li>
+      <a href="../index.html" class="wii">
+        <span><img class="nav-icon" src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Google_material_icons_arrow_back_24px.svg">Back</span>
+      </a>
+    </li>  
+  </ul>
+</nav>
 
 
 <center>
   <br><br>
-
-  <table width="900px" style="border-spacing:0px;">
+	<style>
+	.table-contact{
+	width:900px;
+	border-spacing:0px;
+	}
+	.table-img{
+	width:200px ;
+	background-image:url('../assets/drawings/icon.png');
+	background-size:cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	}
+	.table-desc{
+	text-align:left;
+	vertical-align: middle;
+	background-color:gold;
+	color:black;
+	padding-left:32px;
+	padding-right:32px;
+	padding-top:16px;
+	padding-bottom:16px;}
+	
+	@media (max-width: 600px) {
+	.table-contact{width:100%;}
+	.table-img{display:none;}
+	.table-desc{
+	text-align:center;}
+	}
+	
+	</style>
+  <table class="table-contact" style="">
     <tr>
-    <td style="width:200px ;background-image:url('../assets/drawings/icon.png');background-size:cover;background-repeat: no-repeat;background-position: center; "></td>
-    <td style="text-align:left;vertical-align: middle;background-color:gold; color:black; padding-left:32px;padding-right:32px;padding-top:16px;padding-bottom:16px;">
+    <td class="table-img"></td>
+    <td class="table-desc">
       <i>
       <br>Art/Animation commissions ? Work availability ?
       <br>Or just to say hi ? Ask me anything !

@@ -6,28 +6,37 @@
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/gallery.css">
   <script src="../assets/js/gallery.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 
 <body>
 
-<div class="htab">
-<a href="../index.html"><button class="hbtn hbtn_off">Home</button></a>
-<a href="projects.html"><button class="hbtn hbtn_off">Projects</button></a>
-<a href="gallery.html"><button class="hbtn hbtn_on">Drawings</button></a>
-<a href="links.html"><button class="hbtn hbtn_off">Links</button></a>
-<a href="contact.html"><button class="hbtn hbtn_off">Contact</button></a>
-</div>
-<div class="logo-top">
-<button class="hbtn"><b style="color:white;">SADE</b><b style="color:pink;">WOO</b></button>
-</div>
+<nav class="nav-bar">
+  <ul>
+    <li>
+      <a href="../index.html" class="wii">
+        <span><img class="nav-icon" src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Google_material_icons_arrow_back_24px.svg">Back</span>
+      </a>
+    </li>
+    <li>
+      <a onclick="openCity(event, 'FanArt')" id="defaultOpen" class="wii">
+        <span>Fan Arts</span>
+      </a>
+    </li>
+    <li>
+      <a onclick="openCity(event, 'OriginalCharacters')" class="wii">
+        <span>Original Characters</span>
+      </a>
+    </li>
+    <li>
+      <a onclick="openCity(event, 'GIFs')" class="wii">
+        <span>Gifs</span>
+      </a>
+    </li>  
+  </ul>
+</nav>
 
-<div class="tab" >
-  <button style="background-color:orange;" class="tablinks" onclick="openCity(event, 'FanArt')" id="defaultOpen">Fan Art</button>
-  <button style="background-color:pink;" class="tablinks" onclick="openCity(event, 'OriginalCharacters')" id="defaultOpen">Original Characters</button>
-  <button style="background-color:cyan;" class="tablinks" onclick="openCity(event, 'GIFs')" id="defaultOpen">GIFs</button>
-</div>
-
-
+<p class="content-space"></p>
 <div id="FanArt" class="tabcontent">
 <div id="display-images" class="gallery"></div>
 </div>

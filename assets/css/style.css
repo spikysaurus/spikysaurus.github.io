@@ -1,143 +1,309 @@
-  @font-face {
-    font-family: SuperSquad;
-    src: url('font/SuperSquad.ttf') format('truetype');
-  }
-html,body{
-  text-size-adjust: none;
-  -webkit-text-size-adjust: none;
-  -moz-text-size-adjust: none;
-  -ms-text-size-adjust: none;
-}
-
-@keyframes infiniteScrollBg {
-  0% {
-    background-position: 50% 0;
-  }
-  100%{
-    background-position: 50% (-$background-size * 2);
-  }
-}
-
-body{
-   background-image:url('https://opengameart.org/sites/default/files/styles/medium/public/space_prev.jpg');
-animation: infiniteScrollBg 35s linear infinite;
-    font-family: Arial, Helvetica, sans-serif;
-    padding-top: 0%;
-    padding-bottom:2%;
-    padding-left: 0%;
-    padding-right: 0%;
-    text-align: center;
-    /*background-color: #0c1820;*/
-
-    box-sizing: border-box;
-    margin:0;
-    }
-.logo-top{
-float:left;position:absolute;top:5px;left:10px;
-}
-.text {
-  font-family: SuperSquad;
-  color:white;
-}
-h1{
-  -webkit-text-stroke:1px black;
-/*   color:gold; */
-  padding:0px;margin:0px;
-}
-h1:hover{color:gold;}
-
-.table-bg{
-width:900px;text-align:center;
-
-}
-.htab{
-background-color:none;
-border: 0px solid red;
-padding:5px;
-
-}
-.hbtn{
-  background-color: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding-top: 12px;
-  padding-bottom:12px;
-/*   transition: 0.3s; */
-  font-size: 20px;
-}
-.hbtn:hover{
-  color:black;
-  background-color: gold;
-}
-.hbtn_on{color:gold;font-weight: bold;}
-.hbtn_off{color:white;}
-
+/* (Use the full CSS from previous step — ButaPro scheme) */
+    html {
+  scroll-behavior: smooth;
   
-  a{all:unset;color:darkviolet;}
-  a:hover{color:yellow;cursor:pointer;}
-  ul {
-      list-style-type: none;
+}
+    html, body {
+		
+      margin: 0;
       padding: 0;
-  }
-  .sns{width:auto;height:50px;background-color:transparent;}
-  .sns:hover{opacity:0.5;}
-  /* Style the tab */
-  table{border-width: 0;}
-  tr{border-width: 0;}
-  td{border-width: 0;}
-  iframe{border-width: 0;}
-  .tab {
-    
-    overflow: hidden;
-    border: 0px solid #ccc;
-    background-color: transparent;
-  }
-  
-  /* Style the buttons inside the tab */
-  .tab button {
-    
-    background-color: #1d3b4e;
-    /* float: left; */
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-    font-size: 17px;
-  }
-  
-  /* Change background color of buttons on hover */
-  .tab button:hover {
-    background-color: #ddd;
-  }
-  
-  /* Create an active/current tablink class */
-  .tab button.active {
-    background-color: #386b8f;
-  }
-  
-  /* Style the tab content */
-  .tabcontent {
-    display: none;
-    padding: 6px 12px;
-    border: 0px solid #ccc;
-    border-top: none;
-  }
-  
-  .poster{width:130px;height:180px;}
-  .hvr:hover{filter: brightness(0.5);}
-  .poster_2{width:210px;height:118;}
-  .poster_2:hover{opacity:0.5;}
-  
+      width: 100%;
+      overflow-x: hidden;
+      font-family: system-ui, sans-serif;
+      color: #222222;
+    }
+    .nav-icon{position:relative;top:3px;}
+    .content-space{margin-top:40px;}
+   .nav-bar {
+   margin-top:50px;
+  display: flex;
+  justify-content: center;
+  padding: 15px 0;
+}
 
-  .item {
-    vertical-align: top;
-    display: inline-block;
-    text-align: center;
+.nav-bar ul {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
 }
-.caption {
-    display: block;
-  color:white;
+
+
+.nav-button {
+  position: relative;
+  display: inline-block;
+  width: 120px;
+  height: 120px;
+  text-decoration: none;
+  perspective: 600px;
+}
+
+.nav-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+  /* Hexagon shape */
+  clip-path: polygon(
+    50% 0%,
+    93% 25%,
+    93% 75%,
+    50% 100%,
+    7% 75%,
+    7% 25%
+  );
+
+  transition: transform 0.6s ease; /* short spin duration */
+  transform-style: preserve-3d;
+}
+
+.nav-button:hover img {
+  transform: rotateY(360deg); /* coin spin */
+}
+
+.nav-button span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+<!--  font-size: 24px;-->
+  font-weight: bold;
+  text-shadow: 0 0 5px rgba(0,0,0,0.7);
+  pointer-events: none;
+}
+.nav-button span img{width:72px;}
+.nav-button:hover span {
+  color: #ffcc00;
+}
+
+    .container { display:flex; gap:20px; flex-wrap:wrap; padding:20px; box-sizing:border-box; }
+    .left,.right { flex:1 1 400px; }
+    
+    
+
+	.section-title{font-size:24px;}
+
+
+    .video-wrapper { position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,0.1); }
+    .video-wrapper iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:16px; width:100%; }
+    .card { position:relative; overflow:hidden; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,0.1); background:#fff; cursor:pointer; }
+    .card img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.3s ease; }
+    .card:hover img { transform:scale(1.05); }
+    .overlay-title { position:absolute; bottom:8px; left:8px; right:8px; background:black; color:#fff; padding:6px 10px; font-size:14px; border-radius:4px; }
+    .overlay-genre { position:absolute; top:8px; left:8px; background:red; color:#fff; padding:4px 8px; font-weight:bold;font-size:12px; border-radius:4px; }
+    .tba{opacity:0.5;}
+    
+    
+    // best seen at 1500px or less
+
+html, body { height: 100%; }
+body {
+  background:radial-gradient(ellipse at center, rgba(255,254,234,1) 0%, rgba(255,254,234,1) 35%, #B7E8EB 100%);
+  overflow: hidden;
+}
+
+.ocean { 
+  height: 5%;
+  width:100%;
+  position:absolute;
+  bottom:0;
+  left:0;
+  background: #015871;
+}
+
+.wave {
+  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x; 
+  position: absolute;
+  top: -198px;
+  width: 6400px;
+  height: 198px;
+  animation: wave 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) infinite;
+  transform: translate3d(0, 0, 0);
+}
+
+.wave:nth-of-type(2) {
+  top: -175px;
+  animation: wave 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) -.125s infinite, swell 7s ease -1.25s infinite;
+  opacity: 1;
+}
+
+@keyframes wave {
+  0% {
+    margin-left: 0;
+  }
+  100% {
+    margin-left: -1600px;
+  }
+}
+
+@keyframes swell {
+  0%, 100% {
+    transform: translate3d(0,-25px,0);
+  }
+  50% {
+    transform: translate3d(0,5px,0);
+  }
+}
+
+
+.social-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 400px;
+    margin: auto;
+  }
+
+  .social-btn {
+  	background-color:white;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+<!--    font-weight: bold;-->
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border:1px pink solid;
+    color: gray;
+  }
+
+  .social-btn img {
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+  }
+
+  .social-btn h1 {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
+  /* Hover effect */
+  .social-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
   
+  /* Floating profile icon */
+  .profile-icon {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: url('../drawings/icon.png') no-repeat center/cover;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+  }
+
+  /* Chat bubble */
+  .chat-bubble {
+    position: fixed;
+    top: 20px;
+    left: 90px; /* bubble appears to the right of the icon */
+    max-width: 250px;
+    padding: 12px 16px;
+    background: gold;
+    color: black;
+    border-radius: 16px;
+    font-family: sans-serif;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    cursor: pointer;
+    z-index: 999;
+    animation: fadeIn 0.3s ease;
+    display: block; /* visible by default */
+  }
+
+  /* Simple fade-in animation */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+ .wii {
+    width:auto;
+  margin-top:28px;
+  display: inline-block;
+  padding: 12px 24px;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  text-decoration:none;
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+  border-radius: 20px;
+  background: linear-gradient(to bottom, #fefefe 0%, #dcdcdc 100%);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8);
+  border: 2px solid #aaa;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
 }
+
+.wii:hover {
+  background: linear-gradient(to bottom, #ffffff 0%, #cfcfcf 100%);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.9);
+  transform: scale(1.05);
+} 
+/* Responsive adjustments for mobile */  
+@media (max-width: 600px) {
+	.wii{
+	
+	margin:10px;
+	width:100%;
+	padding: 0px 0px;
+	margin-top:0px;
+	box-shadow: none;
+	}
+  .nav-bar {
+  
+   margin-top:50px;
+   margin-left:-5%;
+  display: flex;
+  justify-content: center;
+  padding: 0px 0;
+}
+.nav-bar ul {
+	width:100%
+  list-style: none;
+  display: inline-block;
+  flex-direction: column;
+  gap: 0px;
+  margin: 0;
+  padding: 0;
+}
+.nav-button {
+  position: absolute;
+  right:20px;
+  top:10%;
+  display: inline-block;
+  width: 96px;
+  height: 96px;
+  text-decoration: none;
+  perspective: 600px;
+}
+ }
+@media (max-width: 1300px) {
+  .profile-icon {
+      bottom: 20px;
+      right: 20px;
+      top: auto;
+      left: auto;
+      width: 50px;
+      height: 50px;
+    }
+    .chat-bubble {
+      bottom: 20px;
+      right: 90px; /* bubble appears to the left of the icon */
+      top: auto;
+      left: auto;
+      max-width: 180px;
+      font-size: 12px;
+    }
+}
+
