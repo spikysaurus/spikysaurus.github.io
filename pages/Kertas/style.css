@@ -4,6 +4,7 @@ html,body {
   background:#222;
   color:#eee;
   font-family:sans-serif;
+  overscroll-behavior-y: contain;
 }
 
 /* Responsive bar container */

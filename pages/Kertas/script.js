@@ -13,11 +13,17 @@ function apply(){stack.style.transform=`translate(-50%,-50%) translate(${px}px,$
 function animate(){px+=(targetPx-px)*0.2;py+=(targetPy-py)*0.2;sc+=(targetSc-sc)*0.2;apply();requestAnimationFrame(animate)}
 animate()
 
-
-var myBody = document.getElementById('dabody');
-myBody.addEventListener('touchstart', function(e){ 
-    e.preventDefault() 
-});
+document.addEventListener('touchmove', function(event) {
+  // Prevent default for specific gestures or conditions
+  // Example: Disable pinch-to-zoom
+  if (event.touches.length > 1) {
+    event.preventDefault();
+  }
+  // Example: Disable scroll beyond a certain point
+  // if (window.scrollY === 0 && event.touches[0].clientY > lastY) {
+  //   event.preventDefault();
+  // }
+}, { passive: false }); // Use passive: false to allow preventDefault()
 
 
 //function resize(w,h){bg.width=w;bg.height=h;dr.width=w;dr.height=h;setSize(w,h)}
