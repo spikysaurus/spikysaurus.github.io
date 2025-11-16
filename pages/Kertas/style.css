@@ -5,6 +5,7 @@ html,body {
   color:#eee;
   font-family:sans-serif;
   overscroll-behavior-y: contain;
+  touch-action: none;
 }
 
 /* Responsive bar container */
