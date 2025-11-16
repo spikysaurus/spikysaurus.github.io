@@ -5,6 +5,7 @@ const overlay=document.getElementById('overlay'),ox=overlay.getContext('2d')
 const stack=document.getElementById('stack')
 const sz=document.getElementById('sz'),op=document.getElementById('op'),col=document.getElementById('col')
 let drawing=false,lx,ly,eras=false,pan=false,px=0,py=0,sc=1,sd=0
+
 let targetPx=0,targetPy=0,targetSc=1,panStartX=0,panStartY=0
 const frames=[];let cur=0
 
@@ -14,15 +15,9 @@ function animate(){px+=(targetPx-px)*0.2;py+=(targetPy-py)*0.2;sc+=(targetSc-sc)
 animate()
 
 document.addEventListener('touchmove', function(event) {
-  // Prevent default for specific gestures or conditions
-  // Example: Disable pinch-to-zoom
   if (event.touches.length > 1) {
     event.preventDefault();
   }
-  // Example: Disable scroll beyond a certain point
-  // if (window.scrollY === 0 && event.touches[0].clientY > lastY) {
-  //   event.preventDefault();
-  // }
 }, { passive: false }); // Use passive: false to allow preventDefault()
 
 
@@ -277,47 +272,6 @@ document.getElementById('load').onclick=()=>{const u=document.getElementById('ur
 resize(640,360);init()
 
 
-
-//let selecting = false, selStartX, selStartY, selEndX, selEndY;
-//let clipboard = null;
-
-//// Toggle selection mode
-//const selectBtn = document.getElementById('select');
-//selectBtn.onclick = () => {
-//  selecting = !selecting;
-//  selectBtn.classList.toggle('activePan', selecting);
-//};
-
-//// Mouse down: start selection
-//dr.addEventListener('mousedown', e => {
-//  if (selecting) {
-//    selStartX = e.offsetX;
-//    selStartY = e.offsetY;
-//    selEndX = selStartX;
-//    selEndY = selStartY;
-//  }
-//});
-
-//// Mouse move: update selection rectangle
-//dr.addEventListener('mousemove', e => {
-//  if (selecting && e.buttons === 1) {
-//    selEndX = e.offsetX;
-//    selEndY = e.offsetY;
-//    // Draw overlay rectangle
-//    render(); // redraw frames
-//    drx.strokeStyle = 'rgba(0,255,0,0.8)';
-//    drx.lineWidth = 1;
-//    drx.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
-//  }
-//});
-
-//// Mouse up: finalize selection
-//dr.addEventListener('mouseup', e => {
-//  if (selecting) {
-//    selEndX = e.offsetX;
-//    selEndY = e.offsetY;
-//  }
-//});
 let selecting = false, selStartX, selStartY, selEndX, selEndY;
 let clipboard = null;
 
@@ -376,6 +330,30 @@ dr.addEventListener('mouseup', e => {
     ox.clearRect(0, 0, overlay.width, overlay.height);
   }
 });
+
+
+canvas.addEventListener("pointerdown", e => {
+  if (e.pointerType === "pen" || e.pointerType === "touch" || e.pointerType === "mouse") {
+    drawing = true;
+    lastX = e.offsetX;
+    lastY = e.offsetY;
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+  }
+});
+
+canvas.addEventListener("pointermove", e => {
+  if (!drawing) return;
+  if (e.pointerType === "pen" || e.pointerType === "touch" || e.pointerType === "mouse") {
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+    lastX = e.offsetX;
+    lastY = e.offsetY;
+  }
+});
+
+canvas.addEventListener("pointerup", () => { drawing = false; });
+canvas.addEventListener("pointerleave", () => { drawing = false; });
 
 
 // Copy selected region
