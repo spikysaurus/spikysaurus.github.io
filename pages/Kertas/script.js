@@ -590,16 +590,16 @@ document.getElementById('import').onclick = () => {
                     cur = 0
                     show(cur)
                     render()
+                     render()
                 }
             } catch (err) {
                 console.error("Invalid JSON", err)
             }
         }
         reader.readAsText(file)
-        show(cur);
+        
     }
     input.click()
-    
 }
 // Load Image
 function loadImage(url) {
