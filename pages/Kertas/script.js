@@ -1,3 +1,9 @@
+var myBody = document.getElementById('dabody');
+myBody.addEventListener('touchstart', function(e){ 
+    e.preventDefault() 
+});
+
+
 const bg = document.getElementById('bg'),
     bgx = bg.getContext('2d')
 const dr = document.getElementById('draw'),
