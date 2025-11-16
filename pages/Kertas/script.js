@@ -183,26 +183,26 @@ document.addEventListener('pointermove', e => {
 let zoomInterval;
 
 // Zoom In (hold to repeat)
-zoomIn.onmousedown = () => {
+zoomIn.onpointerdown = () => {
     zoomInterval = setInterval(() => {
         targetSc *= 1.1;
         // redraw or update canvas here if needed
     }, 100); // every 100ms
 };
 
-zoomIn.onmouseup = zoomIn.onmouseleave = () => {
+zoomIn.onpointerup = zoomIn.onpointerleave = () => {
     clearInterval(zoomInterval);
 };
 
 // Zoom Out (hold to repeat)
-zoomOut.onmousedown = () => {
+zoomOut.onpointerdown = () => {
     zoomInterval = setInterval(() => {
         targetSc *= 0.9;
         // redraw or update canvas here if needed
     }, 100);
 };
 
-zoomOut.onmouseup = zoomOut.onmouseleave = () => {
+zoomOut.onpointerup = zoomOut.onpointerleave = () => {
     clearInterval(zoomInterval);
 };
 
