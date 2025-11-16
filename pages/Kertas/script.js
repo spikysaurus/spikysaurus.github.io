@@ -381,10 +381,13 @@ document.getElementById('paste').onclick = () => {
             drx.drawImage(clipboard, e.offsetX, e.offsetY);
             frames[cur] = dr.toDataURL();
             render();
-//            dr.removeEventListener('click', pasteOnce);
+            dr.removeEventListener('click', pasteOnce);
         });
     }
 };
+
+
+
 
 
 
