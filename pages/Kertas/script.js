@@ -596,8 +596,10 @@ document.getElementById('import').onclick = () => {
             }
         }
         reader.readAsText(file)
+        show(cur);
     }
     input.click()
+    
 }
 // Load Image
 function loadImage(url) {
