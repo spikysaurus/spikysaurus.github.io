@@ -195,26 +195,34 @@
   // original link
   const originalLink = "https://www.youtube.com/embed/ywGcoaYo3-k?list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ";
 
-  // swap video when poster clicked
+  // swap video when card clicked
   cards.forEach(card => {
-  card.addEventListener('click', () => {
-    const newVideo = card.getAttribute('data-video');
-    if (newVideo) {
-      videoFrame.src = newVideo;
+    card.addEventListener('click', () => {
+      let newVideo = card.getAttribute('data-video');
+      if (newVideo) {
+        // ensure autoplay param is added correctly
+        if (newVideo.includes("?")) {
+          newVideo += "&autoplay=1";
+        } else {
+          newVideo += "?autoplay=1";
+        }
 
-      // Scroll and focus on the video
-      videoFrame.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      videoFrame.focus();
-    }
+        videoFrame.src = newVideo;
+
+        // Scroll and focus on the video
+        videoFrame.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        videoFrame.focus();
+      }
+    });
   });
-});
-
 
   // reset to original when title clicked
   resetTitle.addEventListener('click', () => {
+    // also reset with autoplay off
     videoFrame.src = originalLink;
   });
 </script>
+
 
 </body>
 </html>
