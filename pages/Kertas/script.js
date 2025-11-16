@@ -234,6 +234,7 @@ selectBtn.onclick = () => {
         selectBtn.style.backgroundColor = "lightblue";
     } else {
         selectBtn.style.backgroundColor = "";
+        ox.clearRect(0, 0, overlay.width, overlay.height);
     }
     selectBtn.classList.toggle('activePan', selecting);
 };
@@ -288,7 +289,7 @@ dr.addEventListener('pointerup', e => {
     if (selecting) {
         selEndX = e.offsetX;
         selEndY = e.offsetY;
-        ox.clearRect(0, 0, overlay.width, overlay.height);
+//        ox.clearRect(0, 0, overlay.width, overlay.height);
     }
 });
 //prev is canvas.addEve-
@@ -370,13 +371,14 @@ dr.addEventListener('pointerup', e => {
         const { x, y } = getCanvasCoords(e, dr);
         selEndX = x;
         selEndY = y;
-        ox.clearRect(0, 0, overlay.width, overlay.height);
+//        ox.clearRect(0, 0, overlay.width, overlay.height);
     }
 });
 
 // Copy selected region
 document.getElementById('copy').onclick = () => {
     if (selStartX != null) {
+    		ox.clearRect(0, 0, overlay.width, overlay.height);
         const w = selEndX - selStartX;
         const h = selEndY - selStartY;
         if (w && h) {
