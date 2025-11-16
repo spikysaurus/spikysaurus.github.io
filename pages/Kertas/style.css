@@ -1,0 +1,171 @@
+html,body {
+  height:100%;
+  margin:0;
+  background:#222;
+  color:#eee;
+  font-family:sans-serif;
+}
+
+/* Responsive bar container */
+#bar {
+position:relative;
+	z-index:100;
+  display: flex;
+  flex-wrap: wrap;       /* allow wrapping on small screens */
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-bottom: 0px solid #ccc;
+}
+
+#bar button,
+#bar label,
+#bar input[type="text"] {
+  flex: 1 1 auto;
+  min-width: 48px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  text-align: center;
+}
+
+#bar button:hover {
+  background: #e0e0e0;
+}
+
+/* Grouped color tools */
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  justify-content: center;
+}
+
+.group button,
+.group label {
+  flex: 0 1 auto;
+  min-width: 40px;
+}
+
+/* Mobile tweak: stack vertically */
+@media (max-width: 600px) {
+  #bar {
+    flex-direction: column;
+    align-items: stretch;
+    
+  }
+  .color-group {
+    justify-content: flex-start;
+  }
+}
+
+#url {
+  width: 100px;
+}
+
+
+label {
+  display:flex;
+  flex-direction:column;
+  font-size:12px;
+}
+
+input[type=color] {
+  width:32px;
+  padding:0;
+  border:none;
+}
+
+#line {
+  position:fixed;   /* stick to viewport */
+  bottom:0;         /* anchor at bottom */
+  left:0;
+  right:0;
+  z-index:100;      /* above canvas */
+  background:#444;
+  padding:8px;
+  display:flex;
+  gap:4px;
+  overflow-x:auto;
+  justify-content:center;
+}
+.f {
+  width:40px;
+  background:#666;
+  border:2px solid #999;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.f.active {
+  border-color:#0f0;
+}
+
+#stage {
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:-1;
+}
+
+#stack {
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) scale(1);
+}
+
+canvas {
+  position:absolute;
+  top:0;
+  left:0;
+  cursor:crosshair;
+}
+
+
+
+#stack canvas {
+  position:absolute;
+  top:0;
+  left:0;
+}
+#overlay {
+  pointer-events:none; /* overlay won't block mouse events */
+}
+
+
+
+
+#bg {
+  z-index:0;
+  background:#fff;
+}
+
+#draw {
+  z-index:1;
+}
+
+button {
+  font-size:24px;
+  width:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+button.activePan {
+  background:#555;
+  color:#0f0;
+}
+
