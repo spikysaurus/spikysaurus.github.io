@@ -14,11 +14,11 @@ function apply(){stack.style.transform=`translate(-50%,-50%) translate(${px}px,$
 function animate(){px+=(targetPx-px)*0.2;py+=(targetPy-py)*0.2;sc+=(targetSc-sc)*0.2;apply();requestAnimationFrame(animate)}
 animate()
 
-document.addEventListener('touchmove', function(event) {
-  if (event.touches.length > 1) {
-    event.preventDefault();
-  }
-}, { passive: false }); // Use passive: false to allow preventDefault()
+//document.addEventListener('touchmove', function(event) {
+//  if (event.touches.length > 1) {
+//    event.preventDefault();
+//  }
+//}, { passive: false }); // Use passive: false to allow preventDefault()
 
 
 //function resize(w,h){bg.width=w;bg.height=h;dr.width=w;dr.height=h;setSize(w,h)}
@@ -31,7 +31,6 @@ function init(){drx.clearRect(0,0,dr.width,dr.height);frames.push(dr.toDataURL()
 function circ(x,y,s,c,a){drx.globalAlpha=a;drx.globalCompositeOperation=eras?'destination-out':'source-over';drx.fillStyle=eras?'rgba(0,0,0,1)':c;drx.beginPath();drx.arc(x,y,s/2,0,Math.PI*2);drx.fill();drx.globalAlpha=1}
 function line(x0,y0,x1,y1,s,c,a){const dx=x1-x0,dy=y1-y0,d=Math.hypot(dx,dy),st=Math.ceil(d/(s/2));for(let i=0;i<=st;i++){const t=i/st;circ(x0+dx*t,y0+dy*t,s,c,a)}}
 
-dr.onmousedown=e=>{if(pan)return;drawing=true;lx=e.offsetX;ly=e.offsetY;circ(lx,ly,parseInt(sz.value),col.value,parseFloat(op.value))}
 dr.onmousemove=e=>{if(pan)return;if(drawing){line(lx,ly,e.offsetX,e.offsetY,parseInt(sz.value),col.value,parseFloat(op.value));lx=e.offsetX;ly=e.offsetY}}
 dr.onmouseup=()=>{if(pan)return;drawing=false;frames[cur]=dr.toDataURL();render()}
 dr.onmouseleave=()=>{drawing=false}
@@ -40,32 +39,67 @@ document.addEventListener('mousedown',e=>{if(!pan)return;psx=e.clientX-targetPx;
 document.addEventListener('mousemove',e=>{if(!pan)return;if(e.buttons!==1)return;targetPx=e.clientX-psx;targetPy=e.clientY-psy})
 document.addEventListener('mouseup',()=>{if(!pan)return;document.body.style.cursor='default'})
 
-document.addEventListener('touchstart',e=>{
-  if(e.touches.length===2){
-    const dx=e.touches[0].clientX-e.touches[1].clientX
-    const dy=e.touches[0].clientY-e.touches[1].clientY
-    sd=Math.hypot(dx,dy)
-  }
-  if(e.touches.length===3){
-    panStartX=e.touches[0].clientX-targetPx
-    panStartY=e.touches[0].clientY-targetPy
-  }
-},{passive:true})
+// drawing with touch events
+dr.addEventListener('touchstart', e => {
+  if (pan) return;
+  drawing = true;
+  const t = e.touches[0];
+  const rect = dr.getBoundingClientRect();
+  lx = t.clientX - rect.left;
+  ly = t.clientY - rect.top;
+  circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
+}, { passive: false });
 
-document.addEventListener('touchmove',e=>{
-  if(e.touches.length===2){
-    const dx=e.touches[0].clientX-e.touches[1].clientX
-    const dy=e.touches[0].clientY-e.touches[1].clientY
-    const nd=Math.hypot(dx,dy)
-    const f=nd/sd
-    targetSc=Math.min(Math.max(targetSc*f,0.5),3)
-    sd=nd
-  }
-  if(e.touches.length===3){
-    targetPx=e.touches[0].clientX-panStartX
-    targetPy=e.touches[0].clientY-panStartY
-  }
-},{passive:true})
+dr.addEventListener('touchmove', e => {
+  if (pan) return;
+  if (!drawing) return;
+  e.preventDefault(); // prevent scrolling while drawing
+  const t = e.touches[0];
+  const rect = dr.getBoundingClientRect();
+  const x = t.clientX - rect.left;
+  const y = t.clientY - rect.top;
+  line(lx, ly, x, y, parseInt(sz.value), col.value, parseFloat(op.value));
+  lx = x;
+  ly = y;
+}, { passive: false });
+
+dr.addEventListener('touchend', e => {
+  if (pan) return;
+  drawing = false;
+  frames[cur] = dr.toDataURL();
+  render();
+});
+
+dr.addEventListener('touchcancel', () => {
+  drawing = false;
+});
+
+//document.addEventListener('touchstart',e=>{
+//  if(e.touches.length===2){
+//    const dx=e.touches[0].clientX-e.touches[1].clientX
+//    const dy=e.touches[0].clientY-e.touches[1].clientY
+//    sd=Math.hypot(dx,dy)
+//  }
+//  if(e.touches.length===3){
+//    panStartX=e.touches[0].clientX-targetPx
+//    panStartY=e.touches[0].clientY-targetPy
+//  }
+//},{passive:true})
+
+//document.addEventListener('touchmove',e=>{
+//  if(e.touches.length===2){
+//    const dx=e.touches[0].clientX-e.touches[1].clientX
+//    const dy=e.touches[0].clientY-e.touches[1].clientY
+//    const nd=Math.hypot(dx,dy)
+//    const f=nd/sd
+//    targetSc=Math.min(Math.max(targetSc*f,0.5),3)
+//    sd=nd
+//  }
+//  if(e.touches.length===3){
+//    targetPx=e.touches[0].clientX-panStartX
+//    targetPy=e.touches[0].clientY-panStartY
+//  }
+//},{passive:true})
 
 zoomIn.onclick = ()=>{ targetSc = Math.min(targetSc * 1.1, 3) }
 zoomOut.onclick = ()=>{ targetSc = Math.max(targetSc * 0.9, 0.5) }
@@ -352,8 +386,8 @@ canvas.addEventListener("pointermove", e => {
   }
 });
 
-canvas.addEventListener("pointerup", () => { drawing = false; });
-canvas.addEventListener("pointerleave", () => { drawing = false; });
+//canvas.addEventListener("pointerup", () => { drawing = false; });
+//canvas.addEventListener("pointerleave", () => { drawing = false; });
 
 
 // Copy selected region
