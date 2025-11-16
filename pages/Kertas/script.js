@@ -333,6 +333,9 @@ dr.addEventListener('pointermove', e => {
         selEndY = y;
         ox.clearRect(0, 0, overlay.width, overlay.height);
         ox.strokeStyle = 'purple';
+        ox.fillStyle = 'rgba(128, 0, 128, 0.2)'; // purple with 20% opacity
+        ox.fillRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
+        
         ox.lineWidth = 1;
         ox.setLineDash([6, 4]); // 6px dash, 4px gap
         ox.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
