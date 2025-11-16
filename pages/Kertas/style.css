@@ -24,9 +24,9 @@ position:relative;
 #bar label,
 #bar input[type="text"] {
   flex: 1 1 auto;
-  min-width: 48px;
+  min-width: 32px;
   padding: 0.5rem;
-  font-size: 1rem;
+/*  font-size: 1rem;*/
   border-radius: 6px;
   border: 1px solid #ccc;
   background: #fff;
@@ -49,20 +49,10 @@ position:relative;
 .group button,
 .group label {
   flex: 0 1 auto;
-  min-width: 40px;
+/*  min-width: 40px;*/
 }
 
-/* Mobile tweak: stack vertically */
-@media (max-width: 600px) {
-  #bar {
-    flex-direction: column;
-    align-items: stretch;
-    
-  }
-  .color-group {
-    justify-content: flex-start;
-  }
-}
+
 
 #url {
   width: 100px;
@@ -72,7 +62,7 @@ position:relative;
 label {
   display:flex;
   flex-direction:column;
-  font-size:12px;
+/*  font-size:12px;*/
 }
 
 input[type=color] {
@@ -134,8 +124,6 @@ canvas {
   cursor:crosshair;
 }
 
-
-
 #stack canvas {
   position:absolute;
   top:0;
@@ -144,8 +132,6 @@ canvas {
 #overlay {
   pointer-events:none; /* overlay won't block mouse events */
 }
-
-
 
 
 #bg {
@@ -158,15 +144,41 @@ canvas {
 }
 
 button {
-  font-size:24px;
-  width:40px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+/*  font-size:24px;*/
+/*  width:40px;*/
+/*  display:flex;*/
+/*  align-items:center;*/
+/*  justify-content:center;*/
 }
 
 button.activePan {
   background:#555;
   color:#0f0;
+}
+
+/* Mobile tweak: stack vertically */
+@media (max-width: 600px) {
+#bar button,
+#bar label,
+#bar input[type="text"] {
+  flex: 1 1 auto;
+  min-width: 32px;
+  padding: 0.1rem;
+/*  font-size: 1rem;*/
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  text-align: center;
+}
+
+  #bar {
+    flex-direction: column;
+    align-items: stretch;
+    
+  }
+  .color-group {
+    justify-content: flex-start;
+  }
 }
 

@@ -74,32 +74,33 @@ dr.addEventListener('touchcancel', () => {
   drawing = false;
 });
 
-//document.addEventListener('touchstart',e=>{
-//  if(e.touches.length===2){
-//    const dx=e.touches[0].clientX-e.touches[1].clientX
-//    const dy=e.touches[0].clientY-e.touches[1].clientY
-//    sd=Math.hypot(dx,dy)
-//  }
-//  if(e.touches.length===3){
-//    panStartX=e.touches[0].clientX-targetPx
-//    panStartY=e.touches[0].clientY-targetPy
-//  }
-//},{passive:true})
+//PAN
+document.addEventListener('touchstart',e=>{
+  if(e.touches.length===2){
+    const dx=e.touches[0].clientX-e.touches[1].clientX
+    const dy=e.touches[0].clientY-e.touches[1].clientY
+    sd=Math.hypot(dx,dy)
+  }
+  if(e.touches.length===3){
+    panStartX=e.touches[0].clientX-targetPx
+    panStartY=e.touches[0].clientY-targetPy
+  }
+},{passive:true})
 
-//document.addEventListener('touchmove',e=>{
-//  if(e.touches.length===2){
-//    const dx=e.touches[0].clientX-e.touches[1].clientX
-//    const dy=e.touches[0].clientY-e.touches[1].clientY
-//    const nd=Math.hypot(dx,dy)
-//    const f=nd/sd
-//    targetSc=Math.min(Math.max(targetSc*f,0.5),3)
-//    sd=nd
-//  }
-//  if(e.touches.length===3){
-//    targetPx=e.touches[0].clientX-panStartX
-//    targetPy=e.touches[0].clientY-panStartY
-//  }
-//},{passive:true})
+document.addEventListener('touchmove',e=>{
+  if(e.touches.length===2){
+    const dx=e.touches[0].clientX-e.touches[1].clientX
+    const dy=e.touches[0].clientY-e.touches[1].clientY
+    const nd=Math.hypot(dx,dy)
+    const f=nd/sd
+    targetSc=Math.min(Math.max(targetSc*f,0.5),3)
+    sd=nd
+  }
+  if(e.touches.length===3){
+    targetPx=e.touches[0].clientX-panStartX
+    targetPy=e.touches[0].clientY-panStartY
+  }
+},{passive:true})
 
 zoomIn.onclick = ()=>{ targetSc = Math.min(targetSc * 1.1, 3) }
 zoomOut.onclick = ()=>{ targetSc = Math.max(targetSc * 0.9, 0.5) }
