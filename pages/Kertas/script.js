@@ -401,16 +401,16 @@ document.getElementById('cut').onclick = () => {
     render();
 };
 //// Paste clipboard at mouse position
-//document.getElementById('paste').onclick = () => {
-//    if (clipboard) {
-//        dr.addEventListener('click', function pasteOnce(e) {
-//            drx.drawImage(clipboard, e.offsetX, e.offsetY);
-//            frames[cur] = dr.toDataURL();
-//            render();
-//            dr.removeEventListener('click', pasteOnce);
-//        });
-//    }
-//};
+document.getElementById('paste').onclick = () => {
+    if (clipboard) {
+        dr.addEventListener('click', function pasteOnce(e) {
+            drx.drawImage(clipboard, e.offsetX, e.offsetY);
+            frames[cur] = dr.toDataURL();
+            render();
+            dr.removeEventListener('click', pasteOnce);
+        });
+    }
+};
 
 
 
