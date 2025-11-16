@@ -83,7 +83,7 @@ input[type=color] {
   display:flex;
   gap:4px;
   overflow-x:auto;
-  justify-content:center;
+  justify-content:left;
 }
 .f {
   width:40px;
