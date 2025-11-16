@@ -157,7 +157,7 @@ button.activePan {
 }
 
 /* Mobile tweak: stack vertically */
-@media (max-width: 600px) {
+/*@media (max-width: 600px) {*/
 /*#bar button,*/
 /*#bar label,*/
 /*#bar input[type="text"] {*/
@@ -172,13 +172,13 @@ button.activePan {
 /*  text-align: center;*/
 /*}*/
 
-  #bar {
-    flex-direction: column;
-    align-items: stretch;
-    
-  }
-  .color-group {
-    justify-content: flex-start;
-  }
-}
+/*  #bar {*/
+/*    flex-direction: column;*/
+/*    align-items: stretch;*/
+/*    */
+/*  }*/
+/*  .color-group {*/
+/*    justify-content: flex-start;*/
+/*  }*/
+/*}*/
 

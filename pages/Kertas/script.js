@@ -58,6 +58,18 @@ function init() {
     render()
 }
 
+function getCanvasCoords(e, canvas) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    // Use clientX/clientY for consistency across mouse/touch/pen
+    return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+    };
+}
+
 function circ(x, y, s, c, a) {
     drx.globalAlpha = a;
     drx.globalCompositeOperation = eras ? 'destination-out' : 'source-over';
@@ -78,78 +90,93 @@ function line(x0, y0, x1, y1, s, c, a) {
         circ(x0 + dx * t, y0 + dy * t, s, c, a)
     }
 }
-dr.onmousemove = e => {
+//dr.addEventListener("pointermove", e => {
+//    if (pan) return;
+//    if (drawing) {
+//        const { x, y } = getCanvasCoords(e, dr);
+//        line(lx, ly, x, y, parseInt(sz.value), col.value, parseFloat(op.value));
+//        lx = x;
+//        ly = y;
+//    }
+//});
+
+
+dr.onpointermove = e => {
     if (pan) return;
     if (drawing) {
-        line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
-        lx = e.offsetX;
-        ly = e.offsetY
+        const { x, y } = getCanvasCoords(e, dr);
+        line(lx, ly, x, y, parseInt(sz.value), col.value, parseFloat(op.value));
+        lx = x;
+        ly = y;
     }
-}
-dr.onmouseup = () => {
+};
+
+dr.onpointerup = e => {
     if (pan) return;
     drawing = false;
     frames[cur] = dr.toDataURL();
-    render()
-}
-dr.onmouseleave = () => {
+    render();
+};
+
+
+dr.onpointereave = () => {
     drawing = false
 }
-document.addEventListener('mousedown', e => {
+document.addEventListener('pointerdown', e => {
     if (!pan) return;
     psx = e.clientX - targetPx;
     psy = e.clientY - targetPy;
     document.body.style.cursor = 'grab'
 })
-document.addEventListener('mousemove', e => {
+document.addEventListener('pointermove', e => {
     if (!pan) return;
     if (e.buttons !== 1) return;
     targetPx = e.clientX - psx;
     targetPy = e.clientY - psy
 })
-document.addEventListener('mouseup', () => {
+document.addEventListener('pointerup', () => {
     if (!pan) return;
     document.body.style.cursor = 'default'
 })
 
 // drawing with touch events
-dr.addEventListener('touchstart', e => {
-    if (pan) return;
-    drawing = true;
-    const t = e.touches[0];
-    const rect = dr.getBoundingClientRect();
-    lx = t.clientX - rect.left;
-    ly = t.clientY - rect.top;
-    circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
-}, {
-    passive: false
-});
-dr.addEventListener('touchmove', e => {
-    if (pan) return;
-    if (!drawing) return;
-    e.preventDefault(); // prevent scrolling while drawing
-    const t = e.touches[0];
-    const rect = dr.getBoundingClientRect();
-    const x = t.clientX - rect.left;
-    const y = t.clientY - rect.top;
-    line(lx, ly, x, y, parseInt(sz.value), col.value, parseFloat(op.value));
-    lx = x;
-    ly = y;
-}, {
-    passive: false
-});
-dr.addEventListener('touchend', e => {
-    if (pan) return;
-    drawing = false;
-    frames[cur] = dr.toDataURL();
-    render();
-});
-dr.addEventListener('touchcancel', () => {
-    drawing = false;
-});
+//dr.addEventListener('touchstart', e => {
+//    if (pan) return;
+//    drawing = true;
+//    const t = e.touches[0];
+//    const rect = dr.getBoundingClientRect();
+//    lx = t.clientX - rect.left;
+//    ly = t.clientY - rect.top;
+//    circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
+//}, {
+//    passive: false
+//});
+//dr.addEventListener('touchmove', e => {
+//    if (pan) return;
+//    if (!drawing) return;
+//    e.preventDefault(); // prevent scrolling while drawing
+//    const t = e.touches[0];
+//    const rect = dr.getBoundingClientRect();
+//    const x = t.clientX - rect.left;
+//    const y = t.clientY - rect.top;
+//    line(lx, ly, x, y, parseInt(sz.value), col.value, parseFloat(op.value));
+//    lx = x;
+//    ly = y;
+//}, {
+//    passive: false
+//});
+//dr.addEventListener('touchend', e => {
+//    if (pan) return;
+//    drawing = false;
+//    frames[cur] = dr.toDataURL();
+//    render();
+//});
+//dr.addEventListener('touchcancel', () => {
+//    drawing = false;
+//});
 
 //PAN
-document.addEventListener('touchstart', e => {
+document.addEventListener('pointerstart', e => {
     if (e.touches.length === 2) {
         const dx = e.touches[0].clientX - e.touches[1].clientX
         const dy = e.touches[0].clientY - e.touches[1].clientY
@@ -162,7 +189,7 @@ document.addEventListener('touchstart', e => {
 }, {
     passive: true
 })
-document.addEventListener('touchmove', e => {
+document.addEventListener('pointermove', e => {
     if (e.touches.length === 2) {
         const dx = e.touches[0].clientX - e.touches[1].clientX
         const dy = e.touches[0].clientY - e.touches[1].clientY
@@ -196,6 +223,193 @@ document.addEventListener('wheel', e => {
 }, {
     passive: false
 })
+
+let selecting = false,
+    selStartX, selStartY, selEndX, selEndY;
+let clipboard = null;
+const selectBtn = document.getElementById('select');
+selectBtn.onclick = () => {
+    selecting = !selecting;
+    if (selecting) {
+        selectBtn.style.backgroundColor = "lightblue";
+    } else {
+        selectBtn.style.backgroundColor = "";
+    }
+    selectBtn.classList.toggle('activePan', selecting);
+};
+
+// disable painting when selecting
+dr.onpointerdown = e => {
+    if (pan || selecting) return;
+    drawing = true;
+    lx = e.offsetX;
+    ly = e.offsetY;
+    circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
+};
+dr.onpointermove = e => {
+    if (pan || selecting) return;
+    if (drawing) {
+        line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
+        lx = e.offsetX;
+        ly = e.offsetY;
+    }
+};
+dr.onpointerup = () => {
+    if (pan || selecting) return;
+    drawing = false;
+    frames[cur] = dr.toDataURL();
+    render();
+};
+dr.onpointerleave = () => {
+    drawing = false
+};
+
+
+// selection handlers
+dr.addEventListener('pointerdown', e => {
+    if (selecting) {
+        selStartX = e.offsetX;
+        selStartY = e.offsetY;
+        selEndX = selStartX;
+        selEndY = selStartY;
+    }
+});
+dr.addEventListener('pointermove', e => {
+    if (selecting && e.buttons === 1) {
+        selEndX = e.offsetX;
+        selEndY = e.offsetY;
+        ox.clearRect(0, 0, overlay.width, overlay.height);
+        ox.strokeStyle = 'rgba(0,255,0,0.8)';
+        ox.lineWidth = 1;
+        ox.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
+    }
+});
+dr.addEventListener('pointerup', e => {
+    if (selecting) {
+        selEndX = e.offsetX;
+        selEndY = e.offsetY;
+        ox.clearRect(0, 0, overlay.width, overlay.height);
+    }
+});
+//prev is canvas.addEve-
+dr.addEventListener("pointerdown", e => {
+    if (e.pointerType === "pen" || e.pointerType === "touch" || e.pointerType === "mouse") {
+        drawing = true;
+        lastX = e.offsetX;
+        lastY = e.offsetY;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+    }
+});
+dr.addEventListener("pointermove", e => {
+    if (!drawing) return;
+    if (e.pointerType === "pen" || e.pointerType === "touch" || e.pointerType === "mouse") {
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        lastX = e.offsetX;
+        lastY = e.offsetY;
+    }
+});
+// Selection handlers with pointer events
+dr.addEventListener('pointerdown', e => {
+    if (selecting) {
+        const { x, y } = getCanvasCoords(e, dr);
+        selStartX = x;
+        selStartY = y;
+        selEndX = x;
+        selEndY = y;
+    }
+});
+
+//dr.addEventListener('pointermove', e => {
+//    if (selecting && e.pressure > 0) { // pressure>0 means pointer is down
+//        const { x, y } = getCanvasCoords(e, dr);
+//        selEndX = x;
+//        selEndY = y;
+//        ox.clearRect(0, 0, overlay.width, overlay.height);
+//        ox.strokeStyle = 'rgba(0,255,0,0.8)';
+//        ox.lineWidth = 1;
+//        ox.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
+//    }
+//});
+
+//dr.addEventListener('pointerup', e => {
+//    if (selecting) {
+//        const { x, y } = getCanvasCoords(e, dr);
+//        selEndX = x;
+//        selEndY = y;
+//        ox.clearRect(0, 0, overlay.width, overlay.height);
+//    }
+//});
+
+// Selection handlers with pointer events
+dr.addEventListener('pointerdown', e => {
+    if (selecting) {
+        const { x, y } = getCanvasCoords(e, dr);
+        selStartX = x;
+        selStartY = y;
+        selEndX = x;
+        selEndY = y;
+    }
+});
+
+dr.addEventListener('pointermove', e => {
+    if (selecting && e.pressure > 0) { // pressure>0 means pointer is down
+        const { x, y } = getCanvasCoords(e, dr);
+        selEndX = x;
+        selEndY = y;
+        ox.clearRect(0, 0, overlay.width, overlay.height);
+        ox.strokeStyle = 'rgba(0,255,0,0.8)';
+        ox.lineWidth = 1;
+        ox.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
+    }
+});
+
+dr.addEventListener('pointerup', e => {
+    if (selecting) {
+        const { x, y } = getCanvasCoords(e, dr);
+        selEndX = x;
+        selEndY = y;
+        ox.clearRect(0, 0, overlay.width, overlay.height);
+    }
+});
+
+// Copy selected region
+document.getElementById('copy').onclick = () => {
+    if (selStartX != null) {
+        const w = selEndX - selStartX;
+        const h = selEndY - selStartY;
+        if (w && h) {
+            const tmp = document.createElement('canvas');
+            tmp.width = Math.abs(w);
+            tmp.height = Math.abs(h);
+            const ctx = tmp.getContext('2d');
+            ctx.drawImage(dr, Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(w), Math.abs(h), 0, 0, Math.abs(w), Math.abs(h));
+            clipboard = tmp;
+        }
+    }
+};
+// Cut = copy + clear
+document.getElementById('cut').onclick = () => {
+    document.getElementById('copy').onclick();
+    drx.clearRect(Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(selEndX - selStartX), Math.abs(selEndY - selStartY));
+    frames[cur] = dr.toDataURL();
+    render();
+};
+// Paste clipboard at mouse position
+document.getElementById('paste').onclick = () => {
+    if (clipboard) {
+        dr.addEventListener('click', function pasteOnce(e) {
+            drx.drawImage(clipboard, e.offsetX, e.offsetY);
+            frames[cur] = dr.toDataURL();
+            render();
+            dr.removeEventListener('click', pasteOnce);
+        });
+    }
+};
+
+
+
 const brushBtn = document.getElementById('brush')
 brushBtn.onclick = () => {
     eras = !eras;
@@ -248,6 +462,34 @@ function add() {
     cur = frames.length - 1;
     render()
 }
+// Swap with next frame
+document.getElementById('swapNext').onclick = () => {
+    if (frames.length > 1) {
+        const nextIndex = (cur + 1) % frames.length;
+        const temp = frames[cur];
+        frames[cur] = frames[nextIndex];
+        frames[nextIndex] = temp;
+
+        cur = nextIndex; // update pointer
+        show(cur);
+        render();
+    }
+};
+
+// Swap with previous frame
+document.getElementById('swapPrev').onclick = () => {
+    if (frames.length > 1) {
+        const prevIndex = (cur - 1 + frames.length) % frames.length;
+        const temp = frames[cur];
+        frames[cur] = frames[prevIndex];
+        frames[prevIndex] = temp;
+
+        cur = prevIndex; // update pointer
+        show(cur);
+        render();
+    }
+};
+
 //Drag and drop frmae
 function render() {
     const tl = document.getElementById('line')
@@ -363,6 +605,7 @@ function loadImage(url) {
         img.src = url
     })
 }
+
 // Helper: composite background + frame into a dataURL
 async function composeFrame(bgUrl, frameUrl, outW, outH) {
     const can = document.createElement('canvas')
@@ -438,122 +681,4 @@ document.getElementById('load').onclick = () => {
 }
 resize(640, 360);
 init()
-let selecting = false,
-    selStartX, selStartY, selEndX, selEndY;
-let clipboard = null;
-const selectBtn = document.getElementById('select');
-selectBtn.onclick = () => {
-    selecting = !selecting;
-    if (selecting) {
-        selectBtn.style.backgroundColor = "lightblue";
-    } else {
-        selectBtn.style.backgroundColor = "";
-    }
-    selectBtn.classList.toggle('activePan', selecting);
-};
 
-// disable painting when selecting
-dr.onmousedown = e => {
-    if (pan || selecting) return;
-    drawing = true;
-    lx = e.offsetX;
-    ly = e.offsetY;
-    circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
-};
-dr.onmousemove = e => {
-    if (pan || selecting) return;
-    if (drawing) {
-        line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
-        lx = e.offsetX;
-        ly = e.offsetY;
-    }
-};
-dr.onmouseup = () => {
-    if (pan || selecting) return;
-    drawing = false;
-    frames[cur] = dr.toDataURL();
-    render();
-};
-dr.onmouseleave = () => {
-    drawing = false
-};
-
-// selection handlers
-dr.addEventListener('mousedown', e => {
-    if (selecting) {
-        selStartX = e.offsetX;
-        selStartY = e.offsetY;
-        selEndX = selStartX;
-        selEndY = selStartY;
-    }
-});
-dr.addEventListener('mousemove', e => {
-    if (selecting && e.buttons === 1) {
-        selEndX = e.offsetX;
-        selEndY = e.offsetY;
-        ox.clearRect(0, 0, overlay.width, overlay.height);
-        ox.strokeStyle = 'rgba(0,255,0,0.8)';
-        ox.lineWidth = 1;
-        ox.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
-    }
-});
-dr.addEventListener('mouseup', e => {
-    if (selecting) {
-        selEndX = e.offsetX;
-        selEndY = e.offsetY;
-        ox.clearRect(0, 0, overlay.width, overlay.height);
-    }
-});
-//prev is canvas.addEve-
-dr.addEventListener("pointerdown", e => {
-    if (e.pointerType === "pen" || e.pointerType === "touch" || e.pointerType === "mouse") {
-        drawing = true;
-        lastX = e.offsetX;
-        lastY = e.offsetY;
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-    }
-});
-dr.addEventListener("pointermove", e => {
-    if (!drawing) return;
-    if (e.pointerType === "pen" || e.pointerType === "touch" || e.pointerType === "mouse") {
-        ctx.lineTo(e.offsetX, e.offsetY);
-        ctx.stroke();
-        lastX = e.offsetX;
-        lastY = e.offsetY;
-    }
-});
-
-// Copy selected region
-document.getElementById('copy').onclick = () => {
-    if (selStartX != null) {
-        const w = selEndX - selStartX;
-        const h = selEndY - selStartY;
-        if (w && h) {
-            const tmp = document.createElement('canvas');
-            tmp.width = Math.abs(w);
-            tmp.height = Math.abs(h);
-            const ctx = tmp.getContext('2d');
-            ctx.drawImage(dr, Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(w), Math.abs(h), 0, 0, Math.abs(w), Math.abs(h));
-            clipboard = tmp;
-        }
-    }
-};
-// Cut = copy + clear
-document.getElementById('cut').onclick = () => {
-    document.getElementById('copy').onclick();
-    drx.clearRect(Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(selEndX - selStartX), Math.abs(selEndY - selStartY));
-    frames[cur] = dr.toDataURL();
-    render();
-};
-// Paste clipboard at mouse position
-document.getElementById('paste').onclick = () => {
-    if (clipboard) {
-        dr.addEventListener('click', function pasteOnce(e) {
-            drx.drawImage(clipboard, e.offsetX, e.offsetY);
-            frames[cur] = dr.toDataURL();
-            render();
-            dr.removeEventListener('click', pasteOnce);
-        });
-    }
-};
