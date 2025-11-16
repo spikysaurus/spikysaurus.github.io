@@ -202,6 +202,8 @@ selectBtn.onclick = () => {
     selecting = !selecting;
     if (selecting) {
         selectBtn.style.backgroundColor = "lightblue";
+        electBtn.style.color = "black";
+        
     } else {
         selectBtn.style.backgroundColor = "";
         ox.clearRect(0, 0, overlay.width, overlay.height);
@@ -376,7 +378,7 @@ document.getElementById('paste').onclick = () => {
             drx.drawImage(clipboard, e.offsetX, e.offsetY);
             frames[cur] = dr.toDataURL();
             render();
-            dr.removeEventListener('click', pasteOnce);
+//            dr.removeEventListener('click', pasteOnce);
         });
     }
 };
