@@ -410,14 +410,14 @@ panBtn.onclick = () => {
 //document.getElementById("red").onclick=()=>{col.value="#ff0000"},
 //document.getElementById("green").onclick=()=>{col.value="#00ff00"},
 //document.getElementById("blue").onclick=()=>{col.value="#0000ff"};
-//document.getElementById('clr').onclick = () => {
-//    const confirmClear = confirm("Clear the canvas?");
-//    if (confirmClear) {
-//        drx.clearRect(0, 0, dr.width, dr.height);
-//        frames[cur] = dr.toDataURL();
-//        render();
-//    }
-//};
+document.getElementById('clr').onclick = () => {
+    const confirmClear = confirm("Clear the canvas?");
+    if (confirmClear) {
+        drx.clearRect(0, 0, dr.width, dr.height);
+        frames[cur] = dr.toDataURL();
+        render();
+    }
+};
 
 //Save Button
 document.getElementById('save').onclick = () => {
