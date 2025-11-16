@@ -141,42 +141,6 @@ document.addEventListener('pointerup', () => {
     document.body.style.cursor = 'default'
 })
 
-// drawing with touch events
-//dr.addEventListener('touchstart', e => {
-//    if (pan) return;
-//    drawing = true;
-//    const t = e.touches[0];
-//    const rect = dr.getBoundingClientRect();
-//    lx = t.clientX - rect.left;
-//    ly = t.clientY - rect.top;
-//    circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
-//}, {
-//    passive: false
-//});
-//dr.addEventListener('touchmove', e => {
-//    if (pan) return;
-//    if (!drawing) return;
-//    e.preventDefault(); // prevent scrolling while drawing
-//    const t = e.touches[0];
-//    const rect = dr.getBoundingClientRect();
-//    const x = t.clientX - rect.left;
-//    const y = t.clientY - rect.top;
-//    line(lx, ly, x, y, parseInt(sz.value), col.value, parseFloat(op.value));
-//    lx = x;
-//    ly = y;
-//}, {
-//    passive: false
-//});
-//dr.addEventListener('touchend', e => {
-//    if (pan) return;
-//    drawing = false;
-//    frames[cur] = dr.toDataURL();
-//    render();
-//});
-//dr.addEventListener('touchcancel', () => {
-//    drawing = false;
-//});
-
 //PAN
 document.addEventListener('pointerstart', e => {
     if (e.touches.length === 2) {
@@ -366,8 +330,9 @@ dr.addEventListener('pointermove', e => {
         selEndX = x;
         selEndY = y;
         ox.clearRect(0, 0, overlay.width, overlay.height);
-        ox.strokeStyle = 'rgba(0,255,0,0.8)';
+        ox.strokeStyle = 'purple';
         ox.lineWidth = 1;
+        ox.setLineDash([6, 4]); // 6px dash, 4px gap
         ox.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
     }
 });
