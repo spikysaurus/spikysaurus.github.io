@@ -14,6 +14,12 @@ function animate(){px+=(targetPx-px)*0.2;py+=(targetPy-py)*0.2;sc+=(targetSc-sc)
 animate()
 
 
+var myBody = document.getElementById('dabody');
+myBody.addEventListener('touchstart', function(e){ 
+    e.preventDefault() 
+});
+
+
 //function resize(w,h){bg.width=w;bg.height=h;dr.width=w;dr.height=h;setSize(w,h)}
 function resize(w,h){
   bg.width=w;bg.height=h;dr.width=w;dr.height=h;overlay.width=w;overlay.height=h
