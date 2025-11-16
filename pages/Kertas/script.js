@@ -208,10 +208,14 @@ document.addEventListener('pointermove', e => {
     passive: true
 })
 zoomIn.onclick = () => {
-    targetSc = Math.min(targetSc * 1.1, 3)
+ targetSc *= 1.1
+//    targetSc = Math.min(targetSc * 1.1, 3)
+//    targetSc = Math.max(targetSc * 1.1, 0.0001);// prevent collapse to 0
 }
 zoomOut.onclick = () => {
-    targetSc = Math.max(targetSc * 0.9, 0.5)
+ targetSc *= 0.9
+//    targetSc = Math.max(targetSc * 0.9, 0.5)
+//    targetSc = Math.max(targetSc * 0.9, 0.0001);// prevent collapse to 0
 }
 document.addEventListener('wheel', e => {
     e.preventDefault()
