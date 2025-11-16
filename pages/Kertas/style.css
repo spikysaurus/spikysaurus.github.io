@@ -19,11 +19,11 @@ position:relative;
   padding: 0.5rem;
   border-bottom: 0px solid #ccc;
 }
-
+#op,#sz{height:3px;}
 #bar button,
 #bar label,
 #bar input[type="text"] {
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   min-width:auto;
   padding: 0.3rem;
 /*  font-size: 1rem;*/
