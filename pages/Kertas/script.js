@@ -201,7 +201,7 @@ const selectBtn = document.getElementById('select');
 selectBtn.onclick = () => {
     selecting = !selecting;
     if (selecting) {
-        selectBtn.style.backgroundColor = "lightblue";
+        selectBtn.style.backgroundColor = "yellow";
         electBtn.style.color = "black";
         
     } else {
@@ -397,7 +397,8 @@ const panBtn = document.getElementById('pan')
 panBtn.onclick = () => {
     pan = !pan;
     if (pan) {
-        panBtn.style.backgroundColor = "lightblue";
+        panBtn.style.backgroundColor = "yellow";
+        panBtn.style.color = "black";
     } else {
         panBtn.style.backgroundColor = "";
     }

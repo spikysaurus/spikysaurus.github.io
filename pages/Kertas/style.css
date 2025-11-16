@@ -1,7 +1,7 @@
 html,body {
   height:100%;
   margin:0;
-  background:#222;
+  background:gray;
   color:#eee;
   font-family:sans-serif;
   overscroll-behavior-y: contain;
@@ -20,17 +20,19 @@ position:relative;
   padding: 0.5rem;
   border-bottom: 0px solid #ccc;
 }
+
 #op,#sz{height:3px;}
 #bar button,
 #bar label,
 #bar input[type="text"] {
+
   flex: 1 1 auto;
   min-width:auto;
   padding: 0.3rem;
 /*  font-size: 1rem;*/
   border-radius: 6px;
-  border: 1px solid #ccc;
-  background: #fff;
+/*  border: 1px solid black;*/
+  background: lightgray;
   cursor: pointer;
   text-align: center;
 }
@@ -49,6 +51,7 @@ position:relative;
 
 .group button,
 .group label {
+	
   flex: 0 1 auto;
 /*  min-width: 40px;*/
 }
@@ -150,6 +153,7 @@ button {
 /*  display:flex;*/
 /*  align-items:center;*/
 /*  justify-content:center;*/
+
 }
 
 button.activePan {
