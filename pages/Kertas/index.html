@@ -58,7 +58,7 @@
       </div>
       
       		<style>
-      		#canvasLabel{display:none;z-index:99999999;position:fixed;bottom:80px;left:10px;background-color:lightgray;color:black;padding:10px;border-radius:5px;font-size:10px;transition: 0.3s;}
+      		#canvasLabel{z-index:99999999;position:fixed;bottom:80px;left:10px;background-color:lightgray;color:black;padding:10px;border-radius:5px;font-size:10px;transition: 0.3s;}
       		#canvasLabel button{width:100%;margin-top:5px;}
 				input[type=number] {
 				 appearance: textfield;
@@ -94,7 +94,7 @@
 <script>
   const toggleBtn = document.getElementById('toggleLabel');
   const canvasLabel = document.getElementById('canvasLabel');
-
+	canvasLabel.style.display = 'none';
   toggleBtn.onclick = () => {
     if (canvasLabel.style.display === 'none') {
       canvasLabel.style.display = 'block';
