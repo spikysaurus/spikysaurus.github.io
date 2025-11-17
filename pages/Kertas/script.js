@@ -64,8 +64,19 @@ function resize(w, h) {
 
     // Update label text
     const label = document.getElementById('canvasLabel');
-    label.textContent = `${w}px × ${h}px`;
+//    label.textContent = `${w}px × ${h}px`;
 }
+
+document.getElementById('applySize').onclick = () => {
+    const w = parseInt(document.getElementById('canvasWidth').value, 10);
+    const h = parseInt(document.getElementById('canvasHeight').value, 10);
+
+    if (w > 0 && h > 0) {
+        resize(w, h);
+        init(); // reinitialize after resize
+    }
+};
+
 
 function init() {
     drx.clearRect(0, 0, dr.width, dr.height);
@@ -560,67 +571,127 @@ function show(i) {
         img.src = frames[i]
     }
 }
-//Export JSON
-document.getElementById('export').onclick = () => {
-    const bgUrl = document.getElementById('url').value.trim()
-    const data = {
-        background: bgUrl, // store the image URL input
-        frames: frames.map((f, i) => ({
-            index: i,
-            url: f
-        }))
-    }
-    const blob = new Blob([JSON.stringify(data, null, 2)], {
-        type: "application/json"
-    })
-    const link = document.createElement('a')
-    link.download = "keyframes.json"
-    link.href = URL.createObjectURL(blob)
-    link.click()
-}
-//ImportJSON
+////Export JSON
+//document.getElementById('export').onclick = () => {
+//    const bgUrl = document.getElementById('url').value.trim()
+//    const data = {
+//        background: bgUrl, // store the image URL input
+//        frames: frames.map((f, i) => ({
+//            index: i,
+//            url: f
+//        }))
+//    }
+//    const blob = new Blob([JSON.stringify(data, null, 2)], {
+//        type: "application/json"
+//    })
+//    const link = document.createElement('a')
+//    link.download = "keyframes.json"
+//    link.href = URL.createObjectURL(blob)
+//    link.click()
+//}
+////ImportJSON
+//document.getElementById('import').onclick = () => {
+//    const input = document.createElement('input')
+//    input.type = "file"
+//    input.accept = "application/json"
+//    input.onchange = e => {
+//        const file = e.target.files[0]
+//        if (!file) return
+//        const reader = new FileReader()
+//        reader.onload = () => {
+//            try {
+//                const obj = JSON.parse(reader.result)
+//                if (obj.background) {
+//                    document.getElementById('url').value = obj.background
+//                    const img = new Image()
+//                    img.crossOrigin = "anonymous"
+//                    img.src = obj.background
+//                    img.onload = () => {
+//                        resize(img.width, img.height)
+//                        bgx.clearRect(0, 0, bg.width, bg.height)
+//                        bgx.drawImage(img, 0, 0)
+//                        drx.clearRect(0, 0, dr.width, dr.height)
+//                    }
+//                    
+//                    
+//                }
+//                if (obj.frames) {
+//                    frames.length = 0
+//                    obj.frames.forEach(f => frames.push(f.url))
+//                    cur = 0
+//                    show(cur)
+//                    render()
+//                }
+//                
+//            } catch (err) {
+//                console.error("Invalid JSON", err)
+//            }
+//        }
+//        reader.readAsText(file)
+//        
+//    }
+//    input.click()
+//}
+
+// Import JSON
 document.getElementById('import').onclick = () => {
-    const input = document.createElement('input')
-    input.type = "file"
-    input.accept = "application/json"
+    const input = document.createElement('input');
+    input.type = "file";
+    input.accept = "application/json";
     input.onchange = e => {
-        const file = e.target.files[0]
-        if (!file) return
-        const reader = new FileReader()
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
         reader.onload = () => {
             try {
-                const obj = JSON.parse(reader.result)
+                const obj = JSON.parse(reader.result);
+
+                // Restore background
                 if (obj.background) {
-                    document.getElementById('url').value = obj.background
-                    const img = new Image()
-                    img.crossOrigin = "anonymous"
-                    img.src = obj.background
+                    document.getElementById('url').value = obj.background;
+                    const img = new Image();
+                    img.crossOrigin = "anonymous";
+                    img.src = obj.background;
                     img.onload = () => {
-                        resize(img.width, img.height)
-                        bgx.clearRect(0, 0, bg.width, bg.height)
-                        bgx.drawImage(img, 0, 0)
-                        drx.clearRect(0, 0, dr.width, dr.height)
-                    }
-                    
-                    
+                        const w = obj.width || img.width;
+                        const h = obj.height || img.height;
+                        resize(w, h);
+
+                        // Update input fields
+                        document.getElementById('canvasWidth').value = w;
+                        document.getElementById('canvasHeight').value = h;
+
+                        bgx.clearRect(0, 0, bg.width, bg.height);
+                        bgx.drawImage(img, 0, 0, w, h);
+                        drx.clearRect(0, 0, dr.width, dr.height);
+                    };
+                } else if (obj.width && obj.height) {
+                    // Resize even if no background image
+                    resize(obj.width, obj.height);
+
+                    // Update input fields
+                    document.getElementById('canvasWidth').value = obj.width;
+                    document.getElementById('canvasHeight').value = obj.height;
                 }
+
+                // Restore frames
                 if (obj.frames) {
-                    frames.length = 0
-                    obj.frames.forEach(f => frames.push(f.url))
-                    cur = 0
-                    show(cur)
-                    render()
+                    frames.length = 0;
+                    obj.frames.forEach(f => frames.push(f.url));
+                    cur = 0;
+                    show(cur);
+                    render();
                 }
-                
+
             } catch (err) {
-                console.error("Invalid JSON", err)
+                console.error("Invalid JSON", err);
             }
-        }
-        reader.readAsText(file)
-        
-    }
-    input.click()
-}
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+};
+
 // Load Image
 function loadImage(url) {
     return new Promise((resolve, reject) => {

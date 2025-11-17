@@ -50,21 +50,78 @@
          <form>
             <label><input id="sz" type="range" min="2" max="50" value="12"></label>
             <label><input id="op" type="range" min="0.1" max="1" step="0.05" value="1"></label>
+            
+            
             </form>
          </div>
 
       </div>
+      
+      		<style>
+      		#canvasLabel{display:none;z-index:99999999;position:fixed;bottom:80px;left:10px;background-color:lightgray;color:black;padding:10px;border-radius:5px;font-size:10px;transition: 0.3s;}
+      		#canvasLabel button{width:100%;margin-top:5px;}
+				input[type=number] {
+				 appearance: textfield;
+				 width:40px;
+				}
+				
+				
+				/* Toggle button */
+  #toggleLabel {
+    position: fixed;
+    bottom: 50px;
+    left: 10px;
+    z-index: 100000000;
+    background: #444;
+    color: black;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  
+				</style>
+				<div id="canvasLabel">
+				  W: <input id="canvasWidth" type="number" value="640" >
+				  H: <input id="canvasHeight" type="number" value="360"><br>
+				  <button id="applySize">Apply</button>
+				</div>
+				
+				<!-- Toggle button -->
+<button id="toggleLabel">Settings</button>
+
+<script>
+  const toggleBtn = document.getElementById('toggleLabel');
+  const canvasLabel = document.getElementById('canvasLabel');
+
+  toggleBtn.onclick = () => {
+    if (canvasLabel.style.display === 'none') {
+      canvasLabel.style.display = 'block';
+    } else {
+      canvasLabel.style.display = 'none';
+    }
+    
+  };
+
+  // Start hidden if you prefer
+  // canvasLabel.style.display = 'none';
+</script>
+				
+				
       <div id="line"></div>
       <div id="stage">
          <div id="stack">
             <canvas id="bg"></canvas>
             <canvas id="draw"></canvas>
             <canvas id="overlay"></canvas>
-            <div id="canvasLabel"
-       style="position:absolute; top:-25px; right:5px; 
-              font:12px monospace; color:#fff; 
-              background:rgba(0,0,0,0.2); padding:2px 4px; border-radius:3px;">
-  </div>
+<!--            <div id="canvasLabel"-->
+<!--       style="position:absolute; top:-25px; right:5px; -->
+<!--              font:12px monospace; color:#fff; -->
+<!--              background:rgba(0,0,0,0.2); padding:2px 4px; border-radius:3px;">-->
+<!--  </div>-->
+
+
          </div>
           
       </div>
