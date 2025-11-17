@@ -9,54 +9,46 @@
    <body>
       <div id="bar">
       <div class="group">
-<!--         <div class="group">-->
+      
+         <div class="group">
             <button id="export">💾</button>
             <button id="import">📂</button>
             <button id="pdf">📄</button>
             <button id="save">📸</button>
-<!--         </div>-->
-<!--         <div class="group">-->
             <input id="url" type="text" placeholder="Image URL">
             <button id="load">📥</button>
             <button onclick="window.open('https://spikysaurus.github.io', '_blank');" id="home">🏠</button>
             <button onclick="window.open('https://traditionalanimatorindonesia.github.io/pages/Templates/index.html', '_blank');" id="templates">📜</button>
-<!--         </div>-->
-<!--         <div class="group">-->
+            
+         </div>
+         <div class="group">
             <input id="col" type="color" value="#000000">
-<!--            <button id="black" style="color:black">BL</button>-->
-<!--            <button id="white" style="color:black;">WH</button>-->
-<!--            <button id="red" style="color:red">R</button>-->
-<!--            <button id="green" style="color:green">G</button>-->
-<!--            <button id="blue" style="color:blue">B</button>-->
-<!--         </div>-->
-<!--         <div class="group">-->
             <button id="brush">Pen</button>
-            <button id="add">Add Page</button>
-            <button id="clr">Clear</button>
-            <button id="select">Select</button>
-            <button id="copy">Copy</button>
-            <button id="cut">Cut</button>
-            <button id="paste">Stamp</button>
-            <button id="swapPrev">⇇</button>
-           <button id="swapNext">⇉</button>
+            </div>
+				<div class="group">
+            	
+		         <button id="clr">Clear</button>
+		         <button id="select">Select</button>
+		         <button id="copy">Copy</button>
+		         <button id="cut">Cut</button>
+		         <button id="paste">Stamp</button>
+		         </div>
+            <div class="group">
+		         <button id="swapPrev">⇇</button>
+		        <button id="swapNext">⇉</button>
+           </div>
+           
          <div class="group">
             <button id="pan">Pan</button>
             <button id="zoomIn">➕</button>
             <button id="zoomOut">➖</button>
+            <button id="add">Add Page</button>
          </div>
-
-<!--         </div>-->
-         <div class="group">
-         <form>
-            <label><input id="sz" type="range" min="2" max="50" value="12"></label>
-            <label><input id="op" type="range" min="0.1" max="1" step="0.05" value="1"></label>
-            
-            
-            </form>
-         </div>
-
       </div>
       
+      
+     
+          
       		<style>
       		#canvasLabel{text-align:center;width:200px;z-index:99999999;position:fixed;bottom:80px;left:10px;background-color:lightgray;color:black;padding:10px;border-radius:5px;font-size:12px;transition: 0.3s;}
       		#canvasLabel button{width:auto;margin-top:5px;}
@@ -114,7 +106,7 @@
 				<div id="canvasLabel">
 				  W: <input id="canvasWidth" type="number" value="640" ><br>
 				  H: <input id="canvasHeight" type="number" value="360"><br>
-				  
+				 
 				  
 				  <div class="anchor-controls">
   <button id="resizeTop">Top</button>
@@ -144,7 +136,13 @@
   };
 </script>
 				
-				
+		
+		
+         <form class="BrushPanel">
+            <label><input id="sz" type="range" min="2" max="50" value="12"></label>
+            <label><input id="op" type="range" min="0.1" max="1" step="0.05" value="1"></label>
+            </form>
+         
       <div id="line"></div>
       <div id="stage">
          <div id="stack">

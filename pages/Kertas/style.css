@@ -161,29 +161,13 @@ button.activePan {
   color:#0f0;
 }
 
-/* Mobile tweak: stack vertically */
-/*@media (max-width: 600px) {*/
-/*#bar button,*/
-/*#bar label,*/
-/*#bar input[type="text"] {*/
-/*  flex: 1 1 auto;*/
-/*  min-width: 32px;*/
-/*  padding: 0.1rem;*/
-/*/*  font-size: 1rem;*/*/
-/*  border-radius: 6px;*/
-/*  border: 1px solid #ccc;*/
-/*  background: #fff;*/
-/*  cursor: pointer;*/
-/*  text-align: center;*/
-/*}*/
+.BrushPanel{display: flex;bottom:55px;position:fixed;flex-direction: row; gap:5px;}
 
-/*  #bar {*/
-/*    flex-direction: column;*/
-/*    align-items: stretch;*/
-/*    */
-/*  }*/
-/*  .color-group {*/
-/*    justify-content: flex-start;*/
-/*  }*/
-/*}*/
+
+
+/* Mobile tweak: stack vertically */
+@media (max-width: 600px) {
+.BrushPanel{display: flex;bottom:55px;position:fixed;flex-direction: column; gap:5px;}
+
+}
 
