@@ -1,5 +1,3 @@
-
-
 const bg = document.getElementById('bg'),
     bgx = bg.getContext('2d')
 const dr = document.getElementById('draw'),
@@ -42,80 +40,6 @@ function animate() {
     requestAnimationFrame(animate)
 }
 animate()
-//function resize(w, h) {
-//    bg.width = w;
-//    bg.height = h;
-//    dr.width = w;
-//    dr.height = h;
-//    overlay.width = w;
-//    overlay.height = h
-//    stack.style.width = w + 'px';
-//    stack.style.height = h + 'px'
-//}
-
-
-//function resize(w, h) {
-//    bg.width = w;
-//    bg.height = h;
-//    dr.width = w;
-//    dr.height = h;
-//    overlay.width = w;
-//    overlay.height = h;
-//    stack.style.width = w + 'px';
-//    stack.style.height = h + 'px';
-
-//    // Update label text
-//    const label = document.getElementById('canvasLabel');
-////    label.textContent = `${w}px × ${h}px`;
-//}
-
-//document.getElementById('applySize').onclick = () => {
-//    const w = parseInt(document.getElementById('canvasWidth').value, 10);
-//    const h = parseInt(document.getElementById('canvasHeight').value, 10);
-
-//    if (w > 0 && h > 0) {
-//        resize(w, h);
-//        init(); // reinitialize after resize
-//    }
-//};
-
-////RESIZE STRETCH
-//function resize(w, h) {
-//    // Save current drawing as an image
-//    const snapshot = new Image();
-//    snapshot.src = dr.toDataURL();
-
-//    // Resize canvases
-//    bg.width = w;
-//    bg.height = h;
-//    dr.width = w;
-//    dr.height = h;
-//    overlay.width = w;
-//    overlay.height = h;
-//    stack.style.width = w + 'px';
-//    stack.style.height = h + 'px';
-
-//    // Redraw saved content after resize
-//    snapshot.onload = () => {
-//        drx.drawImage(snapshot, 0, 0, w, h);
-//    };
-
-//    // Update inputs
-//    document.getElementById('canvasWidth').value = w;
-//    document.getElementById('canvasHeight').value = h;
-//}
-
-//document.getElementById('applySize').onclick = () => {
-//    const w = parseInt(document.getElementById('canvasWidth').value, 10);
-//    const h = parseInt(document.getElementById('canvasHeight').value, 10);
-
-//    if (w > 0 && h > 0) {
-//        resize(w, h);
-//        // Do NOT call init() here, since it clears the canvas
-//        frames[cur] = dr.toDataURL(); // update current frame with resized content
-//        render();
-//    }
-//};
 
 // --- RESIZE STRETCH ---
 function resize(w, h) {
@@ -506,27 +430,6 @@ dr.addEventListener('pointerdown', e => {
     }
 });
 
-//dr.addEventListener('pointermove', e => {
-//    if (selecting && e.pressure > 0) { // pressure>0 means pointer is down
-//        const { x, y } = getCanvasCoords(e, dr);
-//        selEndX = x;
-//        selEndY = y;
-//        ox.clearRect(0, 0, overlay.width, overlay.height);
-//        ox.strokeStyle = 'rgba(0,255,0,0.8)';
-//        ox.lineWidth = 1;
-//        ox.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
-//    }
-//});
-
-//dr.addEventListener('pointerup', e => {
-//    if (selecting) {
-//        const { x, y } = getCanvasCoords(e, dr);
-//        selEndX = x;
-//        selEndY = y;
-//        ox.clearRect(0, 0, overlay.width, overlay.height);
-//    }
-//});
-
 // Selection handlers with pointer events
 dr.addEventListener('pointerdown', e => {
     if (selecting) {
@@ -750,49 +653,6 @@ document.getElementById('export').onclick = () => {
     link.href = URL.createObjectURL(blob)
     link.click()
 }
-////ImportJSON
-//document.getElementById('import').onclick = () => {
-//    const input = document.createElement('input')
-//    input.type = "file"
-//    input.accept = "application/json"
-//    input.onchange = e => {
-//        const file = e.target.files[0]
-//        if (!file) return
-//        const reader = new FileReader()
-//        reader.onload = () => {
-//            try {
-//                const obj = JSON.parse(reader.result)
-//                if (obj.background) {
-//                    document.getElementById('url').value = obj.background
-//                    const img = new Image()
-//                    img.crossOrigin = "anonymous"
-//                    img.src = obj.background
-//                    img.onload = () => {
-//                        resize(img.width, img.height)
-//                        bgx.clearRect(0, 0, bg.width, bg.height)
-//                        bgx.drawImage(img, 0, 0)
-//                        drx.clearRect(0, 0, dr.width, dr.height)
-//                    }
-//                    
-//                    
-//                }
-//                if (obj.frames) {
-//                    frames.length = 0
-//                    obj.frames.forEach(f => frames.push(f.url))
-//                    cur = 0
-//                    show(cur)
-//                    render()
-//                }
-//                
-//            } catch (err) {
-//                console.error("Invalid JSON", err)
-//            }
-//        }
-//        reader.readAsText(file)
-//        
-//    }
-//    input.click()
-//}
 
 // Import JSON
 document.getElementById('import').onclick = () => {
