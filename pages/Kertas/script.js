@@ -732,24 +732,24 @@ function show(i) {
         img.src = frames[i]
     }
 }
-////Export JSON
-//document.getElementById('export').onclick = () => {
-//    const bgUrl = document.getElementById('url').value.trim()
-//    const data = {
-//        background: bgUrl, // store the image URL input
-//        frames: frames.map((f, i) => ({
-//            index: i,
-//            url: f
-//        }))
-//    }
-//    const blob = new Blob([JSON.stringify(data, null, 2)], {
-//        type: "application/json"
-//    })
-//    const link = document.createElement('a')
-//    link.download = "keyframes.json"
-//    link.href = URL.createObjectURL(blob)
-//    link.click()
-//}
+//Export JSON
+document.getElementById('export').onclick = () => {
+    const bgUrl = document.getElementById('url').value.trim()
+    const data = {
+        background: bgUrl, // store the image URL input
+        frames: frames.map((f, i) => ({
+            index: i,
+            url: f
+        }))
+    }
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json"
+    })
+    const link = document.createElement('a')
+    link.download = "keyframes.json"
+    link.href = URL.createObjectURL(blob)
+    link.click()
+}
 ////ImportJSON
 //document.getElementById('import').onclick = () => {
 //    const input = document.createElement('input')
