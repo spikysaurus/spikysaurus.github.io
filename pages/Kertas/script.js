@@ -52,7 +52,76 @@ animate()
 //    stack.style.width = w + 'px';
 //    stack.style.height = h + 'px'
 //}
+
+
+//function resize(w, h) {
+//    bg.width = w;
+//    bg.height = h;
+//    dr.width = w;
+//    dr.height = h;
+//    overlay.width = w;
+//    overlay.height = h;
+//    stack.style.width = w + 'px';
+//    stack.style.height = h + 'px';
+
+//    // Update label text
+//    const label = document.getElementById('canvasLabel');
+////    label.textContent = `${w}px × ${h}px`;
+//}
+
+//document.getElementById('applySize').onclick = () => {
+//    const w = parseInt(document.getElementById('canvasWidth').value, 10);
+//    const h = parseInt(document.getElementById('canvasHeight').value, 10);
+
+//    if (w > 0 && h > 0) {
+//        resize(w, h);
+//        init(); // reinitialize after resize
+//    }
+//};
+
+////RESIZE STRETCH
+//function resize(w, h) {
+//    // Save current drawing as an image
+//    const snapshot = new Image();
+//    snapshot.src = dr.toDataURL();
+
+//    // Resize canvases
+//    bg.width = w;
+//    bg.height = h;
+//    dr.width = w;
+//    dr.height = h;
+//    overlay.width = w;
+//    overlay.height = h;
+//    stack.style.width = w + 'px';
+//    stack.style.height = h + 'px';
+
+//    // Redraw saved content after resize
+//    snapshot.onload = () => {
+//        drx.drawImage(snapshot, 0, 0, w, h);
+//    };
+
+//    // Update inputs
+//    document.getElementById('canvasWidth').value = w;
+//    document.getElementById('canvasHeight').value = h;
+//}
+
+//document.getElementById('applySize').onclick = () => {
+//    const w = parseInt(document.getElementById('canvasWidth').value, 10);
+//    const h = parseInt(document.getElementById('canvasHeight').value, 10);
+
+//    if (w > 0 && h > 0) {
+//        resize(w, h);
+//        // Do NOT call init() here, since it clears the canvas
+//        frames[cur] = dr.toDataURL(); // update current frame with resized content
+//        render();
+//    }
+//};
+
+// --- RESIZE STRETCH ---
 function resize(w, h) {
+    const snapshot = new Image();
+    snapshot.src = dr.toDataURL();
+
     bg.width = w;
     bg.height = h;
     dr.width = w;
@@ -62,21 +131,113 @@ function resize(w, h) {
     stack.style.width = w + 'px';
     stack.style.height = h + 'px';
 
-    // Update label text
-    const label = document.getElementById('canvasLabel');
-//    label.textContent = `${w}px × ${h}px`;
+    snapshot.onload = () => {
+        // Stretch to fit new size
+        drx.drawImage(snapshot, 0, 0, w, h);
+    };
+
+    document.getElementById('canvasWidth').value = w;
+    document.getElementById('canvasHeight').value = h;
 }
 
+// --- RESIZE ANCHOR PRESERVE ---
+function resizeAnchor(w, h, anchor = "top-left") {
+    const snapshot = new Image();
+    snapshot.src = dr.toDataURL();
+
+    const oldW = dr.width;
+    const oldH = dr.height;
+
+    bg.width = w;
+    bg.height = h;
+    dr.width = w;
+    dr.height = h;
+    overlay.width = w;
+    overlay.height = h;
+    stack.style.width = w + 'px';
+    stack.style.height = h + 'px';
+
+    snapshot.onload = () => {
+        let offsetX = 0, offsetY = 0;
+        if (anchor.includes("right")) offsetX = w - oldW;
+        if (anchor.includes("bottom")) offsetY = h - oldH;
+        // Draw at original size (no stretch)
+        drx.drawImage(snapshot, offsetX, offsetY);
+    };
+
+    document.getElementById('canvasWidth').value = w;
+    document.getElementById('canvasHeight').value = h;
+}
+
+
+// --- RESIZE CENTER PRESERVE ---
+function resizeCenter(w, h) {
+    const snapshot = new Image();
+    snapshot.src = dr.toDataURL();
+
+    const oldW = dr.width;
+    const oldH = dr.height;
+
+    bg.width = w;
+    bg.height = h;
+    dr.width = w;
+    dr.height = h;
+    overlay.width = w;
+    overlay.height = h;
+    stack.style.width = w + 'px';
+    stack.style.height = h + 'px';
+
+    snapshot.onload = () => {
+        // Center the old drawing
+        const offsetX = (w - oldW) / 2;
+        const offsetY = (h - oldH) / 2;
+        drx.drawImage(snapshot, offsetX, offsetY);
+    };
+
+    document.getElementById('canvasWidth').value = w;
+    document.getElementById('canvasHeight').value = h;
+}
+
+// --- BUTTON HANDLERS ---
 document.getElementById('applySize').onclick = () => {
     const w = parseInt(document.getElementById('canvasWidth').value, 10);
     const h = parseInt(document.getElementById('canvasHeight').value, 10);
-
     if (w > 0 && h > 0) {
-        resize(w, h);
-        init(); // reinitialize after resize
+        resize(w, h); // stretch
+        frames[cur] = dr.toDataURL();
+        render();
     }
 };
 
+document.getElementById('resizeLeft').onclick = () => {
+    const w = parseInt(document.getElementById('canvasWidth').value, 10);
+    const h = parseInt(document.getElementById('canvasHeight').value, 10);
+    resizeAnchor(w, h, "top-right");
+};
+
+document.getElementById('resizeRight').onclick = () => {
+    const w = parseInt(document.getElementById('canvasWidth').value, 10);
+    const h = parseInt(document.getElementById('canvasHeight').value, 10);
+    resizeAnchor(w, h, "top-left");
+};
+
+document.getElementById('resizeTop').onclick = () => {
+    const w = parseInt(document.getElementById('canvasWidth').value, 10);
+    const h = parseInt(document.getElementById('canvasHeight').value, 10);
+    resizeAnchor(w, h, "bottom-left");
+};
+
+document.getElementById('resizeBottom').onclick = () => {
+    const w = parseInt(document.getElementById('canvasWidth').value, 10);
+    const h = parseInt(document.getElementById('canvasHeight').value, 10);
+    resizeAnchor(w, h, "top-left");
+};
+
+document.getElementById('resizeCenter').onclick = () => {
+    const w = parseInt(document.getElementById('canvasWidth').value, 10);
+    const h = parseInt(document.getElementById('canvasHeight').value, 10);
+    resizeCenter(w, h);
+};
 
 function init() {
     drx.clearRect(0, 0, dr.width, dr.height);

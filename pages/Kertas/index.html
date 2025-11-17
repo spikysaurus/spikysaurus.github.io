@@ -58,11 +58,13 @@
       </div>
       
       		<style>
-      		#canvasLabel{z-index:99999999;position:fixed;bottom:80px;left:10px;background-color:lightgray;color:black;padding:10px;border-radius:5px;font-size:10px;transition: 0.3s;}
-      		#canvasLabel button{width:100%;margin-top:5px;}
+      		#canvasLabel{text-align:center;width:200px;z-index:99999999;position:fixed;bottom:80px;left:10px;background-color:lightgray;color:black;padding:10px;border-radius:5px;font-size:12px;transition: 0.3s;}
+      		#canvasLabel button{width:auto;margin-top:5px;}
 				input[type=number] {
 				 appearance: textfield;
-				 width:40px;
+				 width:100px;
+				 font-size:18px;
+				 
 				}
 				
 				
@@ -72,20 +74,57 @@
     bottom: 50px;
     left: 10px;
     z-index: 100000000;
-    background: #444;
     color: black;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 4px;
-    font-size: 12px;
     cursor: pointer;
   }
   
 				</style>
+				
+				
+				<style>
+  .anchor-controls {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto auto;
+    gap: 0px;
+<!--    justify-items: center;-->
+    align-items: center;
+    margin-top: 10px;
+  }
+  .anchor-controls button {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .anchor-controls button:hover {
+    background: #ddd;
+  }
+  /* Place buttons in grid like CSP anchor */
+  #resizeTop    { grid-column: 2; grid-row: 1; }
+  #resizeLeft   { grid-column: 1; grid-row: 2; }
+  #resizeCenter { grid-column: 2; grid-row: 2; }
+  #resizeRight  { grid-column: 3; grid-row: 2; }
+  #resizeBottom { grid-column: 2; grid-row: 3; }
+</style>
+
+
+
+
 				<div id="canvasLabel">
-				  W: <input id="canvasWidth" type="number" value="640" >
+				  W: <input id="canvasWidth" type="number" value="640" ><br>
 				  H: <input id="canvasHeight" type="number" value="360"><br>
-				  <button id="applySize">Apply</button>
+				  
+				  
+				  <div class="anchor-controls">
+  <button id="resizeTop">Top</button>
+  <button id="resizeLeft">Left</button>
+  <button id="resizeCenter">Center</button>
+  <button id="resizeRight">Right</button>
+  <button id="resizeBottom">Bottom</button>
+</div>
+<button id="applySize">Resize Center(Stretch)</button>
+
 				</div>
 				
 				<!-- Toggle button -->
@@ -103,9 +142,6 @@
     }
     
   };
-
-  // Start hidden if you prefer
-  // canvasLabel.style.display = 'none';
 </script>
 				
 				
