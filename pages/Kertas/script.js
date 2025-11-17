@@ -42,15 +42,29 @@ function animate() {
     requestAnimationFrame(animate)
 }
 animate()
+//function resize(w, h) {
+//    bg.width = w;
+//    bg.height = h;
+//    dr.width = w;
+//    dr.height = h;
+//    overlay.width = w;
+//    overlay.height = h
+//    stack.style.width = w + 'px';
+//    stack.style.height = h + 'px'
+//}
 function resize(w, h) {
     bg.width = w;
     bg.height = h;
     dr.width = w;
     dr.height = h;
     overlay.width = w;
-    overlay.height = h
+    overlay.height = h;
     stack.style.width = w + 'px';
-    stack.style.height = h + 'px'
+    stack.style.height = h + 'px';
+
+    // Update label text
+    const label = document.getElementById('canvasLabel');
+    label.textContent = `${w}px × ${h}px`;
 }
 
 function init() {
