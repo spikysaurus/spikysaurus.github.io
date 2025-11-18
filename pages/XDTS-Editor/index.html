@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>XDTS Editor</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+
+   <input type="file" id="fileInput" accept=".xdts,.json,.txt" style="display:none">
+  	<div id="dropZone">Drag & Drop .xdts file here or Click to browse</div>
+
+  
+  
+<div class="box">
+	
+</div>
+
+<div clas="box">
+<div class="panel">
+		<b><label id="durationLabel">Duration: (0+0) | Frames: 0</label></b>
+		<label><input type="number" id="newDuration" min="1" value="24"></label>
+		<button id="newTimesheetBtn">New Blank Timesheet</button>
+		<button id="exportBtn" style="display:none">Export XDTS</button>
+	</div>
+  <div class="panel">
+	  <label><b>Symbols : </b></label>
+	  <label>Empty Cell : <input type="text" id="symNull" value="x"></label>
+	  <label>Inbetween : <input type="text" id="symTick1" value="○"></label>
+	  <label>Reverse Sheet : <input type="text" id="symTick2" value="●"></label>
+	  <label>Hyphen : <input type="text" id="symHyphen" value="｜"></label> 
+	
+	
+	<label for="cellWidthInput">Cell Width:</label>
+<input type="number" id="cellWidthInput" min="0" max="999" value="30">
+
+<label for="cellHeightInput">Cell Height:</label>
+<input type="number" id="cellHeightInput" min="0" max="999" value="30">
+
+<!--<label for="fontSizeInput">Font Size:</label>-->
+<!--<input type="number" id="fontSizeInput" min="1" max="999" value="14">-->
+
+
+</div>
+
+	<div class="panel" >
+		<button id="addTrackBtn">Add Track</button>
+		<button id="removeTrackBtn">Remove Track</button>
+		<button id="autoRenameBtn">Auto-Rename Tracks</button>
+		<label>Track to reorder: <input type="text" id="reorderInput" value="A"></label>
+		<button id="reorderLeftBtn">Reorder Left</button>
+		<button id="reorderRightBtn">Reorder Right</button>
+		<label>Adjust Duration by: <input type="number" id="adjustDuration" value="1" min="1"></label>
+		<button id="increaseDurationBtn">Increase Duration</button>
+		<button id="decreaseDurationBtn">Decrease Duration</button>
+	</div>
+		
+</div>
+
+
+  
+
+  <div id="tableContainer"></div>
+
+  <script src="script.js"></script>
+  <script src="script2.js"></script>
+</body>
+</html>
+

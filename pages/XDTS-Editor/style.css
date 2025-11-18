@@ -1,0 +1,116 @@
+body { font-family: sans-serif; margin: 20px; }
+/*#header {*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  justify-content: space-between;*/
+/*}*/
+
+/* Compact responsive layout */
+.box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;              /* tighter spacing */
+  margin-bottom: 1rem;
+}
+
+.panel {
+  flex: 1 1 220px;          /* smaller minimum width */
+  padding: 0.5rem;          /* reduced padding */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fafafa;
+}
+
+/* Labels and inputs compact */
+.panel label {
+/*  display: flex;*/
+/*  flex-direction: inline;*/
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;       /* smaller text */
+}
+.panel input{
+max-width:24px;
+appearance: textfield;
+text-align:center;
+
+
+}
+.panel input,
+.panel button {
+  padding: 0.35rem 0.5rem;  /* tighter controls */
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
+
+.panel button {
+  margin-right: 0.25rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .box {
+    flex-direction: column;   /* stack panels vertically */
+  }
+}
+
+@media (max-width: 480px) {
+  .panel {
+    flex: 1 1 100%;           /* full width on mobile */
+  }
+  .panel input,
+  .panel button {
+    width: 100%;              /* stretch for touch usability */
+    margin-top: 0.3rem;
+  }
+}
+
+
+#tableContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+table { border-collapse: collapse; margin: 10px; }
+th, td { 
+  border: 1px solid #444; 
+  padding: 2px;           
+  text-align: center; 
+  width:30px;
+/*  min-width: 25px;        */
+/*  max-width: 30px; */
+}
+th { background: #eee; font-size: 11px; }
+td { font-size: 11px; }
+input.cellInput { 
+  width: 100%; 
+  border: none; 
+  text-align: center; 
+  font-size: 11px; 
+  padding: 0; 
+  box-sizing: border-box;
+}
+.nullcell { color: black; font-weight: bold; }
+#dropZone {
+  border: 2px dashed #888;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  color: #555;
+/*  margin-top: 20px;*/
+  cursor: pointer;
+}
+#dropZone.dragover {
+  background: #f0f0f0;
+  border-color: #333;
+  color: #000;
+}
+#exportBtn {
+/*  padding: 6px 10px;*/
+/*  border: 1px solid #444;*/
+/*  background: #eee;*/
+/*  cursor: pointer;*/
+/*  font-size: 12px;*/
+/*  margin-left: 20px;*/
+}
+
