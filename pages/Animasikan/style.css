@@ -71,7 +71,7 @@ margin-top:5px;
 
 /* Camera preview (optional) */
 #preview {
-  width: 300px; height: 169px; border: 2px solid #444;
+  width: 300px; height: 169px; border: 0px solid red;
   display: flex; align-items: center; justify-content: center;
   position: relative; overflow: hidden;
 }
