@@ -10,10 +10,13 @@
   <!-- Preview area -->
 <!--  <div style="position:fixed;top:0;">-->
   <center>
+  <label style="position:relative;top:1px;">FPS : </label><input type="number" id="fps" value="24" min="1" max="60">
   <button id="toggleCamera">Switch Cam</button>
   <button id="toggleCam">Hide Cam</button>
-  <label style="position:relative;top:1px;">FPS : </label><input type="number" id="fps" value="24" min="1" max="60">
+  
   <button id="exportGif" style="margin-top:10px;margin-bottom:10px;">Export GIF</button>
+  <button id="exportZip">PNGs (.zip)</button>
+
   <div id="preview">
   <video id="camera" autoplay playsinline></video>
 </div>
@@ -76,6 +79,8 @@
   <script src="script2.js"></script>
   <script src="gif.js"></script>
 <script src="gif.worker.js"></script>
+<script src="jszip.min.js"></script>
+
 
 </body>
 </html>

@@ -69,4 +69,44 @@ exposePlusBtn.onclick=()=>{getSelectedBlocks().forEach(el=>{const strip=el.close
 exposeMinusBtn.onclick=()=>{getSelectedBlocks().forEach(el=>{const strip=el.closest(".track-strip"),trackEl=strip.parentElement,trackIndex=[...tracksDiv.querySelectorAll(".track")].indexOf(trackEl),blocks=[...strip.querySelectorAll(".frame-block")],i=blocks.indexOf(el),layer=layers[trackIndex];let w=parseInt(el.style.width);if(w>frameUnit){el.style.width=w-frameUnit+"px";layer.frames[i].length-=1;for(let j=i+1;j<blocks.length;j++){const b=blocks[j];b.style.left=(parseInt(b.style.left)-frameUnit)+"px";layer.frames[j].start-=1}}});updateTimecode()};
 moveLeftBtn.onclick=()=>{getSelectedBlocks().forEach(el=>{const strip=el.closest(".track-strip"),trackEl=strip.parentElement,trackIndex=[...tracksDiv.querySelectorAll(".track")].indexOf(trackEl),blocks=[...strip.querySelectorAll(".frame-block")],i=blocks.indexOf(el),layer=layers[trackIndex];let left=parseInt(el.style.left);if(left>=frameUnit){el.style.left=(left-frameUnit)+"px";layer.frames[i].start-=1}});updateTimecode()};
 moveRightBtn.onclick=()=>{getSelectedBlocks().forEach(el=>{const strip=el.closest(".track-strip"),trackEl=strip.parentElement,trackIndex=[...tracksDiv.querySelectorAll(".track")].indexOf(trackEl),blocks=[...strip.querySelectorAll(".frame-block")],i=blocks.indexOf(el),layer=layers[trackIndex];let left=parseInt(el.style.left)+frameUnit;el.style.left=left+"px";layer.frames[i].start+=1});updateTimecode()};
-	
+
+const exportZipBtn = document.getElementById("exportZip");
+
+async function renderFrameToCanvas(frameIndex, canvas, ctx) {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  layers.forEach(layer=>{
+    layer.frames.forEach(fr=>{
+      if(frameIndex>=fr.start && frameIndex<fr.start+fr.length){
+        let img=new Image();
+        img.src=fr.url;
+        ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      }
+    });
+  });
+}
+
+async function collectFrames() {
+  const canvas=document.createElement("canvas");
+  canvas.width=640; canvas.height=480;
+  const ctx=canvas.getContext("2d");
+  const blobs=[];
+  const total=layers.reduce((m,l)=>l.frames.reduce((mm,f)=>Math.max(mm,f.start+f.length),m),0);
+  for(let i=0;i<total;i++){
+    await renderFrameToCanvas(i,canvas,ctx);
+    const blob=await new Promise(res=>canvas.toBlob(res,"image/png"));
+    blobs.push({name:`frame_${String(i).padStart(4,"0")}.png`,blob});
+  }
+  return blobs;
+}
+
+exportZipBtn.onclick=async()=>{
+  const frames=await collectFrames();
+  const zip=new JSZip();
+  frames.forEach(f=>zip.file(f.name,f.blob));
+  const content=await zip.generateAsync({type:"blob"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(content);
+  a.download="sequence.zip";
+  a.click();
+};
+
