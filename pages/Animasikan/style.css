@@ -28,8 +28,8 @@ margin-top:5px;
 
 /* Track visuals */
 .track { margin-top: 10px; background: #fafafa; }
-.track-header { display: flex; align-items: center; margin-bottom: 5px; }
-.track-label { width: 80px; font-weight: bold; cursor: move; }
+.track-header { display: flex; align-items: center; margin-bottom: 5px;font-size:12px; }
+.track-label { width: 80px; cursor: move; color:black;background-color:white;padding:3px;border:1px dashed gray;border-radius:3px;}
 .track-strip { position: relative; height: 30px; background: #eee; }
 
 .ruler { display: flex; border-bottom: 1px solid #999;}
