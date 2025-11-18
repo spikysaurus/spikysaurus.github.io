@@ -15,7 +15,7 @@ navigator.mediaDevices.getUserMedia({video:true}).then(s=>camera.srcObject=s).ca
 
 fpsInput.oninput=()=>fps=parseInt(fpsInput.value)||24;
 zoomInput.oninput=()=>{frameUnit=parseInt(zoomInput.value);renderTracks()};
-toggleCam.onclick=()=>{camera.classList.toggle('hidden');toggleCam.textContent=camera.classList.contains('hidden')?"👁 Show Camera":"🙈 Hide Camera"};
+toggleCam.onclick=()=>{camera.classList.toggle('hidden');toggleCam.textContent=camera.classList.contains('hidden')?"Show Camera":"Hide Camera"};
 
 const buildRuler=n=>{let r=document.createElement('div');r.className='ruler';
  for(let i=0;i<n;i++){let t=document.createElement('div');t.className='tick';t.style.width=frameUnit+'px';t.textContent=i;r.appendChild(t)}return r};

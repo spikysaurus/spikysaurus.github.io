@@ -1,5 +1,5 @@
 // --- script2.js ---
-// Playback, playhead, capture, export GIF
+// Playback, playhead, capture, export GIF, camera toggle
 
 // helper: scroll timeline so playhead is visible
 function scrollToPlayhead(){
@@ -27,33 +27,112 @@ function jumpPlayhead(frame){
   scrollToPlayhead();
 }
 
-// capture webcam frame
-capBtn.onclick=()=>{
-  const c=document.createElement('canvas');
-  c.width=camera.videoWidth||320; c.height=camera.videoHeight||240;
-  c.getContext('2d').drawImage(camera,0,0);
-  const url=c.toDataURL('image/png');
+// camera setup
+let currentFacingMode = "user"; // "user"=front, "environment"=rear
+let stream;
 
-  if(layers.length===0){
-    layers.push({name:"Track 1",frames:[{url,start:0,length:1}]});
-    renderTracks();
-    selectBlock(0,0);jumpPlayhead(0);return;
+async function startCamera(facingMode="user"){
+  if(stream){stream.getTracks().forEach(t=>t.stop());}
+  try{
+    stream = await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:{exact:facingMode}}
+    });
+    camera.srcObject = stream;
+    currentFacingMode = facingMode;
+  }catch(err){
+    console.error("Camera error:",err);
   }
-  const sel=document.querySelector('.frame-block.selected');
-  if(!sel){
-    const end=layers[0].frames.reduce((a,f)=>Math.max(a,f.start+f.length),0);
-    layers[0].frames.push({url,start:end,length:1});
+}
+
+function toggleCamera(){
+  const newMode = currentFacingMode==="user" ? "environment" : "user";
+  startCamera(newMode);
+}
+
+// attach toggle button
+document.getElementById("toggleCamera").onclick = toggleCamera;
+
+// initialize default camera
+startCamera("user");
+
+// capture webcam frame
+//capBtn.onclick=()=>{
+//  const c=document.createElement('canvas');
+//  c.width=camera.videoWidth||320; c.height=camera.videoHeight||240;
+//  c.getContext('2d').drawImage(camera,0,0);
+//  const url=c.toDataURL('image/png');
+
+//  if(layers.length===0){
+//    layers.push({name:"Track 1",frames:[{url,start:0,length:1}]});
+//    renderTracks();
+//    selectBlock(0,0);jumpPlayhead(0);return;
+//  }
+//  const sel=document.querySelector('.frame-block.selected');
+//  if(!sel){
+//    const end=layers[0].frames.reduce((a,f)=>Math.max(a,f.start+f.length),0);
+//    layers[0].frames.push({url,start:end,length:1});
+//    renderTracks();
+//    selectBlock(0,layers[0].frames.length-1);jumpPlayhead(end);return;
+//  }
+//  const trackEl=sel.closest('.track');
+//  const ti=[...tracksDiv.querySelectorAll('.track')].indexOf(trackEl);
+//  const fi=[...trackEl.querySelectorAll('.frame-block')].indexOf(sel);
+//  const sf=layers[ti].frames[fi];const ns=sf.start+sf.length;
+//  layers[ti].frames.splice(fi+1,0,{url,start:ns,length:1});
+//  renderTracks();
+//  selectBlock(ti,fi+1);jumpPlayhead(ns);
+//};
+// capture webcam frame
+capBtn.onclick = () => {
+  const previewWidth = preview.clientWidth;
+  const previewHeight = preview.clientHeight;
+
+  const c = document.createElement('canvas');
+  c.width = previewWidth;
+  c.height = previewHeight;
+  const ctx = c.getContext('2d');
+
+  // crop/fit camera image into preview size
+  const scale = Math.max(
+    previewWidth / camera.videoWidth,
+    previewHeight / camera.videoHeight
+  );
+  const sw = camera.videoWidth * scale;
+  const sh = camera.videoHeight * scale;
+  const dx = (previewWidth - sw) / 2;
+  const dy = (previewHeight - sh) / 2;
+
+  ctx.drawImage(camera, dx, dy, sw, sh);
+
+  const url = c.toDataURL('image/png');
+
+  if (layers.length === 0) {
+    layers.push({ name: "Track 1", frames: [{ url, start: 0, length: 1 }] });
     renderTracks();
-    selectBlock(0,layers[0].frames.length-1);jumpPlayhead(end);return;
+    selectBlock(0, 0);
+    jumpPlayhead(0);
+    return;
   }
-  const trackEl=sel.closest('.track');
-  const ti=[...tracksDiv.querySelectorAll('.track')].indexOf(trackEl);
-  const fi=[...trackEl.querySelectorAll('.frame-block')].indexOf(sel);
-  const sf=layers[ti].frames[fi];const ns=sf.start+sf.length;
-  layers[ti].frames.splice(fi+1,0,{url,start:ns,length:1});
+  const sel = document.querySelector('.frame-block.selected');
+  if (!sel) {
+    const end = layers[0].frames.reduce((a, f) => Math.max(a, f.start + f.length), 0);
+    layers[0].frames.push({ url, start: end, length: 1 });
+    renderTracks();
+    selectBlock(0, layers[0].frames.length - 1);
+    jumpPlayhead(end);
+    return;
+  }
+  const trackEl = sel.closest('.track');
+  const ti = [...tracksDiv.querySelectorAll('.track')].indexOf(trackEl);
+  const fi = [...trackEl.querySelectorAll('.frame-block')].indexOf(sel);
+  const sf = layers[ti].frames[fi];
+  const ns = sf.start + sf.length;
+  layers[ti].frames.splice(fi + 1, 0, { url, start: ns, length: 1 });
   renderTracks();
-  selectBlock(ti,fi+1);jumpPlayhead(ns);
+  selectBlock(ti, fi + 1);
+  jumpPlayhead(ns);
 };
+
 
 // playback loop
 async function play(){
@@ -102,7 +181,9 @@ function exportGIF(){
   const gif = new GIF({
     workers: 2,
     quality: 10,
-    workerScript: 'gif.worker.js'
+    workerScript: 'gif.worker.js',
+    width: preview.clientWidth,
+    height: preview.clientHeight
   });
 
   const maxFrame = Math.max(...layers.map(l=>l.frames.reduce((a,f)=>Math.max(a,f.start+f.length),0)));
@@ -126,14 +207,26 @@ function exportGIF(){
   Promise.all(promises).then(()=>{
     for(let f=0; f<maxFrame; f++){
       const canvas=document.createElement('canvas');
-      canvas.width=preview.clientWidth; canvas.height=preview.clientHeight;
+      canvas.width=preview.clientWidth;
+      canvas.height=preview.clientHeight;
       const ctx=canvas.getContext('2d');
 
       layers.forEach(l=>{
         const a=l.frames.find(fr=>f>=fr.start&&f<fr.start+fr.length);
         if(a){
           const img=cache[a.url];
-          ctx.drawImage(img,0,0,canvas.width,canvas.height);
+
+          // crop/fit instead of stretch
+          const scale = Math.max(
+            canvas.width / img.width,
+            canvas.height / img.height
+          );
+          const sw = img.width * scale;
+          const sh = img.height * scale;
+          const dx = (canvas.width - sw) / 2;
+          const dy = (canvas.height - sh) / 2;
+
+          ctx.drawImage(img, dx, dy, sw, sh);
         }
       });
 
@@ -151,7 +244,6 @@ function exportGIF(){
     gif.render();
   });
 }
-
 
 // attach export button
 document.getElementById('exportGif').onclick = exportGIF;
