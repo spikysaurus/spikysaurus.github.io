@@ -25,6 +25,7 @@ function jumpPlayhead(frame){
   playhead.style.left=(frame*frameUnit)+'px';
   scrubToFrame(frame);
   scrollToPlayhead();
+  updateTimecode();
 }
 
 // camera setup
@@ -55,33 +56,6 @@ document.getElementById("toggleCamera").onclick = toggleCamera;
 // initialize default camera
 startCamera("user");
 
-// capture webcam frame
-//capBtn.onclick=()=>{
-//  const c=document.createElement('canvas');
-//  c.width=camera.videoWidth||320; c.height=camera.videoHeight||240;
-//  c.getContext('2d').drawImage(camera,0,0);
-//  const url=c.toDataURL('image/png');
-
-//  if(layers.length===0){
-//    layers.push({name:"Track 1",frames:[{url,start:0,length:1}]});
-//    renderTracks();
-//    selectBlock(0,0);jumpPlayhead(0);return;
-//  }
-//  const sel=document.querySelector('.frame-block.selected');
-//  if(!sel){
-//    const end=layers[0].frames.reduce((a,f)=>Math.max(a,f.start+f.length),0);
-//    layers[0].frames.push({url,start:end,length:1});
-//    renderTracks();
-//    selectBlock(0,layers[0].frames.length-1);jumpPlayhead(end);return;
-//  }
-//  const trackEl=sel.closest('.track');
-//  const ti=[...tracksDiv.querySelectorAll('.track')].indexOf(trackEl);
-//  const fi=[...trackEl.querySelectorAll('.frame-block')].indexOf(sel);
-//  const sf=layers[ti].frames[fi];const ns=sf.start+sf.length;
-//  layers[ti].frames.splice(fi+1,0,{url,start:ns,length:1});
-//  renderTracks();
-//  selectBlock(ti,fi+1);jumpPlayhead(ns);
-//};
 // capture webcam frame
 capBtn.onclick = () => {
   const previewWidth = preview.clientWidth;
@@ -312,5 +286,8 @@ orderDownBtn.onclick = () => {
     tracksDiv.querySelectorAll('.track')[idx+1].classList.add('selected');
   }
 };
+
+
+
 
 
