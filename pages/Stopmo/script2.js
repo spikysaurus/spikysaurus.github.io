@@ -155,18 +155,51 @@ playBtn.onclick=()=>{if(!playing)play()};
 stopBtn.onclick=()=>playing=false;
 
 // playhead drag
-head.onmousedown=e=>{
-  let sx=e.clientX,ol=parseInt(playhead.style.left)||0;
-  const mv=ev=>{
-    let nl=Math.max(0,Math.round((ol+(ev.clientX-sx))/frameUnit)*frameUnit);
-    playhead.style.left=nl+'px';
-    scrubToFrame(nl/frameUnit);
-    scrollToPlayhead();
+//head.onmousedown=e=>{
+//  let sx=e.clientX,ol=parseInt(playhead.style.left)||0;
+//  const mv=ev=>{
+//    let nl=Math.max(0,Math.round((ol+(ev.clientX-sx))/frameUnit)*frameUnit);
+//    playhead.style.left=nl+'px';
+//    scrubToFrame(nl/frameUnit);
+//    scrollToPlayhead();
+//  };
+//  const up=()=>{document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up)};
+//  document.addEventListener('mousemove',mv);
+//  document.addEventListener('mouseup',up);
+//};
+// playhead drag (mouse + touch, prevent page scroll)
+function startDrag(startX, ol) {
+  const move = ev => {
+    const clientX = ev.touches ? ev.touches[0].clientX : ev.clientX;
+    let nl = Math.max(0, Math.round((ol + (clientX - startX)) / frameUnit) * frameUnit);
+    playhead.style.left = nl + 'px';
+    scrubToFrame(nl / frameUnit);
+    // no scrollToPlayhead() here
+    if (ev.cancelable) ev.preventDefault(); // stop page/timeline scrolling
   };
-  const up=()=>{document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up)};
-  document.addEventListener('mousemove',mv);
-  document.addEventListener('mouseup',up);
+  const end = () => {
+    document.removeEventListener('mousemove', move);
+    document.removeEventListener('mouseup', end);
+    document.removeEventListener('touchmove', move);
+    document.removeEventListener('touchend', end);
+  };
+  document.addEventListener('mousemove', move);
+  document.addEventListener('mouseup', end);
+  document.addEventListener('touchmove', move, { passive: false }); // passive:false lets us call preventDefault
+  document.addEventListener('touchend', end);
+}
+
+head.onmousedown = e => {
+  let sx = e.clientX, ol = parseInt(playhead.style.left) || 0;
+  startDrag(sx, ol);
 };
+
+head.ontouchstart = e => {
+  let sx = e.touches[0].clientX, ol = parseInt(playhead.style.left) || 0;
+  if (e.cancelable) e.preventDefault(); // stop page scroll on touchstart
+  startDrag(sx, ol);
+};
+
 
 // scrub preview
 function scrubToFrame(f){
@@ -247,4 +280,37 @@ function exportGIF(){
 
 // attach export button
 document.getElementById('exportGif').onclick = exportGIF;
+
+
+const orderUpBtn = document.getElementById('orderUp');
+const orderDownBtn = document.getElementById('orderDown');
+
+orderUpBtn.onclick = () => {
+  const selTrack = tracksDiv.querySelector('.track.selected');
+  if (!selTrack) return;
+  const idx = [...tracksDiv.querySelectorAll('.track')].indexOf(selTrack);
+  if (idx > 0) {
+    // move layer up
+    const moved = layers.splice(idx,1)[0];
+    layers.splice(idx-1,0,moved);
+    renderTracks();
+    // reselect moved track
+    tracksDiv.querySelectorAll('.track')[idx-1].classList.add('selected');
+  }
+};
+
+orderDownBtn.onclick = () => {
+  const selTrack = tracksDiv.querySelector('.track.selected');
+  if (!selTrack) return;
+  const idx = [...tracksDiv.querySelectorAll('.track')].indexOf(selTrack);
+  if (idx < layers.length-1) {
+    // move layer down
+    const moved = layers.splice(idx,1)[0];
+    layers.splice(idx+1,0,moved);
+    renderTracks();
+    // reselect moved track
+    tracksDiv.querySelectorAll('.track')[idx+1].classList.add('selected');
+  }
+};
+
 
