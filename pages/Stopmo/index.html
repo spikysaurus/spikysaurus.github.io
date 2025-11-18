@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+  <!-- Preview area -->
+<!--  <div style="position:fixed;top:0;">-->
+  <center>
+  <div id="preview">
+  <video id="camera" autoplay playsinline></video>
+</div>
+
+
+  <div class="controls">
+  FPS:<input type="number" id="fps" value="24" min="1" max="60">
+  Zoom:<input type="range" id="zoom" min="10" max="50" value="20">
+  <button id="play">▶</button>
+  <button id="stop">⏹</button>
+  <button id="add">➕ Track</button>
+  <button id="delete">🗑 Remove Selected</button>
+  <button id="capture">📷 Capture</button>
+  <button id="toggleCam">👁 Toggle Camera</button>
+  <button id="exportGif">💾 Export GIF</button>
+
+</div>
+</center>
+<!--</div>-->
+
+  <!-- Timeline -->
+  <div class="timeline" id="tracks">
+    <div id="playhead" class="playhead"></div>
+  </div>
+
+
+  <!-- Hidden video element for camera -->
+  <video id="camera" autoplay playsinline style="display:none"></video>
+
+  <!-- Scripts -->
+  <script src="script1.js"></script>
+  <script src="script2.js"></script>
+  <script src="gif.js"></script>
+<script src="gif.worker.js"></script>
+
+</body>
+</html>
+
