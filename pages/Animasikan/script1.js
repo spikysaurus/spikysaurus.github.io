@@ -22,7 +22,7 @@ fpsInput.oninput = () => fps = parseInt(fpsInput.value) || 24;
 zoomInput.oninput = () => { frameUnit = parseInt(zoomInput.value); renderTracks() };
 toggleCam.onclick = () => {
   camera.classList.toggle('hidden');
-  toggleCam.textContent = camera.classList.contains('hidden') ? "Show Camera" : "Hide Camera";
+  toggleCam.textContent = camera.classList.contains('hidden') ? "Show Cam" : "Hide Cam";
 };
 
 const buildRuler = n => {
