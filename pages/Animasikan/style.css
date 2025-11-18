@@ -13,6 +13,7 @@ body { font-family: sans-serif; margin: 0px; }
 
 /* Timeline resizable with native CSS */
 .timeline {
+margin-top:5px;
   height: 100%;         /* default height */
   min-height: 100px;     /* prevent collapsing too far */
   max-height: 600px;     /* optional upper bound */
@@ -40,20 +41,20 @@ body { font-family: sans-serif; margin: 0px; }
   height: 20px;
   background: #eee;
   border: 2px solid #666;
-  border-radius: 4px;
+/*  border-radius: 4px;*/
   text-align: center;
-  font-size: 0px;
+  font-size: 12px;
   line-height: 20px;
   cursor: pointer;
 }
 .frame-block.selected { border-color: #00aaff; background: #cceeff; }
 
-.handle {
-  position: absolute; top: 0; width: 6px; height: 100%;
-  background: #00aaff; cursor: ew-resize;
-}
-.handle.left { left: -3px; }
-.handle.right { right: -3px; }
+/*.handle {*/
+/*  position: absolute; top: 0; width: 6px; height: 100%;*/
+/*  background: #00aaff; cursor: ew-resize;*/
+/*}*/
+/*.handle.left { left: -3px; }*/
+/*.handle.right { right: -3px; }*/
 
 .track.selected { outline: 2px solid red; background: #fee; }
 .drag-over { outline: 2px dashed #f00; }
@@ -78,10 +79,10 @@ body { font-family: sans-serif; margin: 0px; }
 
 #camera { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
 .hidden { display: none; }
-
+/*.tl_btn{width:32px;height:32px;}*/
 /* Button base style */
 button {
-  padding: 10px 10px;
+  padding: 5px 5px;
   border: 1px solid gray;
   border-radius: 6px;
   background: white;
@@ -93,9 +94,9 @@ button {
 }
 
 /* Active (pressed) effect */
-button:active {
-  background: gray;
-}
+/*button:active {*/
+/*  background: gray;*/
+/*}*/
 
 /* Responsive layout for button group */
 .controls {
@@ -103,13 +104,13 @@ button:active {
   flex-wrap: wrap;       /* wrap buttons on small screens */
   gap: 5px;
   justify-content: center;
-  margin: 10px 0;
+  margin: 5px 0;
 }
 
-button {
-  flex: 1 1 auto;        /* buttons grow/shrink evenly */
-  min-width: 100px;      /* prevent too small buttons */
-}
+/*button {*/
+/*  flex: 1 1 auto;        /* buttons grow/shrink evenly */*/
+/*  min-width: 100px;      /* prevent too small buttons */*/
+/*}*/
 
 
 input::-webkit-outer-spin-button,

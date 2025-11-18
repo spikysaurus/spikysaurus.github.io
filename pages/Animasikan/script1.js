@@ -91,7 +91,7 @@ function renderTracks() {
     layer.frames.forEach((f, j) => {
       const b = document.createElement('div');
       b.className = 'frame-block';
-      b.textContent = "F" + (j + 1);
+      b.textContent = j + 1 //frame label
       b.style.left = (f.start * frameUnit) + 'px';
       b.style.width = (f.length * frameUnit) + 'px';
 
@@ -242,14 +242,25 @@ exposePlusBtn.onclick = () => {
   getSelectedBlocks().forEach(block => {
     let w = parseInt(block.style.width);
     block.style.width = (w + frameUnit) + 'px';
+
     // update data model
     let track = block.closest('.track-strip');
-    let idx = [...track.querySelectorAll('.frame-block')].indexOf(block);
+    let blocks = [...track.querySelectorAll('.frame-block')];
+    let idx = blocks.indexOf(block);
     let layer = layers[[...tracksDiv.querySelectorAll('.track')].indexOf(track.parentElement)];
     layer.frames[idx].length += 1;
+
+    // shift all subsequent frames to the right
+    for (let i = idx + 1; i < blocks.length; i++) {
+      let nextBlock = blocks[i];
+      let l = parseInt(nextBlock.style.left);
+      nextBlock.style.left = (l + frameUnit) + 'px';
+      layer.frames[i].start += 1;
+    }
   });
   updateTimecode();
 };
+
 
 // Decrease exposure
 exposeMinusBtn.onclick = () => {
@@ -257,14 +268,25 @@ exposeMinusBtn.onclick = () => {
     let w = parseInt(block.style.width);
     if (w > frameUnit) {
       block.style.width = (w - frameUnit) + 'px';
+
       let track = block.closest('.track-strip');
-      let idx = [...track.querySelectorAll('.frame-block')].indexOf(block);
+      let blocks = [...track.querySelectorAll('.frame-block')];
+      let idx = blocks.indexOf(block);
       let layer = layers[[...tracksDiv.querySelectorAll('.track')].indexOf(track.parentElement)];
       layer.frames[idx].length -= 1;
+
+      // shift all subsequent frames to the left
+      for (let i = idx + 1; i < blocks.length; i++) {
+        let nextBlock = blocks[i];
+        let l = parseInt(nextBlock.style.left);
+        nextBlock.style.left = (l - frameUnit) + 'px';
+        layer.frames[i].start -= 1;
+      }
     }
   });
   updateTimecode();
 };
+
 
 // Move left
 moveLeftBtn.onclick = () => {

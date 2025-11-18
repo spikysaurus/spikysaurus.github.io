@@ -10,43 +10,57 @@
   <!-- Preview area -->
 <!--  <div style="position:fixed;top:0;">-->
   <center>
+  <button id="toggleCamera">Switch Camera</button>
+  <button id="toggleCam">Hide Camera</button>
+  <label style="position:relative;top:1px;">FPS : </label><input type="number" id="fps" value="24" min="1" max="60">
   <button id="exportGif" style="margin-top:10px;margin-bottom:10px;">Export GIF</button>
   <div id="preview">
   <video id="camera" autoplay playsinline></video>
 </div>
 <div style="margin-top:10px;">
-<label id="timecode" >total duration will be shown here</label>
+
 </div>
 </div>
   <div class="controls">
-  <label style="position:relative;top:5px;">FPS : </label><input type="number" id="fps" value="24" min="1" max="60">
-  <button id="toggleCamera">Switch Camera</button>
-  <button id="toggleCam">Hide Camera</button>
+  
+  
+  
   </div>
   
   <div class="controls">
   
-  <button id="add">Add Track</button>
+  
   <button id="play">Play</button>
   <button id="stop">Stop</button>
+  <button id="add">Add Track</button>
   
-  <button id="orderUp">Order Up</button>
-<button id="orderDown">Order Down</button>
-  <button id="delete">Remove Selected</button>
-  <button id="exposeMinus">- Exposure</button>
-  <button id="exposePlus">+ Exposure</button>
-  <button id="moveLeft">← Move</button>
-  <button id="moveRight">→ Move</button>
   
-  <button id="capture">Capture</button>
+  <button id="moveLeft">Move Left</button>
+  <button id="moveRight">Move Right</button>
+  <button class="tl_btn" id="orderUp">Move Up</button>
+<button class="tl_btn" id="orderDown">Move Down</button>
+ <button class="tl_btn" id="delete">Delete</button>
+ <button class="tl_btn" id="exposeMinus">Decrease</button>
+  <button class="tl_btn" id="exposePlus">Increase</button>
+
+  
   <div>
   
   </div>
 <!--</div>-->
 </center>
 <!--</div>-->
+<label style="margin-left:10px;">🔍 </label><input type="range" id="zoom" min="10" max="100" value="20" style="position:relative;top:5px;width:100px;">
+
+<div style="position:relative;top:-25px;">
+<div style="position:absolute;right:0;">
+	<label id="timecode" >(total duration)</label>
+	<button id="capture" >Capture</button>
+	</div>
+</div>
+
 <div class="timeline" id="tracks">
- <label style="margin-left:10px;">Zoom : </label><input type="range" id="zoom" min="10" max="100" value="20" style="position:relative;top:5px;">
+ 
   <div id="playhead" class="playhead"></div>
   <!-- tracks will be rendered here -->
 </div>
