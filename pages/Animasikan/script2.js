@@ -128,19 +128,6 @@ async function play(){
 playBtn.onclick=()=>{if(!playing)play()};
 stopBtn.onclick=()=>playing=false;
 
-// playhead drag
-//head.onmousedown=e=>{
-//  let sx=e.clientX,ol=parseInt(playhead.style.left)||0;
-//  const mv=ev=>{
-//    let nl=Math.max(0,Math.round((ol+(ev.clientX-sx))/frameUnit)*frameUnit);
-//    playhead.style.left=nl+'px';
-//    scrubToFrame(nl/frameUnit);
-//    scrollToPlayhead();
-//  };
-//  const up=()=>{document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up)};
-//  document.addEventListener('mousemove',mv);
-//  document.addEventListener('mouseup',up);
-//};
 // playhead drag (mouse + touch, prevent page scroll)
 function startDrag(startX, ol) {
   const move = ev => {
