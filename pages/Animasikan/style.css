@@ -14,12 +14,13 @@ body { font-family: sans-serif; margin: 0px; }
 /* Timeline resizable with native CSS */
 .timeline {
 margin-top:5px;
+/*	background-color:lightgray;*/
   height: 100%;         /* default height */
   min-height: 100px;     /* prevent collapsing too far */
   max-height: 600px;     /* optional upper bound */
   overflow: auto;        /* required for resize to show the grip */
   resize: vertical;      /* enable vertical resizing */
-  border-top: 2px dashed #888; /* thick top border to visually suggest the grip */
+  border-top: 2px dotted #888; /* thick top border to visually suggest the grip */
   box-sizing: border-box;
   position: relative;    /* keep in normal flow; NOT fixed */
 }
@@ -27,7 +28,9 @@ margin-top:5px;
 /* Remove the conflicting second .timeline rule (the fixed one) */
 
 /* Track visuals */
-.track { margin-top: 10px; background: #fafafa; }
+.track { 
+margin-top: 10px; 
+background: #fafafa; }
 .track-header { 
 position:relative;
 top:99999;
@@ -66,11 +69,12 @@ display: flex; align-items: center; margin-bottom: 5px;font-size:12px; }
 
 /* Playhead */
 .playhead {
-  position: absolute; top: 0; height: 100%; width: 2px; background: red;
+  position: absolute;
+   top: 0; height: 100%; width: 2px; background: red;
   pointer-events: none; /* line itself not draggable */
 }
 .playhead-head {
-	z-index:9999999;
+/*	z-index:9999999;*/
   position: absolute; top: -8px; left: -6px; width: 14px; height: 14px;
   background: red; border-radius: 50%; cursor: grab; pointer-events: auto;
 }

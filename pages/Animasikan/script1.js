@@ -37,8 +37,8 @@ function renderTracks(){
    let inputId="file-upload-"+idx;
    let track=document.createElement("div");track.className="track";
    track.innerHTML=`<div class="track-header">
-     <style>input[type=file]{display:none}.custom-file-upload{border:1px solid #ccc;display:inline-block;padding:6px 12px;cursor:pointer}</style>
-     <label for="${inputId}" class="custom-file-upload">Import Images</label>
+     <style>input[type=file]{display:none}.custom-file-upload{margin-left:5px;;border:1px solid #ccc;display:inline-block;padding:6px 12px;cursor:pointer}</style>
+     <label for="${inputId}" class="custom-file-upload">+</label>
      <input id="${inputId}" type="file" multiple />
      <div class="track-label" draggable="true" style="margin-left:10px;">${layer.name}</div>
    </div>`;
