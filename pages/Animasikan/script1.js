@@ -15,7 +15,8 @@ toggleCam.onclick=()=>{camera.classList.toggle("hidden");toggleCam.textContent=c
 
 function buildRuler(n){let r=document.createElement("div");r.className="ruler";for(let i=0;i<n;i++){let t=document.createElement("div");t.className="tick";t.style.width=frameUnit+"px";t.textContent=i;r.appendChild(t)}return r}
 function formatTimecode(f){let t=Math.floor(f/fps);return`${String(Math.floor(t/60)).padStart(2,"0")}:${String(t%60).padStart(2,"0")}:${String(f%fps).padStart(2,"0")}`}
-function updateTimecode(){let f=Math.round(parseInt(playhead.style.left||0)/frameUnit),max=layers.reduce((a,l)=>l.frames.reduce((m,fr)=>Math.max(m,fr.start+fr.length),a),0);timecodeLabel.textContent=`${formatTimecode(f)} / ${formatTimecode(max)}`}
+//function updateTimecode(){let f=Math.round(parseInt(playhead.style.left||0)/frameUnit),max=layers.reduce((a,l)=>l.frames.reduce((m,fr)=>Math.max(m,fr.start+fr.length),a),0);timecodeLabel.textContent=`${formatTimecode(f)} / ${formatTimecode(max)}`}
+function updateTimecode(){let f=Math.round(parseInt(playhead.style.left||0)/frameUnit),max=layers.reduce((a,l)=>l.frames.reduce((m,fr)=>Math.max(m,fr.start+fr.length),a),0);timecodeLabel.textContent=`${formatTimecode(max)}`}
 //function updateLayerStacking(){layers.forEach((l,idx)=>{if(l.img){l.img.style.position='absolute';l.img.style.top=0;l.img.style.left=0;l.img.style.zIndex=idx}})}
 function updateLayerStacking(){
   layers.forEach((l,idx)=>{
