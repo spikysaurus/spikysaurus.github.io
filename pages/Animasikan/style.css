@@ -126,3 +126,84 @@ input[type="number"] {
   text-align:center;
 }
 
+
+
+
+
+
+#levelStripPanel {
+  position: fixed;
+  bottom: 0;                /* dock at bottom */
+  left: 0;
+  width: 100%;              /* full width */
+  height: 140px;            /* fixed height strip */
+  background: #2b2b2b;
+  color: white;
+/*  box-shadow: 0 -2px 6px rgba(0,0,0,0.4);*/
+  transition: transform 0.3s ease;
+  transform: translateY(100%); /* hidden by default */
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+}
+
+#levelStripPanel.open {
+  transform: translateY(0); /* slide up */
+}
+
+.level-strip-header {
+  padding: 6px;
+  background: #1e1e1e;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 1px solid #555;
+}
+
+.level-strip-content {
+  flex: 1;
+  overflow-x: auto;          /* ✅ horizontal scroll */
+  overflow-y: hidden;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;       /* stack frames horizontally */
+  gap: 8px;
+  align-items: center;
+}
+
+.level-frame {
+  width: 80px;               /* fixed size */
+  height: 80px;
+  background: #444;
+  border: 1px solid #999;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;            /* don’t shrink when scrolling */
+}
+.level-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.level-frame:hover { background: #666; }
+
+/*#levelStripBtn {*/
+/*  position: fixed;*/
+/*  bottom: 160px;             /* float above strip */*/
+/*  right: 20px;*/
+/*  background: #444;*/
+/*  color: white;*/
+/*  border: none;*/
+/*  border-radius: 50%;*/
+/*  width: 50px;*/
+/*  height: 50px;*/
+/*  font-size: 20px;*/
+/*  cursor: pointer;*/
+/*  box-shadow: 0 4px 8px rgba(0,0,0,0.3);*/
+/*  z-index: 1000;*/
+/*}*/
+
+

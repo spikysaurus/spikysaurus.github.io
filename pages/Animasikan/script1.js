@@ -16,7 +16,19 @@ toggleCam.onclick=()=>{camera.classList.toggle("hidden");toggleCam.textContent=c
 function buildRuler(n){let r=document.createElement("div");r.className="ruler";for(let i=0;i<n;i++){let t=document.createElement("div");t.className="tick";t.style.width=frameUnit+"px";t.textContent=i;r.appendChild(t)}return r}
 function formatTimecode(f){let t=Math.floor(f/fps);return`${String(Math.floor(t/60)).padStart(2,"0")}:${String(t%60).padStart(2,"0")}:${String(f%fps).padStart(2,"0")}`}
 function updateTimecode(){let f=Math.round(parseInt(playhead.style.left||0)/frameUnit),max=layers.reduce((a,l)=>l.frames.reduce((m,fr)=>Math.max(m,fr.start+fr.length),a),0);timecodeLabel.textContent=`${formatTimecode(f)} / ${formatTimecode(max)}`}
-function updateLayerStacking(){layers.forEach((l,idx)=>{if(l.img){l.img.style.position='absolute';l.img.style.top=0;l.img.style.left=0;l.img.style.zIndex=idx}})}
+//function updateLayerStacking(){layers.forEach((l,idx)=>{if(l.img){l.img.style.position='absolute';l.img.style.top=0;l.img.style.left=0;l.img.style.zIndex=idx}})}
+function updateLayerStacking(){
+  layers.forEach((l,idx)=>{
+    if(l.img){ // only update if it exists
+      l.img.style.position='absolute';
+      l.img.style.top=0;
+      l.img.style.left=0;
+      l.img.style.zIndex=idx;
+    }
+    else{}
+  });
+}
+
 
 function renderTracks(){
  tracksDiv.querySelectorAll(".track").forEach(e=>e.remove());
@@ -30,7 +42,7 @@ function renderTracks(){
      <div class="track-label" draggable="true" style="margin-left:10px;">${layer.name}</div>
    </div>`;
    let strip=document.createElement("div");strip.className="track-strip";track.append(buildRuler(200),strip);
-   track.querySelector(".track-label").onclick=()=>track.classList.toggle("selected");
+   track.querySelector(".track-label").onclick=()=>track.classList.toggle("selected"); updateLevelStrip();
 
    layer.frames.forEach((fr,fidx)=>{
      let block=document.createElement("div");block.className="frame-block";block.textContent=fidx+1;
@@ -41,25 +53,63 @@ function renderTracks(){
      block.onclick=ev=>{if(!ev.target.classList.contains("handle")){block.classList.toggle("selected");block.querySelectorAll(".handle").forEach(h=>h.style.display=block.classList.contains("selected")?"block":"none")}};
      // drag/resize handlers omitted for brevity (same as your original)
    });
+track.querySelector("input").onchange = e => {
+  let end = layer.frames.reduce((m,f)=>Math.max(m,f.start+f.length),0);
+  [...e.target.files].forEach(file=>{
+    let url = URL.createObjectURL(file);
+    layer.frames.push({url,start:end,length:1});
+    end++;
 
-   track.querySelector("input").onchange=e=>{
-     let end=layer.frames.reduce((m,f)=>Math.max(m,f.start+f.length),0);
-     [...e.target.files].forEach(file=>{
-       let url=URL.createObjectURL(file);
-       layer.frames.push({url,start:end,length:1});end++;
-     });
-     renderTracks();updateTimecode();updateLayerStacking();
-   };
+    const img = new Image();
+img.onload = () => {
+  const c = document.createElement("canvas");
+  c.width = preview.clientWidth;
+  c.height = preview.clientHeight;
+  const ctx = c.getContext("2d");
+
+  // same crop/fit logic as camera
+  const scale = Math.max(
+    c.width / img.width,
+    c.height / img.height
+  );
+  const sw = img.width * scale;
+  const sh = img.height * scale;
+  const dx = (c.width - sw) / 2;
+  const dy = (c.height - sh) / 2;
+
+  ctx.drawImage(img, dx, dy, sw, sh);
+
+  // store canvas as preview element
+  layer.img = c;
+  preview.appendChild(c);
+};
+img.src = url;
+
+  });
+  renderTracks();
+  updateTimecode();
+  updateLevelStrip();
+};
+
+
+//   track.querySelector("input").onchange=e=>{
+//     let end=layer.frames.reduce((m,f)=>Math.max(m,f.start+f.length),0);
+//     [...e.target.files].forEach(file=>{
+//       let url=URL.createObjectURL(file);
+//       layer.frames.push({url,start:end,length:1});end++;
+//     });
+//     renderTracks();updateTimecode();updateLayerStacking();
+//   };
 
    let label=track.querySelector(".track-label");label.ondragstart=e=>e.dataTransfer.setData("index",idx);
    track.ondragover=e=>{e.preventDefault();track.classList.add("drag-over")};
    track.ondragleave=()=>track.classList.remove("drag-over");
    track.ondrop=e=>{e.preventDefault();track.classList.remove("drag-over");let from=parseInt(e.dataTransfer.getData("index")),to=idx;if(from!==to){layers.splice(to,0,layers.splice(from,1)[0]);renderTracks();updateTimecode();updateLayerStacking()}};tracksDiv.appendChild(track);
  });
- updateTimecode();updateLayerStacking();
+ updateTimecode();updateLayerStacking();updateLevelStrip();
 }
-
-addBtn.onclick=()=>{layers.unshift({name:"Track "+(layers.length+1),frames:[]});renderTracks();updateLayerStacking()};
+//unshhift - push
+addBtn.onclick=()=>{layers.push({name:"Track "+(layers.length+1),frames:[]});renderTracks();updateLayerStacking()};
 delBtn.onclick=()=>{let sel=[...tracksDiv.querySelectorAll(".track.selected")];if(sel.length){sel.forEach(tr=>{let idx=[...tracksDiv.querySelectorAll(".track")].indexOf(tr);if(idx>-1)layers.splice(idx,1)});renderTracks();updateLayerStacking();return}layers.forEach((layer,idx)=>{layer.frames=layer.frames.filter((fr,fidx)=>![...tracksDiv.querySelectorAll(".track")][idx].querySelectorAll(".frame-block")[fidx].classList.contains("selected"))});renderTracks();updateLayerStacking()};
 
 const exposePlusBtn=document.getElementById("exposePlus"),exposeMinusBtn=document.getElementById("exposeMinus"),
@@ -84,5 +134,44 @@ async function renderFrameToCanvas(frameIndex, canvas, ctx) {
     });
   });
 }
+
+
+
+
+
+const levelStripBtn = document.getElementById("levelStripBtn");
+const levelStripPanel = document.getElementById("levelStripPanel");
+const levelStripContent = document.getElementById("levelStripContent");
+
+levelStripBtn.onclick = () => {
+  levelStripPanel.classList.toggle("open");
+  if(levelStripPanel.classList.contains("open")) updateLevelStrip();
+};
+
+function getSelectedTrackIndex(){
+  const tracks=[...tracksDiv.querySelectorAll(".track")];
+  return tracks.findIndex(t=>t.classList.contains("selected"));
+}
+
+function updateLevelStrip(){
+  levelStripContent.innerHTML="";
+  const idx=getSelectedTrackIndex();
+  if(idx<0) return; // no track selected
+  const layer=layers[idx];
+  layer.frames.forEach((fr,i)=>{
+    const frameDiv=document.createElement("div");
+    frameDiv.className="level-frame";
+    const img=document.createElement("img");
+    img.src=fr.url;
+    frameDiv.appendChild(img);
+    frameDiv.title=`Frame ${i+1}`;
+    frameDiv.onclick=()=>{
+      playhead.style.left=(fr.start*frameUnit)+"px";
+      updateTimecode();
+    };
+    levelStripContent.appendChild(frameDiv);
+  });
+}
+
 
 
