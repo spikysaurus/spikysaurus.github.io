@@ -28,9 +28,14 @@ margin-top:5px;
 
 /* Track visuals */
 .track { margin-top: 10px; background: #fafafa; }
-.track-header { display: flex; align-items: center; margin-bottom: 5px;font-size:12px; }
+.track-header { 
+position:relative;
+top:99999;
+display: flex; align-items: center; margin-bottom: 5px;font-size:12px; }
 .track-label { width: 80px; cursor: move; color:black;background-color:white;padding:3px;border:1px dashed gray;border-radius:3px;}
-.track-strip { position: relative; height: 30px; background: #eee; }
+.track-strip { 
+/*position: relative;*/
+ height: 30px; background: #eee; }
 
 .ruler { display: flex; border-bottom: 1px solid #999;}
 .tick { flex: 0 0 24px; text-align: center; border-left: 1px solid #ccc; font-size:0px;}
@@ -65,6 +70,7 @@ margin-top:5px;
   pointer-events: none; /* line itself not draggable */
 }
 .playhead-head {
+	z-index:9999999;
   position: absolute; top: -8px; left: -6px; width: 14px; height: 14px;
   background: red; border-radius: 50%; cursor: grab; pointer-events: auto;
 }

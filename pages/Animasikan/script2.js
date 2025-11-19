@@ -166,7 +166,11 @@ head.ontouchstart = e => {
 function scrubToFrame(f){
   layers.forEach(l=>{
     const a=l.frames.find(fr=>f>=fr.start&&f<fr.start+fr.length);
-    if(a){l.img.src=a.url;l.img.style.display='block'}else l.img.style.display='none';
+    if(a){
+//    l.img.src=a.url;l.img.style.display='block'
+    }else {
+//    l.img.style.display='none'
+    };
   });
 }
 

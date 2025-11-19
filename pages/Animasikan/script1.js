@@ -121,6 +121,8 @@ exposeMinusBtn.onclick=()=>{getSelectedBlocks().forEach(el=>{const strip=el.clos
 moveLeftBtn.onclick=()=>{getSelectedBlocks().forEach(el=>{const strip=el.closest(".track-strip"),trackEl=strip.parentElement,trackIndex=[...tracksDiv.querySelectorAll(".track")].indexOf(trackEl),blocks=[...strip.querySelectorAll(".frame-block")],i=blocks.indexOf(el),layer=layers[trackIndex];let left=parseInt(el.style.left);if(left>=frameUnit){el.style.left=(left-frameUnit)+"px";layer.frames[i].start-=1}});updateTimecode()};
 moveRightBtn.onclick=()=>{getSelectedBlocks().forEach(el=>{const strip=el.closest(".track-strip"),trackEl=strip.parentElement,trackIndex=[...tracksDiv.querySelectorAll(".track")].indexOf(trackEl),blocks=[...strip.querySelectorAll(".frame-block")],i=blocks.indexOf(el),layer=layers[trackIndex];let left=parseInt(el.style.left)+frameUnit;el.style.left=left+"px";layer.frames[i].start+=1});updateTimecode()};
 
+
+
 const exportZipBtn = document.getElementById("exportZip");
 
 async function renderFrameToCanvas(frameIndex, canvas, ctx) {
