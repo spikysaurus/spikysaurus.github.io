@@ -65,7 +65,7 @@
         }
         },
     "Studio MAF":{
-        "Ganglion (LO)":
+        "Ganglion (LO)(Genga)":
         {
         "link":"TBA",
         "color":"orange"
@@ -75,6 +75,11 @@
         "Yaiba:Samurai Legend (E10)(LO)":
         {
         "link":"https://www.youtube.com/watch?v=nTF6QBu7vMA",
+        "color":""
+        },
+        "Yaiba:Samurai Legend (E21)(LO)":
+        {
+        "link":"https://www.youtube.com/watch?v=MSiL1tRuQiY",
         "color":""
         }
         },
