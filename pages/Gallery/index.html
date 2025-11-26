@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../../assets/css/style.css">
   <title>Gallery</title>
   <style>
-	
+		
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -98,6 +98,7 @@
   display: none; /* hidden by default */
 }
 body.noscroll {
+overscroll-behavior: none;
   overflow: hidden;
   position: fixed;   /* locks body in place */
   width: 100%;       /* ensures full width */

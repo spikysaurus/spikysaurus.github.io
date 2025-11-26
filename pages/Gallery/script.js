@@ -3,6 +3,7 @@ let currentIndex = 0;
 let zoomLevel = 1;
 let isDragging = false;
 let startX, startY, translateX = 0, translateY = 0;
+let currentGallery = allImages; // default
 
 
 document.addEventListener('gesturestart', function (e) {
@@ -65,40 +66,7 @@ function enableScroll() {
   document.body.classList.remove("noscroll");
 }
 
-function openLightbox(index) {
-disableScroll()
-  currentIndex = index;
-  zoomLevel = 1;
-  translateX = 0;
-  translateY = 0;
 
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightbox-img');
-  const loadingText = document.getElementById('loadingText');
-
-  lightbox.style.display = "flex";
-  
-	
-  // Show thumbnail first
-//  lightboxImg.src = allImages[index].src.replace(/(\d+)\/(\d+)$/, "_thumb");
-  updateTransform();
-
-  // Show loading text
-  loadingText.style.display = "block";
-
-  // Preload full image
-  const fullImg = new Image();
-  fullImg.src = allImages[index].src;
-  fullImg.onload = () => {
-    lightboxImg.src = fullImg.src;
-    loadingText.style.display = "none";
-  };
-}
-
-function closeLightbox() {
-enableScroll()
-  document.getElementById('lightbox').style.display = "none";
-}
 
 function showPrev() {
   currentIndex = (currentIndex - 1 + allImages.length) % allImages.length;
@@ -191,8 +159,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById('close').addEventListener('click', closeLightbox);
   document.getElementById('prev').addEventListener('click', showPrev);
   document.getElementById('next').addEventListener('click', showNext);
-//  document.getElementById('zoomIn').addEventListener('click', zoomIn);
-//  document.getElementById('zoomOut').addEventListener('click', zoomOut);
 });
 
 // Search by tag
@@ -201,8 +167,41 @@ document.getElementById('search').addEventListener('input', e => {
   const filtered = allImages.filter(img =>
     img.tags && img.tags.some(tag => tag.toLowerCase().includes(query))
   );
+  currentGallery = filtered; // update current gallery
   renderGallery(filtered);
 });
+
+function openLightbox(index) {
+disableScroll()
+  currentIndex = index;
+  zoomLevel = 1;
+  translateX = 0;
+  translateY = 0;
+
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const loadingText = document.getElementById('loadingText');
+
+  lightbox.style.display = "flex";
+  updateTransform();
+
+  // Show loading text
+  loadingText.style.display = "block";
+
+  // Preload full image
+  const fullImg = new Image();
+//  fullImg.src = allImages[index].src;
+  fullImg.src = currentGallery[index].src; // use currentGallery instead of allImages
+  fullImg.onload = () => {
+    lightboxImg.src = fullImg.src;
+    loadingText.style.display = "none";
+  };
+}
+
+function closeLightbox() {
+enableScroll()
+  document.getElementById('lightbox').style.display = "none";
+}
 
 function selectTag(evt, tag) {
   const searchInput = document.getElementById("search");
