@@ -97,8 +97,15 @@
   border-radius: 5px;
   display: none; /* hidden by default */
 }
+
+html, body {
+  overscroll-behavior-y: contain; /* stops pull-to-refresh */
+  overscroll-behavior-x: none;    /* optional: no horizontal bounce */
+  height: 100%;
+  margin: 0;
+}
+
 body.noscroll {
-overscroll-behavior: none;
   overflow: hidden;
   position: fixed;   /* locks body in place */
   width: 100%;       /* ensures full width */
