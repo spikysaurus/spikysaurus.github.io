@@ -5,17 +5,17 @@ let isDragging = false;
 let startX, startY, translateX = 0, translateY = 0;
 
 
-//document.addEventListener('gesturestart', function (e) {
-//  e.preventDefault();
-//});
+document.addEventListener('gesturestart', function (e) {
+  e.preventDefault();
+});
 
-//document.addEventListener('gesturechange', function (e) {
-//  e.preventDefault();
-//});
+document.addEventListener('gesturechange', function (e) {
+  e.preventDefault();
+});
 
-//document.addEventListener('gestureend', function (e) {
-//  e.preventDefault();
-//});
+document.addEventListener('gestureend', function (e) {
+  e.preventDefault();
+});
 
 
 async function loadGallery() {
