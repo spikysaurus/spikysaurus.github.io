@@ -23,7 +23,10 @@ async function loadGallery() {
   try {
     const response = await fetch('../../assets/json/data_gallery.json');
     allImages = await response.json();
-    renderGallery(allImages);
+    currentGallery = allImages;
+    renderGallery(currentGallery);
+    
+    
   } catch (error) {
     console.error("Error loading gallery:", error);
   }
@@ -69,12 +72,12 @@ function enableScroll() {
 
 
 function showPrev() {
-  currentIndex = (currentIndex - 1 + allImages.length) % allImages.length;
+  currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
   openLightbox(currentIndex);
 }
 
 function showNext() {
-  currentIndex = (currentIndex + 1) % allImages.length;
+  currentIndex = (currentIndex + 1) % currentGallery.length;
   openLightbox(currentIndex);
 }
 
