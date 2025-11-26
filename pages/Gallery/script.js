@@ -214,33 +214,4 @@ function selectTag(evt, tag) {
   searchInput.dispatchEvent(new Event("input"));
 }
 
-let initialDistance = 0;
-let initialZoom = 1;
-
-
-lightboxImg.addEventListener('touchstart', e => {
-  if (e.touches.length === 2) {
-    // Two fingers → start pinch
-    const dx = e.touches[0].clientX - e.touches[1].clientX;
-    const dy = e.touches[0].clientY - e.touches[1].clientY;
-    initialDistance = Math.sqrt(dx * dx + dy * dy);
-    initialZoom = zoomLevel;
-  }
-}, { passive: false });
-
-lightboxImg.addEventListener('touchmove', e => {
-  if (e.touches.length === 2) {
-    e.preventDefault(); // prevent page scroll
-    const dx = e.touches[0].clientX - e.touches[1].clientX;
-    const dy = e.touches[0].clientY - e.touches[1].clientY;
-    const newDistance = Math.sqrt(dx * dx + dy * dy);
-
-    // Scale factor relative to initial pinch distance
-    const scale = newDistance / initialDistance;
-    zoomLevel = initialZoom * scale;
-
-    updateTransform();
-  }
-}, { passive: false });
-
 
