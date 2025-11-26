@@ -44,15 +44,15 @@ function renderGallery(images) {
 document.getElementById('lightbox-img').ondragstart = function() { return false; };
 
 function disableScroll() {
-document.body.style.overflow = 'hidden';
+document.body.classList.add("noscroll");
 }
 
 function enableScroll() {
-  window.onscroll = null; // Remove the custom scroll handler
+  document.body.classList.remove("noscroll");
 }
 
 function openLightbox(index) {
-
+disableScroll()
   currentIndex = index;
   zoomLevel = 1;
   translateX = 0;
@@ -82,6 +82,7 @@ function openLightbox(index) {
 }
 
 function closeLightbox() {
+enableScroll()
   document.getElementById('lightbox').style.display = "none";
 }
 
@@ -144,7 +145,6 @@ document.addEventListener('pointerup', () => {
 });
 
 document.addEventListener('pointermove', e => {
-disableScroll()
   if (!isDragging) return;
   translateX = e.clientX - startX;
   translateY = e.clientY - startY;
