@@ -43,7 +43,16 @@ function renderGallery(images) {
 }
 document.getElementById('lightbox-img').ondragstart = function() { return false; };
 
+function disableScroll() {
+document.body.style.overflow = 'hidden';
+}
+
+function enableScroll() {
+  window.onscroll = null; // Remove the custom scroll handler
+}
+
 function openLightbox(index) {
+
   currentIndex = index;
   zoomLevel = 1;
   translateX = 0;
@@ -54,6 +63,7 @@ function openLightbox(index) {
   const loadingText = document.getElementById('loadingText');
 
   lightbox.style.display = "flex";
+  
 	
   // Show thumbnail first
 //  lightboxImg.src = allImages[index].src.replace(/(\d+)\/(\d+)$/, "_thumb");
@@ -103,17 +113,38 @@ function updateTransform() {
 // Dragging logic
 const lightboxImg = document.getElementById('lightbox-img');
 
-lightboxImg.addEventListener('mousedown', e => {
+const zoomIn_ = document.getElementById("zoomIn");
+// Start continuous zoom on press
+zoomIn_.addEventListener("pointerdown", () => {
+  zoomInterval = setInterval(zoomIn, 100); // every 100ms
+});
+// Stop zoom when released
+zoomIn_.addEventListener("pointerup", () => {
+  clearInterval(zoomInterval);
+});
+
+const zoomOut_ = document.getElementById("zoomOut");
+// Start continuous zoom on press
+zoomOut_.addEventListener("pointerdown", () => {
+  zoomInterval = setInterval(zoomOut, 100); // every 100ms
+});
+// Stop zoom when released
+zoomOut_.addEventListener("pointerup", () => {
+  clearInterval(zoomInterval);
+});
+
+lightboxImg.addEventListener('pointerdown', e => {
   isDragging = true;
   startX = e.clientX - translateX;
   startY = e.clientY - translateY;
 });
 
-document.addEventListener('mouseup', () => {
+document.addEventListener('pointerup', () => {
   isDragging = false;
 });
 
-document.addEventListener('mousemove', e => {
+document.addEventListener('pointermove', e => {
+disableScroll()
   if (!isDragging) return;
   translateX = e.clientX - startX;
   translateY = e.clientY - startY;
@@ -121,18 +152,18 @@ document.addEventListener('mousemove', e => {
 });
 
 // Touch support
-lightboxImg.addEventListener('touchstart', e => {
+lightboxImg.addEventListener('pointerstart', e => {
   isDragging = true;
   const touch = e.touches[0];
   startX = touch.clientX - translateX;
   startY = touch.clientY - translateY;
 });
 
-document.addEventListener('touchend', () => {
+document.addEventListener('pointerend', () => {
   isDragging = false;
 });
 
-document.addEventListener('touchmove', e => {
+document.addEventListener('pointermove', e => {
   if (!isDragging) return;
   const touch = e.touches[0];
   translateX = touch.clientX - startX;
@@ -146,8 +177,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById('close').addEventListener('click', closeLightbox);
   document.getElementById('prev').addEventListener('click', showPrev);
   document.getElementById('next').addEventListener('click', showNext);
-  document.getElementById('zoomIn').addEventListener('click', zoomIn);
-  document.getElementById('zoomOut').addEventListener('click', zoomOut);
+//  document.getElementById('zoomIn').addEventListener('click', zoomIn);
+//  document.getElementById('zoomOut').addEventListener('click', zoomOut);
 });
 
 // Search by tag
