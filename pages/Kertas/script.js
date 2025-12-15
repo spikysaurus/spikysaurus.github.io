@@ -863,20 +863,20 @@ function makeDragButton(btn) {
     }
   });
 
-  // Pointer drag (horizontal)
+  // Pointer drag
   btn.addEventListener('pointerdown', (e) => {
     if (btn.classList.contains('editing')) return;
     btn.setPointerCapture(e.pointerId);
     isDragging = true;
     btn.classList.add('dragging');
-    startX = e.clientX;
+    startY = e.clientY;
     startVal = readVal();
     accumulated = 0;
   });
 
   btn.addEventListener('pointermove', (e) => {
     if (!isDragging) return;
-    const dx = e.clientX - startX; // right is positive
+    const dx = startY - e.clientY ; // right is positive
     const totalStepsFloat = (dx + accumulated) / pxPerStep;
     const wholeSteps = Math.trunc(totalStepsFloat);
     if (wholeSteps !== 0) {
