@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Reusable Drag Buttons</title>
+<style>
+  :root {
+    --btn-bg: #1f2937;
+    --btn-bg-active: #111827;
+    --btn-text: #e5e7eb;
+    --btn-border: #374151;
+    --btn-focus: #3b82f6;
+  }
+
+  .control {
+    display: flex;
+    align-items: center;
+    margin: 12px 0;
+    gap: 10px;
+  }
+
+  .control-label {
+    font: 600 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    color: #111827;
+    min-width: 80px;
+  }
+
+  .drag-btn {
+    appearance: none;
+    border: 1px solid var(--btn-border);
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font: 600 16px/1.1 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    cursor: ew-resize; /* left/right drag */
+    user-select: none;
+    touch-action: none;
+    transition: background 120ms ease, box-shadow 120ms ease, transform 60ms ease;
+    width: 140px;
+    text-align: center;
+    position: relative;
+  }
+
+  .drag-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in oklab, white 0%, var(--btn-focus) 100%);
+  }
+
+  .drag-btn.dragging {
+    background: var(--btn-bg-active);
+    transform: scale(0.98);
+  }
+
+  .value-display {
+    font-size: 16px;
+    font-weight: 600;
+    pointer-events: none;
+  }
+
+  .value-input {
+    display: none;
+    width: 60px;
+    padding: 2px;
+    border: 1px solid var(--btn-border);
+    border-radius: 4px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .editing .value-display {
+    display: none;
+  }
+  .editing .value-input {
+    display: inline-block;
+  }
+</style>
+</head>
+<body>
+
+<div class="control">
+  <span class="control-label">Size</span>
+  <button
+    class="drag-btn"
+    data-min="10"
+    data-max="200"
+    data-step="5"
+    data-px-per-step="12"
+  >
+    <span class="value-display">100</span>
+    <input class="value-input" type="number" min="10" max="200" step="5" value="100" />
+  </button>
+</div>
+
+<div class="control">
+  <span class="control-label">Opacity</span>
+  <button
+    class="drag-btn"
+    data-min="0"
+    data-max="100"
+    data-step="5"
+    data-px-per-step="12"
+  >
+    <span class="value-display">50</span>
+    <input class="value-input" type="number" min="0" max="100" step="5" value="50" />
+  </button>
+</div>
+
+<!-- Example of adding a new reusable drag button -->
+<div class="control">
+  <span class="control-label">Rotation</span>
+  <button
+    class="drag-btn"
+    data-min="0"
+    data-max="360"
+    data-step="15"
+    data-px-per-step="10"
+  >
+    <span class="value-display">0</span>
+    <input class="value-input" type="number" min="0" max="360" step="15" value="0" />
+  </button>
+</div>
+
+<script>
+function makeDragButton(btn) {
+  const displayEl = btn.querySelector('.value-display');
+  const inputEl = btn.querySelector('.value-input');
+
+  const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+  const getAttr = (name, fallback) => {
+    const v = parseFloat(btn.getAttribute(name));
+    return Number.isFinite(v) ? v : fallback;
+  };
+
+  let min = getAttr('data-min', 0);
+  let max = getAttr('data-max', 100);
+  let step = getAttr('data-step', 1);
+  let pxPerStep = getAttr('data-px-per-step', 16);
+
+  let startX = 0;
+  let startVal = 0;
+  let isDragging = false;
+  let accumulated = 0;
+
+  const readVal = () => parseFloat(displayEl.textContent) || 0;
+  const writeVal = (v) => {
+    const clamped = clamp(v, min, max);
+    displayEl.textContent = clamped;
+    inputEl.value = clamped;
+  };
+
+  // Double-click to edit
+  btn.addEventListener('dblclick', () => {
+    btn.classList.add('editing');
+    inputEl.focus();
+    inputEl.select();
+  });
+
+  // Commit input on blur or Enter
+  inputEl.addEventListener('blur', () => {
+    btn.classList.remove('editing');
+    writeVal(parseFloat(inputEl.value));
+  });
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      inputEl.blur();
+    }
+  });
+
+  // Keyboard support
+  btn.addEventListener('keydown', (e) => {
+    let v = readVal();
+    switch (e.key) {
+      case 'ArrowRight': writeVal(v + step); e.preventDefault(); break;
+      case 'ArrowLeft': writeVal(v - step); e.preventDefault(); break;
+    }
+  });
+
+  // Pointer drag (horizontal)
+  btn.addEventListener('pointerdown', (e) => {
+    if (btn.classList.contains('editing')) return;
+    btn.setPointerCapture(e.pointerId);
+    isDragging = true;
+    btn.classList.add('dragging');
+    startX = e.clientX;
+    startVal = readVal();
+    accumulated = 0;
+  });
+
+  btn.addEventListener('pointermove', (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - startX; // right is positive
+    const totalStepsFloat = (dx + accumulated) / pxPerStep;
+    const wholeSteps = Math.trunc(totalStepsFloat);
+    if (wholeSteps !== 0) {
+      const next = startVal + wholeSteps * step;
+      writeVal(next);
+      const usedPx = wholeSteps * pxPerStep;
+      accumulated = (dx + accumulated) - usedPx;
+    }
+  });
+
+  const endDrag = (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    btn.classList.remove('dragging');
+    btn.releasePointerCapture?.(e.pointerId);
+  };
+
+  btn.addEventListener('pointerup', endDrag);
+  btn.addEventListener('pointercancel', endDrag);
+  btn.addEventListener('pointerleave', endDrag);
+
+  writeVal(readVal());
+}
+
+// Initialize all drag buttons automatically
+document.querySelectorAll('.drag-btn').forEach(makeDragButton);
+</script>
+
+</body>
+</html>
+

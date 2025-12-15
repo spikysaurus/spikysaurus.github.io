@@ -4,47 +4,35 @@
       <meta charset="UTF-8">
       <title>Kertas</title>
       <link rel="stylesheet" href="style.css">
+      <link rel="stylesheet" href="bl-icons.css">
       <meta name="viewport" content="width=device-width, initial-scale=1" />
    </head>
    <body>
       <div id="bar">
-      <div class="group">
       
          <div class="group">
-            <button id="export">💾</button>
-            <button id="import">📂</button>
-            <button id="pdf">📄</button>
-            <button id="save">📸</button>
-            <input id="url" type="text" value="https://traditionalanimatorindonesia.github.io/pages/Templates/assets/AnimeGO_Storyboard.png" placeholder="Image URL">
-            <button id="load">📥</button>
-            <button onclick="window.open('https://spikysaurus.github.io', '_blank');" id="home">🏠</button>
-            <button onclick="window.open('https://traditionalanimatorindonesia.github.io/pages/Templates/index.html', '_blank');" id="templates">📜</button>
-            
+            <button id="export"><span class="bl-icons-file_tick"></span></button>
+            <button id="import"><span class="bl-icons-file_folder"></span></button>
+            <button id="pdf"><span class="bl-icons-output"></span></button>
+            <button id="save"><span class="bl-icons-restrict_render_off"></span></button>
          </div>
          <div class="group">
             <input id="col" type="color" value="#000000">
-            <button id="brush">Pen</button>
+            <button id="brush"><span id="brush-icon" class="bl-icons-greasepencil"></span></button>
             </div>
-				<div class="group">
-            	
-		         <button id="clr">Clear</button>
-		         <button id="select">Select</button>
-		         <button id="copy">Copy</button>
-		         <button id="cut">Cut</button>
-		         <button id="paste">Stamp</button>
-		         </div>
-            <div class="group">
-		         <button id="swapPrev">⇇Reorder</button>
-		        <button id="swapNext">Reorder⇉</button>
-           </div>
+			<div class="group">
+	         <button id="clr"><span class="bl-icons-file_hidden"></span></button>
+	         <button id="select"><span class="bl-icons-select_set"></span></button>
+	         <button id="copy"><span class="bl-icons-duplicate"></span></button>
+	         <button id="cut"><span class="bl-icons-node_insert_on"></span></button>
+	         <button id="paste"><span class="bl-icons-pastedown"></span></button>
+         </div>
            
          <div class="group">
-            <button id="pan">Pan</button>
-            <button id="zoomIn">➕</button>
-            <button id="zoomOut">➖</button>
-            <button id="add">Add Page</button>
+            <button id="pan"><span class="bl-icons-view_pan"></span></button>
+            <button id="zoomIn"><span class="bl-icons-zoom_in"></span></button>
+            <button id="zoomOut"><span class="bl-icons-zoom_out"></span></button>    
          </div>
-      </div>
       
       
      
@@ -61,7 +49,7 @@
 				
 				
 				/* Toggle button */
-  #toggleLabel {
+  .panel-bottom {
     position: fixed;
     bottom: 50px;
     left: 10px;
@@ -103,12 +91,12 @@
 
 
 
-				<div id="canvasLabel">
-				  W: <input id="canvasWidth" type="number" value="640" ><br>
-				  H: <input id="canvasHeight" type="number" value="360"><br>
-				 
-				  
-				  <div class="anchor-controls">
+<div id="canvasLabel">
+  W: <input id="canvasWidth" type="number" value="640" ><br>
+  H: <input id="canvasHeight" type="number" value="360"><br>
+ 
+  
+  <div class="anchor-controls">
   <button id="resizeTop">Top</button>
   <button id="resizeLeft">Left</button>
   <button id="resizeCenter">Center</button>
@@ -117,10 +105,22 @@
 </div>
 <button id="applySize">Resize Center(Stretch)</button>
 
+<input id="url" type="text" value="https://traditionalanimatorindonesia.github.io/pages/Templates/assets/AnimeGO_Storyboard.png" placeholder="Image URL">
+            <button id="load">Load Image</button>
+            
+            <button onclick="window.open('https://spikysaurus.github.io', '_blank');" id="home"><span class="bl-icons-url"></span>Home</button>
+            <button onclick="window.open('https://traditionalanimatorindonesia.github.io/pages/Templates/index.html', '_blank');" id="templates"><span class="bl-icons-url"></span>Templates</button>
 				</div>
 				
 				<!-- Toggle button -->
-<button id="toggleLabel">Settings</button>
+<div class="panel-bottom">
+<div class="group">
+<button id="toggleLabel"><span class="bl-icons-preferences"></span></button>
+<button id="swapPrev"><span class="bl-icons-area_join_left"></span></button>
+<button id="swapNext"><span class="bl-icons-area_join"></span></button>
+<button id="add"><span class="bl-icons-file_new"></span></button>
+</div>
+</div>
 
 <script>
   const toggleBtn = document.getElementById('toggleLabel');
@@ -136,12 +136,36 @@
   };
 </script>
 				
+<div class="sliders">				
+		<div class="control">
+<!--  <span class="control-label">Size</span>-->
+  <button
+    class="drag-btn"
+    data-min="1"
+    data-max="200"
+    data-step="1"
+    data-px-per-step="5"
+  >
+    <span class="value-display">3</span>
+    <input id="sz" class="value-input" type="number" min="1" max="200" step="5" value="3" />
+  </button>
+</div>
+
+<div class="control">
+<!--  <span class="control-label">Opacity</span>-->
+  <button
+    class="drag-btn"
+    data-min="0"
+    data-max="1"
+    data-step="0.01"
+    data-px-per-step="5"
+  >
+    <span class="value-display">1</span>
+    <input id="op" class="value-input" type="number" min="0" max="1" step="0.01" value="1" />
+  </button>
+</div>
+</div>
 		
-		
-         <form class="BrushPanel">
-            <label><input id="sz" type="range" min="2" max="50" value="12"></label>
-            <label><input id="op" type="range" min="0.1" max="1" step="0.05" value="1"></label>
-            </form>
          
       <div id="line"></div>
       <div id="stage">
@@ -156,6 +180,11 @@
       </div>
       <script src="script.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+      
+      
+      
+      
+      
    </body>
 </html>
 

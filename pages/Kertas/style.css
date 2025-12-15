@@ -21,17 +21,13 @@ position:relative;
   border-bottom: 0px solid #ccc;
 }
 
-#op,#sz{height:3px;}
-#bar button,
-#bar label,
-#bar input[type="text"] {
+
+#bar button{
 
   flex: 1 1 auto;
   min-width:auto;
   padding: 0.3rem;
-/*  font-size: 1rem;*/
   border-radius: 6px;
-/*  border: 1px solid black;*/
   background: lightgray;
   cursor: pointer;
   text-align: center;
@@ -43,6 +39,9 @@ position:relative;
 
 /* Grouped color tools */
 .group {
+	background-color: rgba(255, 255, 255, 0.5);
+	padding:3px;
+	border-radius:5px;
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
@@ -147,21 +146,11 @@ canvas {
   z-index:0;
 }
 
-button {
-/*  font-size:24px;*/
-/*  width:40px;*/
-/*  display:flex;*/
-/*  align-items:center;*/
-/*  justify-content:center;*/
-
-}
 
 button.activePan {
   background:#555;
   color:#0f0;
 }
-
-.BrushPanel{display: flex;bottom:55px;position:fixed;flex-direction: row; gap:5px;}
 
 
 
@@ -170,4 +159,85 @@ button.activePan {
 .BrushPanel{display: flex;bottom:55px;position:fixed;flex-direction: column; gap:5px;}
 
 }
+
+/*Slider*/
+
+.sliders{
+position:fixed;
+top:20%;
+left:5px;
+/*background-color: red;*/
+/*transform: rotate(-90deg);*/
+}
+
+/*DRAG BUTTONS*/
+:root {
+    --btn-bg: rgba(255, 255, 255, 0.5);
+    --btn-bg-active: #111827;
+    --btn-text: black;
+    --btn-border: #374151;
+    --btn-focus: #3b82f6;
+  }
+
+  .control {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+    gap: 5px;
+  }
+
+  .control-label {
+    color: #111827;
+    min-width: 80px;
+  }
+
+  .drag-btn {
+    appearance: none;
+    border: none;
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    border-radius: 8px;
+    padding: 10px 16px;
+/*    font: 600 16px/1.1 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;*/
+    cursor: ew-resize; /* left/right drag */
+    user-select: none;
+    touch-action: none;
+    transition: background 120ms ease, box-shadow 120ms ease, transform 60ms ease;
+    width: 48px;
+    text-align: center;
+    position: relative;
+  }
+
+  .drag-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in oklab, white 0%, var(--btn-focus) 100%);
+  }
+
+  .drag-btn.dragging {
+    background: var(--btn-bg-active);
+/*    transform: scale(0.98);*/
+  }
+
+  .value-display {
+    font-size: 16px;
+    font-weight: 600;
+    pointer-events: none;
+  }
+
+  .value-input {
+    display: none;
+    width: 60px;
+    padding: 2px;
+    border: 1px solid var(--btn-border);
+    border-radius: 4px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .editing .value-display {
+    display: none;
+  }
+  .editing .value-input {
+    display: inline-block;
+  }
 

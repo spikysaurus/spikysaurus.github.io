@@ -219,7 +219,8 @@ dr.onpointermove = e => {
     if (pan) return;
     if (drawing) {
         const { x, y } = getCanvasCoords(e, dr);
-        line(lx, ly, x, y, parseInt(sz.value), col.value, parseFloat(op.value));
+        
+        line(lx, ly, x, y, parseInt(sz.value), col.value, parseFloat(op.value).toFixed(2));
         lx = x;
         ly = y;
     }
@@ -505,11 +506,18 @@ document.getElementById('paste').onclick = () => {
 
 
 
-
 const brushBtn = document.getElementById('brush')
+const brushBtn_icon = document.getElementById('brush-icon')
 brushBtn.onclick = () => {
-    eras = !eras;
-    brushBtn.textContent = eras ? 'Eraser' : 'Pen'
+    eras = !eras
+    if (eras){
+    	brushBtn_icon.classList.replace('bl-icons-greasepencil', 'bl-icons-meta_ellipsoid');
+    }
+    else{
+    	brushBtn_icon.classList.replace('bl-icons-meta_ellipsoid', 'bl-icons-greasepencil');
+    }
+    
+    	
 }
 const panBtn = document.getElementById('pan')
 panBtn.onclick = () => {
@@ -798,4 +806,101 @@ document.getElementById('load').onclick = () => {
     img.src = u
 }
 
+
+//DRAG BUTTONS
+
+function makeDragButton(btn) {
+  const displayEl = btn.querySelector('.value-display');
+  const inputEl = btn.querySelector('.value-input');
+
+  const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+  const getAttr = (name, fallback) => {
+    const v = parseFloat(btn.getAttribute(name));
+    return Number.isFinite(v) ? v : fallback;
+  };
+
+  let min = getAttr('data-min', 0);
+  let max = getAttr('data-max', 100);
+  let step = getAttr('data-step', 1);
+  let pxPerStep = getAttr('data-px-per-step', 16);
+
+  let startX = 0;
+  let startVal = 0;
+  let isDragging = false;
+  let accumulated = 0;
+
+  const readVal = () => parseFloat(displayEl.textContent) || 0;
+  const writeVal = (v) => {
+    const clamped = clamp(v, min, max);
+    displayEl.textContent = clamped;
+    inputEl.value = clamped;
+  };
+
+  // Double-click to edit
+  btn.addEventListener('dblclick', () => {
+    btn.classList.add('editing');
+    inputEl.focus();
+    inputEl.select();
+  });
+
+  // Commit input on blur or Enter
+  inputEl.addEventListener('blur', () => {
+    btn.classList.remove('editing');
+    writeVal(parseFloat(inputEl.value));
+  });
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      inputEl.blur();
+    }
+  });
+
+  // Keyboard support
+  btn.addEventListener('keydown', (e) => {
+    let v = readVal();
+    switch (e.key) {
+      case 'ArrowRight': writeVal(v + step); e.preventDefault(); break;
+      case 'ArrowLeft': writeVal(v - step); e.preventDefault(); break;
+    }
+  });
+
+  // Pointer drag (horizontal)
+  btn.addEventListener('pointerdown', (e) => {
+    if (btn.classList.contains('editing')) return;
+    btn.setPointerCapture(e.pointerId);
+    isDragging = true;
+    btn.classList.add('dragging');
+    startX = e.clientX;
+    startVal = readVal();
+    accumulated = 0;
+  });
+
+  btn.addEventListener('pointermove', (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - startX; // right is positive
+    const totalStepsFloat = (dx + accumulated) / pxPerStep;
+    const wholeSteps = Math.trunc(totalStepsFloat);
+    if (wholeSteps !== 0) {
+      const next = startVal + wholeSteps * step;
+      writeVal(next);
+      const usedPx = wholeSteps * pxPerStep;
+      accumulated = (dx + accumulated) - usedPx;
+    }
+  });
+
+  const endDrag = (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    btn.classList.remove('dragging');
+    btn.releasePointerCapture?.(e.pointerId);
+  };
+
+  btn.addEventListener('pointerup', endDrag);
+  btn.addEventListener('pointercancel', endDrag);
+  btn.addEventListener('pointerleave', endDrag);
+
+  writeVal(readVal());
+}
+
+// Initialize all drag buttons automatically
+document.querySelectorAll('.drag-btn').forEach(makeDragButton);
 
