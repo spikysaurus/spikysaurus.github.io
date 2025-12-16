@@ -1106,6 +1106,89 @@ function exportGif() {
     });
 }
 
+//Animation Play
+let playing = false;
+let playIndex = 0;
+let playTimer = null;
+
+const playBtn = document.getElementById("playBtn");
+const playBtn_icon = document.getElementById("playBtn_icon");
+const delayInput = document.getElementById("GifDelay");
+
+playBtn.onclick = () => {
+    if (playing) {
+        stopAnimation();
+        playBtn_icon.classList.replace('bl-icons-pause', 'bl-icons-play');
+        
+    } else {
+        playAnimation();
+        playBtn_icon.classList.replace('bl-icons-play', 'bl-icons-pause');	
+    }
+    
+};
+
+function playAnimation() {
+    if (!frames.length) {
+        alert("No frames to play!");
+        return;
+    }
+    playing = true;
+    playIndex = 0;
+    nextFrame();
+}
+
+function stopAnimation() {
+    playing = false;
+    clearTimeout(playTimer);
+}
+
+function nextFrame() {
+    if (!playing) return;
+
+    const frame = frames[playIndex];
+    const img = new Image();
+    img.src = frame.src || frame; // handle if frames[] is just dataURLs
+
+    img.onload = () => {
+        drx.clearRect(0, 0, dr.width, dr.height);
+        drx.drawImage(img, 0, 0);
+
+        // get delay from input field
+        const delayMs = parseInt(delayInput.value, 10) || 200;
+
+        playTimer = setTimeout(() => {
+            playIndex = (playIndex + 1) % frames.length;
+            nextFrame();
+        }, delayMs);
+    };
+}
+
+//Duplicate Frame
+document.getElementById("duplicateBtn").onclick = duplicateFrame;
+
+function duplicateFrame() {
+    if (frames.length === 0) {
+        alert("No frames to duplicate!");
+        return;
+    }
+
+    // Get current frame
+    const currentFrame = frames[cur];
+
+    // Create a shallow copy (if frames are objects with src+delay, clone it)
+    const newFrame = typeof currentFrame === "object"
+        ? { ...currentFrame }
+        : currentFrame;
+
+    // Insert duplicate right after current frame
+    frames.splice(cur + 1, 0, newFrame);
+
+    // Auto-select the new duplicated frame
+    cur = cur + 1;
+
+    // Re-render UI / canvas preview
+    render();
+}
 
 
 const toggleBtn = document.getElementById('toggleLabel');
