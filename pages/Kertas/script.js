@@ -1202,12 +1202,12 @@ function show(i) {
 
     // previous frame ghost (red tint)
     if (showOnionSkin && i > 0 && frames[i - 1]) {
-        tintFrame(frames[i - 1], "red", 1,0.3);
+        tintFrame(frames[i - 1], "red", 1);
     }
 
     // next frame ghost (blue tint)
     if (showOnionSkin && i < frames.length - 1 && frames[i + 1]) {
-        tintFrame(frames[i + 1], "blue", 1,0.3);
+        tintFrame(frames[i + 1], "blue", 1);
     }
 
     // current frame full opacity
@@ -1257,7 +1257,7 @@ function tintFrame(src, color, alpha) {
 
         // draw tinted frame onto main canvas
         drx.save();
-        drx.globalAlpha = 0.5; // ghost opacity
+        drx.globalAlpha = 0.2; // ghost opacity
         drx.drawImage(off, 0, 0);
         drx.restore();
     };
