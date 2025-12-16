@@ -7,6 +7,7 @@ html,body {
   overscroll-behavior-y: contain;
   touch-action: none;
 }
+.side-by-side{display:flex; align-items:center; gap:5px;}
 #bar {
 position:relative;
 top:0;
@@ -79,7 +80,7 @@ margin-top:5px;
 
 input[type=number] {
  appearance: textfield;
- width:100px;
+ width:100%;
  font-size:18px;
 }
 .anchor-controls {

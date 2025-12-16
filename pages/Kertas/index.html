@@ -15,8 +15,7 @@
          <div class="group">
             <button id="export"><span class="bl-icons-file_tick"></span></button>
             <button id="import"><span class="bl-icons-file_folder"></span></button>
-            <button id="pdf"><span class="bl-icons-output"></span></button>
-            <button id="save"><span class="bl-icons-restrict_render_off"></span></button>
+            
          </div>
          <div class="group">
             <input id="col" type="color" value="#000000">
@@ -41,9 +40,9 @@
 
 
 <div id="settings">
-  W: <input id="canvasWidth" type="number" value="640" ><br>
-  H: <input id="canvasHeight" type="number" value="360"><br>
- 
+<div class="side-by-side">
+  Size<input id="canvasWidth" type="number" value="640" ><input id="canvasHeight" type="number" value="360"><br>
+ </div>
   
   <div class="anchor-controls">
   <button id="resizeTop">Top</button>
@@ -52,6 +51,7 @@
   <button id="resizeRight">Right</button>
   <button id="resizeBottom">Bottom</button>
 </div>
+
 <button id="applySize">Resize Center(Stretch)</button>
 
 <input id="url" type="text" value="" placeholder="Image URL">
@@ -60,6 +60,18 @@
             <button onclick="window.open('https://spikysaurus.github.io', '_blank');" id="home"><span class="bl-icons-url"></span>Home</button>
             <button onclick="window.open('https://traditionalanimatorindonesia.github.io/pages/Templates/index.html', '_blank');" id="templates"><span class="bl-icons-url"></span>Templates</button>
             <button id="checkerboardBtn"><span class="bl-icons-texture"></span></button>
+            
+            <div class="side-by-side">
+  <label for="GifDelay">Delay (ms):</label>
+  <input id="GifDelay" type="number" value="200" style="width:80px;">
+  <button id="exportGif">
+    Export GIF
+  </button>
+</div>
+				<div class="side-by-side">
+				<button id="pdf"><span class="bl-icons-output"></span>Export PDF</button>
+            <button id="save"><span class="bl-icons-restrict_render_off"></span>Snapshot</button>
+           </div>
 				</div>
 				
 				<!-- Toggle button -->
@@ -166,9 +178,7 @@
       <script src="script.js"></script>
       <script src="ColorPicker.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-      
-      
-      
+      <script src="gif.js"></script>
       
       
    </body>

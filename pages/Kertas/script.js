@@ -703,13 +703,8 @@ document.getElementById('save').onclick = () => {
     link.click()
 }
 
-//Add Frame
-function add() {
-    drx.clearRect(0, 0, dr.width, dr.height);
-    frames.push(dr.toDataURL());
-    cur = frames.length - 1;
-    render()
-}
+
+
 // Swap with next frame
 document.getElementById('swapNext').onclick = () => {
     if (frames.length > 1) {
@@ -932,7 +927,16 @@ document.getElementById('pdf').onclick = async () => {
         alert("PDF export failed. Check console for details.")
     }
 }
+
 document.getElementById('add').onclick = add
+//Add Frame
+function add() {
+    drx.clearRect(0, 0, dr.width, dr.height);
+    frames.push(dr.toDataURL());
+    cur = frames.length - 1;
+    render()
+}
+
 document.getElementById('load').onclick = () => {
     const u = document.getElementById('url').value.trim();
     if (!u) return;
@@ -1046,6 +1050,61 @@ function makeDragButton(btn) {
 
 // Initialize all drag buttons automatically
 document.querySelectorAll('.drag-btn').forEach(makeDragButton);
+
+// Export Gif
+document.getElementById('exportGif').onclick = exportGif;
+
+// Export GIF from collected frames
+function exportGif() {
+    if (!frames.length) {
+        alert("No frames to export!");
+        return;
+    }
+
+    const gif = new GIF({
+        workers: 2,
+        quality: 10,
+        width: dr.width,
+        height: dr.height,
+        transparent: null // disable transparency → solid background
+    });
+
+    let loadedCount = 0;
+
+    frames.forEach((frameDataUrl, idx) => {
+        const img = new Image();
+        img.src = frameDataUrl;
+
+        img.onload = () => {
+            // Draw onto a temp canvas to ensure background is filled
+            const tempCanvas = document.createElement("canvas");
+            tempCanvas.width = dr.width;
+            tempCanvas.height = dr.height;
+            const tempCtx = tempCanvas.getContext("2d");
+
+            // Fill background (white here, change if needed)
+            tempCtx.fillStyle = "#ffffff";
+            tempCtx.fillRect(0, 0, dr.width, dr.height);
+
+            // Draw the frame image on top
+            tempCtx.drawImage(img, 0, 0);
+
+            gif.addFrame(tempCtx, { delay: 200 }); // 200ms per frame
+
+            loadedCount++;
+            if (loadedCount === frames.length) {
+                gif.on("finished", blob => {
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "animation.gif";
+                    link.click();
+                });
+                gif.render();
+            }
+        };
+    });
+}
+
 
 
 const toggleBtn = document.getElementById('toggleLabel');
