@@ -1055,6 +1055,7 @@ document.querySelectorAll('.drag-btn').forEach(makeDragButton);
 document.getElementById('exportGif').onclick = exportGif;
 
 // Export GIF from collected frames
+GifDelay = document.getElementById('GifDelay');
 function exportGif() {
     if (!frames.length) {
         alert("No frames to export!");
@@ -1089,7 +1090,7 @@ function exportGif() {
             // Draw the frame image on top
             tempCtx.drawImage(img, 0, 0);
 
-            gif.addFrame(tempCtx, { delay: 200 }); // 200ms per frame
+            gif.addFrame(tempCtx, { delay: GifDelay.value }); // 200ms per frame
 
             loadedCount++;
             if (loadedCount === frames.length) {
