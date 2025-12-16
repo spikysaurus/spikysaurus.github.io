@@ -1,5 +1,7 @@
 const bg = document.getElementById('bg'),
     bgx = bg.getContext('2d')
+const cv_checkerboard = document.getElementById('checkerboard'),
+    cvx_checkerboard = cv_checkerboard.getContext('2d')
 const dr = document.getElementById('draw'),
     drx = dr.getContext('2d')
     drx.imageSmoothingEnabled = false;
@@ -9,6 +11,7 @@ const stack = document.getElementById('stack')
 const sz = document.getElementById('sz'),
     op = document.getElementById('op'),
     col = document.getElementById('col')
+   
 let drawing = false,
     lx, ly, eras = false,
     pan = false,
@@ -23,6 +26,9 @@ let targetPx = 0,
     panStartY = 0
 const frames = [];
 let cur = 0
+
+let selecting = false,selStartX, selStartY, selEndX, selEndY;
+let fillMode = false; 
 
 function setSize(w, h) {
     stack.style.width = w + 'px';
@@ -42,15 +48,131 @@ function animate() {
 }
 animate()
 
+//function drawCheckerboard(ctx, width, height, size = 16) {
+//  for (let y = 0; y < height; y += size) {
+//    for (let x = 0; x < width; x += size) {
+//      // Alternate colors
+//      const isLight = ((x / size) + (y / size)) % 2 === 0;
+//      ctx.fillStyle = isLight ? "#ddd" : "#fff"; // light gray + white
+//      ctx.fillRect(x, y, size, size, size, size);
+//    }
+//  }
+//}
+//const ctx = dr.getContext("2d");
+//drawCheckerboard(ctx, dr.width, dr.height);
+
+//FILL TOOL
+// Attach button toggle
+	const fillBtn = document.getElementById("fillBtn");
+    document.getElementById("fillBtn").addEventListener("click", () => {
+    	
+      fillMode = !fillMode;
+		 if (fillMode) {
+		     fillBtn.style.backgroundColor = "yellow";
+		     
+		 } else {
+			fillBtn.style.backgroundColor = "";
+		 }
+    });
+    
+	function fill(x, y, fillColor, tolerance) {
+  const w = dr.width, h = dr.height;
+  const imageData = drx.getImageData(0, 0, w, h);
+  const data = imageData.data;
+
+  function getPixel(px, py) {
+    const i = (py * w + px) * 4;
+    return [data[i], data[i+1], data[i+2], data[i+3]];
+  }
+
+  function setPixel(px, py, color) {
+    const i = (py * w + px) * 4;
+    data[i]   = color[0];
+    data[i+1] = color[1];
+    data[i+2] = color[2];
+    data[i+3] = color[3];
+  }
+
+  function parseColor(colorStr) {
+    const tmp = document.createElement("canvas").getContext("2d");
+    tmp.fillStyle = colorStr;
+    tmp.fillRect(0, 0, 1, 1);
+    const c = tmp.getImageData(0, 0, 1, 1).data;
+    return [c[0], c[1], c[2], c[3]];
+  }
+
+  function colorMatch(c1, c2, tol) {
+    // Euclidean distance in RGBA space
+    const diff = Math.sqrt(
+      Math.pow(c1[0] - c2[0], 2) +
+      Math.pow(c1[1] - c2[1], 2) +
+      Math.pow(c1[2] - c2[2], 2) +
+      Math.pow(c1[3] - c2[3], 2)
+    );
+    return diff <= tol;
+  }
+
+  const targetColor = getPixel(x, y);
+  const newColor = parseColor(fillColor);
+
+  // Only skip if the new color is *exactly* the same
+  if (targetColor.toString() === newColor.toString()) return;
+
+  const stack = [[x, y]];
+  const visited = new Set();
+
+  while (stack.length) {
+    const [px, py] = stack.pop();
+    const key = px + "," + py;
+    if (visited.has(key)) continue;
+    visited.add(key);
+
+    const currentColor = getPixel(px, py);
+    if (colorMatch(currentColor, targetColor, tolerance)) {
+      setPixel(px, py, newColor); // always overwrite
+
+      if (px > 0) stack.push([px-1, py]);
+      if (px < w-1) stack.push([px+1, py]);
+      if (py > 0) stack.push([px, py-1]);
+      if (py < h-1) stack.push([px, py+1]);
+    }
+  }
+
+  drx.putImageData(imageData, 0, 0);
+}
+
+// Canvas click handler (with zoom-safe coordinates)
+if (!selecting) {
+  dr.addEventListener("pointerdown", e => {
+    if (!fillMode) return; // only fill if enabled
+
+    const rect = dr.getBoundingClientRect();
+
+    // Map screen coords back to canvas pixel coords
+    const scaleX = dr.width / rect.width;
+    const scaleY = dr.height / rect.height;
+
+    const x = Math.floor((e.clientX - rect.left) * scaleX);
+    const y = Math.floor((e.clientY - rect.top) * scaleY);
+
+    fill(x, y, col.value, 0); // fill with chosen color
+  });
+}
+
+ 
 // --- RESIZE STRETCH ---
 function resize(w, h) {
     const snapshot = new Image();
     snapshot.src = dr.toDataURL();
 
+	cv_checkerboard.width = w;
+    cv_checkerboard.height = h;
+    
     bg.width = w;
     bg.height = h;
     dr.width = w;
     dr.height = h;
+    
     overlay.width = w;
     overlay.height = h;
     stack.style.width = w + 'px';
@@ -73,10 +195,14 @@ function resizeAnchor(w, h, anchor = "top-left") {
     const oldW = dr.width;
     const oldH = dr.height;
 
+	cv_checkerboard.width = w;
+    cv_checkerboard.height = h;
+    
     bg.width = w;
     bg.height = h;
     dr.width = w;
     dr.height = h;
+    
     overlay.width = w;
     overlay.height = h;
     stack.style.width = w + 'px';
@@ -102,7 +228,9 @@ function resizeCenter(w, h) {
 
     const oldW = dr.width;
     const oldH = dr.height;
-
+		
+		cv_checkerboard.width = w;
+    cv_checkerboard.height = h;
     bg.width = w;
     bg.height = h;
     dr.width = w;
@@ -185,26 +313,6 @@ function getCanvasCoords(e, canvas) {
     };
 }
 
-//function circ(x, y, s, c, a) {
-//    drx.globalAlpha = a;
-//    drx.globalCompositeOperation = eras ? 'destination-out' : 'source-over';
-//    drx.fillStyle = eras ? 'rgba(0,0,0,1)' : c;
-//    drx.beginPath();
-//    drx.arc(x, y, s / 2, 0, Math.PI * 2);
-//    drx.fill();
-//    drx.globalAlpha = 1
-//}
-
-//function line(x0, y0, x1, y1, s, c, a) {
-//    const dx = x1 - x0,
-//        dy = y1 - y0,
-//        d = Math.hypot(dx, dy),
-//        st = Math.ceil(d / (s / 2));
-//    for (let i = 0; i <= st; i++) {
-//        const t = i / st;
-//        circ(x0 + dx * t, y0 + dy * t, s, c, a)
-//    }
-//}
 let useAliased = false; // user can set this true/false
 const AliasedBtn = document.getElementById('aliased');
 AliasedBtn.onclick = () => {
@@ -220,7 +328,10 @@ AliasedBtn.onclick = () => {
 };
 
 
+//Painting
 function circ(x, y, s, c, a) {
+	if (!fillMode)
+	{
     drx.globalAlpha = a;
     drx.globalCompositeOperation = eras ? 'destination-out' : 'source-over';
     drx.fillStyle = eras ? 'rgba(0,0,0,1)' : c;
@@ -241,18 +352,23 @@ function circ(x, y, s, c, a) {
     }
 
     drx.globalAlpha = 1;
+    
+    }
 }
 
 function line(x0, y0, x1, y1, s, c, a) {
     const dx = x1 - x0,
           dy = y1 - y0,
           d = Math.hypot(dx, dy),
-          st = Math.ceil(d / (s / 2));
+          // smaller step size ensures overlap
+          st = Math.ceil(d / (s / 3));  
     for (let i = 0; i <= st; i++) {
         const t = i / st;
         circ(x0 + dx * t, y0 + dy * t, s, c, a);
     }
 }
+
+
 
 dr.onpointermove = e => {
     if (pan) return;
@@ -370,8 +486,7 @@ document.addEventListener('wheel', e => {
     passive: false
 })
 
-let selecting = false,
-    selStartX, selStartY, selEndX, selEndY;
+//let selecting = false,selStartX, selStartY, selEndX, selEndY;
 let clipboard = null;
 const selectBtn = document.getElementById('select');
 selectBtn.onclick = () => {
@@ -573,12 +688,6 @@ panBtn.onclick = () => {
     panBtn.classList.toggle('activePan', pan)
 }
 
-//Color Buttons
-//document.getElementById("black").onclick=()=>{col.value="#000000"},
-//document.getElementById("white").onclick=()=>{col.value="#ffffff"},
-//document.getElementById("red").onclick=()=>{col.value="#ff0000"},
-//document.getElementById("green").onclick=()=>{col.value="#00ff00"},
-//document.getElementById("blue").onclick=()=>{col.value="#0000ff"};
 document.getElementById('clr').onclick = () => {
     const confirmClear = confirm("Clear the canvas?");
     if (confirmClear) {
@@ -947,15 +1056,17 @@ function makeDragButton(btn) {
 document.querySelectorAll('.drag-btn').forEach(makeDragButton);
 
 
- const toggleBtn = document.getElementById('toggleLabel');
-  const settings = document.getElementById('settings');
-	settings.style.display = 'none';
-  toggleBtn.onclick = () => {
-    if (settings.style.display === 'none') {
-      settings.style.display = 'block';
-    } else {
-      settings.style.display = 'none';
-    }
-    
-  };
+const toggleBtn = document.getElementById('toggleLabel');
+const settings = document.getElementById('settings');
+settings.style.display = 'none';
+toggleBtn.onclick = () => {
+ if (settings.style.display === 'none') {
+   settings.style.display = 'block';
+ } else {
+   settings.style.display = 'none';
+ }
+ 
+};
+
+
 

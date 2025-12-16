@@ -5,9 +5,11 @@
       <title>Kertas</title>
       <link rel="stylesheet" href="style.css">
       <link rel="stylesheet" href="bl-icons.css">
+      <link rel="stylesheet" href="ColorPicker.css">
       <meta name="viewport" content="width=device-width, initial-scale=1" />
    </head>
    <body>
+   
       <div id="bar">
       
          <div class="group">
@@ -20,6 +22,7 @@
             <input id="col" type="color" value="#000000">
             <button id="brush"><span id="brush-icon" class="bl-icons-greasepencil"></span></button>
             <button id="aliased"><span class="bl-icons-aliased"></span></button>
+            <button id="fillBtn"><span class="bl-icons-image"></span></button>
             </div>
 			<div class="group">
 	         <button id="clr"><span class="bl-icons-file_hidden"></span></button>
@@ -68,7 +71,10 @@
 </div>
 </div>
 
-<div class="sliders">				
+<div class="sliders">
+<div class="control">	
+<button id="ColorPickerBtn"><span class="bl-icons-material"></span></button>
+</div>
 		<div class="control">
 <!--  <span class="control-label">Size</span>-->
   <button
@@ -98,19 +104,85 @@
 </div>
 </div>
 		
-         
+        <style>
+#checkerboard {
+  /* Transparent checkerboard background */
+  background-image: 
+    linear-gradient(45deg, #ddd 25%, transparent 25%),
+    linear-gradient(-45deg, #ddd 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ddd 75%),
+    linear-gradient(-45deg, transparent 75%, #ddd 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+
+  /* Make sure canvas itself stays transparent */
+  background-color: transparent;
+}
+</style>
+ 
       <div id="line"></div>
+      
       <div id="stage">
+      
          <div id="stack">
+         	
+
+				<canvas id="checkerboard"></canvas>
             <canvas id="bg"></canvas>
             <canvas id="draw"></canvas>
             <canvas id="overlay"></canvas>
-
+				
 
          </div>
           
       </div>
+      
+   <div class="picker" id="paintPicker">
+  <div class="sv-wrap" id="svWrap">
+    <canvas id="sv"></canvas>
+    <div class="sv-thumb" id="svThumb"></div>
+  </div>
+
+  <div class="right">
+    <div class="hue-wrap" id="hueWrap">
+      <canvas id="hue"></canvas>
+      <div class="hue-thumb" id="hueThumb"></div>
+    </div>
+
+    <div class="io">
+      <div class="field">
+        <label for="hex">HEX</label>
+        <input id="hex" placeholder="#RRGGBB" />
+      </div>
+      <div class="field">
+        <label for="rgb">RGB</label>
+        <input id="rgb" placeholder="r, g, b" />
+      </div>
+    </div>
+
+    <div class="chips" id="chips"></div>
+
+    <div class="swatches">
+    	<div>
+        <div class="small">Preview</div>
+        <div class="swatch" id="curSwatch"></div>
+      </div>
+      <div>
+        <div class="small">Current</div>
+        <div class="swatch" id="prevSwatch"></div>
+      </div>
+      
+    </div>
+
+    <div class="swatches">
+    	<span class="small" id="readout"></span>
+      <button id="setPrev">Set Color</button>
+      
+    </div>
+  </div>   
+      
       <script src="script.js"></script>
+      <script src="ColorPicker.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
       
       

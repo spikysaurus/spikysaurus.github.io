@@ -8,9 +8,9 @@ html,body {
   touch-action: none;
 }
 
-/* Responsive bar container */
 #bar {
 position:relative;
+top:0;
 	z-index:100;
   display: flex;
   flex-wrap: wrap;       /* allow wrapping on small screens */
@@ -23,7 +23,6 @@ position:relative;
 
 
 #bar button{
-
   flex: 1 1 auto;
   min-width:auto;
   padding: 0.3rem;
@@ -73,7 +72,7 @@ input[type=color] {
   padding:0;
   border:none;
 }
-#settings{text-align:center;width:200px;z-index:99999999;position:fixed;bottom:90px;left:10px;background-color:lightgray;color:black;padding:10px;border-radius:5px;font-size:12px;transition: 0.3s;}
+#settings{text-align:center;width:200px;z-index:20;position:fixed;bottom:90px;left:10px;background-color:lightgray;color:black;padding:10px;border-radius:5px;font-size:12px;transition: 0.3s;}
 #settings button{
 width:auto;
 margin-top:5px;
@@ -123,7 +122,7 @@ input[type=number] {
   bottom:0;         /* anchor at bottom */
   left:0;
   right:0;
-  z-index:100;      /* above canvas */
+  z-index:20;      /* above canvas */
   background:#444;
   padding:8px;
   display:flex;
@@ -146,6 +145,7 @@ input[type=number] {
 }
 
 #stage {
+	z-index:-1;
   position:fixed;
   top:0;
   left:0;
@@ -154,14 +154,16 @@ input[type=number] {
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:-1;
+  
 }
 
 #stack {
+/*border:1px solid white;*/
   position:absolute;
   left:50%;
   top:50%;
   transform:translate(-50%,-50%) scale(1);
+  background-color:white;
 }
 
 canvas {
@@ -183,7 +185,7 @@ canvas {
 
 #bg {
   z-index:0;
-  background:#fff;
+/*  background:#fff;*/
 }
 
 #draw {
