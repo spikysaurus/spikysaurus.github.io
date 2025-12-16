@@ -2,6 +2,7 @@ const bg = document.getElementById('bg'),
     bgx = bg.getContext('2d')
 const dr = document.getElementById('draw'),
     drx = dr.getContext('2d')
+    drx.imageSmoothingEnabled = false;
 const overlay = document.getElementById('overlay'),
     ox = overlay.getContext('2d')
 const stack = document.getElementById('stack')
@@ -184,36 +185,74 @@ function getCanvasCoords(e, canvas) {
     };
 }
 
+//function circ(x, y, s, c, a) {
+//    drx.globalAlpha = a;
+//    drx.globalCompositeOperation = eras ? 'destination-out' : 'source-over';
+//    drx.fillStyle = eras ? 'rgba(0,0,0,1)' : c;
+//    drx.beginPath();
+//    drx.arc(x, y, s / 2, 0, Math.PI * 2);
+//    drx.fill();
+//    drx.globalAlpha = 1
+//}
+
+//function line(x0, y0, x1, y1, s, c, a) {
+//    const dx = x1 - x0,
+//        dy = y1 - y0,
+//        d = Math.hypot(dx, dy),
+//        st = Math.ceil(d / (s / 2));
+//    for (let i = 0; i <= st; i++) {
+//        const t = i / st;
+//        circ(x0 + dx * t, y0 + dy * t, s, c, a)
+//    }
+//}
+let useAliased = false; // user can set this true/false
+const AliasedBtn = document.getElementById('aliased');
+AliasedBtn.onclick = () => {
+    aliased = !aliased;
+    if (!aliased) {
+        AliasedBtn.style.backgroundColor = "yellow";
+        useAliased = true;
+        
+    } else {
+		AliasedBtn.style.backgroundColor = "";
+      useAliased = false;
+    }
+};
+
+
 function circ(x, y, s, c, a) {
     drx.globalAlpha = a;
     drx.globalCompositeOperation = eras ? 'destination-out' : 'source-over';
     drx.fillStyle = eras ? 'rgba(0,0,0,1)' : c;
-    drx.beginPath();
-    drx.arc(x, y, s / 2, 0, Math.PI * 2);
-    drx.fill();
-    drx.globalAlpha = 1
+
+    if (useAliased) {
+        const r = Math.floor(s / 2);
+        for (let py = -r; py <= r; py++) {
+            for (let px = -r; px <= r; px++) {
+                if (px * px + py * py <= r * r) {
+                    drx.fillRect(Math.round(x + px), Math.round(y + py), 1, 1);
+                }
+            }
+        }
+    } else {
+        drx.beginPath();
+        drx.arc(x, y, s / 2, 0, Math.PI * 2);
+        drx.fill();
+    }
+
+    drx.globalAlpha = 1;
 }
 
 function line(x0, y0, x1, y1, s, c, a) {
     const dx = x1 - x0,
-        dy = y1 - y0,
-        d = Math.hypot(dx, dy),
-        st = Math.ceil(d / (s / 2));
+          dy = y1 - y0,
+          d = Math.hypot(dx, dy),
+          st = Math.ceil(d / (s / 2));
     for (let i = 0; i <= st; i++) {
         const t = i / st;
-        circ(x0 + dx * t, y0 + dy * t, s, c, a)
+        circ(x0 + dx * t, y0 + dy * t, s, c, a);
     }
 }
-//dr.addEventListener("pointermove", e => {
-//    if (pan) return;
-//    if (drawing) {
-//        const { x, y } = getCanvasCoords(e, dr);
-//        line(lx, ly, x, y, parseInt(sz.value), col.value, parseFloat(op.value));
-//        lx = x;
-//        ly = y;
-//    }
-//});
-
 
 dr.onpointermove = e => {
     if (pan) return;
@@ -256,30 +295,30 @@ document.addEventListener('pointerup', () => {
 
 //PAN
 document.addEventListener('pointerstart', e => {
-    if (e.touches.length === 2) {
-        const dx = e.touches[0].clientX - e.touches[1].clientX
-        const dy = e.touches[0].clientY - e.touches[1].clientY
+    if (e.length === 2) {
+        const dx = e[0].clientX - e[1].clientX
+        const dy = e[0].clientY - e[1].clientY
         sd = Math.hypot(dx, dy)
     }
-    if (e.touches.length === 3) {
-        panStartX = e.touches[0].clientX - targetPx
-        panStartY = e.touches[0].clientY - targetPy
+    if (e.length === 3) {
+        panStartX = e[0].clientX - targetPx
+        panStartY = e[0].clientY - targetPy
     }
 }, {
     passive: true
 })
 document.addEventListener('pointermove', e => {
-    if (e.touches.length === 2) {
-        const dx = e.touches[0].clientX - e.touches[1].clientX
-        const dy = e.touches[0].clientY - e.touches[1].clientY
+    if (e.length === 2) {
+        const dx = e[0].clientX - e[1].clientX
+        const dy = e[0].clientY - e[1].clientY
         const nd = Math.hypot(dx, dy)
         const f = nd / sd
         targetSc = Math.min(Math.max(targetSc * f, 0.5), 3)
         sd = nd
     }
-    if (e.touches.length === 3) {
-        targetPx = e.touches[0].clientX - panStartX
-        targetPy = e.touches[0].clientY - panStartY
+    if (e.length === 3) {
+        targetPx = e[0].clientX - panStartX
+        targetPy = e[0].clientY - panStartY
     }
 }, {
     passive: true
@@ -339,13 +378,13 @@ selectBtn.onclick = () => {
     selecting = !selecting;
     if (selecting) {
         selectBtn.style.backgroundColor = "yellow";
-        electBtn.style.color = "black";
+        selectBtn.style.color = "black";
         
     } else {
         selectBtn.style.backgroundColor = "";
         ox.clearRect(0, 0, overlay.width, overlay.height);
     }
-    selectBtn.classList.toggle('activePan', selecting);
+//    selectBtn.classList.toggle(!selecting, selecting);
 };
 
 // disable painting when selecting
@@ -402,23 +441,26 @@ dr.addEventListener('pointerup', e => {
     }
 });
 //prev is canvas.addEve-
+// changed ctx to dr
 dr.addEventListener("pointerdown", e => {
     if (e.pointerType === "pen" || e.pointerType === "touch" || e.pointerType === "mouse") {
         drawing = true;
         lastX = e.offsetX;
         lastY = e.offsetY;
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
+//        ctx.beginPath();
+//        ctx.moveTo(lastX, lastY);
     }
+    else{pass}
 });
-dr.addEventListener("pointermove", e => {
+dr.addEventListener("pointermove", e => { 
     if (!drawing) return;
     if (e.pointerType === "pen" || e.pointerType === "touch" || e.pointerType === "mouse") {
-        ctx.lineTo(e.offsetX, e.offsetY);
-        ctx.stroke();
+//        ctx.lineTo(e.offsetX, e.offsetY);
+//        ctx.stroke();
         lastX = e.offsetX;
         lastY = e.offsetY;
     }
+    else{pass}
 });
 // Selection handlers with pointer events
 dr.addEventListener('pointerdown', e => {

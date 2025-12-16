@@ -144,15 +144,9 @@ canvas {
 
 #draw {
   z-index:0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* fallback for some browsers */
 }
-
-
-button.activePan {
-  background:#555;
-  color:#0f0;
-}
-
-
 
 /* Mobile tweak: stack vertically */
 @media (max-width: 600px) {
