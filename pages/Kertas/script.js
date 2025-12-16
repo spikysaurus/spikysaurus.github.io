@@ -315,32 +315,36 @@ AliasedBtn.onclick = () => {
     }
 };
 
-
 //Painting
 function circ(x, y, s, c, a) {
-	if (!fillMode)
-	{
-    drx.globalAlpha = a;
-    drx.globalCompositeOperation = eras ? 'destination-out' : 'source-over';
-    drx.fillStyle = eras ? 'rgba(0,0,0,1)' : c;
+    if (!fillMode) {
+        drx.globalAlpha = a;
 
-    if (useAliased) {
-        const r = Math.floor(s / 2);
-        for (let py = -r; py <= r; py++) {
-            for (let px = -r; px <= r; px++) {
-                if (px * px + py * py <= r * r) {
-                    drx.fillRect(Math.round(x + px), Math.round(y + py), 1, 1);
+        if (eras) {
+            drx.globalCompositeOperation = 'destination-out';
+            drx.fillStyle = 'rgba(0,0,0,1)'; // <-- can just use any solid color
+        } else {
+            drx.globalCompositeOperation = 'source-over';
+            drx.fillStyle = c;
+        }
+
+        if (useAliased) {
+            const r = Math.floor(s / 2);
+            for (let py = -r; py <= r; py++) {
+                for (let px = -r; px <= r; px++) {
+                    if (px * px + py * py <= r * r) {
+                        drx.fillRect(Math.round(x + px), Math.round(y + py), 1, 1);
+                    }
                 }
             }
+        } else {
+            drx.beginPath();
+            drx.arc(x, y, s / 2, 0, Math.PI * 2);
+            drx.fill();
         }
-    } else {
-        drx.beginPath();
-        drx.arc(x, y, s / 2, 0, Math.PI * 2);
-        drx.fill();
-    }
 
-    drx.globalAlpha = 1;
-    
+        drx.globalAlpha = 1;
+        drx.globalCompositeOperation = 'source-over'; // reset after erasing
     }
 }
 
