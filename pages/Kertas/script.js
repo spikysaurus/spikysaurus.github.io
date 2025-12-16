@@ -946,3 +946,16 @@ function makeDragButton(btn) {
 // Initialize all drag buttons automatically
 document.querySelectorAll('.drag-btn').forEach(makeDragButton);
 
+
+ const toggleBtn = document.getElementById('toggleLabel');
+  const settings = document.getElementById('settings');
+	settings.style.display = 'none';
+  toggleBtn.onclick = () => {
+    if (settings.style.display === 'none') {
+      settings.style.display = 'block';
+    } else {
+      settings.style.display = 'none';
+    }
+    
+  };
+
