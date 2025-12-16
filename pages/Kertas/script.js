@@ -1120,13 +1120,12 @@ playBtn.onclick = () => {
     if (playing) {
         stopAnimation();
         playBtn_icon.classList.replace('bl-icons-pause', 'bl-icons-play');
-        show(cur);
-        render();
+//        show(cur);
+//        render();
         
     } else {
         playAnimation();
         playBtn_icon.classList.replace('bl-icons-play', 'bl-icons-pause');	
-        
     }
     
 };
@@ -1137,6 +1136,12 @@ function playAnimation() {
         return;
     }
     playing = true;
+    if (showOnionSkin){
+    showOnionSkin = false;
+    onionBtn_icon.classList.replace('bl-icons-onionskin_on', 'bl-icons-onionskin_off');
+    
+    }
+    
     playIndex = 0;
     nextFrame();
 }
@@ -1274,6 +1279,7 @@ function tintFrame(src, color, alpha) {
 const onionBtn = document.getElementById('onionBtn')
 const onionBtn_icon = document.getElementById('onion-icon')
 onionBtn.addEventListener("click", () => {
+	
 	
     showOnionSkin = !showOnionSkin;
     if (showOnionSkin){
