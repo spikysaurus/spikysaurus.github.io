@@ -7,7 +7,6 @@ html,body {
   overscroll-behavior-y: contain;
   touch-action: none;
 }
-
 #bar {
 position:relative;
 top:0;
@@ -164,6 +163,20 @@ input[type=number] {
   top:50%;
   transform:translate(-50%,-50%) scale(1);
   background-color:white;
+}
+
+#checkerboard {
+  /* Transparent checkerboard background */
+  background-image: 
+    linear-gradient(45deg, #ddd 25%, transparent 25%),
+    linear-gradient(-45deg, #ddd 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ddd 75%),
+    linear-gradient(-45deg, transparent 75%, #ddd 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+
+  /* Make sure canvas itself stays transparent */
+  background-color: transparent;
 }
 
 canvas {

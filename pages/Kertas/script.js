@@ -1069,4 +1069,14 @@ toggleBtn.onclick = () => {
 };
 
 
+const checkerboardBtn = document.getElementById('checkerboardBtn');
+checkerboardBtn.onclick = () => {
+ if (cv_checkerboard.style.display === 'none') {
+   cv_checkerboard.style.display = 'block';
+ } else {
+   cv_checkerboard.style.display = 'none';
+ }
+ 
+};
+
 

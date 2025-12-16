@@ -59,6 +59,7 @@
             
             <button onclick="window.open('https://spikysaurus.github.io', '_blank');" id="home"><span class="bl-icons-url"></span>Home</button>
             <button onclick="window.open('https://traditionalanimatorindonesia.github.io/pages/Templates/index.html', '_blank');" id="templates"><span class="bl-icons-url"></span>Templates</button>
+            <button id="checkerboardBtn"><span class="bl-icons-texture"></span></button>
 				</div>
 				
 				<!-- Toggle button -->
@@ -104,29 +105,10 @@
 </div>
 </div>
 		
-        <style>
-#checkerboard {
-  /* Transparent checkerboard background */
-  background-image: 
-    linear-gradient(45deg, #ddd 25%, transparent 25%),
-    linear-gradient(-45deg, #ddd 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #ddd 75%),
-    linear-gradient(-45deg, transparent 75%, #ddd 75%);
-  background-size: 20px 20px;
-  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-
-  /* Make sure canvas itself stays transparent */
-  background-color: transparent;
-}
-</style>
- 
-      <div id="line"></div>
       
-      <div id="stage">
-      
+      <div id="line"></div> 
+      <div id="stage">  
          <div id="stack">
-         	
-
 				<canvas id="checkerboard"></canvas>
             <canvas id="bg"></canvas>
             <canvas id="draw"></canvas>
