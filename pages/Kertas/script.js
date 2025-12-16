@@ -771,16 +771,16 @@ function render() {
     })
 }
 
-function show(i) {
-    if (frames[i]) {
-        const img = new Image();
-        img.onload = () => {
-            drx.clearRect(0, 0, dr.width, dr.height);
-            drx.drawImage(img, 0, 0)
-        };
-        img.src = frames[i]
-    }
-}
+//function show(i) {
+//    if (frames[i]) {
+//        const img = new Image();
+//        img.onload = () => {
+//            drx.clearRect(0, 0, dr.width, dr.height);
+//            drx.drawImage(img, 0, 0)
+//        };
+//        img.src = frames[i]
+//    }
+//}
 //Export JSON
 document.getElementById('export').onclick = () => {
     const bgUrl = document.getElementById('url').value.trim()
@@ -935,6 +935,7 @@ function add() {
     frames.push(dr.toDataURL());
     cur = frames.length - 1;
     render()
+    show(cur);
 }
 
 document.getElementById('load').onclick = () => {
@@ -1119,10 +1120,13 @@ playBtn.onclick = () => {
     if (playing) {
         stopAnimation();
         playBtn_icon.classList.replace('bl-icons-pause', 'bl-icons-play');
+        show(cur);
+        render();
         
     } else {
         playAnimation();
         playBtn_icon.classList.replace('bl-icons-play', 'bl-icons-pause');	
+        
     }
     
 };
@@ -1188,8 +1192,102 @@ function duplicateFrame() {
 
     // Re-render UI / canvas preview
     render();
+    show(cur);
 }
 
+//Onion Skin
+let showOnionSkin = false; // toggle ON/OFF
+function show(i) {
+    drx.clearRect(0, 0, dr.width, dr.height);
+
+    // previous frame ghost (red tint)
+    if (showOnionSkin && i > 0 && frames[i - 1]) {
+        tintFrame(frames[i - 1], "red", 1,0.3);
+    }
+
+    // next frame ghost (blue tint)
+    if (showOnionSkin && i < frames.length - 1 && frames[i + 1]) {
+        tintFrame(frames[i + 1], "blue", 1,0.3);
+    }
+
+    // current frame full opacity
+    if (frames[i]) {
+        const img = new Image();
+        img.onload = () => {
+            drx.save();
+            drx.globalAlpha = 1.0;
+            drx.drawImage(img, 0, 0);
+            drx.restore();
+        };
+        img.src = frames[i];
+    }
+}
+
+function tintFrame(src, color, alpha) {
+    const img = new Image();
+    img.src = src;
+    img.onload = () => {
+        // draw frame into an offscreen canvas
+        const off = document.createElement("canvas");
+        off.width = dr.width;
+        off.height = dr.height;
+        const offCtx = off.getContext("2d");
+
+        offCtx.drawImage(img, 0, 0);
+
+        // get pixel data
+        const imageData = offCtx.getImageData(0, 0, dr.width, dr.height);
+        const data = imageData.data;
+
+        // apply tint only to non‑transparent pixels
+        let tintRGB;
+        if (color === "red") tintRGB = [255, 0, 0];
+        else if (color === "blue") tintRGB = [0, 0, 255];
+        else tintRGB = [0, 0, 0];
+
+        for (let p = 0; p < data.length; p += 4) {
+            if (data[p + 3] > 0) { // alpha > 0 means stroke pixel
+                data[p]   = (data[p]   * (1 - alpha)) + (tintRGB[0] * alpha);
+                data[p+1] = (data[p+1] * (1 - alpha)) + (tintRGB[1] * alpha);
+                data[p+2] = (data[p+2] * (1 - alpha)) + (tintRGB[2] * alpha);
+            }
+        }
+
+        offCtx.putImageData(imageData, 0, 0);
+
+        // draw tinted frame onto main canvas
+        drx.save();
+        drx.globalAlpha = 0.5; // ghost opacity
+        drx.drawImage(off, 0, 0);
+        drx.restore();
+    };
+}
+
+
+
+//document.getElementById("onionToggle").onchange = e => {
+//    showOnionSkin = e.target.checked;
+//    render();
+//};
+
+
+const onionBtn = document.getElementById('onionBtn')
+const onionBtn_icon = document.getElementById('onion-icon')
+onionBtn.addEventListener("click", () => {
+	
+    showOnionSkin = !showOnionSkin;
+    if (showOnionSkin){
+		 onionBtn_icon.classList.replace('bl-icons-onionskin_off', 'bl-icons-onionskin_on');
+		 render();
+    	show(cur);
+    }
+    else{
+		 onionBtn_icon.classList.replace('bl-icons-onionskin_on', 'bl-icons-onionskin_off');
+		 render();
+    	show(cur);
+		 
+    }
+    });
 
 const toggleBtn = document.getElementById('toggleLabel');
 const settings = document.getElementById('settings');
