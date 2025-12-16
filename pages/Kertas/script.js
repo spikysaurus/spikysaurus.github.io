@@ -48,18 +48,6 @@ function animate() {
 }
 animate()
 
-//function drawCheckerboard(ctx, width, height, size = 16) {
-//  for (let y = 0; y < height; y += size) {
-//    for (let x = 0; x < width; x += size) {
-//      // Alternate colors
-//      const isLight = ((x / size) + (y / size)) % 2 === 0;
-//      ctx.fillStyle = isLight ? "#ddd" : "#fff"; // light gray + white
-//      ctx.fillRect(x, y, size, size, size, size);
-//    }
-//  }
-//}
-//const ctx = dr.getContext("2d");
-//drawCheckerboard(ctx, dr.width, dr.height);
 
 //FILL TOOL
 // Attach button toggle
