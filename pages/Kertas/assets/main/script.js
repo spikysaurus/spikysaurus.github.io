@@ -53,7 +53,7 @@ let tools = [
 ];
 
 // Helper to set active tool
-let activeTool = null;
+let activeTool = "ToolBrush";
 // Activate one tool, deactivate others
 function setActiveTool(toolName) {
   tools.forEach(tool => {
@@ -505,25 +505,28 @@ document.addEventListener('wheel', e => {
 
 
 dr.onpointerdown = e => {
-    if (activeTool == "ToolPan" || activeTool == "ToolSelect" || activeTool == "ToolFill") return; // disable painting when ToolSelect
+    if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
     drawing = true;
     lx = e.offsetX;
     ly = e.offsetY;
     circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
+    }
 };
 dr.onpointermove = e => {
-    if (activeTool == "ToolPan" || activeTool == "ToolSelect" || activeTool == "ToolFill") return; 
+    if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
     if (drawing) {
         line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
         lx = e.offsetX;
         ly = e.offsetY;
     }
+    }
 };
 dr.onpointerup = () => {
-    if (activeTool == "ToolPan" || activeTool == "ToolSelect" || activeTool == "ToolFill") return; 
+if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
     drawing = false;
     frames[cur] = dr.toDataURL();
     render();
+    }
 };
 dr.onpointerleave = () => {
     drawing = false
