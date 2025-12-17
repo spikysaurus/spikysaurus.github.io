@@ -59,6 +59,12 @@ function setActiveTool(toolName) {
   tools.forEach(tool => {
     tool.active = (tool.name === toolName);
   });
+  // if the new tool is NOT Select, clear the overlay
+//  if (toolName != "ToolSelect") {
+//    ox.clearRect(0, 0, overlay.width, overlay.height);
+//    
+//  }
+  
   updateUI();
   activeTool = toolName;
 }
@@ -532,101 +538,79 @@ dr.onpointerleave = () => {
     drawing = false
 };
 
+// --- Selection state ---
+//let selStartX = null, selStartY = null, selEndX = null, selEndY = null;
 
-// selection handlers
-dr.addEventListener('pointerdown', e => {
-    if (activeTool == "ToolSelect") {
-        selStartX = e.offsetX;
-        selStartY = e.offsetY;
-        selEndX = selStartX;
-        selEndY = selStartY;
-    }
-});
-dr.addEventListener('pointermove', e => {
-    if (activeTool == "ToolSelect" && e.buttons === 1) {
-        selEndX = e.offsetX;
-        selEndY = e.offsetY;
-        ox.clearRect(0, 0, overlay.width, overlay.height);
-        ox.strokeStyle = 'rgba(0,255,0,0.8)';
-        ox.lineWidth = 1;
-        ox.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
-    }
-});
-dr.addEventListener('pointerup', e => {
-    if (activeTool == "ToolSelect") {
-        selEndX = e.offsetX;
-        selEndY = e.offsetY;
-//        ox.clearRect(0, 0, overlay.width, overlay.height);
-    }
-});
-//prev is canvas.addEve-
-// changed ctx to dr
-dr.addEventListener("pointerdown", e => {
-    if (e.pointerType === "pen" || e.pointerType === "touch" || e.pointerType === "mouse") {
-        drawing = true;
-        lastX = e.offsetX;
-        lastY = e.offsetY;
-//        ctx.beginPath();
-//        ctx.moveTo(lastX, lastY);
-    }
-    else{pass}
-});
-dr.addEventListener("pointermove", e => { 
-    if (!drawing) return;
-    if (e.pointerType === "pen" || e.pointerType === "touch" || e.pointerType === "mouse") {
-//        ctx.lineTo(e.offsetX, e.offsetY);
-//        ctx.stroke();
-        lastX = e.offsetX;
-        lastY = e.offsetY;
-    }
-    else{pass}
-});
-// Selection handlers with pointer events
-dr.addEventListener('pointerdown', e => {
-    if (activeTool == "ToolSelect") {
-        const { x, y } = getCanvasCoords(e, dr);
-        selStartX = x;
-        selStartY = y;
-        selEndX = x;
-        selEndY = y;
-    }
-});
+// --- Selection handlers ---
 
-// Selection handlers with pointer events
 dr.addEventListener('pointerdown', e => {
-    if (activeTool == "ToolSelect") {
-        const { x, y } = getCanvasCoords(e, dr);
-        selStartX = x;
-        selStartY = y;
-        selEndX = x;
-        selEndY = y;
-    }
+  if (activeTool !== "ToolSelect") return;
+  const { x, y } = getCanvasCoords(e, dr);
+  selStartX = x; selStartY = y;
+  selEndX = x; selEndY = y;
 });
 
 dr.addEventListener('pointermove', e => {
-    if (activeTool == "ToolSelect"&& e.pressure > 0) { // pressure>0 means pointer is down
-        const { x, y } = getCanvasCoords(e, dr);
-        selEndX = x;
-        selEndY = y;
-        ox.clearRect(0, 0, overlay.width, overlay.height);
-        ox.strokeStyle = 'purple';
-        ox.fillStyle = 'rgba(128, 0, 128, 0.2)'; // purple with 20% opacity
-        ox.fillRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
-        
-        ox.lineWidth = 1;
-        ox.setLineDash([6, 4]); // 6px dash, 4px gap
-        ox.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
-    }
+  if (activeTool !== "ToolSelect") return;
+
+  // pointer is down if buttons==1 or pressure>0
+  if (!(e.buttons === 1 || e.pressure > 0)) return;
+
+  const { x, y } = getCanvasCoords(e, dr);
+  selEndX = x; selEndY = y;
+
+  ox.clearRect(0, 0, overlay.width, overlay.height);
+
+  // style: green stroke if mouse, purple fill+dash if pressure
+  if (e.pressure > 0) {
+    ox.strokeStyle = 'purple';
+    ox.fillStyle = 'rgba(128,0,128,0.2)';
+    ox.fillRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
+    ox.setLineDash([6, 4]);
+  } else {
+    ox.strokeStyle = 'rgba(0,255,0,0.8)';
+    ox.setLineDash([]);
+  }
+
+  ox.lineWidth = 1;
+  ox.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
 });
 
 dr.addEventListener('pointerup', e => {
-    if (activeTool == "ToolSelect") {
-        const { x, y } = getCanvasCoords(e, dr);
-        selEndX = x;
-        selEndY = y;
-//        ox.clearRect(0, 0, overlay.width, overlay.height);
-    }
+  if (activeTool !== "ToolSelect") return;
+  const { x, y } = getCanvasCoords(e, dr);
+  selEndX = x; selEndY = y;
+
+  const w = Math.abs(selEndX - selStartX);
+  const h = Math.abs(selEndY - selStartY);
+  if (w < 5 || h < 5) {
+    ox.clearRect(0, 0, overlay.width, overlay.height);
+  }
 });
+
+// --- Freehand drawing handlers ---
+dr.addEventListener('pointerdown', e => {
+  if (["pen","touch","mouse"].includes(e.pointerType)) {
+    drawing = true;
+    lastX = e.offsetX;
+    lastY = e.offsetY;
+  }
+});
+
+dr.addEventListener('pointermove', e => {
+  if (!drawing) return;
+  if (["pen","touch","mouse"].includes(e.pointerType)) {
+    // ctx.lineTo(e.offsetX, e.offsetY);
+    // ctx.stroke();
+    lastX = e.offsetX;
+    lastY = e.offsetY;
+  }
+});
+
+dr.addEventListener('pointerup', e => {
+  drawing = false;
+});
+
 
 // Copy selected region
 document.getElementById('copy').onclick = () => {
