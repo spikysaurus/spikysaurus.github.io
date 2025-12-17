@@ -48,6 +48,7 @@ let tools = [
 	{ name: "ToolBrush",   active: true, btn: ToolBrushBtn },
 	{ name: "ToolEraser",   active: false, btn: ToolEraserBtn },
   { name: "ToolFill",   active: false, btn: ToolFillBtn },
+  { name: "ToolLassoFill",   active: false, btn: ToolLassoFillBtn },
   { name: "ToolSelect", active: false, btn: ToolSelectBtn },
   { name: "ToolPan",    active: false, btn: ToolPanBtn }
 ];
@@ -56,14 +57,14 @@ let tools = [
 let activeTool = "ToolBrush";
 // Activate one tool, deactivate others
 function setActiveTool(toolName) {
+activeTool = toolName;
+
   tools.forEach(tool => {
     tool.active = (tool.name === toolName);
+  
+  const toggleBtn = document.getElementById("ToolLassoFillToggle");
+  toggleBtn.style.display = (activeTool === "ToolLassoFill") ? "block" : "none";
   });
-  // if the new tool is NOT Select, clear the overlay
-//  if (toolName != "ToolSelect") {
-//    ox.clearRect(0, 0, overlay.width, overlay.height);
-//    
-//  }
   
   updateUI();
   activeTool = toolName;
@@ -156,23 +157,105 @@ animate()
   drx.putImageData(imageData, 0, 0);
 }
 
-// Canvas click handler (with zoom-safe coordinates)
-if (activeTool != "ToolFill") {
-  dr.addEventListener("pointerdown", e => {
-    if (activeTool != "ToolFill") return; // only fill if enabled
+// Fill Tool handlers
+dr.addEventListener("pointerdown", e => {
+ if (activeTool != "ToolFill") return; // only fill if enabled
 
-    const rect = dr.getBoundingClientRect();
+ const rect = dr.getBoundingClientRect();
 
-    // Map screen coords back to canvas pixel coords
-    const scaleX = dr.width / rect.width;
-    const scaleY = dr.height / rect.height;
+ // Map screen coords back to canvas pixel coords
+ const scaleX = dr.width / rect.width;
+ const scaleY = dr.height / rect.height;
 
-    const x = Math.floor((e.clientX - rect.left) * scaleX);
-    const y = Math.floor((e.clientY - rect.top) * scaleY);
+ const x = Math.floor((e.clientX - rect.left) * scaleX);
+ const y = Math.floor((e.clientY - rect.top) * scaleY);
 
-    fill(x, y, col.value, 0); // fill with chosen color
-  });
-}
+ fill(x, y, col.value, 0); // fill with chosen color
+});
+
+// --- Globals for lasso ---
+let lassoPoints = [];
+let isLassoing = false;
+let lassoEraseMode = false; // default: fill mode
+
+// --- Toggle button ---
+const ToolLassoFillToggle = document.getElementById("ToolLassoFillToggle");
+
+ToolLassoFillToggle .addEventListener("click", () => {
+  lassoEraseMode = !lassoEraseMode;
+  // update button label or style
+  ToolLassoFillToggle.textContent = lassoEraseMode ? "Erase" : "Fill";
+});
+
+// --- Lasso tool handlers ---
+dr.addEventListener("pointerdown", e => {
+  if (activeTool !== "ToolLassoFill") return;
+
+  const rect = dr.getBoundingClientRect();
+  const scaleX = dr.width / rect.width;
+  const scaleY = dr.height / rect.height;
+  const x = Math.floor((e.clientX - rect.left) * scaleX);
+  const y = Math.floor((e.clientY - rect.top) * scaleY);
+
+  lassoPoints = [{ x, y }];
+  isLassoing = true;
+});
+
+dr.addEventListener("pointermove", e => {
+  if (activeTool !== "ToolLassoFill" || !isLassoing) return;
+
+  const rect = dr.getBoundingClientRect();
+  const scaleX = dr.width / rect.width;
+  const scaleY = dr.height / rect.height;
+  const x = Math.floor((e.clientX - rect.left) * scaleX);
+  const y = Math.floor((e.clientY - rect.top) * scaleY);
+
+  lassoPoints.push({ x, y });
+
+  // draw lasso path on overlay
+  ox.clearRect(0, 0, overlay.width, overlay.height);
+  ox.strokeStyle = "rgba(0,0,255,0.8)";
+  ox.lineWidth = 1;
+  ox.beginPath();
+  ox.moveTo(lassoPoints[0].x, lassoPoints[0].y);
+  for (let i = 1; i < lassoPoints.length; i++) {
+    ox.lineTo(lassoPoints[i].x, lassoPoints[i].y);
+  }
+  ox.stroke();
+});
+
+dr.addEventListener("pointerup", e => {
+  if (activeTool !== "ToolLassoFill" || !isLassoing) return;
+  isLassoing = false;
+
+  ox.clearRect(0, 0, overlay.width, overlay.height);
+
+  const ctx = drx; // main drawing context
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(lassoPoints[0].x, lassoPoints[0].y);
+  for (let i = 1; i < lassoPoints.length; i++) {
+    ctx.lineTo(lassoPoints[i].x, lassoPoints[i].y);
+  }
+  ctx.closePath();
+  ctx.clip();
+
+  if (lassoEraseMode) {
+    // erase inside lasso
+    ctx.clearRect(0, 0, dr.width, dr.height);
+  } else {
+    // fill inside lasso
+    ctx.fillStyle = col.value;
+    ctx.fillRect(0, 0, dr.width, dr.height);
+  }
+
+  ctx.restore();
+
+  lassoPoints = [];
+  frames[cur] = dr.toDataURL();
+  render();
+});
+
 
  
 // --- RESIZE STRETCH ---
@@ -333,7 +416,7 @@ const AliasedBtn = document.getElementById('aliased');
 AliasedBtn.onclick = () => {
     aliased = !aliased;
     if (!aliased) {
-        AliasedBtn.style.backgroundColor = "yellow";
+        AliasedBtn.style.backgroundColor = "gray";
         useAliased = true;
         
     } else {
@@ -606,11 +689,6 @@ dr.addEventListener('pointermove', e => {
     ox.fillRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
     ox.setLineDash([6, 4]);
 	 } 
-//else {
-//    ox.strokeStyle = 'rgba(0,255,0,0.8)';
-//    ox.setLineDash([]);
-//  }
-
   ox.lineWidth = 1;
   ox.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
 
@@ -1406,6 +1484,7 @@ function updateUI() {
 ToolBrushBtn.addEventListener("click", () => setActiveTool("ToolBrush"));
 ToolEraserBtn.addEventListener("click", () => setActiveTool("ToolEraser"));
 ToolFillBtn.addEventListener("click", () => setActiveTool("ToolFill"));
+ToolLassoFillBtn.addEventListener("click", () => setActiveTool("ToolLassoFill"));
 ToolSelectBtn.addEventListener("click", () => setActiveTool("ToolSelect"));
 ToolPanBtn.addEventListener("click", () => setActiveTool("ToolPan"));
 
