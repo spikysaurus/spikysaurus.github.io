@@ -201,6 +201,9 @@ dr.addEventListener("pointerdown", e => {
   isLassoing = true;
 });
 
+
+let rainbowOffset = 0; // animation phase
+
 dr.addEventListener("pointermove", e => {
   if (activeTool !== "ToolLassoFill" || !isLassoing) return;
 
@@ -212,17 +215,30 @@ dr.addEventListener("pointermove", e => {
 
   lassoPoints.push({ x, y });
 
-  // draw lasso path on overlay
+  // clear overlay
   ox.clearRect(0, 0, overlay.width, overlay.height);
-  ox.strokeStyle = "rgba(0,0,255,0.8)";
-  ox.lineWidth = 1;
+
+  // create animated rainbow gradient
+  const gradient = ox.createLinearGradient(0, 0, overlay.width, 0);
+  for (let i = 0; i <= 6; i++) {
+    const hue = (rainbowOffset + i * 60) % 360;
+    gradient.addColorStop(i / 6, `hsl(${hue}, 100%, 50%)`);
+  }
+  ox.strokeStyle = gradient;
+  ox.lineWidth = 2;
+
+  // draw lasso path
   ox.beginPath();
   ox.moveTo(lassoPoints[0].x, lassoPoints[0].y);
   for (let i = 1; i < lassoPoints.length; i++) {
     ox.lineTo(lassoPoints[i].x, lassoPoints[i].y);
   }
   ox.stroke();
+
+  // advance rainbow animation
+  rainbowOffset = (rainbowOffset + 5) % 360; // 5 is speed
 });
+
 
 dr.addEventListener("pointerup", e => {
   if (activeTool !== "ToolLassoFill" || !isLassoing) return;
@@ -657,23 +673,21 @@ dr.addEventListener('pointerdown', e => {
   selEndX = x; selEndY = y;
 });
 
+
 dr.addEventListener('pointermove', e => {
   if (activeTool !== "ToolSelect") return;
   const { x, y } = getCanvasCoords(e, dr);
 
   if (isDraggingHandle) {
-    // only move selection when handle is active
     if (e.buttons === 1 || e.pressure > 0) {
       const dx = x - dragStartX;
       const dy = y - dragStartY;
-
       selStartX = frozenStartX + dx;
       selEndX   = frozenEndX   + dx;
       selStartY = frozenStartY + dy;
       selEndY   = frozenEndY   + dy;
     }
   } else {
-    // normal selection resize
     if (e.buttons === 1 || e.pressure > 0) {
       selEndX = x;
       selEndY = y;
@@ -682,14 +696,20 @@ dr.addEventListener('pointermove', e => {
 
   ox.clearRect(0, 0, overlay.width, overlay.height);
 
-  // style: green stroke if mouse, purple fill+dash if pressure
+  // fill if pressure
   if (e.pressure > 0) {
-    ox.strokeStyle = 'purple';
     ox.fillStyle = 'rgba(128,0,128,0.2)';
     ox.fillRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
     ox.setLineDash([6, 4]);
-	 } 
-  ox.lineWidth = 1;
+  }
+  // 🌈 rainbow stroke
+  const gradient = ox.createLinearGradient(selStartX, selStartY, selEndX, selEndY);
+  for (let i = 0; i <= 6; i++) {
+    const hue = (rainbowOffset + i * 60) % 360;
+    gradient.addColorStop(i / 6, `hsl(${hue}, 100%, 50%)`);
+  }
+  ox.strokeStyle = gradient;
+  ox.lineWidth = 2;
   ox.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
 
   // draw center handle
@@ -697,10 +717,13 @@ dr.addEventListener('pointermove', e => {
   const h = selEndY - selStartY;
   const centerX = selStartX + w / 2;
   const centerY = selStartY + h / 2;
-  ox.fillStyle = 'orange';
+  ox.fillStyle = gradient;
   ox.beginPath();
   ox.arc(centerX, centerY, 6, 0, Math.PI * 2);
   ox.fill();
+
+  // advance rainbow animation
+  rainbowOffset = (rainbowOffset + 5) % 360; // adjust speed here
 });
 
 dr.addEventListener('pointerup', e => {
@@ -1063,7 +1086,7 @@ document.getElementById('pdf').onclick = async () => {
 }
 
 document.getElementById('add').onclick = add
-//Add Frame
+// Add Frame
 function add() {
     drx.clearRect(0, 0, dr.width, dr.height);
     frames.push(dr.toDataURL());
@@ -1071,6 +1094,32 @@ function add() {
     render();
     show(cur);
 }
+
+// Delete Frame
+document.getElementById('deleteFrame').onclick = deleteFrame;
+
+function deleteFrame() {
+  if (frames.length === 0) return; // nothing to delete
+
+  const confirmDelete = confirm("Are you sure you want to delete this frame?");
+  if (!confirmDelete) return;
+
+  // remove current frame
+  frames.splice(cur, 1);
+  if (frames.length === 0) {
+    add()
+  } else {
+    // adjust current index
+    if (cur >= frames.length) {
+      cur = frames.length - 1;
+    }
+  }
+
+  render();
+  show(cur);
+}
+
+
 
 document.getElementById('load').onclick = () => {
     const u = document.getElementById('url').value.trim();
