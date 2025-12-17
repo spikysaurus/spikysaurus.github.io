@@ -1058,6 +1058,10 @@ document.getElementById('exportGif').onclick = exportGif;
 // Export GIF from collected frames
 GifDelay = document.getElementById('GifDelay');
 function exportGif() {
+	let fps = parseInt(GifDelay.value, 10);
+	  if (isNaN(fps) || fps <= 0) fps = 5; // fallback default FPS
+	  const delayMs = 1000 / fps;
+	  
     if (!frames.length) {
         alert("No frames to export!");
         return;
@@ -1091,7 +1095,7 @@ function exportGif() {
             // Draw the frame image on top
             tempCtx.drawImage(img, 0, 0);
 
-            gif.addFrame(tempCtx, { delay: GifDelay.value }); // 200ms per frame
+            gif.addFrame(tempCtx, { delay: delayMs }); // Delay
 
             loadedCount++;
             if (loadedCount === frames.length) {
@@ -1114,7 +1118,6 @@ let playTimer = null;
 
 const playBtn = document.getElementById("playBtn");
 const playBtn_icon = document.getElementById("playBtn_icon");
-const delayInput = document.getElementById("GifDelay");
 
 playBtn.onclick = () => {
     if (playing) {
@@ -1136,11 +1139,6 @@ function playAnimation() {
         return;
     }
     playing = true;
-//    if (showOnionSkin){
-//    showOnionSkin = false;
-//    onionBtn_icon.classList.replace('bl-icons-onionskin_on', 'bl-icons-onionskin_off');
-//    
-//    }
     
     playIndex = 0;
     nextFrame();
@@ -1159,19 +1157,22 @@ function nextFrame() {
     img.src = frame.src || frame; // handle if frames[] is just dataURLs
 
     img.onload = () => {
+        // clear and draw current frame
         drx.clearRect(0, 0, dr.width, dr.height);
         drx.drawImage(img, 0, 0);
 
-        // get delay from input field
-        const delayMs = parseInt(delayInput.value, 10) || 200;
+        // read FPS from input, convert to ms per frame
+        let fps = parseInt(GifDelay.value, 10);
+        if (isNaN(fps) || fps <= 0) fps = 5; // fallback default FPS
+        const delayMs = 1000 / fps;
 
+        // schedule next frame
         playTimer = setTimeout(() => {
             playIndex = (playIndex + 1) % frames.length;
             nextFrame();
         }, delayMs);
     };
 }
-
 //Duplicate Frame
 document.getElementById("duplicateBtn").onclick = duplicateFrame;
 
@@ -1207,7 +1208,7 @@ underlay.width = dr.width;
 underlay.height = dr.height;
 const underCtx = underlay.getContext("2d");
 
-// Assume 'dr' is your main canvas
+// dr is main canvas
 // 'drx' is its context
 // We'll stack them in the DOM so underlay is behind main
 dr.parentNode.insertBefore(underlay, dr);
