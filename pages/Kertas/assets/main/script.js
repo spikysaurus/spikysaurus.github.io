@@ -490,8 +490,6 @@ function line(x0, y0, x1, y1, s, c, a) {
     
 }
 
-
-
 dr.onpointermove = e => {
     if (activeTool == "ToolPan") return;
     if (drawing) {
@@ -830,9 +828,6 @@ document.getElementById('delete').onclick = () => {
 document.getElementById('cut').onclick = () => {
 	document.getElementById('copy').onclick();
 	document.getElementById('delete').onclick();
-//	drx.clearRect(Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(selEndX - selStartX), Math.abs(selEndY - selStartY));
-//	frames[cur] = dr.toDataURL();
-//	render();
 };
 
 
@@ -842,9 +837,6 @@ document.getElementById('paste').onclick = () => {
     // compute selection bounds
     const w = selEndX - selStartX;
     const h = selEndY - selStartY;
-
-    // clear overlay
-//    ox.clearRect(0, 0, overlay.width, overlay.height);
 
     // draw clipboard image scaled to fit selection
     drx.drawImage(
@@ -860,10 +852,6 @@ document.getElementById('paste').onclick = () => {
     render();
   }
 };
-
-
-
-
 
 document.getElementById('clr').onclick = () => {
     const confirmClear = confirm("Clear the canvas?");
@@ -887,8 +875,6 @@ document.getElementById('save').onclick = () => {
     link.href = tmp.toDataURL();
     link.click()
 }
-
-
 
 // Swap with next frame
 document.getElementById('swapNext').onclick = () => {
@@ -918,10 +904,9 @@ document.getElementById('swapPrev').onclick = () => {
     }
 };
 
-//Drag and drop frmae
 function render() {
-    const tl = document.getElementById('line')
-    tl.innerHTML = ''
+    const timeline = document.getElementById('timeline')
+    timeline.innerHTML = ''
     frames.forEach((f, i) => {
         const d = document.createElement('div')
         d.className = 'f' + (i === cur ? ' active' : '')
@@ -952,38 +937,34 @@ function render() {
                 render()
             }
         })
-        tl.appendChild(d)
+        timeline.appendChild(d)
     })
 }
 
-//function show(i) {
-//    if (frames[i]) {
-//        const img = new Image();
-//        img.onload = () => {
-//            drx.clearRect(0, 0, dr.width, dr.height);
-//            drx.drawImage(img, 0, 0)
-//        };
-//        img.src = frames[i]
-//    }
-//}
-//Export JSON
+// Export JSON
 document.getElementById('export').onclick = () => {
-    const bgUrl = document.getElementById('url').value.trim()
+    const bgUrl = document.getElementById('url').value.trim();
+
     const data = {
         background: bgUrl, // store the image URL input
+        canvas: {
+            width: dr.width,
+            height: dr.height
+        },
         frames: frames.map((f, i) => ({
             index: i,
             url: f
         }))
-    }
+    };
+
     const blob = new Blob([JSON.stringify(data, null, 2)], {
         type: "application/json"
-    })
-    const link = document.createElement('a')
-    link.download = "document.json"
-    link.href = URL.createObjectURL(blob)
-    link.click()
-}
+    });
+    const link = document.createElement('a');
+    link.download = "document.json";
+    link.href = URL.createObjectURL(blob);
+    link.click();
+};
 
 // Import JSON
 document.getElementById('import').onclick = () => {
@@ -1005,8 +986,9 @@ document.getElementById('import').onclick = () => {
                     img.crossOrigin = "anonymous";
                     img.src = obj.background;
                     img.onload = () => {
-                        const w = obj.width || img.width;
-                        const h = obj.height || img.height;
+                        // Prefer canvas size from JSON, fallback to image size
+                        const w = (obj.canvas && obj.canvas.width) || img.width;
+                        const h = (obj.canvas && obj.canvas.height) || img.height;
                         resize(w, h);
 
                         // Update input fields
@@ -1017,13 +999,13 @@ document.getElementById('import').onclick = () => {
                         bgx.drawImage(img, 0, 0, w, h);
                         drx.clearRect(0, 0, dr.width, dr.height);
                     };
-                } else if (obj.width && obj.height) {
+                } else if (obj.canvas && obj.canvas.width && obj.canvas.height) {
                     // Resize even if no background image
-                    resize(obj.width, obj.height);
+                    resize(obj.canvas.width, obj.canvas.height);
 
                     // Update input fields
-                    document.getElementById('canvasWidth').value = obj.width;
-                    document.getElementById('canvasHeight').value = obj.height;
+                    document.getElementById('canvasWidth').value = obj.canvas.width;
+                    document.getElementById('canvasHeight').value = obj.canvas.height;
                 }
 
                 // Restore frames
@@ -1044,6 +1026,7 @@ document.getElementById('import').onclick = () => {
     input.click();
 };
 
+
 // Load Image
 function loadImage(url) {
     return new Promise((resolve, reject) => {
@@ -1055,6 +1038,71 @@ function loadImage(url) {
     })
 }
 
+function importImageSequence(files, bgUrl = null) {
+    frames.length = files.length;
+    let loaded = 0;
+
+    files.forEach((file, idx) => {
+        const reader = new FileReader();
+
+        reader.onload = async () => {
+            try {
+                // For the very first frame, resize canvas BEFORE composing
+                if (idx === 0) {
+                    const firstImg = await loadImage(reader.result);
+                    resize(firstImg.width, firstImg.height);
+
+                    document.getElementById('canvasWidth').value = firstImg.width;
+                    document.getElementById('canvasHeight').value = firstImg.height;
+                }
+
+                // Compose background + frame into a dataURL using the resized canvas
+                const dataURL = await composeFrame(bgUrl, reader.result, dr.width, dr.height);
+                frames[idx] = dataURL;
+                loaded++;
+
+                if (loaded === files.length) {
+                    cur = 0;
+                    show(cur);
+                    render();
+                }
+            } catch (e) {
+                console.error(`Error composing frame ${idx}:`, e);
+            }
+        };
+
+        reader.onerror = () => console.error(`Error reading file: ${file.name}`);
+        reader.readAsDataURL(file);
+    });
+}
+
+// Helper: load image from URL or dataURL
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+    });
+}
+
+
+
+// --- Import Button Handler for Image Sequences ---
+document.getElementById('importSequence').onclick = () => {
+    const input = document.createElement('input');
+    input.type = "file";
+    input.multiple = true;              // allow multiple images
+    input.accept = "image/*";           // restrict to image files only
+    input.onchange = e => {
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
+        importImageSequence(files);     // call the importer
+    };
+    input.click();
+};
+
 // Helper: composite background + frame into a dataURL
 async function composeFrame(bgUrl, frameUrl, outW, outH) {
     const can = document.createElement('canvas')
@@ -1062,8 +1110,8 @@ async function composeFrame(bgUrl, frameUrl, outW, outH) {
     can.height = outH
     const ctx = can.getContext('2d')
     // Fill transparent background to avoid PDF black page
-    ctx.fillStyle = "#ffffff"
-    ctx.fillRect(0, 0, outW, outH)
+//    ctx.fillStyle = "#ffffff"
+//    ctx.fillRect(0, 0, outW, outH)
     // Draw background if present
     if (bgUrl) {
         try {
@@ -1088,7 +1136,8 @@ async function composeFrame(bgUrl, frameUrl, outW, outH) {
             y = (outH - h) / 2
         ctx.drawImage(frImg, x, y, w, h)
     }
-    return can.toDataURL("image/jpeg", 0.92) // smaller PDF size; use PNG if needed
+	return can.toDataURL("image/png");
+//    return can.toDataURL("image/jpeg", 0.92) // smaller PDF size; use PNG if needed
 }
 // Export PDF
 document.getElementById('pdf').onclick = async () => {
@@ -1332,7 +1381,7 @@ const playBtn_icon = document.getElementById("playBtn_icon");
 
 playBtn.onclick = () => {
     if (playing) {
-        stoToolPanimation();
+        stopAnimation();
         playBtn_icon.classList.replace('bl-icons-pause', 'bl-icons-play');
         show(cur);
 //        render();
@@ -1355,7 +1404,9 @@ function playAnimation() {
     nextFrame();
 }
 
-function stoToolPanimation() {
+///////////////////////
+
+function stopAnimation() {
     playing = false;
     clearTimeout(playTimer);
 }
@@ -1412,7 +1463,6 @@ function duplicateFrame() {
         alert("No frames to duplicate!");
         return;
     }
-
     // Get current frame
     const currentFrame = frames[cur];
 

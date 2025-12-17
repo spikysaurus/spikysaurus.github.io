@@ -23,8 +23,8 @@ top:0;
 
 
 #bar button{
-  flex: 1 1 auto;
-  min-width:auto;
+  flex: 0 0 auto;
+/*  min-width:auto;*/
   padding: 0.3rem;
   border-radius: 6px;
   background: lightgray;
@@ -72,7 +72,7 @@ input[type=color] {
   padding:0;
   border:none;
 }
-#settings{text-align:center;width:200px;z-index:20;position:fixed;bottom:90px;left:10px;background-color:lightgray;color:black;padding:10px;border-radius:5px;font-size:12px;transition: 0.3s;}
+#settings{margin-right:10px;text-align:center;width:auto;z-index:20;position:fixed;bottom:90px;left:10px;background-color:lightgray;color:black;padding:10px;border-radius:5px;font-size:12px;transition: 0.3s;}
 #settings button{
 width:auto;
 margin-top:5px;
@@ -116,8 +116,18 @@ input[type=number] {
 	color: black;
 	cursor: pointer;
 }
+
+.sliders{
+display:flex;
+flex-direction:column;
+gap:0	px;
+position:fixed;
+bottom:90px;
+left:10px;
+width:32px;
+}
   
-#line {
+#timeline {
   position:fixed;   /* stick to viewport */
   bottom:0;         /* anchor at bottom */
   left:0;
@@ -131,7 +141,9 @@ input[type=number] {
   justify-content:left;
 }
 .f {
-  width:40px;
+	flex:0 0 auto;
+/*	flex-shrink: 0; */
+  width:20px;
   background:#666;
   border:2px solid #999;
   cursor:pointer;
@@ -142,6 +154,42 @@ input[type=number] {
 
 .f.active {
   border-color:#0f0;
+}
+
+@media (orientation: landscape) {
+#timeline {
+	width:24px;
+  position:fixed;   /* stick to viewport */
+  top:0;         /* anchor at bottom */
+  bottom:0;
+  left:0;
+  flex-direction: column;
+  overflow-x:hidden;
+  overflow-y:auto;
+  justify-content:flex-start;
+}
+.panel-bottom {
+	bottom: 0px;
+	left: 40px;
+}
+#settings{
+bottom:40px;
+left:40px;
+}
+.sliders{
+flex-direction:row;
+bottom:40px;
+left:40px;
+gap:5px;
+}
+#bar{
+width:95px;
+left:32px;
+/*margin-bottom:80px;*/
+/*/*top:-10px;*/*/
+gap:0px;
+/*height:auto;*/
+}
 }
 
 #stage {
@@ -214,13 +262,7 @@ canvas {
 
 }
 
-/*Slider*/
 
-.sliders{
-position:fixed;
-bottom:90px;
-left:10px;
-}
 
 /*DRAG BUTTONS*/
 :root {
@@ -233,6 +275,7 @@ left:10px;
 
   .control {
     display: flex;
+    
     align-items: center;
     margin: 5px 0;
     gap: 5px;

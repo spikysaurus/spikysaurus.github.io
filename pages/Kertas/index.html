@@ -77,6 +77,7 @@
 				<button id="pdf"><span class="bl-icons-output"></span>Export PDF</button>
             <button id="save"><span class="bl-icons-restrict_render_off"></span>Snapshot</button>
            </div>
+           <button id="importSequence">Import Image Sequence</button>
 				</div>
 				
 				<!-- Toggle button -->
@@ -87,6 +88,7 @@
 <button id="swapNext"><span class="bl-icons-area_join"></span></button>
 <button id="deleteFrame"><span class="bl-icons-trash"></span></button>
 <button id="duplicateBtn"><span class="bl-icons-duplicate"></span></button>
+<button id="duplicateLinkedFrameBtn"><span class="bl-icons-duplicate"></span></button>
 <button id="add"><span class="bl-icons-file_new"></span></button>
 <button id="playBtn"><span id="playBtn_icon"class="bl-icons-play"></span></button>
 <button id="onionBtn"><span class="bl-icons-onionskin_on"></span></button>
@@ -137,12 +139,14 @@
 </div>
 		
       
-      <div id="line"></div> 
+      <div id="timeline"></div> 
       <div id="stage">  
          <div id="stack">
 				<canvas id="checkerboard"></canvas>
             <canvas id="bg"></canvas>
+            
             <canvas id="draw"></canvas>
+            
             <canvas id="overlay"></canvas>
 				
 
