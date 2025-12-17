@@ -12,8 +12,9 @@ const sz = document.getElementById('sz'),
     op = document.getElementById('op'),
     col = document.getElementById('col')
 
-let activeTool = null;
-   
+
+let clipboard = null;
+
 let drawing = false,
     lx, ly, eras = false,
     px = 0,
@@ -31,6 +32,36 @@ let cur = 0
 let ToolSelect = false,selStartX, selStartY, selEndX, selEndY;
 let ToolFill = false; 
 let ToolPan = false;
+
+const ToolPanBtn = document.getElementById('ToolPanBtn')
+const ToolSelectBtn = document.getElementById('ToolSelectBtn');
+const ToolFillBtn = document.getElementById("ToolFillBtn");
+
+const onionBtn = document.getElementById('onionBtn')
+const toggleBtn = document.getElementById('toggleLabel');
+const settings = document.getElementById('settings');
+const checkerboardBtn = document.getElementById('checkerboardBtn');
+
+
+// Tool state
+let tools = [
+	{ name: "ToolBrush",   active: true, btn: ToolBrushBtn },
+	{ name: "ToolEraser",   active: false, btn: ToolEraserBtn },
+  { name: "ToolFill",   active: false, btn: ToolFillBtn },
+  { name: "ToolSelect", active: false, btn: ToolSelectBtn },
+  { name: "ToolPan",    active: false, btn: ToolPanBtn }
+];
+
+// Helper to set active tool
+let activeTool = null;
+// Activate one tool, deactivate others
+function setActiveTool(toolName) {
+  tools.forEach(tool => {
+    tool.active = (tool.name === toolName);
+  });
+  updateUI();
+  activeTool = toolName;
+}
 
 function setSize(w, h) {
     stack.style.width = w + 'px';
@@ -52,19 +83,7 @@ animate()
 
 
 //FILL TOOL
-// Attach button toggle
-	const ToolFillBtn = document.getElementById("ToolFillBtn");
-    ToolFillBtn.addEventListener("click", () => {
-    	
-      ToolFill = !ToolFill;
-		 if (ToolFill) {
-		     ToolFillBtn.style.backgroundColor = "yellow";
-		     
-		 } else {
-			ToolFillBtn.style.backgroundColor = "";
-		 }
-    });
-    
+	
 	function fill(x, y, fillColor, tolerance) {
   const w = dr.width, h = dr.height;
   const imageData = drx.getImageData(0, 0, w, h);
@@ -132,9 +151,9 @@ animate()
 }
 
 // Canvas click handler (with zoom-safe coordinates)
-if (!ToolSelect) {
+if (activeTool != "ToolFill") {
   dr.addEventListener("pointerdown", e => {
-    if (!ToolFill) return; // only fill if enabled
+    if (activeTool != "ToolFill") return; // only fill if enabled
 
     const rect = dr.getBoundingClientRect();
 
@@ -319,35 +338,34 @@ AliasedBtn.onclick = () => {
 
 //Painting
 function circ(x, y, s, c, a) {
-    if (!ToolFill) {
-        drx.globalAlpha = a;
+  drx.globalAlpha = a;
 
-        if (eras) {
-            drx.globalCompositeOperation = 'destination-out';
-            drx.fillStyle = 'rgba(0,0,0,1)'; // <-- can just use any solid color
-        } else {
-            drx.globalCompositeOperation = 'source-over';
-            drx.fillStyle = c;
-        }
+  if (activeTool == "ToolEraser") {
+      drx.globalCompositeOperation = 'destination-out';
+      drx.fillStyle = 'rgba(0,0,0,1)'; // <-- can just use any solid color
+  } else {
+      drx.globalCompositeOperation = 'source-over';
+      drx.fillStyle = c;
+  }
 
-        if (useAliased) {
-            const r = Math.floor(s / 2);
-            for (let py = -r; py <= r; py++) {
-                for (let px = -r; px <= r; px++) {
-                    if (px * px + py * py <= r * r) {
-                        drx.fillRect(Math.round(x + px), Math.round(y + py), 1, 1);
-                    }
-                }
-            }
-        } else {
-            drx.beginPath();
-            drx.arc(x, y, s / 2, 0, Math.PI * 2);
-            drx.fill();
-        }
+  if (useAliased) {
+      const r = Math.floor(s / 2);
+      for (let py = -r; py <= r; py++) {
+          for (let px = -r; px <= r; px++) {
+              if (px * px + py * py <= r * r) {
+                  drx.fillRect(Math.round(x + px), Math.round(y + py), 1, 1);
+              }
+          }
+      }
+  } else {
+      drx.beginPath();
+      drx.arc(x, y, s / 2, 0, Math.PI * 2);
+      drx.fill();
+  }
 
-        drx.globalAlpha = 1;
-        drx.globalCompositeOperation = 'source-over'; // reset after erasing
-    }
+  drx.globalAlpha = 1;
+  drx.globalCompositeOperation = 'source-over'; // reset after erasing
+    
 }
 
 function line(x0, y0, x1, y1, s, c, a) {
@@ -368,7 +386,7 @@ function line(x0, y0, x1, y1, s, c, a) {
 
 
 dr.onpointermove = e => {
-    if (ToolPan) return;
+    if (activeTool == "ToolPan") return;
     if (drawing) {
         const { x, y } = getCanvasCoords(e, dr);
         
@@ -379,7 +397,7 @@ dr.onpointermove = e => {
 };
 
 dr.onpointerup = e => {
-    if (ToolPan) return;
+    if (activeTool == "ToolPan") return;
     drawing = false;
     frames[cur] = dr.toDataURL();
     render();
@@ -390,19 +408,19 @@ dr.onpointereave = () => {
     drawing = false
 }
 document.addEventListener('pointerdown', e => {
-    if (!ToolPan) return;
+    if (activeTool != "ToolPan") return;
     psx = e.clientX - targetPx;
     psy = e.clientY - targetPy;
     document.body.style.cursor = 'grab'
 })
 document.addEventListener('pointermove', e => {
-    if (!ToolPan) return;
+    if (activeTool != "ToolPan") return;
     if (e.buttons !== 1) return;
     targetPx = e.clientX - psx;
     targetPy = e.clientY - psy
 })
 document.addEventListener('pointerup', () => {
-    if (!ToolPan) return;
+    if (activeTool != "ToolPan") return;
     document.body.style.cursor = 'default'
 })
 
@@ -483,32 +501,18 @@ document.addEventListener('wheel', e => {
     passive: false
 })
 
-//let ToolSelect = false,selStartX, selStartY, selEndX, selEndY;
-let clipboard = null;
-const ToolSelectBtn = document.getElementById('ToolSelectBtn');
-ToolSelectBtn.onclick = () => {
-    ToolSelect = !ToolSelect;
-    if (ToolSelect) {
-        ToolSelectBtn.style.backgroundColor = "yellow";
-        ToolSelectBtn.style.color = "black";
-        
-    } else {
-        ToolSelectBtn.style.backgroundColor = "";
-        ox.clearRect(0, 0, overlay.width, overlay.height);
-    }
-//    ToolSelectBtn.classList.toggle(!ToolSelect, ToolSelect);
-};
+
 
 
 dr.onpointerdown = e => {
-    if (ToolPan || ToolSelect || ToolFill) return; // disable painting when ToolSelect
+    if (activeTool == "ToolPan" || activeTool == "ToolSelect" || activeTool == "ToolFill") return; // disable painting when ToolSelect
     drawing = true;
     lx = e.offsetX;
     ly = e.offsetY;
     circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
 };
 dr.onpointermove = e => {
-    if (ToolPan || ToolSelect  || ToolFill) return;
+    if (activeTool == "ToolPan" || activeTool == "ToolSelect" || activeTool == "ToolFill") return; 
     if (drawing) {
         line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
         lx = e.offsetX;
@@ -516,7 +520,7 @@ dr.onpointermove = e => {
     }
 };
 dr.onpointerup = () => {
-    if (ToolPan || ToolSelect  || ToolFill) return;
+    if (activeTool == "ToolPan" || activeTool == "ToolSelect" || activeTool == "ToolFill") return; 
     drawing = false;
     frames[cur] = dr.toDataURL();
     render();
@@ -528,7 +532,7 @@ dr.onpointerleave = () => {
 
 // selection handlers
 dr.addEventListener('pointerdown', e => {
-    if (ToolSelect) {
+    if (activeTool == "ToolSelect") {
         selStartX = e.offsetX;
         selStartY = e.offsetY;
         selEndX = selStartX;
@@ -536,7 +540,7 @@ dr.addEventListener('pointerdown', e => {
     }
 });
 dr.addEventListener('pointermove', e => {
-    if (ToolSelect && e.buttons === 1) {
+    if (activeTool == "ToolSelect" && e.buttons === 1) {
         selEndX = e.offsetX;
         selEndY = e.offsetY;
         ox.clearRect(0, 0, overlay.width, overlay.height);
@@ -546,7 +550,7 @@ dr.addEventListener('pointermove', e => {
     }
 });
 dr.addEventListener('pointerup', e => {
-    if (ToolSelect) {
+    if (activeTool == "ToolSelect") {
         selEndX = e.offsetX;
         selEndY = e.offsetY;
 //        ox.clearRect(0, 0, overlay.width, overlay.height);
@@ -576,7 +580,7 @@ dr.addEventListener("pointermove", e => {
 });
 // Selection handlers with pointer events
 dr.addEventListener('pointerdown', e => {
-    if (ToolSelect) {
+    if (activeTool == "ToolSelect") {
         const { x, y } = getCanvasCoords(e, dr);
         selStartX = x;
         selStartY = y;
@@ -587,7 +591,7 @@ dr.addEventListener('pointerdown', e => {
 
 // Selection handlers with pointer events
 dr.addEventListener('pointerdown', e => {
-    if (ToolSelect) {
+    if (activeTool == "ToolSelect") {
         const { x, y } = getCanvasCoords(e, dr);
         selStartX = x;
         selStartY = y;
@@ -597,7 +601,7 @@ dr.addEventListener('pointerdown', e => {
 });
 
 dr.addEventListener('pointermove', e => {
-    if (ToolSelect && e.pressure > 0) { // pressure>0 means pointer is down
+    if (activeTool == "ToolSelect"&& e.pressure > 0) { // pressure>0 means pointer is down
         const { x, y } = getCanvasCoords(e, dr);
         selEndX = x;
         selEndY = y;
@@ -613,7 +617,7 @@ dr.addEventListener('pointermove', e => {
 });
 
 dr.addEventListener('pointerup', e => {
-    if (ToolSelect) {
+    if (activeTool == "ToolSelect") {
         const { x, y } = getCanvasCoords(e, dr);
         selEndX = x;
         selEndY = y;
@@ -660,30 +664,7 @@ document.getElementById('paste').onclick = () => {
 
 
 
-const brushBtn = document.getElementById('brush')
-const brushBtn_icon = document.getElementById('brush-icon')
-brushBtn.onclick = () => {
-    eras = !eras
-    if (eras){
-    	brushBtn_icon.classList.replace('bl-icons-greasepencil', 'bl-icons-meta_ellipsoid');
-    }
-    else{
-    	brushBtn_icon.classList.replace('bl-icons-meta_ellipsoid', 'bl-icons-greasepencil');
-    }
-    
-    	
-}
-const ToolPanBtn = document.getElementById('ToolPanBtn')
-ToolPanBtn.onclick = () => {
-    ToolPan = !ToolPan;
-    if (ToolPan) {
-        ToolPanBtn.style.backgroundColor = "yellow";
-        ToolPanBtn.style.color = "black";
-    } else {
-        ToolPanBtn.style.backgroundColor = "";
-    }
-//    ToolPanBtn.classList.toggle('activeToolPan', ToolPan)
-}
+
 
 document.getElementById('clr').onclick = () => {
     const confirmClear = confirm("Clear the canvas?");
@@ -1242,7 +1223,6 @@ underlay.style.position = "absolute";
 
 // Onion Skin toggle
 let showOnionSkin = false;
-
 function show(i) {
     // clear both layers
     drx.clearRect(0, 0, dr.width, dr.height);
@@ -1309,7 +1289,7 @@ function tintFrame(src, color, alpha, ctx) {
     };
 }
 
-const onionBtn = document.getElementById('onionBtn')
+
 onionBtn.addEventListener("click", () => {
     	
       showOnionSkin = !showOnionSkin;
@@ -1322,9 +1302,9 @@ onionBtn.addEventListener("click", () => {
 			onionBtn.style.backgroundColor = "";
 		 }
     });
+    
 
-const toggleBtn = document.getElementById('toggleLabel');
-const settings = document.getElementById('settings');
+
 settings.style.display = 'none';
 toggleBtn.onclick = () => {
  if (settings.style.display === 'none') {
@@ -1335,8 +1315,6 @@ toggleBtn.onclick = () => {
  
 };
 
-
-const checkerboardBtn = document.getElementById('checkerboardBtn');
 checkerboardBtn.onclick = () => {
  if (cv_checkerboard.style.display === 'none') {
    cv_checkerboard.style.display = 'block';
@@ -1345,5 +1323,20 @@ checkerboardBtn.onclick = () => {
  }
  
 };
+
+
+// Update activeTool UI
+function updateUI() {
+  tools.forEach(tool => {
+    tool.btn.style.backgroundColor = tool.active ? "yellow" : "";
+  });
+}
+
+// Tool events
+ToolBrushBtn.addEventListener("click", () => setActiveTool("ToolBrush"));
+ToolEraserBtn.addEventListener("click", () => setActiveTool("ToolEraser"));
+ToolFillBtn.addEventListener("click", () => setActiveTool("ToolFill"));
+ToolSelectBtn.addEventListener("click", () => setActiveTool("ToolSelect"));
+ToolPanBtn.addEventListener("click", () => setActiveTool("ToolPan"));
 
 
