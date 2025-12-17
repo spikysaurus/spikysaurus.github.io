@@ -934,7 +934,7 @@ function add() {
     drx.clearRect(0, 0, dr.width, dr.height);
     frames.push(dr.toDataURL());
     cur = frames.length - 1;
-    render()
+    render();
     show(cur);
 }
 
@@ -949,7 +949,7 @@ document.getElementById('load').onclick = () => {
         bgx.drawImage(img, 0, 0);
         drx.clearRect(0, 0, dr.width, dr.height);
         frames[cur] = dr.toDataURL();
-        render()
+        render();
     };
     img.src = u
 }
@@ -1173,6 +1173,26 @@ function nextFrame() {
         }, delayMs);
     };
 }
+
+// Next Prev Frame
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+prevBtn.addEventListener('click', () => {
+    if (frames.length === 0) return;
+    cur = (cur - 1 + frames.length) % frames.length; // wrap backwards
+    render();   // update timeline highlight
+    show(cur);  // draw selected frame
+});
+
+nextBtn.addEventListener('click', () => {
+    if (frames.length === 0) return;
+    cur = (cur + 1) % frames.length; // wrap forwards
+    render();   // update timeline highlight
+    show(cur);  // draw selected frame
+});
+
+
 //Duplicate Frame
 document.getElementById("duplicateBtn").onclick = duplicateFrame;
 
