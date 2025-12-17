@@ -2,9 +2,9 @@ const bg = document.getElementById('bg'),
     bgx = bg.getContext('2d')
 const cv_checkerboard = document.getElementById('checkerboard'),
     cvx_checkerboard = cv_checkerboard.getContext('2d')
-const dr = document.getElementById('draw'),
-    drx = dr.getContext('2d')
-    drx.imageSmoothingEnabled = false;
+const layer_1 = document.getElementById('layer_1'),
+    layer_1_ctx = layer_1.getContext('2d')
+    layer_1_ctx.imageSmoothingEnabled = false;
 const overlay = document.getElementById('overlay'),
     ox = overlay.getContext('2d')
 const stack = document.getElementById('stack')
@@ -92,8 +92,8 @@ animate()
 //FILL TOOL
 	
 	function fill(x, y, fillColor, tolerance) {
-  const w = dr.width, h = dr.height;
-  const imageData = drx.getImageData(0, 0, w, h);
+  const w = layer_1.width, h = layer_1.height;
+  const imageData = layer_1_ctx.getImageData(0, 0, w, h);
   const data = imageData.data;
 
   function getPixel(px, py) {
@@ -154,18 +154,18 @@ animate()
     }
   }
 
-  drx.putImageData(imageData, 0, 0);
+  layer_1_ctx.putImageData(imageData, 0, 0);
 }
 
 // Fill Tool handlers
-dr.addEventListener("pointerdown", e => {
+layer_1.addEventListener("pointerdown", e => {
  if (activeTool != "ToolFill") return; // only fill if enabled
 
- const rect = dr.getBoundingClientRect();
+ const rect = layer_1.getBoundingClientRect();
 
  // Map screen coords back to canvas pixel coords
- const scaleX = dr.width / rect.width;
- const scaleY = dr.height / rect.height;
+ const scaleX = layer_1.width / rect.width;
+ const scaleY = layer_1.height / rect.height;
 
  const x = Math.floor((e.clientX - rect.left) * scaleX);
  const y = Math.floor((e.clientY - rect.top) * scaleY);
@@ -188,12 +188,12 @@ ToolLassoFillToggle .addEventListener("click", () => {
 });
 
 // --- Lasso tool handlers ---
-dr.addEventListener("pointerdown", e => {
+layer_1.addEventListener("pointerdown", e => {
   if (activeTool !== "ToolLassoFill") return;
 
-  const rect = dr.getBoundingClientRect();
-  const scaleX = dr.width / rect.width;
-  const scaleY = dr.height / rect.height;
+  const rect = layer_1.getBoundingClientRect();
+  const scaleX = layer_1.width / rect.width;
+  const scaleY = layer_1.height / rect.height;
   const x = Math.floor((e.clientX - rect.left) * scaleX);
   const y = Math.floor((e.clientY - rect.top) * scaleY);
 
@@ -204,12 +204,12 @@ dr.addEventListener("pointerdown", e => {
 
 let rainbowOffset = 0; // animation phase
 
-dr.addEventListener("pointermove", e => {
+layer_1.addEventListener("pointermove", e => {
   if (activeTool !== "ToolLassoFill" || !isLassoing) return;
 
-  const rect = dr.getBoundingClientRect();
-  const scaleX = dr.width / rect.width;
-  const scaleY = dr.height / rect.height;
+  const rect = layer_1.getBoundingClientRect();
+  const scaleX = layer_1.width / rect.width;
+  const scaleY = layer_1.height / rect.height;
   const x = Math.floor((e.clientX - rect.left) * scaleX);
   const y = Math.floor((e.clientY - rect.top) * scaleY);
 
@@ -240,13 +240,13 @@ dr.addEventListener("pointermove", e => {
 });
 
 
-dr.addEventListener("pointerup", e => {
+layer_1.addEventListener("pointerup", e => {
   if (activeTool !== "ToolLassoFill" || !isLassoing) return;
   isLassoing = false;
 
   ox.clearRect(0, 0, overlay.width, overlay.height);
 
-  const ctx = drx; // main drawing context
+  const ctx = layer_1_ctx; // main drawing context
   ctx.save();
   ctx.beginPath();
   ctx.moveTo(lassoPoints[0].x, lassoPoints[0].y);
@@ -258,17 +258,17 @@ dr.addEventListener("pointerup", e => {
 
   if (lassoEraseMode) {
     // erase inside lasso
-    ctx.clearRect(0, 0, dr.width, dr.height);
+    ctx.clearRect(0, 0, layer_1.width, layer_1.height);
   } else {
     // fill inside lasso
     ctx.fillStyle = col.value;
-    ctx.fillRect(0, 0, dr.width, dr.height);
+    ctx.fillRect(0, 0, layer_1.width, layer_1.height);
   }
 
   ctx.restore();
 
   lassoPoints = [];
-  frames[cur] = dr.toDataURL();
+  frames[cur] = layer_1.toDataURL();
   render();
 });
 
@@ -277,15 +277,15 @@ dr.addEventListener("pointerup", e => {
 // --- RESIZE STRETCH ---
 function resize(w, h) {
     const snapshot = new Image();
-    snapshot.src = dr.toDataURL();
+    snapshot.src = layer_1.toDataURL();
 
 	cv_checkerboard.width = w;
     cv_checkerboard.height = h;
     
     bg.width = w;
     bg.height = h;
-    dr.width = w;
-    dr.height = h;
+    layer_1.width = w;
+    layer_1.height = h;
     
     overlay.width = w;
     overlay.height = h;
@@ -294,7 +294,7 @@ function resize(w, h) {
 
     snapshot.onload = () => {
         // Stretch to fit new size
-        drx.drawImage(snapshot, 0, 0, w, h);
+        layer_1_ctx.drawImage(snapshot, 0, 0, w, h);
     };
 
     document.getElementById('canvasWidth').value = w;
@@ -304,18 +304,18 @@ function resize(w, h) {
 // --- RESIZE ANCHOR PRESERVE ---
 function resizeAnchor(w, h, anchor = "top-left") {
     const snapshot = new Image();
-    snapshot.src = dr.toDataURL();
+    snapshot.src = layer_1.toDataURL();
 
-    const oldW = dr.width;
-    const oldH = dr.height;
+    const oldW = layer_1.width;
+    const oldH = layer_1.height;
 
 	cv_checkerboard.width = w;
     cv_checkerboard.height = h;
     
     bg.width = w;
     bg.height = h;
-    dr.width = w;
-    dr.height = h;
+    layer_1.width = w;
+    layer_1.height = h;
     
     overlay.width = w;
     overlay.height = h;
@@ -327,7 +327,7 @@ function resizeAnchor(w, h, anchor = "top-left") {
         if (anchor.includes("right")) offsetX = w - oldW;
         if (anchor.includes("bottom")) offsetY = h - oldH;
         // Draw at original size (no stretch)
-        drx.drawImage(snapshot, offsetX, offsetY);
+        layer_1_ctx.drawImage(snapshot, offsetX, offsetY);
     };
 
     document.getElementById('canvasWidth').value = w;
@@ -338,17 +338,17 @@ function resizeAnchor(w, h, anchor = "top-left") {
 // --- RESIZE CENTER PRESERVE ---
 function resizeCenter(w, h) {
     const snapshot = new Image();
-    snapshot.src = dr.toDataURL();
+    snapshot.src = layer_1.toDataURL();
 
-    const oldW = dr.width;
-    const oldH = dr.height;
+    const oldW = layer_1.width;
+    const oldH = layer_1.height;
 		
 		cv_checkerboard.width = w;
     cv_checkerboard.height = h;
     bg.width = w;
     bg.height = h;
-    dr.width = w;
-    dr.height = h;
+    layer_1.width = w;
+    layer_1.height = h;
     overlay.width = w;
     overlay.height = h;
     stack.style.width = w + 'px';
@@ -358,7 +358,7 @@ function resizeCenter(w, h) {
         // Center the old drawing
         const offsetX = (w - oldW) / 2;
         const offsetY = (h - oldH) / 2;
-        drx.drawImage(snapshot, offsetX, offsetY);
+        layer_1_ctx.drawImage(snapshot, offsetX, offsetY);
     };
 
     document.getElementById('canvasWidth').value = w;
@@ -371,7 +371,7 @@ document.getElementById('applySize').onclick = () => {
     const h = parseInt(document.getElementById('canvasHeight').value, 10);
     if (w > 0 && h > 0) {
         resize(w, h); // stretch
-        frames[cur] = dr.toDataURL();
+        frames[cur] = layer_1.toDataURL();
         render();
     }
 };
@@ -407,8 +407,8 @@ document.getElementById('resizeCenter').onclick = () => {
 };
 
 function init() {
-    drx.clearRect(0, 0, dr.width, dr.height);
-    frames.push(dr.toDataURL());
+    layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
+    frames.push(layer_1.toDataURL());
     cur = frames.length - 1;
     render()
 
@@ -443,16 +443,16 @@ AliasedBtn.onclick = () => {
     }
 };
 
-//Painting
+////Painting
 function circ(x, y, s, c, a) {
-  drx.globalAlpha = a;
+  layer_1_ctx.globalAlpha = a;
 
   if (activeTool == "ToolEraser") {
-      drx.globalCompositeOperation = 'destination-out';
-      drx.fillStyle = 'rgba(0,0,0,1)'; // <-- can just use any solid color
+      layer_1_ctx.globalCompositeOperation = 'destination-out';
+      layer_1_ctx.fillStyle = 'rgba(0,0,0,1)'; // <-- can just use any solid color
   } else {
-      drx.globalCompositeOperation = 'source-over';
-      drx.fillStyle = c;
+      layer_1_ctx.globalCompositeOperation = 'source-over';
+      layer_1_ctx.fillStyle = c;
   }
 
   if (useAliased) {
@@ -460,18 +460,18 @@ function circ(x, y, s, c, a) {
       for (let py = -r; py <= r; py++) {
           for (let px = -r; px <= r; px++) {
               if (px * px + py * py <= r * r) {
-                  drx.fillRect(Math.round(x + px), Math.round(y + py), 1, 1);
+                  layer_1_ctx.fillRect(Math.round(x + px), Math.round(y + py), 1, 1);
               }
           }
       }
   } else {
-      drx.beginPath();
-      drx.arc(x, y, s / 2, 0, Math.PI * 2);
-      drx.fill();
+      layer_1_ctx.beginPath();
+      layer_1_ctx.arc(x, y, s / 2, 0, Math.PI * 2);
+      layer_1_ctx.fill();
   }
 
-  drx.globalAlpha = 1;
-  drx.globalCompositeOperation = 'source-over'; // reset after erasing
+  layer_1_ctx.globalAlpha = 1;
+  layer_1_ctx.globalCompositeOperation = 'source-over'; // reset after erasing
     
 }
 
@@ -490,7 +490,9 @@ function line(x0, y0, x1, y1, s, c, a) {
     
 }
 
-dr.onpointermove = e => {
+
+
+layer_1.onpointermove = e => {
     if (activeTool == "ToolPan") return;
     if (drawing) {
         const { x, y } = getCanvasCoords(e, dr);
@@ -501,15 +503,15 @@ dr.onpointermove = e => {
     }
 };
 
-dr.onpointerup = e => {
+layer_1.onpointerup = e => {
     if (activeTool == "ToolPan") return;
     drawing = false;
-    frames[cur] = dr.toDataURL();
+    frames[cur] = layer_1.toDataURL();
     render();
 };
 
 
-dr.onpointereave = () => {
+layer_1.onpointereave = () => {
     drawing = false
 }
 document.addEventListener('pointerdown', e => {
@@ -618,7 +620,7 @@ window.addEventListener('load', () => {
 });
 
 function autoFitCanvas() {
-  const rect = dr.getBoundingClientRect();
+  const rect = layer_1.getBoundingClientRect();
 
   // available screen size (or container size)
   const screenW = window.innerWidth;
@@ -635,7 +637,8 @@ function autoFitCanvas() {
   // e.g. redrawCanvas();
 }
 
-dr.onpointerdown = e => {
+//DRAWING ERASING
+layer_1.onpointerdown = e => {
     if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
     drawing = true;
     lx = e.offsetX;
@@ -643,7 +646,7 @@ dr.onpointerdown = e => {
     circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
     }
 };
-dr.onpointermove = e => {
+layer_1.onpointermove = e => {
     if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
     if (drawing) {
         line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
@@ -652,16 +655,17 @@ dr.onpointermove = e => {
     }
     }
 };
-dr.onpointerup = () => {
+layer_1.onpointerup = () => {
 if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
     drawing = false;
-    frames[cur] = dr.toDataURL();
+    frames[cur] = layer_1.toDataURL();
     render();
     }
 };
-dr.onpointerleave = () => {
+layer_1.onpointerleave = () => {
     drawing = false
 };
+
 
 // --- Globals ---
 //let selStartX = null, selStartY = null, selEndX = null, selEndY = null;
@@ -671,7 +675,7 @@ let frozenStartX = 0, frozenStartY = 0, frozenEndX = 0, frozenEndY = 0;
 //let clipboard = null;
 
 // --- Selection handlers ---
-dr.addEventListener('pointerdown', e => {
+layer_1.addEventListener('pointerdown', e => {
   if (activeTool !== "ToolSelect") return;
   const { x, y } = getCanvasCoords(e, dr);
 
@@ -700,7 +704,7 @@ dr.addEventListener('pointerdown', e => {
 });
 
 
-dr.addEventListener('pointermove', e => {
+layer_1.addEventListener('pointermove', e => {
   if (activeTool !== "ToolSelect") return;
   const { x, y } = getCanvasCoords(e, dr);
 
@@ -752,7 +756,7 @@ dr.addEventListener('pointermove', e => {
   rainbowOffset = (rainbowOffset + 5) % 360; // adjust speed here
 });
 
-dr.addEventListener('pointerup', e => {
+layer_1.addEventListener('pointerup', e => {
   if (activeTool !== "ToolSelect") return;
 
   if (isDraggingHandle) {
@@ -777,7 +781,7 @@ dr.addEventListener('pointerup', e => {
 });
 
 // --- Freehand drawing handlers ---
-dr.addEventListener('pointerdown', e => {
+layer_1.addEventListener('pointerdown', e => {
   if (["pen","touch","mouse"].includes(e.pointerType)) {
     drawing = true;
     lastX = e.offsetX;
@@ -785,7 +789,7 @@ dr.addEventListener('pointerdown', e => {
   }
 });
 
-dr.addEventListener('pointermove', e => {
+layer_1.addEventListener('pointermove', e => {
   if (!drawing) return;
   if (["pen","touch","mouse"].includes(e.pointerType)) {
     // ctx.lineTo(e.offsetX, e.offsetY);
@@ -795,7 +799,7 @@ dr.addEventListener('pointermove', e => {
   }
 });
 
-dr.addEventListener('pointerup', e => {
+layer_1.addEventListener('pointerup', e => {
   drawing = false;
 });
 
@@ -819,8 +823,8 @@ document.getElementById('copy').onclick = () => {
 
 // Delete
 document.getElementById('delete').onclick = () => {
-	drx.clearRect(Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(selEndX - selStartX), Math.abs(selEndY - selStartY));
-	frames[cur] = dr.toDataURL();
+	layer_1_ctx.clearRect(Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(selEndX - selStartX), Math.abs(selEndY - selStartY));
+	frames[cur] = layer_1.toDataURL();
 	render();
 };
 
@@ -839,7 +843,7 @@ document.getElementById('paste').onclick = () => {
     const h = selEndY - selStartY;
 
     // draw clipboard image scaled to fit selection
-    drx.drawImage(
+    layer_1_ctx.drawImage(
       clipboard,
       0, 0, clipboard.width, clipboard.height, // source
       Math.min(selStartX, selEndX),
@@ -848,7 +852,7 @@ document.getElementById('paste').onclick = () => {
       Math.abs(h) // destination size
     );
 
-    frames[cur] = dr.toDataURL();
+    frames[cur] = layer_1.toDataURL();
     render();
   }
 };
@@ -856,8 +860,8 @@ document.getElementById('paste').onclick = () => {
 document.getElementById('clr').onclick = () => {
     const confirmClear = confirm("Clear the canvas?");
     if (confirmClear) {
-        drx.clearRect(0, 0, dr.width, dr.height);
-        frames[cur] = dr.toDataURL();
+        layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
+        frames[cur] = layer_1.toDataURL();
         render();
     }
 };
@@ -904,6 +908,7 @@ document.getElementById('swapPrev').onclick = () => {
     }
 };
 
+
 function render() {
     const timeline = document.getElementById('timeline')
     timeline.innerHTML = ''
@@ -948,8 +953,8 @@ document.getElementById('export').onclick = () => {
     const data = {
         background: bgUrl, // store the image URL input
         canvas: {
-            width: dr.width,
-            height: dr.height
+            width: layer_1.width,
+            height: layer_1.height
         },
         frames: frames.map((f, i) => ({
             index: i,
@@ -997,7 +1002,7 @@ document.getElementById('import').onclick = () => {
 
                         bgx.clearRect(0, 0, bg.width, bg.height);
                         bgx.drawImage(img, 0, 0, w, h);
-                        drx.clearRect(0, 0, dr.width, dr.height);
+                        layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
                     };
                 } else if (obj.canvas && obj.canvas.width && obj.canvas.height) {
                     // Resize even if no background image
@@ -1057,7 +1062,7 @@ function importImageSequence(files, bgUrl = null) {
                 }
 
                 // Compose background + frame into a dataURL using the resized canvas
-                const dataURL = await composeFrame(bgUrl, reader.result, dr.width, dr.height);
+                const dataURL = await composeFrame(bgUrl, reader.result, layer_1.width, layer_1.height);
                 frames[idx] = dataURL;
                 loaded++;
 
@@ -1165,8 +1170,8 @@ document.getElementById('pdf').onclick = async () => {
 document.getElementById('add').onclick = add
 // Add Frame
 function add() {
-    drx.clearRect(0, 0, dr.width, dr.height);
-    frames.push(dr.toDataURL());
+    layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
+    frames.push(layer_1.toDataURL());
     cur = frames.length - 1;
     render();
     show(cur);
@@ -1207,8 +1212,8 @@ document.getElementById('load').onclick = () => {
         resize(img.width, img.height);
         bgx.clearRect(0, 0, bg.width, bg.height);
         bgx.drawImage(img, 0, 0);
-        drx.clearRect(0, 0, dr.width, dr.height);
-        frames[cur] = dr.toDataURL();
+        layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
+        frames[cur] = layer_1.toDataURL();
         render();
     };
     img.src = u
@@ -1330,8 +1335,8 @@ function exportGif() {
     const gif = new GIF({
         workers: 2,
         quality: 10,
-        width: dr.width,
-        height: dr.height,
+        width: layer_1.width,
+        height: layer_1.height,
         transparent: null // disable transparency → solid background
     });
 
@@ -1344,13 +1349,13 @@ function exportGif() {
         img.onload = () => {
             // Draw onto a temp canvas to ensure background is filled
             const tempCanvas = document.createElement("canvas");
-            tempCanvas.width = dr.width;
-            tempCanvas.height = dr.height;
+            tempCanvas.width = layer_1.width;
+            tempCanvas.height = layer_1.height;
             const tempCtx = tempCanvas.getContext("2d");
 
             // Fill background (white here, change if needed)
             tempCtx.fillStyle = "#ffffff";
-            tempCtx.fillRect(0, 0, dr.width, dr.height);
+            tempCtx.fillRect(0, 0, layer_1.width, layer_1.height);
 
             // Draw the frame image on top
             tempCtx.drawImage(img, 0, 0);
@@ -1420,8 +1425,8 @@ function nextFrame() {
 
     img.onload = () => {
         // clear and draw current frame
-        drx.clearRect(0, 0, dr.width, dr.height);
-        drx.drawImage(img, 0, 0);
+        layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
+        layer_1_ctx.drawImage(img, 0, 0);
 
         // read FPS from input, convert to ms per frame
         let fps = parseInt(GifDelay.value, 10);
@@ -1485,22 +1490,22 @@ function duplicateFrame() {
 //Onion Skin
 // Create two canvases: underlay (for onion skin) and main (for current frame)
 const underlay = document.createElement("canvas");
-underlay.width = dr.width;
-underlay.height = dr.height;
+underlay.width = layer_1.width;
+underlay.height = layer_1.height;
 const underCtx = underlay.getContext("2d");
 
 // dr is main canvas
-// 'drx' is its context
+// 'layer_1_ctx' is its context
 // We'll stack them in the DOM so underlay is behind main
-dr.parentNode.insertBefore(underlay, dr);
-dr.style.position = "absolute";
+layer_1.parentNode.insertBefore(underlay, layer_1);
+layer_1.style.position = "absolute";
 underlay.style.position = "absolute";
 
 // Onion Skin toggle
 let showOnionSkin = false;
 function show(i) {
     // clear both layers
-    drx.clearRect(0, 0, dr.width, dr.height);
+    layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
     underCtx.clearRect(0, 0, underlay.width, underlay.height);
 
     // previous frame ghost (red tint) on underlay
@@ -1517,10 +1522,10 @@ function show(i) {
     if (frames[i]) {
         const img = new Image();
         img.onload = () => {
-            drx.save();
-            drx.globalAlpha = 1.0;
-            drx.drawImage(img, 0, 0);
-            drx.restore();
+            layer_1_ctx.save();
+            layer_1_ctx.globalAlpha = 1.0;
+            layer_1_ctx.drawImage(img, 0, 0);
+            layer_1_ctx.restore();
         };
         img.src = frames[i];
     }
@@ -1532,13 +1537,13 @@ function tintFrame(src, color, alpha, ctx) {
     img.onload = () => {
         // offscreen canvas for tinting
         const off = document.createElement("canvas");
-        off.width = dr.width;
-        off.height = dr.height;
+        off.width = layer_1.width;
+        off.height = layer_1.height;
         const offCtx = off.getContext("2d");
 
         offCtx.drawImage(img, 0, 0);
 
-        const imageData = offCtx.getImageData(0, 0, dr.width, dr.height);
+        const imageData = offCtx.getImageData(0, 0, layer_1.width, layer_1.height);
         const data = imageData.data;
 
         let tintRGB;
