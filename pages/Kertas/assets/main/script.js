@@ -689,13 +689,23 @@ document.getElementById('copy').onclick = () => {
         }
     }
 };
-// Cut = copy + clear
-document.getElementById('cut').onclick = () => {
-    document.getElementById('copy').onclick();
-    drx.clearRect(Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(selEndX - selStartX), Math.abs(selEndY - selStartY));
-    frames[cur] = dr.toDataURL();
-    render();
+
+// Delete
+document.getElementById('delete').onclick = () => {
+	drx.clearRect(Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(selEndX - selStartX), Math.abs(selEndY - selStartY));
+	frames[cur] = dr.toDataURL();
+	render();
 };
+
+// Cut = copy + delete
+document.getElementById('cut').onclick = () => {
+	document.getElementById('copy').onclick();
+	document.getElementById('delete').onclick();
+//	drx.clearRect(Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(selEndX - selStartX), Math.abs(selEndY - selStartY));
+//	frames[cur] = dr.toDataURL();
+//	render();
+};
+
 
 // --- Paste clipboard into current selection ---
 document.getElementById('paste').onclick = () => {
