@@ -117,15 +117,7 @@ input[type=number] {
 	cursor: pointer;
 }
 
-.sliders{
-display:flex;
-flex-direction:column;
-gap:0	px;
-position:fixed;
-bottom:90px;
-left:10px;
-width:32px;
-}
+
   
 #timeline {
   position:fixed;   /* stick to viewport */
@@ -156,36 +148,6 @@ width:32px;
   border-color:#0f0;
 }
 
-@media (orientation: landscape) {
-#timeline {
-	width:24px;
-  position:fixed;   /* stick to viewport */
-  top:0;         /* anchor at bottom */
-  bottom:0;
-  left:0;
-  flex-direction: column;
-  overflow-x:hidden;
-  overflow-y:auto;
-  justify-content:flex-start;
-}
-.panel-bottom {
-	bottom: 0px;
-	left: 40px;
-}
-#settings{
-bottom:40px;
-left:40px;
-}
-.sliders{
-flex-direction:row;
-bottom:40px;
-left:40px;
-gap:5px;
-}
-#bar{
-gap:0px;
-}
-}
 
 #stage {
 	z-index:-1;
@@ -257,7 +219,18 @@ canvas {
 
 }
 
+.sliders button{
+width:40px;
+}
+.sliders{
 
+display:flex;
+flex-direction:column;
+gap:0	px;
+position:fixed;
+bottom:90px;
+left:10px;
+}
 
 /*DRAG BUTTONS*/
 :root {
@@ -270,7 +243,8 @@ canvas {
 
   .control {
     display: flex;
-    
+    width:40px;
+width:100%;
     align-items: center;
     margin: 5px 0;
     gap: 5px;
@@ -330,4 +304,35 @@ canvas {
   .editing .value-input {
     display: inline-block;
   }
+  
+  @media (orientation: landscape) {
+	#timeline {
+		width:24px;
+	  position:fixed;   /* stick to viewport */
+	  top:0;         /* anchor at bottom */
+	  bottom:0;
+	  left:0;
+	  flex-direction: column;
+	  overflow-x:hidden;
+	  overflow-y:auto;
+	  justify-content:flex-start;
+	}
+	.panel-bottom {
+		bottom: 0px;
+		left: 40px;
+	}
+	#settings{
+		bottom:40px;
+		left:40px;
+	}
+	.sliders{
+		bottom:40px;
+		left:40px;
+		gap:0px;
+	}
+	#bar{
+		gap:0px;
+	}
+	}
+
 
