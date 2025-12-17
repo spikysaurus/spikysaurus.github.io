@@ -1120,7 +1120,7 @@ playBtn.onclick = () => {
     if (playing) {
         stopAnimation();
         playBtn_icon.classList.replace('bl-icons-pause', 'bl-icons-play');
-//        show(cur);
+        show(cur);
 //        render();
         
     } else {
@@ -1136,11 +1136,11 @@ function playAnimation() {
         return;
     }
     playing = true;
-    if (showOnionSkin){
-    showOnionSkin = false;
-    onionBtn_icon.classList.replace('bl-icons-onionskin_on', 'bl-icons-onionskin_off');
-    
-    }
+//    if (showOnionSkin){
+//    showOnionSkin = false;
+//    onionBtn_icon.classList.replace('bl-icons-onionskin_on', 'bl-icons-onionskin_off');
+//    
+//    }
     
     playIndex = 0;
     nextFrame();
@@ -1201,21 +1201,38 @@ function duplicateFrame() {
 }
 
 //Onion Skin
-let showOnionSkin = false; // toggle ON/OFF
+// Create two canvases: underlay (for onion skin) and main (for current frame)
+const underlay = document.createElement("canvas");
+underlay.width = dr.width;
+underlay.height = dr.height;
+const underCtx = underlay.getContext("2d");
+
+// Assume 'dr' is your main canvas
+// 'drx' is its context
+// We'll stack them in the DOM so underlay is behind main
+dr.parentNode.insertBefore(underlay, dr);
+dr.style.position = "absolute";
+underlay.style.position = "absolute";
+
+// Onion Skin toggle
+let showOnionSkin = false;
+
 function show(i) {
+    // clear both layers
     drx.clearRect(0, 0, dr.width, dr.height);
+    underCtx.clearRect(0, 0, underlay.width, underlay.height);
 
-    // previous frame ghost (red tint)
+    // previous frame ghost (red tint) on underlay
     if (showOnionSkin && i > 0 && frames[i - 1]) {
-        tintFrame(frames[i - 1], "red", 1);
+        tintFrame(frames[i - 1], "red", 1, underCtx);
     }
 
-    // next frame ghost (blue tint)
+    // next frame ghost (blue tint) on underlay
     if (showOnionSkin && i < frames.length - 1 && frames[i + 1]) {
-        tintFrame(frames[i + 1], "blue", 1);
+        tintFrame(frames[i + 1], "blue", 1, underCtx);
     }
 
-    // current frame full opacity
+    // current frame full opacity on main canvas
     if (frames[i]) {
         const img = new Image();
         img.onload = () => {
@@ -1228,11 +1245,11 @@ function show(i) {
     }
 }
 
-function tintFrame(src, color, alpha) {
+function tintFrame(src, color, alpha, ctx) {
     const img = new Image();
     img.src = src;
     img.onload = () => {
-        // draw frame into an offscreen canvas
+        // offscreen canvas for tinting
         const off = document.createElement("canvas");
         off.width = dr.width;
         off.height = dr.height;
@@ -1240,18 +1257,16 @@ function tintFrame(src, color, alpha) {
 
         offCtx.drawImage(img, 0, 0);
 
-        // get pixel data
         const imageData = offCtx.getImageData(0, 0, dr.width, dr.height);
         const data = imageData.data;
 
-        // apply tint only to non‑transparent pixels
         let tintRGB;
         if (color === "red") tintRGB = [255, 0, 0];
         else if (color === "blue") tintRGB = [0, 0, 255];
         else tintRGB = [0, 0, 0];
 
         for (let p = 0; p < data.length; p += 4) {
-            if (data[p + 3] > 0) { // alpha > 0 means stroke pixel
+            if (data[p + 3] > 0) {
                 data[p]   = (data[p]   * (1 - alpha)) + (tintRGB[0] * alpha);
                 data[p+1] = (data[p+1] * (1 - alpha)) + (tintRGB[1] * alpha);
                 data[p+2] = (data[p+2] * (1 - alpha)) + (tintRGB[2] * alpha);
@@ -1260,39 +1275,26 @@ function tintFrame(src, color, alpha) {
 
         offCtx.putImageData(imageData, 0, 0);
 
-        // draw tinted frame onto main canvas
-        drx.save();
-        drx.globalAlpha = 0.2; // ghost opacity
-        drx.drawImage(off, 0, 0);
-        drx.restore();
+        // draw tinted frame onto underlay canvas
+        ctx.save();
+        ctx.globalAlpha = 0.2; // ghost opacity
+        ctx.drawImage(off, 0, 0);
+        ctx.restore();
     };
 }
 
-
-
-//document.getElementById("onionToggle").onchange = e => {
-//    showOnionSkin = e.target.checked;
-//    render();
-//};
-
-
 const onionBtn = document.getElementById('onionBtn')
-const onionBtn_icon = document.getElementById('onion-icon')
 onionBtn.addEventListener("click", () => {
-	
-	
-    showOnionSkin = !showOnionSkin;
-    if (showOnionSkin){
-		 onionBtn_icon.classList.replace('bl-icons-onionskin_off', 'bl-icons-onionskin_on');
-		 render();
-    	show(cur);
-    }
-    else{
-		 onionBtn_icon.classList.replace('bl-icons-onionskin_on', 'bl-icons-onionskin_off');
-		 render();
-    	show(cur);
-		 
-    }
+    	
+      showOnionSkin = !showOnionSkin;
+		 if (showOnionSkin) {
+		 		show(cur);
+		     onionBtn.style.backgroundColor = "yellow";
+		     
+		 } else {
+		 show(cur);
+			onionBtn.style.backgroundColor = "";
+		 }
     });
 
 const toggleBtn = document.getElementById('toggleLabel');
