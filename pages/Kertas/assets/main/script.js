@@ -538,26 +538,64 @@ dr.onpointerleave = () => {
     drawing = false
 };
 
-// --- Selection state ---
+// --- Globals ---
 //let selStartX = null, selStartY = null, selEndX = null, selEndY = null;
+let isDraggingHandle = false;
+let dragStartX = 0, dragStartY = 0;
+let frozenStartX = 0, frozenStartY = 0, frozenEndX = 0, frozenEndY = 0;
+//let clipboard = null;
 
 // --- Selection handlers ---
-
 dr.addEventListener('pointerdown', e => {
   if (activeTool !== "ToolSelect") return;
   const { x, y } = getCanvasCoords(e, dr);
+
+  // compute center of current selection
+  const w = selEndX - selStartX;
+  const h = selEndY - selStartY;
+  const centerX = selStartX + w / 2;
+  const centerY = selStartY + h / 2;
+
+  // check if pointer is inside handle (10px radius)
+  if (selStartX != null && Math.abs(x - centerX) < 10 && Math.abs(y - centerY) < 10) {
+    isDraggingHandle = true;
+    dragStartX = x;
+    dragStartY = y;
+    // freeze selection bounds
+    frozenStartX = selStartX;
+    frozenStartY = selStartY;
+    frozenEndX = selEndX;
+    frozenEndY = selEndY;
+    return;
+  }
+
+  // normal selection start
   selStartX = x; selStartY = y;
   selEndX = x; selEndY = y;
 });
 
 dr.addEventListener('pointermove', e => {
   if (activeTool !== "ToolSelect") return;
-
-  // pointer is down if buttons==1 or pressure>0
-  if (!(e.buttons === 1 || e.pressure > 0)) return;
-
   const { x, y } = getCanvasCoords(e, dr);
-  selEndX = x; selEndY = y;
+
+  if (isDraggingHandle) {
+    // only move selection when handle is active
+    if (e.buttons === 1 || e.pressure > 0) {
+      const dx = x - dragStartX;
+      const dy = y - dragStartY;
+
+      selStartX = frozenStartX + dx;
+      selEndX   = frozenEndX   + dx;
+      selStartY = frozenStartY + dy;
+      selEndY   = frozenEndY   + dy;
+    }
+  } else {
+    // normal selection resize
+    if (e.buttons === 1 || e.pressure > 0) {
+      selEndX = x;
+      selEndY = y;
+    }
+  }
 
   ox.clearRect(0, 0, overlay.width, overlay.height);
 
@@ -567,17 +605,36 @@ dr.addEventListener('pointermove', e => {
     ox.fillStyle = 'rgba(128,0,128,0.2)';
     ox.fillRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
     ox.setLineDash([6, 4]);
-  } else {
-    ox.strokeStyle = 'rgba(0,255,0,0.8)';
-    ox.setLineDash([]);
-  }
+	 } 
+//else {
+//    ox.strokeStyle = 'rgba(0,255,0,0.8)';
+//    ox.setLineDash([]);
+//  }
 
   ox.lineWidth = 1;
   ox.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
+
+  // draw center handle
+  const w = selEndX - selStartX;
+  const h = selEndY - selStartY;
+  const centerX = selStartX + w / 2;
+  const centerY = selStartY + h / 2;
+  ox.fillStyle = 'orange';
+  ox.beginPath();
+  ox.arc(centerX, centerY, 6, 0, Math.PI * 2);
+  ox.fill();
 });
 
 dr.addEventListener('pointerup', e => {
   if (activeTool !== "ToolSelect") return;
+
+  if (isDraggingHandle) {
+    // stop dragging, don't overwrite selEndX/Y with pointer position
+    isDraggingHandle = false;
+    return;
+  }
+
+  // normal selection finalize
   const { x, y } = getCanvasCoords(e, dr);
   selEndX = x; selEndY = y;
 
@@ -585,6 +642,10 @@ dr.addEventListener('pointerup', e => {
   const h = Math.abs(selEndY - selStartY);
   if (w < 5 || h < 5) {
     ox.clearRect(0, 0, overlay.width, overlay.height);
+    selStartX = null;
+    selStartY = null;
+    selEndX   = null;
+    selEndY   = null;
   }
 });
 
@@ -615,7 +676,7 @@ dr.addEventListener('pointerup', e => {
 // Copy selected region
 document.getElementById('copy').onclick = () => {
     if (selStartX != null) {
-    		ox.clearRect(0, 0, overlay.width, overlay.height);
+//    		ox.clearRect(0, 0, overlay.width, overlay.height);
         const w = selEndX - selStartX;
         const h = selEndY - selStartY;
         if (w && h) {
@@ -635,19 +696,31 @@ document.getElementById('cut').onclick = () => {
     frames[cur] = dr.toDataURL();
     render();
 };
-//// Paste clipboard at mouse position
+
+// --- Paste clipboard into current selection ---
 document.getElementById('paste').onclick = () => {
-    if (clipboard) {
-        dr.addEventListener('click', function pasteOnce(e) {
-            drx.drawImage(clipboard, e.offsetX, e.offsetY);
-            frames[cur] = dr.toDataURL();
-            render();
-            dr.removeEventListener('click', pasteOnce);
-        });
-    }
+  if (clipboard && selStartX != null && selEndX != null) {
+    // compute selection bounds
+    const w = selEndX - selStartX;
+    const h = selEndY - selStartY;
+
+    // clear overlay
+//    ox.clearRect(0, 0, overlay.width, overlay.height);
+
+    // draw clipboard image scaled to fit selection
+    drx.drawImage(
+      clipboard,
+      0, 0, clipboard.width, clipboard.height, // source
+      Math.min(selStartX, selEndX),
+      Math.min(selStartY, selEndY),
+      Math.abs(w),
+      Math.abs(h) // destination size
+    );
+
+    frames[cur] = dr.toDataURL();
+    render();
+  }
 };
-
-
 
 
 
