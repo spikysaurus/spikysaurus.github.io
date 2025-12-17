@@ -11,10 +11,11 @@ const stack = document.getElementById('stack')
 const sz = document.getElementById('sz'),
     op = document.getElementById('op'),
     col = document.getElementById('col')
+
+let activeTool = null;
    
 let drawing = false,
     lx, ly, eras = false,
-    pan = false,
     px = 0,
     py = 0,
     sc = 1,
@@ -22,13 +23,14 @@ let drawing = false,
 let targetPx = 0,
     targetPy = 0,
     targetSc = 1,
-    panStartX = 0,
-    panStartY = 0
+    punStartX = 0,
+    punStartY = 0
 const frames = [];
 let cur = 0
 
-let selecting = false,selStartX, selStartY, selEndX, selEndY;
-let fillMode = false; 
+let ToolSelect = false,selStartX, selStartY, selEndX, selEndY;
+let ToolFill = false; 
+let ToolPan = false;
 
 function setSize(w, h) {
     stack.style.width = w + 'px';
@@ -51,15 +53,15 @@ animate()
 
 //FILL TOOL
 // Attach button toggle
-	const fillBtn = document.getElementById("fillBtn");
-    document.getElementById("fillBtn").addEventListener("click", () => {
+	const ToolFillBtn = document.getElementById("ToolFillBtn");
+    ToolFillBtn.addEventListener("click", () => {
     	
-      fillMode = !fillMode;
-		 if (fillMode) {
-		     fillBtn.style.backgroundColor = "yellow";
+      ToolFill = !ToolFill;
+		 if (ToolFill) {
+		     ToolFillBtn.style.backgroundColor = "yellow";
 		     
 		 } else {
-			fillBtn.style.backgroundColor = "";
+			ToolFillBtn.style.backgroundColor = "";
 		 }
     });
     
@@ -130,9 +132,9 @@ animate()
 }
 
 // Canvas click handler (with zoom-safe coordinates)
-if (!selecting) {
+if (!ToolSelect) {
   dr.addEventListener("pointerdown", e => {
-    if (!fillMode) return; // only fill if enabled
+    if (!ToolFill) return; // only fill if enabled
 
     const rect = dr.getBoundingClientRect();
 
@@ -317,7 +319,7 @@ AliasedBtn.onclick = () => {
 
 //Painting
 function circ(x, y, s, c, a) {
-    if (!fillMode) {
+    if (!ToolFill) {
         drx.globalAlpha = a;
 
         if (eras) {
@@ -349,6 +351,7 @@ function circ(x, y, s, c, a) {
 }
 
 function line(x0, y0, x1, y1, s, c, a) {
+	
     const dx = x1 - x0,
           dy = y1 - y0,
           d = Math.hypot(dx, dy),
@@ -358,12 +361,14 @@ function line(x0, y0, x1, y1, s, c, a) {
         const t = i / st;
         circ(x0 + dx * t, y0 + dy * t, s, c, a);
     }
+    
+    
 }
 
 
 
 dr.onpointermove = e => {
-    if (pan) return;
+    if (ToolPan) return;
     if (drawing) {
         const { x, y } = getCanvasCoords(e, dr);
         
@@ -374,7 +379,7 @@ dr.onpointermove = e => {
 };
 
 dr.onpointerup = e => {
-    if (pan) return;
+    if (ToolPan) return;
     drawing = false;
     frames[cur] = dr.toDataURL();
     render();
@@ -385,23 +390,23 @@ dr.onpointereave = () => {
     drawing = false
 }
 document.addEventListener('pointerdown', e => {
-    if (!pan) return;
+    if (!ToolPan) return;
     psx = e.clientX - targetPx;
     psy = e.clientY - targetPy;
     document.body.style.cursor = 'grab'
 })
 document.addEventListener('pointermove', e => {
-    if (!pan) return;
+    if (!ToolPan) return;
     if (e.buttons !== 1) return;
     targetPx = e.clientX - psx;
     targetPy = e.clientY - psy
 })
 document.addEventListener('pointerup', () => {
-    if (!pan) return;
+    if (!ToolPan) return;
     document.body.style.cursor = 'default'
 })
 
-//PAN
+//ToolPan
 document.addEventListener('pointerstart', e => {
     if (e.length === 2) {
         const dx = e[0].clientX - e[1].clientX
@@ -409,8 +414,8 @@ document.addEventListener('pointerstart', e => {
         sd = Math.hypot(dx, dy)
     }
     if (e.length === 3) {
-        panStartX = e[0].clientX - targetPx
-        panStartY = e[0].clientY - targetPy
+        punStartX = e[0].clientX - targetPx
+        punStartY = e[0].clientY - targetPy
     }
 }, {
     passive: true
@@ -425,8 +430,8 @@ document.addEventListener('pointermove', e => {
         sd = nd
     }
     if (e.length === 3) {
-        targetPx = e[0].clientX - panStartX
-        targetPy = e[0].clientY - panStartY
+        targetPx = e[0].clientX - punStartX
+        targetPy = e[0].clientY - punStartY
     }
 }, {
     passive: true
@@ -478,32 +483,32 @@ document.addEventListener('wheel', e => {
     passive: false
 })
 
-//let selecting = false,selStartX, selStartY, selEndX, selEndY;
+//let ToolSelect = false,selStartX, selStartY, selEndX, selEndY;
 let clipboard = null;
-const selectBtn = document.getElementById('select');
-selectBtn.onclick = () => {
-    selecting = !selecting;
-    if (selecting) {
-        selectBtn.style.backgroundColor = "yellow";
-        selectBtn.style.color = "black";
+const ToolSelectBtn = document.getElementById('ToolSelectBtn');
+ToolSelectBtn.onclick = () => {
+    ToolSelect = !ToolSelect;
+    if (ToolSelect) {
+        ToolSelectBtn.style.backgroundColor = "yellow";
+        ToolSelectBtn.style.color = "black";
         
     } else {
-        selectBtn.style.backgroundColor = "";
+        ToolSelectBtn.style.backgroundColor = "";
         ox.clearRect(0, 0, overlay.width, overlay.height);
     }
-//    selectBtn.classList.toggle(!selecting, selecting);
+//    ToolSelectBtn.classList.toggle(!ToolSelect, ToolSelect);
 };
 
-// disable painting when selecting
+
 dr.onpointerdown = e => {
-    if (pan || selecting) return;
+    if (ToolPan || ToolSelect || ToolFill) return; // disable painting when ToolSelect
     drawing = true;
     lx = e.offsetX;
     ly = e.offsetY;
     circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
 };
 dr.onpointermove = e => {
-    if (pan || selecting) return;
+    if (ToolPan || ToolSelect  || ToolFill) return;
     if (drawing) {
         line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
         lx = e.offsetX;
@@ -511,7 +516,7 @@ dr.onpointermove = e => {
     }
 };
 dr.onpointerup = () => {
-    if (pan || selecting) return;
+    if (ToolPan || ToolSelect  || ToolFill) return;
     drawing = false;
     frames[cur] = dr.toDataURL();
     render();
@@ -523,7 +528,7 @@ dr.onpointerleave = () => {
 
 // selection handlers
 dr.addEventListener('pointerdown', e => {
-    if (selecting) {
+    if (ToolSelect) {
         selStartX = e.offsetX;
         selStartY = e.offsetY;
         selEndX = selStartX;
@@ -531,7 +536,7 @@ dr.addEventListener('pointerdown', e => {
     }
 });
 dr.addEventListener('pointermove', e => {
-    if (selecting && e.buttons === 1) {
+    if (ToolSelect && e.buttons === 1) {
         selEndX = e.offsetX;
         selEndY = e.offsetY;
         ox.clearRect(0, 0, overlay.width, overlay.height);
@@ -541,7 +546,7 @@ dr.addEventListener('pointermove', e => {
     }
 });
 dr.addEventListener('pointerup', e => {
-    if (selecting) {
+    if (ToolSelect) {
         selEndX = e.offsetX;
         selEndY = e.offsetY;
 //        ox.clearRect(0, 0, overlay.width, overlay.height);
@@ -571,7 +576,7 @@ dr.addEventListener("pointermove", e => {
 });
 // Selection handlers with pointer events
 dr.addEventListener('pointerdown', e => {
-    if (selecting) {
+    if (ToolSelect) {
         const { x, y } = getCanvasCoords(e, dr);
         selStartX = x;
         selStartY = y;
@@ -582,7 +587,7 @@ dr.addEventListener('pointerdown', e => {
 
 // Selection handlers with pointer events
 dr.addEventListener('pointerdown', e => {
-    if (selecting) {
+    if (ToolSelect) {
         const { x, y } = getCanvasCoords(e, dr);
         selStartX = x;
         selStartY = y;
@@ -592,7 +597,7 @@ dr.addEventListener('pointerdown', e => {
 });
 
 dr.addEventListener('pointermove', e => {
-    if (selecting && e.pressure > 0) { // pressure>0 means pointer is down
+    if (ToolSelect && e.pressure > 0) { // pressure>0 means pointer is down
         const { x, y } = getCanvasCoords(e, dr);
         selEndX = x;
         selEndY = y;
@@ -608,7 +613,7 @@ dr.addEventListener('pointermove', e => {
 });
 
 dr.addEventListener('pointerup', e => {
-    if (selecting) {
+    if (ToolSelect) {
         const { x, y } = getCanvasCoords(e, dr);
         selEndX = x;
         selEndY = y;
@@ -668,16 +673,16 @@ brushBtn.onclick = () => {
     
     	
 }
-const panBtn = document.getElementById('pan')
-panBtn.onclick = () => {
-    pan = !pan;
-    if (pan) {
-        panBtn.style.backgroundColor = "yellow";
-        panBtn.style.color = "black";
+const ToolPanBtn = document.getElementById('ToolPanBtn')
+ToolPanBtn.onclick = () => {
+    ToolPan = !ToolPan;
+    if (ToolPan) {
+        ToolPanBtn.style.backgroundColor = "yellow";
+        ToolPanBtn.style.color = "black";
     } else {
-        panBtn.style.backgroundColor = "";
+        ToolPanBtn.style.backgroundColor = "";
     }
-    panBtn.classList.toggle('activePan', pan)
+//    ToolPanBtn.classList.toggle('activeToolPan', ToolPan)
 }
 
 document.getElementById('clr').onclick = () => {
@@ -1121,7 +1126,7 @@ const playBtn_icon = document.getElementById("playBtn_icon");
 
 playBtn.onclick = () => {
     if (playing) {
-        stopAnimation();
+        stoToolPanimation();
         playBtn_icon.classList.replace('bl-icons-pause', 'bl-icons-play');
         show(cur);
 //        render();
@@ -1144,7 +1149,7 @@ function playAnimation() {
     nextFrame();
 }
 
-function stopAnimation() {
+function stoToolPanimation() {
     playing = false;
     clearTimeout(playTimer);
 }

@@ -11,7 +11,7 @@
     hex: document.getElementById('hex'),
     rgb: document.getElementById('rgb'),
     chips: document.getElementById('chips'),
-    prevSwatch: document.getElementById('prevSwatch'),
+//    prevSwatch: document.getElementById('prevSwatch'),
     curSwatch: document.getElementById('curSwatch'),
     readout: document.getElementById('readout'),
     setPrev: document.getElementById('setPrev')
@@ -149,7 +149,7 @@
     const { r, g, b } = hsvToRgb(state.h, state.s, state.v);
     const hex = rgbToHex(r, g, b);
     el.curSwatch.style.background = hex;
-    el.prevSwatch.style.background = state.prevHex;
+//    el.prevSwatch.style.background = state.prevHex;
     el.hex.value = hex;
     el.rgb.value = `${r}, ${g}, ${b}`;
     el.readout.textContent = `HSV: ${Math.round(state.h)}°, ${Math.round(state.s*100)}%, ${Math.round(state.v*100)}%`;
