@@ -411,7 +411,9 @@ function init() {
     frames.push(dr.toDataURL());
     cur = frames.length - 1;
     render()
+
 }
+
 resize(640, 360);
 init()
 
@@ -432,7 +434,7 @@ const AliasedBtn = document.getElementById('aliased');
 AliasedBtn.onclick = () => {
     aliased = !aliased;
     if (!aliased) {
-        AliasedBtn.style.backgroundColor = "gray";
+        AliasedBtn.style.backgroundColor = "orange";
         useAliased = true;
         
     } else {
@@ -607,7 +609,33 @@ document.addEventListener('wheel', e => {
 })
 
 
+// Fit to Screen button
+fitScreen.onclick = () => {
+  autoFitCanvas();
+};
 
+// Auto fit when page loads
+window.addEventListener('load', () => {
+  autoFitCanvas();
+});
+
+function autoFitCanvas() {
+  const rect = dr.getBoundingClientRect();
+
+  // available screen size (or container size)
+  const screenW = window.innerWidth;
+  const screenH = window.innerHeight;
+
+  // scale factors for width and height
+  const scaleX = screenW / rect.width;
+  const scaleY = screenH / rect.height;
+
+  // choose the smaller one so canvas fits entirely
+  targetSc = Math.min(scaleX, scaleY);
+
+  // redraw or update canvas here if needed
+  // e.g. redrawCanvas();
+}
 
 dr.onpointerdown = e => {
     if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
