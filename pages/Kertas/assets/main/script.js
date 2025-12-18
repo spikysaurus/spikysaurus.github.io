@@ -416,7 +416,7 @@ function init() {
 
 }
 
-resize(640, 360);
+resize(500, 500);
 init()
 
 function getCanvasCoords(e, canvas) {
