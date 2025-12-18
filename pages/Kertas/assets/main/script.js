@@ -495,39 +495,6 @@ let undoStack = [];
 let redoStack = [];
 
 ////DRAWING ERASING
-//layer_1.onpointerdown = e => {
-//    if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
-//        // --- Capture undo state BEFORE drawing ---
-//        undoStack.push(layer_1.toDataURL());
-
-//        drawing = true;
-//        lx = e.offsetX;
-//        ly = e.offsetY;
-//        circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
-//    }
-//};
-
-//layer_1.onpointermove = e => {
-//    if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
-//        if (drawing) {
-//            line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
-//            lx = e.offsetX;
-//            ly = e.offsetY;
-//        }
-//    }
-//};
-
-//layer_1.onpointerup = () => {
-//    if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
-//        drawing = false;
-//        frames[cur] = layer_1.toDataURL();
-//        render();
-//    }
-//};
-
-//layer_1.onpointerleave = () => {
-//    drawing = false;
-//};
 const pressureSizeToggle = document.getElementById("pressureSizeToggle");
 const pressureOpacityToggle = document.getElementById("pressureOpacityToggle");
 
@@ -554,8 +521,6 @@ layer_1.onpointerdown = e => {
         lx = e.offsetX;
         ly = e.offsetY;
 
-//        const { brushSize, brushOpacity } = getBrushSettings(e);
-//        circ(lx, ly, brushSize, col.value, brushOpacity);
     }
 };
 
