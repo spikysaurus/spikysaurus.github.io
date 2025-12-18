@@ -225,8 +225,8 @@ width:40px;
 .sliders{
 
 display:flex;
-flex-direction:column;
-gap:0	px;
+flex-direction:row;
+gap:5px;
 position:fixed;
 bottom:90px;
 left:10px;
@@ -326,6 +326,8 @@ width:100%;
 		left:40px;
 	}
 	.sliders{
+	flex-direction:column;
+gap:0px;
 		bottom:40px;
 		left:40px;
 		gap:0px;
