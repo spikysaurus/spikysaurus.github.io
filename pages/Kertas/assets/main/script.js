@@ -1334,9 +1334,10 @@ function exportGif() {
     const gif = new GIF({
         workers: 2,
         quality: 10,
+        workerScript: 'assets/gif-js/gif.worker.js', // <-- correct path
         width: layer_1.width,
         height: layer_1.height,
-        transparent: null // disable transparency → solid background
+        transparent: null, // disable transparency → solid background
     });
 
     let loadedCount = 0;
