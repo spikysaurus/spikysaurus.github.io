@@ -149,20 +149,43 @@ animate()
   layer_1_ctx.putImageData(imageData, 0, 0);
 }
 
+//// Fill Tool handlers
+//layer_1.addEventListener("pointerdown", e => {
+// if (activeTool != "ToolFill") return; // only fill if enabled
+
+// const rect = layer_1.getBoundingClientRect();
+
+// // Map screen coords back to canvas pixel coords
+// const scaleX = layer_1.width / rect.width;
+// const scaleY = layer_1.height / rect.height;
+
+// const x = Math.floor((e.clientX - rect.left) * scaleX);
+// const y = Math.floor((e.clientY - rect.top) * scaleY);
+
+// fill(x, y, col.value, 0); // fill with chosen color
+//});
+
 // Fill Tool handlers
 layer_1.addEventListener("pointerdown", e => {
- if (activeTool != "ToolFill") return; // only fill if enabled
+    if (activeTool != "ToolFill") return; // only fill if enabled
 
- const rect = layer_1.getBoundingClientRect();
+    // --- Capture undo state BEFORE filling ---
+    undoStack.push(layer_1.toDataURL());
 
- // Map screen coords back to canvas pixel coords
- const scaleX = layer_1.width / rect.width;
- const scaleY = layer_1.height / rect.height;
+    const rect = layer_1.getBoundingClientRect();
 
- const x = Math.floor((e.clientX - rect.left) * scaleX);
- const y = Math.floor((e.clientY - rect.top) * scaleY);
+    // Map screen coords back to canvas pixel coords
+    const scaleX = layer_1.width / rect.width;
+    const scaleY = layer_1.height / rect.height;
 
- fill(x, y, col.value, 0); // fill with chosen color
+    const x = Math.floor((e.clientX - rect.left) * scaleX);
+    const y = Math.floor((e.clientY - rect.top) * scaleY);
+
+    fill(x, y, col.value, 0); // fill with chosen color
+
+    // Optionally update frames[] if you want fills to be stored like strokes
+    frames[cur] = layer_1.toDataURL();
+    render();
 });
 
 // --- Globals for lasso ---
@@ -237,7 +260,10 @@ layer_1.addEventListener("pointerup", e => {
   isLassoing = false;
 
   cvx_overlay.clearRect(0, 0, cv_overlay.width, cv_overlay.height);
-
+	
+	// --- Capture undo state BEFORE applying lasso fill/erase ---
+  undoStack.push(layer_1.toDataURL());
+  
   const ctx = layer_1_ctx; // main drawing context
   ctx.save();
   ctx.beginPath();
@@ -481,33 +507,110 @@ function line(x0, y0, x1, y1, s, c, a) {
 }
 
 //DRAWING ERASING
+//layer_1.onpointerdown = e => {
+//    if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
+//    drawing = true;
+//    lx = e.offsetX;
+//    ly = e.offsetY;
+//    circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
+//    }
+//};
+//layer_1.onpointermove = e => {
+//    if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
+//    if (drawing) {
+//        line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
+//        lx = e.offsetX;
+//        ly = e.offsetY;
+//    }
+//    }
+//};
+//layer_1.onpointerup = () => {
+//if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
+//    drawing = false;
+//    frames[cur] = layer_1.toDataURL();
+//    render();
+//    }
+//};
+//layer_1.onpointerleave = () => {
+//    drawing = false
+//};
+
+// Keep a stack of undo/redo states
+let undoStack = [];
+let redoStack = [];
+
+//DRAWING ERASING
 layer_1.onpointerdown = e => {
-    if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
-    drawing = true;
-    lx = e.offsetX;
-    ly = e.offsetY;
-    circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
-    }
-};
-layer_1.onpointermove = e => {
-    if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
-    if (drawing) {
-        line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
+    if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
+        // --- Capture undo state BEFORE drawing ---
+        undoStack.push(layer_1.toDataURL());
+
+        drawing = true;
         lx = e.offsetX;
         ly = e.offsetY;
-    }
+        circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
     }
 };
+
+layer_1.onpointermove = e => {
+    if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
+        if (drawing) {
+            line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
+            lx = e.offsetX;
+            ly = e.offsetY;
+        }
+    }
+};
+
 layer_1.onpointerup = () => {
-if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
-    drawing = false;
-    frames[cur] = layer_1.toDataURL();
-    render();
+    if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
+        drawing = false;
+        frames[cur] = layer_1.toDataURL();
+        render();
     }
 };
+
 layer_1.onpointerleave = () => {
-    drawing = false
+    drawing = false;
 };
+
+document.getElementById("undoBtn").onclick = undo;
+document.getElementById("redoBtn").onclick = redo;
+
+function undo() {
+    if (undoStack.length > 0) {
+        // Save current state into redoStack
+        redoStack.push(layer_1.toDataURL());
+
+        const lastState = undoStack.pop();
+        const img = new Image();
+        img.onload = () => {
+            layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
+            layer_1_ctx.drawImage(img, 0, 0);
+            frames[cur] = lastState;
+            render();
+        };
+        img.src = lastState;
+    }
+}
+
+function redo() {
+    if (redoStack.length > 0) {
+        // Save current state into undoStack
+        undoStack.push(layer_1.toDataURL());
+
+        const nextState = redoStack.pop();
+        const img = new Image();
+        img.onload = () => {
+            layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
+            layer_1_ctx.drawImage(img, 0, 0);
+            frames[cur] = nextState;
+            render();
+        };
+        img.src = nextState;
+    }
+}
+
 
 
 // ToolPan (mouse/pen only)
@@ -1334,6 +1437,7 @@ playBtn.onclick = () => {
     }
     
 };
+
 
 function playAnimation() {
     if (!frames.length) {
