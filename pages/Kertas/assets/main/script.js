@@ -1,20 +1,15 @@
-const bg = document.getElementById('bg'),
-    bgx = bg.getContext('2d')
-const cv_checkerboard = document.getElementById('checkerboard'),
-    cvx_checkerboard = cv_checkerboard.getContext('2d')
-const layer_1 = document.getElementById('layer_1'),
-    layer_1_ctx = layer_1.getContext('2d')
-    layer_1_ctx.imageSmoothingEnabled = false;
-const overlay = document.getElementById('overlay'),
-    ox = overlay.getContext('2d')
 const stack = document.getElementById('stack')
-const sz = document.getElementById('sz'),
-    op = document.getElementById('op'),
-    col = document.getElementById('col')
+const cv_background = document.getElementById('background'),cvx_background = cv_background.getContext('2d')
+const cv_checkerboard = document.getElementById('checkerboard'),cvx_checkerboard = cv_checkerboard.getContext('2d')
+const cv_overlay = document.getElementById('overlay'),cvx_overlay = cv_overlay.getContext('2d')
+const layer_1 = document.getElementById('layer_1'),layer_1_ctx = layer_1.getContext('2d')
 
+cvx_overlay.imageSmoothingEnabled = false;
+layer_1_ctx.imageSmoothingEnabled = false;
+
+const sz = document.getElementById('sz'),op = document.getElementById('op'),col = document.getElementById('col')
 
 let clipboard = null;
-
 let drawing = false,
     lx, ly, eras = false,
     px = 0,
@@ -216,24 +211,24 @@ layer_1.addEventListener("pointermove", e => {
   lassoPoints.push({ x, y });
 
   // clear overlay
-  ox.clearRect(0, 0, overlay.width, overlay.height);
+  cvx_overlay.clearRect(0, 0, cv_overlay.width, cv_overlay.height);
 
   // create animated rainbow gradient
-  const gradient = ox.createLinearGradient(0, 0, overlay.width, 0);
+  const gradient = cvx_overlay.createLinearGradient(0, 0, cv_overlay.width, 0);
   for (let i = 0; i <= 6; i++) {
     const hue = (rainbowOffset + i * 60) % 360;
     gradient.addColorStop(i / 6, `hsl(${hue}, 100%, 50%)`);
   }
-  ox.strokeStyle = gradient;
-  ox.lineWidth = 2;
+  cvx_overlay.strokeStyle = gradient;
+  cvx_overlay.lineWidth = 2;
 
   // draw lasso path
-  ox.beginPath();
-  ox.moveTo(lassoPoints[0].x, lassoPoints[0].y);
+  cvx_overlay.beginPath();
+  cvx_overlay.moveTo(lassoPoints[0].x, lassoPoints[0].y);
   for (let i = 1; i < lassoPoints.length; i++) {
-    ox.lineTo(lassoPoints[i].x, lassoPoints[i].y);
+    cvx_overlay.lineTo(lassoPoints[i].x, lassoPoints[i].y);
   }
-  ox.stroke();
+  cvx_overlay.stroke();
 
   // advance rainbow animation
   rainbowOffset = (rainbowOffset + 5) % 360; // 5 is speed
@@ -244,7 +239,7 @@ layer_1.addEventListener("pointerup", e => {
   if (activeTool !== "ToolLassoFill" || !isLassoing) return;
   isLassoing = false;
 
-  ox.clearRect(0, 0, overlay.width, overlay.height);
+  cvx_overlay.clearRect(0, 0, cv_overlay.width, cv_overlay.height);
 
   const ctx = layer_1_ctx; // main drawing context
   ctx.save();
@@ -282,13 +277,13 @@ function resize(w, h) {
 	cv_checkerboard.width = w;
     cv_checkerboard.height = h;
     
-    bg.width = w;
-    bg.height = h;
+    cv_background.width = w;
+    cv_background.height = h;
     layer_1.width = w;
     layer_1.height = h;
     
-    overlay.width = w;
-    overlay.height = h;
+    cv_overlay.width = w;
+    cv_overlay.height = h;
     stack.style.width = w + 'px';
     stack.style.height = h + 'px';
 
@@ -312,13 +307,13 @@ function resizeAnchor(w, h, anchor = "top-left") {
 	cv_checkerboard.width = w;
     cv_checkerboard.height = h;
     
-    bg.width = w;
-    bg.height = h;
+    cv_background.width = w;
+    cv_background.height = h;
     layer_1.width = w;
     layer_1.height = h;
     
-    overlay.width = w;
-    overlay.height = h;
+    cv_overlay.width = w;
+    cv_overlay.height = h;
     stack.style.width = w + 'px';
     stack.style.height = h + 'px';
 
@@ -345,12 +340,12 @@ function resizeCenter(w, h) {
 		
 		cv_checkerboard.width = w;
     cv_checkerboard.height = h;
-    bg.width = w;
-    bg.height = h;
+    cv_background.width = w;
+    cv_background.height = h;
     layer_1.width = w;
     layer_1.height = h;
-    overlay.width = w;
-    overlay.height = h;
+    cv_overlay.width = w;
+    cv_overlay.height = h;
     stack.style.width = w + 'px';
     stack.style.height = h + 'px';
 
@@ -677,7 +672,7 @@ let frozenStartX = 0, frozenStartY = 0, frozenEndX = 0, frozenEndY = 0;
 // --- Selection handlers ---
 layer_1.addEventListener('pointerdown', e => {
   if (activeTool !== "ToolSelect") return;
-  const { x, y } = getCanvasCoords(e, dr);
+  const { x, y } = getCanvasCoords(e, layer_1);
 
   // compute center of current selection
   const w = selEndX - selStartX;
@@ -706,7 +701,7 @@ layer_1.addEventListener('pointerdown', e => {
 
 layer_1.addEventListener('pointermove', e => {
   if (activeTool !== "ToolSelect") return;
-  const { x, y } = getCanvasCoords(e, dr);
+  const { x, y } = getCanvasCoords(e, layer_1);
 
   if (isDraggingHandle) {
     if (e.buttons === 1 || e.pressure > 0) {
@@ -724,33 +719,37 @@ layer_1.addEventListener('pointermove', e => {
     }
   }
 
-  ox.clearRect(0, 0, overlay.width, overlay.height);
+  cvx_overlay.clearRect(0, 0, cv_overlay.width, cv_overlay.height);
 
   // fill if pressure
   if (e.pressure > 0) {
-    ox.fillStyle = 'rgba(128,0,128,0.2)';
-    ox.fillRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
-    ox.setLineDash([6, 4]);
+    cvx_overlay.fillStyle = 'rgba(128,0,128,0.2)';
+    cvx_overlay.fillRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
+    cvx_overlay.setLineDash([6, 4]);
   }
   // 🌈 rainbow stroke
-  const gradient = ox.createLinearGradient(selStartX, selStartY, selEndX, selEndY);
-  for (let i = 0; i <= 6; i++) {
-    const hue = (rainbowOffset + i * 60) % 360;
-    gradient.addColorStop(i / 6, `hsl(${hue}, 100%, 50%)`);
-  }
-  ox.strokeStyle = gradient;
-  ox.lineWidth = 2;
-  ox.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
+  if (Number.isFinite(selStartX) && Number.isFinite(selStartY) &&
+    Number.isFinite(selEndX) && Number.isFinite(selEndY)) {
 
-  // draw center handle
-  const w = selEndX - selStartX;
-  const h = selEndY - selStartY;
-  const centerX = selStartX + w / 2;
-  const centerY = selStartY + h / 2;
-  ox.fillStyle = gradient;
-  ox.beginPath();
-  ox.arc(centerX, centerY, 6, 0, Math.PI * 2);
-  ox.fill();
+    const gradient = cvx_overlay.createLinearGradient(selStartX, selStartY, selEndX, selEndY);
+    for (let i = 0; i <= 6; i++) {
+        const hue = (rainbowOffset + i * 60) % 360;
+        gradient.addColorStop(i / 6, `hsl(${hue}, 100%, 50%)`);
+    }
+    cvx_overlay.strokeStyle = gradient;
+    cvx_overlay.lineWidth = 2;
+    cvx_overlay.strokeRect(selStartX, selStartY, selEndX - selStartX, selEndY - selStartY);
+
+    // draw center handle
+    const w = selEndX - selStartX;
+    const h = selEndY - selStartY;
+    const centerX = selStartX + w / 2;
+    const centerY = selStartY + h / 2;
+    cvx_overlay.fillStyle = gradient;
+    cvx_overlay.beginPath();
+    cvx_overlay.arc(centerX, centerY, 6, 0, Math.PI * 2);
+    cvx_overlay.fill();
+}
 
   // advance rainbow animation
   rainbowOffset = (rainbowOffset + 5) % 360; // adjust speed here
@@ -766,13 +765,13 @@ layer_1.addEventListener('pointerup', e => {
   }
 
   // normal selection finalize
-  const { x, y } = getCanvasCoords(e, dr);
+  const { x, y } = getCanvasCoords(e, layer_1);
   selEndX = x; selEndY = y;
 
   const w = Math.abs(selEndX - selStartX);
   const h = Math.abs(selEndY - selStartY);
   if (w < 5 || h < 5) {
-    ox.clearRect(0, 0, overlay.width, overlay.height);
+    cvx_overlay.clearRect(0, 0, cv_overlay.width, cv_overlay.height);
     selStartX = null;
     selStartY = null;
     selEndX   = null;
@@ -807,7 +806,7 @@ layer_1.addEventListener('pointerup', e => {
 // Copy selected region
 document.getElementById('copy').onclick = () => {
     if (selStartX != null) {
-//    		ox.clearRect(0, 0, overlay.width, overlay.height);
+//    		cvx_overlay.clearRect(0, 0, cv_overlay.width, cv_overlay.height);
         const w = selEndX - selStartX;
         const h = selEndY - selStartY;
         if (w && h) {
@@ -815,7 +814,7 @@ document.getElementById('copy').onclick = () => {
             tmp.width = Math.abs(w);
             tmp.height = Math.abs(h);
             const ctx = tmp.getContext('2d');
-            ctx.drawImage(dr, Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(w), Math.abs(h), 0, 0, Math.abs(w), Math.abs(h));
+            ctx.drawImage(layer_1, Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(w), Math.abs(h), 0, 0, Math.abs(w), Math.abs(h));
             clipboard = tmp;
         }
     }
@@ -869,11 +868,11 @@ document.getElementById('clr').onclick = () => {
 //Save Button
 document.getElementById('save').onclick = () => {
     const tmp = document.createElement('canvas');
-    tmp.width = bg.width;
-    tmp.height = bg.height;
+    tmp.width = cv_background.width;
+    tmp.height = cv_background.height;
     const tx = tmp.getContext('2d');
-    tx.drawImage(bg, 0, 0);
-    tx.drawImage(dr, 0, 0);
+    tx.drawImage(cv_background, 0, 0);
+    tx.drawImage(layer_1, 0, 0);
     const link = document.createElement('a');
     link.download = 'img.png';
     link.href = tmp.toDataURL();
@@ -1000,8 +999,8 @@ document.getElementById('import').onclick = () => {
                         document.getElementById('canvasWidth').value = w;
                         document.getElementById('canvasHeight').value = h;
 
-                        bgx.clearRect(0, 0, bg.width, bg.height);
-                        bgx.drawImage(img, 0, 0, w, h);
+                        cvx_background.clearRect(0, 0, cv_background.width, cv_background.height);
+                        cvx_background.drawImage(img, 0, 0, w, h);
                         layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
                     };
                 } else if (obj.canvas && obj.canvas.width && obj.canvas.height) {
@@ -1210,8 +1209,8 @@ document.getElementById('load').onclick = () => {
     img.crossOrigin = "anonymous";
     img.onload = () => {
         resize(img.width, img.height);
-        bgx.clearRect(0, 0, bg.width, bg.height);
-        bgx.drawImage(img, 0, 0);
+        cvx_background.clearRect(0, 0, cv_background.width, cv_background.height);
+        cvx_background.drawImage(img, 0, 0);
         layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
         frames[cur] = layer_1.toDataURL();
         render();
