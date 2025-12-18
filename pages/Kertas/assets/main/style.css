@@ -311,8 +311,7 @@ width:100%;
 	}
 	.panel-bottom {
 		bottom: 0px;
-		left: 38px;
-		width:100px;
+		left: 40px;
 	}
 	#settings{
     bottom:0px;
@@ -322,7 +321,6 @@ width:100%;
 	.sliders{
 		flex-direction:column;
 		gap:0px;
-		bottom:100px;
 		left:50px;
 		gap:0px;
 	}
