@@ -37,6 +37,11 @@ const toggleBtn = document.getElementById('toggleLabel');
 const settings = document.getElementById('settings');
 const checkerboardBtn = document.getElementById('checkerboardBtn');
 
+window.oncontextmenu = function(event) {
+     event.preventDefault();
+     event.stopPropagation();
+     return false;
+};
 
 // Tool state
 let tools = [
@@ -520,7 +525,10 @@ layer_1.onpointerdown = e => {
         drawing = true;
         lx = e.offsetX;
         ly = e.offsetY;
-
+			
+			// draw initial dot
+        const { brushSize, brushOpacity } = getBrushSettings(e);
+        circ(lx, ly, brushSize, col.value, brushOpacity);
     }
 };
 
