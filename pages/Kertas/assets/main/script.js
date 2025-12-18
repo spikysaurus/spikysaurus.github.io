@@ -535,20 +535,21 @@ function getBrushSettings(e) {
     const baseSize = parseInt(sz.value);
     const baseOpacity = parseFloat(op.value);
 
-    // Default pressure is 1.0 if unsupported or not pressed
-    const pressure = e.pressure > 0 ? e.pressure : 1.0;
+    // Pressure: clamp to a small minimum so it's never 0
+    let pressure = e.pressure;
+    if (pressure === 0) pressure = 0.05; // tiny dot instead of full size
 
-    // Apply toggles
     const brushSize = pressureSizeToggle.checked ? baseSize * pressure : baseSize;
     const brushOpacity = pressureOpacityToggle.checked ? baseOpacity * pressure : baseOpacity;
 
     return { brushSize, brushOpacity };
 }
 
+
 layer_1.onpointerdown = e => {
     if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
         undoStack.push(layer_1.toDataURL());
-        redoStack = []; // clear redo history
+        redoStack = [];
 
         drawing = true;
         lx = e.offsetX;
@@ -560,15 +561,14 @@ layer_1.onpointerdown = e => {
 };
 
 layer_1.onpointermove = e => {
-    if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
-        if (drawing) {
-            const { brushSize, brushOpacity } = getBrushSettings(e);
-            line(lx, ly, e.offsetX, e.offsetY, brushSize, col.value, brushOpacity);
-            lx = e.offsetX;
-            ly = e.offsetY;
-        }
+    if ((activeTool == "ToolBrush" || activeTool == "ToolEraser") && drawing) {
+        const { brushSize, brushOpacity } = getBrushSettings(e);
+        line(lx, ly, e.offsetX, e.offsetY, brushSize, col.value, brushOpacity);
+        lx = e.offsetX;
+        ly = e.offsetY;
     }
 };
+
 
 layer_1.onpointerup = () => {
     if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
