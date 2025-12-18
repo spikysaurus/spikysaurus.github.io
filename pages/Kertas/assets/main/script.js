@@ -149,22 +149,6 @@ animate()
   layer_1_ctx.putImageData(imageData, 0, 0);
 }
 
-//// Fill Tool handlers
-//layer_1.addEventListener("pointerdown", e => {
-// if (activeTool != "ToolFill") return; // only fill if enabled
-
-// const rect = layer_1.getBoundingClientRect();
-
-// // Map screen coords back to canvas pixel coords
-// const scaleX = layer_1.width / rect.width;
-// const scaleY = layer_1.height / rect.height;
-
-// const x = Math.floor((e.clientX - rect.left) * scaleX);
-// const y = Math.floor((e.clientY - rect.top) * scaleY);
-
-// fill(x, y, col.value, 0); // fill with chosen color
-//});
-
 // Fill Tool handlers
 layer_1.addEventListener("pointerdown", e => {
     if (activeTool != "ToolFill") return; // only fill if enabled
@@ -507,33 +491,6 @@ function line(x0, y0, x1, y1, s, c, a) {
 }
 
 //DRAWING ERASING
-//layer_1.onpointerdown = e => {
-//    if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
-//    drawing = true;
-//    lx = e.offsetX;
-//    ly = e.offsetY;
-//    circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
-//    }
-//};
-//layer_1.onpointermove = e => {
-//    if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
-//    if (drawing) {
-//        line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
-//        lx = e.offsetX;
-//        ly = e.offsetY;
-//    }
-//    }
-//};
-//layer_1.onpointerup = () => {
-//if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
-//    drawing = false;
-//    frames[cur] = layer_1.toDataURL();
-//    render();
-//    }
-//};
-//layer_1.onpointerleave = () => {
-//    drawing = false
-//};
 
 // Keep a stack of undo/redo states
 let undoStack = [];
