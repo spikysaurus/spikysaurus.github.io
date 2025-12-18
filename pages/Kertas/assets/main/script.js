@@ -526,9 +526,11 @@ layer_1.onpointerdown = e => {
         lx = e.offsetX;
         ly = e.offsetY;
 			
-			// draw initial dot
-        const { brushSize, brushOpacity } = getBrushSettings(e);
-        circ(lx, ly, brushSize, col.value, brushOpacity);
+			// Only draw initial dot if pressure is NOT controlling size or opacity
+        if (!pressureSizeToggle.checked && !pressureOpacityToggle.checked) {
+            const { brushSize, brushOpacity } = getBrushSettings(e);
+            circ(lx, ly, brushSize, col.value, brushOpacity);
+        }
     }
 };
 
