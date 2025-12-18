@@ -534,9 +534,26 @@ layer_1.onpointerdown = e => {
     }
 };
 
+//layer_1.onpointermove = e => {
+//    if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
+//        if (drawing) {
+//            const { brushSize, brushOpacity } = getBrushSettings(e);
+//            line(lx, ly, e.offsetX, e.offsetY, brushSize, col.value, brushOpacity);
+//            lx = e.offsetX;
+//            ly = e.offsetY;
+//        }
+//    }
+//};
+
 layer_1.onpointermove = e => {
     if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
         if (drawing) {
+            // if pressure is enabled, skip zero-length moves
+            if ((pressureSizeToggle.checked || pressureOpacityToggle.checked) &&
+                lx === e.offsetX && ly === e.offsetY) {
+                return; // don't draw the dot
+            }
+
             const { brushSize, brushOpacity } = getBrushSettings(e);
             line(lx, ly, e.offsetX, e.offsetY, brushSize, col.value, brushOpacity);
             lx = e.offsetX;
