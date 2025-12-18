@@ -554,8 +554,8 @@ layer_1.onpointerdown = e => {
         lx = e.offsetX;
         ly = e.offsetY;
 
-        const { brushSize, brushOpacity } = getBrushSettings(e);
-        circ(lx, ly, brushSize, col.value, brushOpacity);
+//        const { brushSize, brushOpacity } = getBrushSettings(e);
+//        circ(lx, ly, brushSize, col.value, brushOpacity);
     }
 };
 
