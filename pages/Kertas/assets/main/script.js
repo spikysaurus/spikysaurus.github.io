@@ -40,29 +40,26 @@ const checkerboardBtn = document.getElementById('checkerboardBtn');
 
 // Tool state
 let tools = [
-	{ name: "ToolBrush",   active: true, btn: ToolBrushBtn },
-	{ name: "ToolEraser",   active: false, btn: ToolEraserBtn },
-  { name: "ToolFill",   active: false, btn: ToolFillBtn },
-  { name: "ToolLassoFill",   active: false, btn: ToolLassoFillBtn },
-  { name: "ToolSelect", active: false, btn: ToolSelectBtn },
-  { name: "ToolPan",    active: false, btn: ToolPanBtn }
+{ name: "ToolBrush", active: true, btn: ToolBrushBtn },
+{ name: "ToolEraser", active: false, btn: ToolEraserBtn },
+{ name: "ToolFill", active: false, btn: ToolFillBtn },
+{ name: "ToolLassoFill", active: false, btn: ToolLassoFillBtn },
+{ name: "ToolSelect", active: false, btn: ToolSelectBtn },
+{ name: "ToolPan", active: false, btn: ToolPanBtn }
 ];
 
 // Helper to set active tool
 let activeTool = "ToolBrush";
 // Activate one tool, deactivate others
 function setActiveTool(toolName) {
-activeTool = toolName;
-
-  tools.forEach(tool => {
-    tool.active = (tool.name === toolName);
-  
-  const toggleBtn = document.getElementById("ToolLassoFillToggle");
-  toggleBtn.style.display = (activeTool === "ToolLassoFill") ? "block" : "none";
-  });
-  
-  updateUI();
-  activeTool = toolName;
+	activeTool = toolName;
+	tools.forEach(tool => {
+		tool.active = (tool.name === toolName);
+		const toggleBtn = document.getElementById("ToolLassoFillToggle");
+		toggleBtn.style.display = (activeTool === "ToolLassoFill") ? "block" : "none";
+	});
+	updateUI();
+	activeTool = toolName;
 }
 
 function setSize(w, h) {
@@ -481,8 +478,6 @@ function line(x0, y0, x1, y1, s, c, a) {
         const t = i / st;
         circ(x0 + dx * t, y0 + dy * t, s, c, a);
     }
-    
-    
 }
 
 //DRAWING ERASING
@@ -515,10 +510,9 @@ layer_1.onpointerleave = () => {
 };
 
 
-// ToolPan
+// ToolPan (mouse/pen only)
 document.addEventListener('pointerdown', e => {
   if (activeTool !== "ToolPan") return;
-
   psx = e.clientX - targetPx;
   psy = e.clientY - targetPy;
   document.body.style.cursor = 'grab';
@@ -526,60 +520,15 @@ document.addEventListener('pointerdown', e => {
 
 document.addEventListener('pointermove', e => {
   if (activeTool !== "ToolPan") return;
-
-  // simple pan with mouse
-  if (e.buttons === 1) {
-    targetPx = e.clientX - psx;
-    targetPy = e.clientY - psy;
-  }
-
-  // multi-touch gestures (use TouchEvent.touches, not PointerEvent)
-  if (e.touches?.length === 2) {
-    const [t0, t1] = e.touches;
-    const dx = t0.clientX - t1.clientX;
-    const dy = t0.clientY - t1.clientY;
-    const nd = Math.hypot(dx, dy);
-    const f = nd / sd;
-    targetSc = Math.min(Math.max(targetSc * f, 0.5), 3);
-    sd = nd;
-  }
-
-  if (e.touches?.length === 3) {
-    const [t0] = e.touches;
-    targetPx = t0.clientX - punStartX;
-    targetPy = t0.clientY - punStartY;
-  }
-}, { passive: true });
+  if (e.buttons !== 1) return; // only drag with button pressed
+  targetPx = e.clientX - psx;
+  targetPy = e.clientY - psy;
+});
 
 document.addEventListener('pointerup', () => {
   if (activeTool !== "ToolPan") return;
   document.body.style.cursor = 'default';
 });
-
-// initialize multi-touch start
-document.addEventListener('touchstart', e => {
-  if (activeTool !== "ToolPan") return;
-
-  if (e.touches.length === 2) {
-    const [t0, t1] = e.touches;
-    const dx = t0.clientX - t1.clientX;
-    const dy = t0.clientY - t1.clientY;
-    sd = Math.hypot(dx, dy);
-  }
-
-  if (e.touches.length === 3) {
-    const [t0] = e.touches;
-    punStartX = t0.clientX - targetPx;
-    punStartY = t0.clientY - targetPy;
-  }
-}, { passive: true });
-
-//zoomIn.onclick = () => {
-// targetSc *= 1.1
-//}
-//zoomOut.onclick = () => {
-// targetSc *= 0.9
-//}
 
 let zoomInterval;
 
@@ -1571,8 +1520,6 @@ onionBtn.addEventListener("click", () => {
 		 }
     });
     
-
-
 settings.style.display = 'none';
 toggleBtn.onclick = () => {
  if (settings.style.display === 'none') {
