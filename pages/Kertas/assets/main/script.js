@@ -1647,6 +1647,33 @@ function updateUI() {
   });
 }
 
+const bar = document.getElementById('bar');
+let isDragging = false;
+let offsetX, offsetY;
+
+bar.addEventListener('mousedown', (e) => {
+  // Only drag if clicked on empty space, not buttons
+  if (e.target === bar) {
+    isDragging = true;
+    offsetX = e.clientX - bar.offsetLeft;
+    offsetY = e.clientY - bar.offsetTop;
+    document.body.style.userSelect = 'none'; // prevent text selection
+  }
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (isDragging) {
+    bar.style.left = (e.clientX - offsetX) + 'px';
+    bar.style.top = (e.clientY - offsetY) + 'px';
+  }
+});
+
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+  document.body.style.userSelect = '';
+});
+
+
 // Tool events
 ToolBrushBtn.addEventListener("click", () => setActiveTool("ToolBrush"));
 ToolEraserBtn.addEventListener("click", () => setActiveTool("ToolEraser"));
