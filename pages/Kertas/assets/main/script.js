@@ -490,13 +490,44 @@ function line(x0, y0, x1, y1, s, c, a) {
     }
 }
 
-//DRAWING ERASING
-
 // Keep a stack of undo/redo states
 let undoStack = [];
 let redoStack = [];
 
-//DRAWING ERASING
+////DRAWING ERASING
+//layer_1.onpointerdown = e => {
+//    if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
+//        // --- Capture undo state BEFORE drawing ---
+//        undoStack.push(layer_1.toDataURL());
+
+//        drawing = true;
+//        lx = e.offsetX;
+//        ly = e.offsetY;
+//        circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
+//    }
+//};
+
+//layer_1.onpointermove = e => {
+//    if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
+//        if (drawing) {
+//            line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
+//            lx = e.offsetX;
+//            ly = e.offsetY;
+//        }
+//    }
+//};
+
+//layer_1.onpointerup = () => {
+//    if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
+//        drawing = false;
+//        frames[cur] = layer_1.toDataURL();
+//        render();
+//    }
+//};
+
+//layer_1.onpointerleave = () => {
+//    drawing = false;
+//};
 layer_1.onpointerdown = e => {
     if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
         // --- Capture undo state BEFORE drawing ---
@@ -505,14 +536,24 @@ layer_1.onpointerdown = e => {
         drawing = true;
         lx = e.offsetX;
         ly = e.offsetY;
-        circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
+
+        // Use pen pressure to scale brush size or opacity
+        const pressure = e.pressure > 0 ? e.pressure : 1.0; // fallback if device doesn't support
+        const brushSize = parseInt(sz.value) * pressure;
+        const brushOpacity = parseFloat(op.value) * pressure;
+
+        circ(lx, ly, brushSize, col.value, brushOpacity);
     }
 };
 
 layer_1.onpointermove = e => {
     if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
         if (drawing) {
-            line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
+            const pressure = e.pressure > 0 ? e.pressure : 1.0;
+            const brushSize = parseInt(sz.value) * pressure;
+            const brushOpacity = parseFloat(op.value) * pressure;
+
+            line(lx, ly, e.offsetX, e.offsetY, brushSize, col.value, brushOpacity);
             lx = e.offsetX;
             ly = e.offsetY;
         }
