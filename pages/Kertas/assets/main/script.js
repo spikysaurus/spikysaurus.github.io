@@ -485,77 +485,95 @@ function line(x0, y0, x1, y1, s, c, a) {
     
 }
 
-
-
-layer_1.onpointermove = e => {
-    if (activeTool == "ToolPan") return;
-    if (drawing) {
-        const { x, y } = getCanvasCoords(e, dr);
-        
-        line(lx, ly, x, y, parseInt(sz.value), col.value, parseFloat(op.value).toFixed(2));
-        lx = x;
-        ly = y;
+//DRAWING ERASING
+layer_1.onpointerdown = e => {
+    if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
+    drawing = true;
+    lx = e.offsetX;
+    ly = e.offsetY;
+    circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
     }
 };
-
-layer_1.onpointerup = e => {
-    if (activeTool == "ToolPan") return;
+layer_1.onpointermove = e => {
+    if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
+    if (drawing) {
+        line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
+        lx = e.offsetX;
+        ly = e.offsetY;
+    }
+    }
+};
+layer_1.onpointerup = () => {
+if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
     drawing = false;
     frames[cur] = layer_1.toDataURL();
     render();
+    }
+};
+layer_1.onpointerleave = () => {
+    drawing = false
 };
 
 
-layer_1.onpointereave = () => {
-    drawing = false
-}
+// ToolPan
 document.addEventListener('pointerdown', e => {
-    if (activeTool != "ToolPan") return;
-    psx = e.clientX - targetPx;
-    psy = e.clientY - targetPy;
-    document.body.style.cursor = 'grab'
-})
-document.addEventListener('pointermove', e => {
-    if (activeTool != "ToolPan") return;
-    if (e.buttons !== 1) return;
-    targetPx = e.clientX - psx;
-    targetPy = e.clientY - psy
-})
-document.addEventListener('pointerup', () => {
-    if (activeTool != "ToolPan") return;
-    document.body.style.cursor = 'default'
-})
+  if (activeTool !== "ToolPan") return;
 
-//ToolPan
-document.addEventListener('pointerstart', e => {
-    if (e.length === 2) {
-        const dx = e[0].clientX - e[1].clientX
-        const dy = e[0].clientY - e[1].clientY
-        sd = Math.hypot(dx, dy)
-    }
-    if (e.length === 3) {
-        punStartX = e[0].clientX - targetPx
-        punStartY = e[0].clientY - targetPy
-    }
-}, {
-    passive: true
-})
+  psx = e.clientX - targetPx;
+  psy = e.clientY - targetPy;
+  document.body.style.cursor = 'grab';
+});
+
 document.addEventListener('pointermove', e => {
-    if (e.length === 2) {
-        const dx = e[0].clientX - e[1].clientX
-        const dy = e[0].clientY - e[1].clientY
-        const nd = Math.hypot(dx, dy)
-        const f = nd / sd
-        targetSc = Math.min(Math.max(targetSc * f, 0.5), 3)
-        sd = nd
-    }
-    if (e.length === 3) {
-        targetPx = e[0].clientX - punStartX
-        targetPy = e[0].clientY - punStartY
-    }
-}, {
-    passive: true
-})
+  if (activeTool !== "ToolPan") return;
+
+  // simple pan with mouse
+  if (e.buttons === 1) {
+    targetPx = e.clientX - psx;
+    targetPy = e.clientY - psy;
+  }
+
+  // multi-touch gestures (use TouchEvent.touches, not PointerEvent)
+  if (e.touches?.length === 2) {
+    const [t0, t1] = e.touches;
+    const dx = t0.clientX - t1.clientX;
+    const dy = t0.clientY - t1.clientY;
+    const nd = Math.hypot(dx, dy);
+    const f = nd / sd;
+    targetSc = Math.min(Math.max(targetSc * f, 0.5), 3);
+    sd = nd;
+  }
+
+  if (e.touches?.length === 3) {
+    const [t0] = e.touches;
+    targetPx = t0.clientX - punStartX;
+    targetPy = t0.clientY - punStartY;
+  }
+}, { passive: true });
+
+document.addEventListener('pointerup', () => {
+  if (activeTool !== "ToolPan") return;
+  document.body.style.cursor = 'default';
+});
+
+// initialize multi-touch start
+document.addEventListener('touchstart', e => {
+  if (activeTool !== "ToolPan") return;
+
+  if (e.touches.length === 2) {
+    const [t0, t1] = e.touches;
+    const dx = t0.clientX - t1.clientX;
+    const dy = t0.clientY - t1.clientY;
+    sd = Math.hypot(dx, dy);
+  }
+
+  if (e.touches.length === 3) {
+    const [t0] = e.touches;
+    punStartX = t0.clientX - targetPx;
+    punStartY = t0.clientY - targetPy;
+  }
+}, { passive: true });
+
 //zoomIn.onclick = () => {
 // targetSc *= 1.1
 //}
@@ -631,36 +649,6 @@ function autoFitCanvas() {
   // redraw or update canvas here if needed
   // e.g. redrawCanvas();
 }
-
-//DRAWING ERASING
-layer_1.onpointerdown = e => {
-    if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
-    drawing = true;
-    lx = e.offsetX;
-    ly = e.offsetY;
-    circ(lx, ly, parseInt(sz.value), col.value, parseFloat(op.value));
-    }
-};
-layer_1.onpointermove = e => {
-    if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
-    if (drawing) {
-        line(lx, ly, e.offsetX, e.offsetY, parseInt(sz.value), col.value, parseFloat(op.value));
-        lx = e.offsetX;
-        ly = e.offsetY;
-    }
-    }
-};
-layer_1.onpointerup = () => {
-if (activeTool == "ToolBrush" || activeTool == "ToolEraser"){
-    drawing = false;
-    frames[cur] = layer_1.toDataURL();
-    render();
-    }
-};
-layer_1.onpointerleave = () => {
-    drawing = false
-};
-
 
 // --- Globals ---
 //let selStartX = null, selStartY = null, selEndX = null, selEndY = null;
