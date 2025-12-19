@@ -2,7 +2,7 @@
 body {
   margin: 0;
   font-family: sans-serif;
-  background: lightgray;
+  background: black;
   color: #eee;
   overflow: hidden;
 }
@@ -56,7 +56,7 @@ html, body {
   height: 1280px;
   position: relative;
   overflow: hidden;
-  background-color: #222;
+  background-color: #5e5c64;
   transform-origin: 0 0; /* important for pan/zoom */
 /*  background-image: */
 /*    linear-gradient(to right, #3f3f3f 1px, transparent 1px),*/
