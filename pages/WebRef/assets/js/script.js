@@ -604,6 +604,46 @@ document.getElementById("importImages").addEventListener("change", (e) => {
   });
 });
 
+// --- Clipboard paste support ---
+document.addEventListener("paste", (e) => {
+  const items = e.clipboardData.items;
+  if (!items) return;
 
+  for (const item of items) {
+    if (item.type.indexOf("image") !== -1) {
+      const file = item.getAsFile();
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        // Create image box at default position
+        createImageBox(ev.target.result, 50, 50);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+});
+
+// --- paste button ---
+const pasteBtn = document.getElementById("pasteImage");
+pasteBtn.addEventListener("click", async () => {
+  // For button clicks, you don’t have a ClipboardEvent.
+  // Instead, use the async Clipboard API:
+  try {
+    const items = await navigator.clipboard.read();
+    for (const item of items) {
+      for (const type of item.types) {
+        if (type.startsWith("image/")) {
+          const blob = await item.getType(type);
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            createImageBox(ev.target.result, 50, 50);
+          };
+          reader.readAsDataURL(blob);
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Clipboard read failed:", err);
+  }
+});
 
 
