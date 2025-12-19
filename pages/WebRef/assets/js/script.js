@@ -258,7 +258,7 @@ document.getElementById("saveBoard").addEventListener("click",()=>{
 
     // Trigger download
     const link=document.createElement("a");
-    link.download="board.png";
+    link.download="WebRef.png";
     link.href=canvas.toDataURL("image/png");
     link.click();
   });
