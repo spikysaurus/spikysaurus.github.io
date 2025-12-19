@@ -60,6 +60,19 @@ board.addEventListener("drop",e=>{
   });
 });
 
+let gridSize = 80;       // default snap size
+let gridSizeShift = 20;  // snap size when holding Shift
+
+let scaleMode = false;
+let isScaling = false;
+let scalingBox = null;
+let startScaleX = 1;
+let startScaleY = 1;
+let baseW = 0;
+let baseH = 0;
+let anchorLeft = 0;
+let anchorTop = 0;
+
 function createImageBox(src, x, y) {
   const box = document.createElement("div");
   box.className = "image-box";
@@ -112,30 +125,17 @@ function createImageBox(src, x, y) {
   });
 
   // --- Rotate logic ---
-//  let isRot = false, startA = 0, initA = 0;
-//  rotate.addEventListener("pointerdown", e => {
-//    e.stopPropagation();
-//    isRot = true;
-//    document.body.classList.add("noselect");
-//    const r = box.getBoundingClientRect();
-//    const cx = r.left + r.width / 2;
-//    const cy = r.top + r.height / 2;
-//    startA = Math.atan2(e.clientY - cy, e.clientX - cx);
-//    initA = state.angle;
-//  });
-
-// --- Rotate logic ---
-let isRot = false, startA = 0, initA = 0;
-rotate.addEventListener("pointerdown", e => {
-  e.stopPropagation();
-  isRot = true;
-  document.body.classList.add("noselect");
-  const r = box.getBoundingClientRect();
-  const cx = r.left + r.width / 2;
-  const cy = r.top + r.height / 2;
-  startA = Math.atan2(e.clientY - cy, e.clientX - cx);
-  initA = state.angle;
-});
+  let isRot = false, startA = 0, initA = 0;
+  rotate.addEventListener("pointerdown", e => {
+    e.stopPropagation();
+    isRot = true;
+    document.body.classList.add("noselect");
+    const r = box.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+    startA = Math.atan2(e.clientY - cy, e.clientX - cx);
+    initA = state.angle;
+  });
 
   // --- Drag logic ---
   let down = false, sx = 0, sy = 0, ix = 0, iy = 0;
@@ -152,64 +152,136 @@ rotate.addEventListener("pointerdown", e => {
     iy = state.posY;
   });
 
-  const gridSize = 20;
+  // --- Move logic with Shift override ---
   const onMove = e => {
     if (isPanning || isZooming) return;
+
+    // 👇 choose grid size depending on Shift key
+    const activeGrid = e.shiftKey ? gridSizeShift : gridSize;
+
     if (isResizing) {
       let w = startW + (e.clientX - startX);
       if (w > 20) {
-        w = Math.round(w / gridSize) * gridSize;
+        w = Math.round(w / activeGrid) * activeGrid;
         state.width = w;
         box._update();
       }
     }
-//    if (isRot) {
-//      const r = box.getBoundingClientRect();
-//      const cx = r.left + r.width / 2;
-//      const cy = r.top + r.height / 2;
-//      const a = Math.atan2(e.clientY - cy, e.clientX - cx);
-//      state.angle = initA + (a - startA);
-//      box._update();
-//    }
-if (isRot) {
-  const r = box.getBoundingClientRect();
-  const cx = r.left + r.width / 2;
-  const cy = r.top + r.height / 2;
-  const a = Math.atan2(e.clientY - cy, e.clientX - cx);
 
-  // continuous angle
-  let rawAngle = initA + (a - startA);
+    if (isRot) {
+      const r = box.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const a = Math.atan2(e.clientY - cy, e.clientX - cx);
 
-  // --- Snap logic ---
-  const snapStep = Math.PI / 12; // 15° in radians
-  rawAngle = Math.round(rawAngle / snapStep) * snapStep;
+      let rawAngle = initA + (a - startA);
 
-  state.angle = rawAngle;
-  box._update();
-}
+      const snapStep = Math.PI / 12; // 15° snap
+      rawAngle = Math.round(rawAngle / snapStep) * snapStep;
+
+      state.angle = rawAngle;
+      box._update();
+    }
 
     if (down) {
       let nx = ix + (e.clientX - sx);
       let ny = iy + (e.clientY - sy);
-      nx = Math.round(nx / gridSize) * gridSize;
-      ny = Math.round(ny / gridSize) * gridSize;
+      nx = Math.round(nx / activeGrid) * activeGrid;
+      ny = Math.round(ny / activeGrid) * activeGrid;
       state.posX = nx;
       state.posY = ny;
       box._update();
     }
   };
+
   const onUp = () => {
     isResizing = false;
     isRot = false;
     down = false;
     document.body.classList.remove("noselect");
   };
+
   document.addEventListener("pointermove", onMove);
   document.addEventListener("pointerup", onUp);
 
   return box;
 }
 
+
+// Activate scale mode like Blender: press S
+document.addEventListener("keydown", e => {
+  if (e.key.toLowerCase() === "s" && selectedBox) {
+    const box = selectedBox;
+    const r = box.getBoundingClientRect();
+
+    scaleMode = true;
+    isScaling = true;
+    scalingBox = box;
+
+    // Capture starting scales and base screen-space size
+    startScaleX = box._state.scaleX;
+    startScaleY = box._state.scaleY;
+    baseW = r.width;   // screen-space width at mode start
+    baseH = r.height;  // screen-space height at mode start
+
+    // Anchor at current top-left so bottom-right tracks the pointer
+    anchorLeft = r.left;
+    anchorTop = r.top;
+
+    document.body.classList.add("scaling"); // optional visual cue
+  }
+
+  // Optional: ESC to cancel and restore initial scale
+  if (e.key === "Escape" && isScaling && scalingBox) {
+    const st = scalingBox._state;
+    st.scaleX = startScaleX;
+    st.scaleY = startScaleY;
+    scalingBox._update();
+
+    scaleMode = false;
+    isScaling = false;
+    scalingBox = null;
+    document.body.classList.remove("scaling");
+  }
+});
+
+// Real-time scale: bottom-right corner follows the cursor
+document.addEventListener("pointermove", e => {
+  if (!isScaling || !scalingBox) return;
+
+  const st = scalingBox._state;
+
+  // Desired bottom-right position relative to the anchored top-left
+  let targetW = e.clientX - anchorLeft;
+  let targetH = e.clientY - anchorTop;
+
+  // Prevent collapse
+  targetW = Math.max(targetW, 20);
+  targetH = Math.max(targetH, 20);
+
+  // Snap in screen space
+  const activeGrid = e.shiftKey ? gridSizeShift : gridSize;
+  targetW = Math.round(targetW / activeGrid) * activeGrid;
+  targetH = Math.round(targetH / activeGrid) * activeGrid;
+
+  // Compute scale relative to base screen-space size captured at start
+  st.scaleX = targetW / baseW;
+  st.scaleY = targetH / baseH;
+
+  scalingBox._update();
+});
+
+// Confirm scaling on click or pointer up
+const finishScaling = () => {
+  if (!isScaling) return;
+  scaleMode = false;
+  isScaling = false;
+  scalingBox = null;
+  document.body.classList.remove("scaling");
+};
+
+document.addEventListener("click", finishScaling);
+document.addEventListener("pointerup", finishScaling);
 
 mirrorH.addEventListener("click", () => {
   if (!selectedBox) return;
@@ -224,6 +296,8 @@ mirrorV.addEventListener("click", () => {
   state.scaleY *= -1;
   selectedBox._update();
 });
+
+
 
 
 // --- Pan + zoom ---
@@ -446,6 +520,7 @@ zoomOverlay.addEventListener("pointerup", e => {
 });
 
 const navButton = document.getElementById("navButton");
+const snapButton = document.getElementById("snapButton");
 const navOverlays = document.getElementById("navOverlays");
 
 // Show overlays while holding button
@@ -461,6 +536,22 @@ navButton.addEventListener("pointerup", () => {
 // Also hide if pointer leaves button while pressed
 navButton.addEventListener("pointerleave", () => {
   navOverlays.style.display = "none";
+});
+
+
+// Show overlays while holding button
+snapButton.addEventListener("pointerdown", () => {
+	gridSize = gridSizeShift;
+});
+
+// Hide overlays when released
+snapButton.addEventListener("pointerup", () => {
+	gridSize = gridSize;
+});
+
+// Also hide if pointer leaves button while pressed
+navButton.addEventListener("pointerleave", () => {
+	gridSize = gridSize;
 });
 
 //fit zoom onload
