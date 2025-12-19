@@ -1,0 +1,202 @@
+/* Global body styling */
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: lightgray;
+  color: #eee;
+  overflow: hidden;
+}
+
+html, body {
+  overflow: hidden;   /* disables scrolling */
+  height: 100%;       /* ensures body fills viewport */
+  touch-action: none; /* disables touch gestures like scroll/pinch */
+}
+
+/* Toolbar with mirror buttons */
+.toolbar {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 1000;
+  background-color:rgba(0, 0, 0, 0.5);
+  padding:5px;
+}
+/* Make the toolbar a flex container */
+.toolbar {
+/*  display: flex;*/
+	
+  align-items: center;   /* vertically center items */
+  gap: 8px;              /* space between buttons/labels */
+}
+
+/* Style for buttons and labels inside toolbar */
+.toolbar button,
+.toolbar label {
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+
+/* Hover effect */
+.toolbar button:hover,
+.toolbar label:hover {
+  background: #666;
+}
+
+/* Main board */
+.board {
+  width: 1280px;
+  height: 1280px;
+  position: relative;
+  overflow: hidden;
+  background-color: #222;
+  transform-origin: 0 0; /* important for pan/zoom */
+/*  background-image: */
+/*    linear-gradient(to right, #3f3f3f 1px, transparent 1px),*/
+/*    linear-gradient(to bottom, #3f3f3f 1px, transparent 1px);*/
+/*  background-size: 20px 20px; /* grid size */*/
+}
+/* Image container */
+
+.board-resize{
+position:absolute;width:12px;height:12px;background:blue;z-index:1000;cursor:nwse-resize;bottom:0;right:0;
+}
+.image-box {
+  position: absolute;
+/*  border: 2px solid transparent;*/
+  background-color: transparent;
+  display: inline-block;
+  will-change: transform; /* hint GPU acceleration */
+  user-select: none;      /* prevent accidental text selection */
+}
+
+/* Highlight when selected */
+.image-box.selected {
+/*  border-color: yellow;*/
+}
+
+/* Image itself */
+.image-box img {
+  display: block;
+  max-width: none;   /* allow free scaling */
+  max-height: none;
+  pointer-events: none; /* prevent ghost drag */
+}
+
+/* Prevent text selection globally */
+.noselect {
+  user-select: none;
+}
+
+/* Resize handle (hidden by default) */
+.resize-handle {
+  display: none;
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  border: 1px solid #000;
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  cursor: nwse-resize;
+}
+
+/* Rotate handle (hidden by default) */
+.rotate-handle {
+  display: none;
+  width: 32px;
+  height: 32px;
+  background: #0ff;
+  border: 1px solid #000;
+  position: absolute;
+  right: -6px;
+  top: -6px;
+  cursor: grab;
+}
+.rotate-handle:active {
+  cursor: grabbing;
+}
+
+/* Show handles only when selected */
+.image-box.selected .resize-handle,
+.image-box.selected .rotate-handle {
+  display: block;
+}
+input[type="number"]{width:40px; appearance: textfield; }
+
+/* Bottom-left button */
+.nav-toggle {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 1000;
+}
+
+.nav-toggle button {
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.nav-toggle button:hover {
+  background: #666;
+}
+
+/* Centered overlay controls */
+.overlay-controls {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 1000;
+}
+
+.overlay-btn {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(68,68,68,0.85);
+  color: #fff;
+  border-radius: 50%;
+  cursor: grab;
+  user-select: none;
+  font-size: 22px;
+  transition: background 0.2s;
+}
+
+.overlay-btn:hover {
+  background: rgba(102,102,102,0.9);
+}
+
+.import-btn {
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.import-btn:hover {
+  background: #666;
+}
+
+
