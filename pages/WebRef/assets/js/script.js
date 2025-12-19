@@ -538,21 +538,24 @@ navButton.addEventListener("pointerleave", () => {
   navOverlays.style.display = "none";
 });
 
+let snapShift = false;
+// Show overlays while holding button
+snapButton.addEventListener("click", () => {
+	snapShift = !snapShift;
+	if (snapShift){
+		snapButton.style.backgroundColor = 'orange';
+		snapButton.style.color = 'black';
+		gridSize = gridSizeShift;
+	}
+	else{
+		snapButton.style.backgroundColor = '';
+		snapButton.style.color = 'white';
+		gridSize = 80;
+	}
+	
+	
+});
 
-//// Show overlays while holding button
-//snapButton.addEventListener("pointerdown", () => {
-//	gridSize = gridSizeShift;
-//});
-
-//// Hide overlays when released
-//snapButton.addEventListener("pointerup", () => {
-//	gridSize = gridSize;
-//});
-
-//// Also hide if pointer leaves button while pressed
-//navButton.addEventListener("pointerleave", () => {
-//	gridSize = gridSize;
-//});
 
 //fit zoom onload
 window.addEventListener("load", () => {

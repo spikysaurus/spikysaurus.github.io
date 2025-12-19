@@ -75,6 +75,7 @@ border: none;
 
 /* Toolbar with mirror buttons */
 .toolbar {
+
 	display:flex;
   position: fixed;
   top: 0px;
@@ -83,6 +84,7 @@ border: none;
   padding:5px;
   align-items:center;
   justify-content:center;
+  
   
 }
 
