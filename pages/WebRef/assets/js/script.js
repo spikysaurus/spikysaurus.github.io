@@ -80,7 +80,7 @@ function createImageBox(src, x, y) {
   board.appendChild(box);
 
   // --- Unified state ---
-  const state = { posX:x, posY:y, angle:0, scaleX:1, scaleY:1, width:200 };
+  const state = { posX:0, posY:0, angle:0, scaleX:1, scaleY:1, width:350 };
   box._state = state;
 
   // --- Unified update function ---
