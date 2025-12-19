@@ -154,8 +154,8 @@ position:absolute;width:12px;height:12px;background:blue;z-index:1000;cursor:nws
 
 .resize-handle {
   display: none;
-  width: 64px;
-  height: 64px;
+  width: 32px;
+  height: 32px;
   background: #fff;
   border: 2px solid #000;
   position: absolute;
@@ -168,8 +168,8 @@ position:absolute;width:12px;height:12px;background:blue;z-index:1000;cursor:nws
 /* Rotate handle (top center) */
 .rotate-handle {
   display: none;
-  width: 64px;
-  height: 64px;
+  width: 32px;
+  height: 32px;
   background: #0ff;
   border: 2px solid #000;
   position: absolute;
