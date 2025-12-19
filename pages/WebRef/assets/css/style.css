@@ -257,8 +257,8 @@ input[type="number"]{width:40px; appearance: textfield; }
   background: #666;
 }
 
-@media (max-width: 600px) {
-.nav-toggle {display:block;
-}
+/*@media (max-width: 600px) {*/
+/*.nav-toggle {display:block;*/
+/*}*/
 
 
