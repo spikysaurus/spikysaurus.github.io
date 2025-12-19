@@ -1,4 +1,5 @@
 const board=document.getElementById("board");
+
 let selectedBox=null,isPanning=false,isZooming=false,psx=0,psy=0,iox=0,ioy=0,zid=null,zsy=0,iz=1,pvx=0,pvy=0;
 const viewState={offsetX:0,offsetY:0,zoom:1};
 function updateView(){board.style.transform=`translate(${viewState.offsetX}px,${viewState.offsetY}px) scale(${viewState.zoom})`;board.style.transformOrigin="0 0";}
@@ -13,6 +14,25 @@ handle.addEventListener("pointerdown",e=>{
   startW=board.offsetWidth;startH=board.offsetHeight;
   document.body.classList.add("noselect");
 });
+
+
+const toggleBtn = document.getElementById("menuToggle");
+const menu = document.getElementById("menu");
+
+// Toggle menu when button is clicked
+toggleBtn.addEventListener("click", (e) => {
+  e.stopPropagation(); // prevent the click from bubbling to document
+  menu.style.display = (menu.style.display === "block") ? "none" : "block";
+});
+
+// Close menu when clicking outside
+document.addEventListener("click", (e) => {
+  if (menu.style.display === "block" && !menu.contains(e.target) && e.target !== toggleBtn) {
+    menu.style.display = "none";
+  }
+});
+
+
 
 document.addEventListener("pointermove",e=>{
   if(resizing){

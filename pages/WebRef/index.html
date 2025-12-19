@@ -4,50 +4,51 @@
   <meta charset="UTF-8">
   <title>WebRef</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/bl-icons/bl-icons.css">
 </head>
 <body>
   <div class="toolbar">
-  		<div class="toolbar">
-	  <label for="importImages" class="import-btn">+</label>
-	  <input type="file" id="importImages" accept="image/*" multiple hidden>
-
-  		<button id="saveZip">Save</button>
-  		<input type="file" id="loadZip" accept=".zip" hidden>
-		<label for="loadZip" class="file-btn">Load</label>
-
-  		
-		<button id="mirrorH">MirrorX</button>
-		<button id="mirrorV">MirrorY</button>
-		<button id="deleteImage">Del</button>
-		
-		<label>W : <input id="boardWidth" type="number" value="1280"></label>
-		<label>H : <input id="boardHeight" type="number" value="1280"></label>
-		<button id="saveBoard">.png</button>
-		
+  		<button id="menuToggle"><span class="bl-icons-key_menu"></span></button>
+	  <label for="importImages" class="import-btn">+</label>	
+		<button id="mirrorH">X</button>
+		<button id="mirrorV">Y</button>
+		<button id="deleteImage"><span class="bl-icons-trash"></span></button>
   </div>
   
   <div id="board" class="board">
   		<div id="board-resize" class="board-resize"></div>
   </div>
 <div id="overlay"></div>	
+<div id="menu" style="display:none;">
+    <input type="file" id="importImages" accept="image/*" multiple hidden>
+    <label id="saveZip"><span class="bl-icons-file_tick"></span>‎ Save File</label>
+    
+    <input type="file" id="loadZip" accept=".zip" hidden>
+    <label for="loadZip" class="file-btn"><span class="bl-icons-filebrowser"></span>‎ Load File</label>
+    
+    <label id="saveBoard"><span class="bl-icons-restrict_render_off"></span>‎ Snapshot</label>
+    
+    <label>Size : <input id="boardWidth" type="number" value="1280"><input id="boardHeight" type="number" value="1280"></label>
+</div>
+
 
 <!-- Bottom-left toggle button -->
 <div class="nav-toggle">
-  <button id="navButton">🧭 Navigation</button>
+  <button id="navButton"><span class="bl-icons-camera_data"></span></button>
 </div>
 
 
 <!-- Pan & Zoom overlays (initially hidden) -->
 <div class="overlay-controls" id="navOverlays" style="display:none;">
-  <div id="panOverlay" class="overlay-btn">🖐️</div>
-  <div id="zoomOverlay" class="overlay-btn">🔍</div>
+  <div id="panOverlay" class="overlay-btn"><span class="bl-icons-view_pan"></span></div>
+  <div id="zoomOverlay" class="overlay-btn"><span class="bl-icons-viewzoom"></span></div>
 </div>
 
-	<script src="script.js"></script>
-	<script src="html2canvas.min.js"></script>
-	<script src="jszip.min.js"></script>
-	<script src="FileSaver.min.js"></script>
+	<script src="assets/js/script.js"></script>
+	<script src="assets/js/html2canvas.min.js"></script>
+	<script src="assets/js/jszip.min.js"></script>
+	<script src="assets/js/FileSaver.min.js"></script>
 
 </body>
 </html>
