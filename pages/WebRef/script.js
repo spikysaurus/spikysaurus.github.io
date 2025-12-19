@@ -244,7 +244,7 @@ async function getImageBase64(img) {
 }
 
 // --- SAVE ZIP ---
-document.getElementById("saveZip").addEventListener("click", async () => {
+document.getElementById("saveZip").addEventListener("pointerdown", async () => {
   const zip = new JSZip();
   const imagesFolder = zip.folder("images");
 
