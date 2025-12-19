@@ -539,20 +539,20 @@ navButton.addEventListener("pointerleave", () => {
 });
 
 
-// Show overlays while holding button
-snapButton.addEventListener("pointerdown", () => {
-	gridSize = gridSizeShift;
-});
+//// Show overlays while holding button
+//snapButton.addEventListener("pointerdown", () => {
+//	gridSize = gridSizeShift;
+//});
 
-// Hide overlays when released
-snapButton.addEventListener("pointerup", () => {
-	gridSize = gridSize;
-});
+//// Hide overlays when released
+//snapButton.addEventListener("pointerup", () => {
+//	gridSize = gridSize;
+//});
 
-// Also hide if pointer leaves button while pressed
-navButton.addEventListener("pointerleave", () => {
-	gridSize = gridSize;
-});
+//// Also hide if pointer leaves button while pressed
+//navButton.addEventListener("pointerleave", () => {
+//	gridSize = gridSize;
+//});
 
 //fit zoom onload
 window.addEventListener("load", () => {
