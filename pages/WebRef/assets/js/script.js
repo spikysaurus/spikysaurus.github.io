@@ -465,8 +465,12 @@ navButton.addEventListener("pointerleave", () => {
 
 //fit zoom onload
 window.addEventListener("load", () => {
-  fitBoardToView();
+	fitBoardToView();
+	// Reset values explicitly on reload
+	document.getElementById("boardWidth").value = 1280;
+	document.getElementById("boardHeight").value = 1280;
 });
+
 
 function fitBoardToView() {
   const boardRect = board.getBoundingClientRect();
