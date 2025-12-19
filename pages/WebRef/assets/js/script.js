@@ -112,17 +112,30 @@ function createImageBox(src, x, y) {
   });
 
   // --- Rotate logic ---
-  let isRot = false, startA = 0, initA = 0;
-  rotate.addEventListener("pointerdown", e => {
-    e.stopPropagation();
-    isRot = true;
-    document.body.classList.add("noselect");
-    const r = box.getBoundingClientRect();
-    const cx = r.left + r.width / 2;
-    const cy = r.top + r.height / 2;
-    startA = Math.atan2(e.clientY - cy, e.clientX - cx);
-    initA = state.angle;
-  });
+//  let isRot = false, startA = 0, initA = 0;
+//  rotate.addEventListener("pointerdown", e => {
+//    e.stopPropagation();
+//    isRot = true;
+//    document.body.classList.add("noselect");
+//    const r = box.getBoundingClientRect();
+//    const cx = r.left + r.width / 2;
+//    const cy = r.top + r.height / 2;
+//    startA = Math.atan2(e.clientY - cy, e.clientX - cx);
+//    initA = state.angle;
+//  });
+
+// --- Rotate logic ---
+let isRot = false, startA = 0, initA = 0;
+rotate.addEventListener("pointerdown", e => {
+  e.stopPropagation();
+  isRot = true;
+  document.body.classList.add("noselect");
+  const r = box.getBoundingClientRect();
+  const cx = r.left + r.width / 2;
+  const cy = r.top + r.height / 2;
+  startA = Math.atan2(e.clientY - cy, e.clientX - cx);
+  initA = state.angle;
+});
 
   // --- Drag logic ---
   let down = false, sx = 0, sy = 0, ix = 0, iy = 0;
@@ -150,14 +163,31 @@ function createImageBox(src, x, y) {
         box._update();
       }
     }
-    if (isRot) {
-      const r = box.getBoundingClientRect();
-      const cx = r.left + r.width / 2;
-      const cy = r.top + r.height / 2;
-      const a = Math.atan2(e.clientY - cy, e.clientX - cx);
-      state.angle = initA + (a - startA);
-      box._update();
-    }
+//    if (isRot) {
+//      const r = box.getBoundingClientRect();
+//      const cx = r.left + r.width / 2;
+//      const cy = r.top + r.height / 2;
+//      const a = Math.atan2(e.clientY - cy, e.clientX - cx);
+//      state.angle = initA + (a - startA);
+//      box._update();
+//    }
+if (isRot) {
+  const r = box.getBoundingClientRect();
+  const cx = r.left + r.width / 2;
+  const cy = r.top + r.height / 2;
+  const a = Math.atan2(e.clientY - cy, e.clientX - cx);
+
+  // continuous angle
+  let rawAngle = initA + (a - startA);
+
+  // --- Snap logic ---
+  const snapStep = Math.PI / 12; // 15° in radians
+  rawAngle = Math.round(rawAngle / snapStep) * snapStep;
+
+  state.angle = rawAngle;
+  box._update();
+}
+
     if (down) {
       let nx = ix + (e.clientX - sx);
       let ny = iy + (e.clientY - sy);
