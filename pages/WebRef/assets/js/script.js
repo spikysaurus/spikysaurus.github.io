@@ -375,6 +375,7 @@ board.querySelectorAll(".image-box").forEach(el => el.remove());
     // Apply restored state
     box._update();
   }
+  menu.style.display = "none";
 });
 
 // --- Delete button ---
