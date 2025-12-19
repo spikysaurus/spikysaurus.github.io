@@ -188,7 +188,6 @@ input[type="number"]{width:40px; appearance: textfield; }
 
 /* Bottom-left button */
 .nav-toggle {
-	display:none;
   position: fixed;
   bottom: 10px;
   left: 10px;
