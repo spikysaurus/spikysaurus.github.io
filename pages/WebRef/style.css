@@ -133,7 +133,7 @@ input[type="number"]{width:40px; appearance: textfield; }
 
 /* Bottom-left button */
 .nav-toggle {
-  position: absolute;
+  position: fixed;
   bottom: 10px;
   left: 10px;
   z-index: 1000;
@@ -156,7 +156,7 @@ input[type="number"]{width:40px; appearance: textfield; }
 
 /* Centered overlay controls */
 .overlay-controls {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
