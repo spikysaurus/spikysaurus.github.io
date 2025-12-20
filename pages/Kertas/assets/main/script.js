@@ -1001,7 +1001,7 @@ document.getElementById('export').onclick = () => {
         type: "application/json"
     });
     const link = document.createElement('a');
-    link.download = "document.json";
+    link.download = "Kertas.json";
     link.href = URL.createObjectURL(blob);
     link.click();
 };
