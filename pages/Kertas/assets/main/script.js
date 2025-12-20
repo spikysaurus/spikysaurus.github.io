@@ -1674,6 +1674,57 @@ document.addEventListener('mouseup', () => {
 });
 
 
+minUI = false;
+minimalUIBtn = document.getElementById('minimalUI');
+timelineUI = document.getElementById('timeline');
+addBtn = document.getElementById('add');
+deleteFrameBtn = document.getElementById('deleteFrame');
+slidersUI = document.getElementById('sliders');
+panelBottomUI = document.getElementById('panel-bottom');
+swapPrevBtn = document.getElementById('swapPrev');
+swapNextBtn = document.getElementById('swapNext');
+settingsUI = document.getElementById('settings');
+barUI = document.getElementById('bar');
+minimalUIBtn.addEventListener('click', (e) => {
+  minUI = !minUI;
+  if (minUI){
+  	timelineUI.style.display = 'none';
+  	prevBtn.style.display = 'none';
+  	nextBtn.style.display = 'none';
+  	playBtn.style.display = 'none';
+  	onionBtn.style.display = 'none';
+  	addBtn.style.display = 'none';
+  	swapPrevBtn.style.display = 'none';
+   swapNextBtn.style.display = 'none';
+  	deleteFrameBtn.style.display = 'none';
+  	duplicateBtn.style.display = 'none';
+  	slidersUI.style.bottom = '-5px';
+  	slidersUI.style.left = '60px';
+  	panelBottomUI.style.bottom= '0px';
+  	barUI.style.gap = '0px';
+  	barUI.style.padding = '0rem';
+  	settingsUI.style.bottom = '32px';
+  }
+  else{
+   timelineUI.style.display = 'block';
+   prevBtn.style.display = 'block';
+   nextBtn.style.display = 'block';
+   playBtn.style.display = 'block';
+   onionBtn.style.display = 'block';
+   addBtn.style.display = 'block';
+   deleteFrameBtn.style.display = 'block';
+   swapPrevBtn.style.display = 'block';
+   swapNextBtn.style.display = 'block';
+   duplicateBtn.style.display = 'block';
+   slidersUI.style.bottom = '80px';
+   slidersUI.style.left = '0px';
+   panelBottomUI.style.bottom = '43px';
+   barUI.style.gap = '5px';
+   barUI.style.padding = '0.5rem';
+   settingsUI.style.bottom = '75px';
+  }
+});
+
 // Tool events
 ToolBrushBtn.addEventListener("click", () => setActiveTool("ToolBrush"));
 ToolEraserBtn.addEventListener("click", () => setActiveTool("ToolEraser"));

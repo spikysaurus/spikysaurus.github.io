@@ -215,10 +215,8 @@
 
   // Preset chips (classic MS Paint inspired palette)
   const presets = [
-    '#000000','#808080','#c0c0c0','#ffffff',
-    '#800000','#ff0000','#ffa500','#ffff00',
-    '#008000','#00ff00','#00ffff','#008080',
-    '#000080','#0000ff','#800080','#ff00ff'
+    '#000000','#ffffff','#FF0000','#008000',
+    '#0000FF','#FFFFC5','#FFB5C0 ','#90D5FF',
   ];
   function renderChips() {
     el.chips.innerHTML = '';

@@ -49,8 +49,6 @@ top:0;
 /*  min-width: 40px;*/
 }
 
-
-
 #url {
   width: 100px;
 }
@@ -67,7 +65,20 @@ input[type=color] {
   padding:0;
   border:none;
 }
-#settings{margin-right:10px;text-align:center;width:auto;z-index:20;position:fixed;bottom:75px;left:0px;background-color:lightgray;color:black;padding:10px;font-size:12px;transition: 0.3s;}
+#settings{
+	margin-right:10px;
+	text-align:center;
+	width:auto;
+	z-index:20;
+	position:fixed;
+	bottom:75px;
+	left:0px;
+	background-color:lightgray;
+	color:black;
+	padding:10px;
+	font-size:12px;
+	transition: 0.3s;
+}
 #settings button{
 width:auto;
 margin-top:5px;
@@ -322,7 +333,6 @@ width:100%;
 		flex-direction:column;
 		gap:0px;
 		left:50px;
-		gap:0px;
 		bottom:50px;
 	}
 	#bar{

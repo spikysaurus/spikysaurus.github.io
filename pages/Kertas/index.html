@@ -80,19 +80,23 @@
 				<div class="side-by-side">
 				<button id="pdf"><span class="bl-icons-output"></span>Export PDF</button>
             <button id="save"><span class="bl-icons-restrict_render_off"></span>Snapshot</button>
+            <button id="importSequence">Import Image Sequence</button>
            </div>
-           <button id="importSequence">Import Image Sequence</button>
+           
+           
+           
+           
 				</div>
 				
 				<!-- Toggle button -->
-<div class="panel-bottom">
+<div id="panel-bottom" class="panel-bottom">
 <div class="group">
 <button id="toggleLabel"><span class="bl-icons-preferences"></span></button>
+<button id="minimalUI"><span class="bl-icons-statusbar"></span></button>
 <button id="swapPrev"><span class="bl-icons-area_join_left"></span></button>
 <button id="swapNext"><span class="bl-icons-area_join"></span></button>
 <button id="deleteFrame"><span class="bl-icons-trash"></span></button>
 <button id="duplicateBtn"><span class="bl-icons-duplicate"></span></button>
-<button id="duplicateLinkedFrameBtn"><span class="bl-icons-duplicate"></span></button>
 <button id="add"><span class="bl-icons-file_new"></span></button>
 <button id="playBtn"><span id="playBtn_icon"class="bl-icons-play"></span></button>
 <button id="onionBtn"><span class="bl-icons-onionskin_on"></span></button>
@@ -100,7 +104,7 @@
 </div>
 </div>
 
-<div class="sliders">
+<div id="sliders" class="sliders">
 
 	<div class="control">
 	<button id="prevBtn"><span class="bl-icons-frame_prev"></span></button>
@@ -165,7 +169,7 @@
       <div>
 <!--        <div class="small">Current</div>-->
 <!--        <div class="swatch" id="prevSwatch"></div>-->
-        <button id="setPrev">Set Color</button>
+        <button id="setPrev" style="width:auto;">Set Color</button>
       </div>
     </div>
     
@@ -182,14 +186,10 @@
 
     <div class="io">
       <div class="field">
-        <label for="hex">HEX</label>
         <input id="hex" placeholder="#RRGGBB" />
+        <input style="display:none;"id="rgb" placeholder="r, g, b" />
       </div>
-      <div class="field">
-        <label for="rgb">RGB</label>
-        <input id="rgb" placeholder="r, g, b" />
-      </div>
-      <div class="field">
+      <div style="display:none;" class="field">
       <span class="small" id="readout"></span>
       </div>
     </div>
