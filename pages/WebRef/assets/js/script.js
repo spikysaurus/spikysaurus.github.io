@@ -368,6 +368,53 @@ async function getImageBase64(img) {
 }
 
 // --- SAVE ZIP ---
+//document.getElementById("saveZip").addEventListener("pointerdown", async () => {
+//  const zip = new JSZip();
+//  const imagesFolder = zip.folder("images");
+
+//  const data = {
+//    board: {
+//      width: board.offsetWidth,
+//      height: board.offsetHeight
+//    },
+//    images: []
+//  };
+
+//  const boxes = board.querySelectorAll(".image-box");
+//  let idx = 0;
+//  for (const box of boxes) {
+//    const img = box.querySelector("img");
+//    const tr = box.style.transform;
+//    const filename = `img${idx}.png`;
+
+//    // Extract state directly from your tracked properties
+//    const state = {
+//      filename,
+//      posX: parseFloat(tr.match(/translate\((.*?)px/)[1]) || 0,
+//      posY: parseFloat(tr.match(/translate.*?,(.*?)px/)[1]) || 0,
+//      angle: parseFloat(tr.match(/rotate\((.*?)rad/)[1]) || 0,
+//      scaleX: img._scaleX ?? 1,
+//      scaleY: img._scaleY ?? 1,
+//      width: parseInt(img.style.width, 10)
+//    };
+
+//    data.images.push(state);
+
+//    // FIX: normalize src to base64
+//    const base64 = await getImageBase64(img);
+//    imagesFolder.file(filename, base64, { base64: true });
+
+//    idx++;
+//  }
+
+//  // Add JSON
+//  zip.file("project.json", JSON.stringify(data, null, 2));
+
+//  // Generate zip
+//  const blob = await zip.generateAsync({ type: "blob" });
+//  saveAs(blob, "WebRef.zip");
+//});
+// --- SAVE ZIP ---
 document.getElementById("saveZip").addEventListener("pointerdown", async () => {
   const zip = new JSZip();
   const imagesFolder = zip.folder("images");
@@ -382,25 +429,34 @@ document.getElementById("saveZip").addEventListener("pointerdown", async () => {
 
   const boxes = board.querySelectorAll(".image-box");
   let idx = 0;
+
   for (const box of boxes) {
     const img = box.querySelector("img");
-    const tr = box.style.transform;
+    const tr = getComputedStyle(box).transform; // safer than box.style.transform
     const filename = `img${idx}.png`;
 
-    // Extract state directly from your tracked properties
+    // Parse transform using DOMMatrix
+    let posX = 0, posY = 0, angle = 0;
+    if (tr && tr !== "none") {
+      const matrix = new DOMMatrix(tr);
+      posX = matrix.m41;
+      posY = matrix.m42;
+      angle = Math.atan2(matrix.m21, matrix.m11); // radians
+    }
+
     const state = {
       filename,
-      posX: parseFloat(tr.match(/translate\((.*?)px/)[1]) || 0,
-      posY: parseFloat(tr.match(/translate.*?,(.*?)px/)[1]) || 0,
-      angle: parseFloat(tr.match(/rotate\((.*?)rad/)[1]) || 0,
+      posX,
+      posY,
+      angle,
       scaleX: img._scaleX ?? 1,
       scaleY: img._scaleY ?? 1,
-      width: parseInt(img.style.width, 10)
+      width: parseInt(img.style.width, 10) || img.naturalWidth
     };
 
     data.images.push(state);
 
-    // FIX: normalize src to base64
+    // Normalize src to base64
     const base64 = await getImageBase64(img);
     imagesFolder.file(filename, base64, { base64: true });
 
@@ -414,6 +470,21 @@ document.getElementById("saveZip").addEventListener("pointerdown", async () => {
   const blob = await zip.generateAsync({ type: "blob" });
   saveAs(blob, "WebRef.zip");
 });
+
+// Helper: normalize image src to base64
+async function getImageBase64(img) {
+  if (img.src.startsWith("data:")) {
+    return img.src.split(",")[1]; // already base64
+  }
+  const res = await fetch(img.src);
+  const blob = await res.blob();
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result.split(",")[1]);
+    reader.readAsDataURL(blob);
+  });
+}
+///////////
 
 // --- LOAD ZIP ---
 document.getElementById("loadZip").addEventListener("change", async (e) => {
