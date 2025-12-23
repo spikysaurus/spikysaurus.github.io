@@ -8,12 +8,7 @@
   <title>Gallery</title>
   <style>
 		
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 15px;
-      padding: 15px;
-    }
+    .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; padding: 15px; } .gallery > div { aspect-ratio: 1 / 1; /* forces square */ }
 
     .card {
       background: #fff;
@@ -141,20 +136,15 @@ overscroll-behavior-y: contain; /* stops pull-to-refresh */
       </a>
     </li>
     <li>
-      <a onclick="selectTag(event, 'fan art')" class="wii">
-        <span>Fan Art</span>
+      <a onclick="selectTag(event, 'sketch')" class="wii">
+        <span>Sketch</span>
       </a>
     </li>
     <li>
-      <a onclick="selectTag(event, 'original character')" class="wii">
-        <span>Original Character</span>
+      <a onclick="selectTag(event, 'settei')" class="wii">
+        <span>Settei</span>
       </a>
     </li>
-    <li>
-      <a onclick="selectTag(event, 'gif')" class="wii">
-        <span>Gif</span>
-      </a>
-    </li>  
   </ul>
 </nav>
 	<center>

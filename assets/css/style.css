@@ -197,7 +197,7 @@ body {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: url('../drawings/icon.png') no-repeat center/cover;
+    background: url('../icon.png') no-repeat center/cover;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     z-index: 1000;
