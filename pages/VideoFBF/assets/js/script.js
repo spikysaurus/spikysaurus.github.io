@@ -34,14 +34,40 @@ document.addEventListener('keydown',e=>{
 });
 
 // Save current frame as PNG with video name + frame number
-saveBtn.addEventListener('click',()=>{
- const canvas=document.createElement('canvas');
- canvas.width=video.videoWidth;canvas.height=video.videoHeight;
- const ctx=canvas.getContext('2d');
- ctx.drawImage(video,0,0,canvas.width,canvas.height);
- const frameNum=Math.floor(video.currentTime*fps);
- const link=document.createElement('a');
- link.download=`${videoFileName}_${frameNum}.png`;
- link.href=canvas.toDataURL('image/png');
- link.click();
+//saveBtn.addEventListener('click',()=>{
+// const canvas=document.createElement('canvas');
+// canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+// const ctx=canvas.getContext('2d');
+// ctx.drawImage(video,0,0,canvas.width,canvas.height);
+// const frameNum=Math.floor(video.currentTime*fps);
+// const link=document.createElement('a');
+// link.download=`${videoFileName}_${frameNum}.png`;
+// link.href=canvas.toDataURL('image/png');
+// link.click();
+//});
+
+saveBtn.addEventListener('click', () => {
+  // Ensure video metadata is loaded
+  if (video.videoWidth === 0 || video.videoHeight === 0) {
+    console.warn("Video not ready yet!");
+    return;
+  }
+
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+
+  // Draw current frame
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  // Compute frame number
+  const frameNum = Math.floor(video.currentTime * fps);
+
+  // Save as PNG
+  const link = document.createElement('a');
+  link.download = `${videoFileName}_${frameNum}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
 });
+
