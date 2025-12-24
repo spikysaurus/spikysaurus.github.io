@@ -7,7 +7,6 @@ html {
       margin: 0;
       padding: 0;
       width: 100%;
-      overflow-x: hidden;
       font-family: system-ui, sans-serif;
       color: #222222;
     }
@@ -72,7 +71,6 @@ html {
 html, body { height: 100%; }
 body {
   background:radial-gradient(ellipse at center, rgba(255,254,234,1) 0%, rgba(255,254,234,1) 35%, #B7E8EB 100%);
-  overflow: hidden;
 }
 
 .ocean { 
@@ -236,7 +234,6 @@ body {
   padding: 0px 0;
 }
 .nav-bar ul {
-	width:100%	
   list-style: none;
   display: inline-block;
   flex-direction: column;
