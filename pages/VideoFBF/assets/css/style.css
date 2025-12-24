@@ -9,7 +9,9 @@ border:none;
 border-radius:6px;background:none;color:#fff;cursor:pointer;display:block;margin-bottom:6px}
 button:active,.custom-file-label:active{background:rgba(0,119,170,0.8)}
 button:hover,.custom-file-label:hover{background:rgba(0,119,170,0.8)}
-#prevFrame{position:fixed;top:50%;left:10px;transform:translateY(-50%)}
-#nextFrame{position:fixed;top:50%;right:10px;transform:translateY(-50%)}
+#prevFrame{background:rgba(0,119,170,0.8);position:fixed;top:50%;left:10px;transform:translateY(-50%)}
+#nextFrame{background:rgba(0,119,170,0.8);position:fixed;top:50%;right:10px;transform:translateY(-50%)}
+#prevFrame,#nextFrame{border:1px solid black;}
+#prevFrame:active,#nextFrame:active{border:1px solid yellow;}
 #fileInput{display:none}
 .topLeftControls{position:fixed;top:10px;left:10px;display:flex;flex-direction:column;align-items:flex-start}
