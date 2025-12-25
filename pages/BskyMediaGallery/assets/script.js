@@ -8,6 +8,9 @@ async function loadProfilesFromFile(file) {
         const data = JSON.parse(event.target.result);
         profiles = data.profiles || [];
 
+        // Save to localStorage for auto-load next time
+        localStorage.setItem("lastProfiles", JSON.stringify(profiles));
+
         // reset state before loading new profiles
         allMedia = [];
         currentPage = 0;
@@ -32,10 +35,12 @@ const modal = document.getElementById("modal");
 const modalContent = document.getElementById("modalContent");
 const closeBtn = document.querySelector(".close-btn");
 const fileInput = document.getElementById("fileInput");
+const sortToggleBtn = document.getElementById("sortToggleBtn");
 
 let allMedia = [];
 let currentPage = 0;
 const pageSize = 18;
+let sortLatestFirst = true; // default sort order
 
 async function fetchProfileMedia(handle) {
   try {
@@ -51,27 +56,28 @@ async function fetchProfileMedia(handle) {
       const embed = post.post.embed;
       const postUri = post.post.uri;
       const postUrl = `https://bsky.app/profile/${handle}/post/${postUri.split("/").pop()}`;
+      const postDate = new Date(post.post.indexedAt); // capture date
 
       if (!embed) return;
 
       if (embed.$type === "app.bsky.embed.images#view" && embed.images) {
         embed.images.forEach(img => {
-          allMedia.push({ type: "image", src: img.fullsize, alt: handle, postUrl });
+          allMedia.push({ type: "image", src: img.fullsize, alt: handle, postUrl, date: postDate });
         });
       }
 
       if (embed.$type === "app.bsky.embed.video#view" && embed.video) {
-        allMedia.push({ type: "video", src: embed.video.url, alt: handle, postUrl });
+        allMedia.push({ type: "video", src: embed.video.url, alt: handle, postUrl, date: postDate });
       }
 
       if (embed.$type === "app.bsky.embed.recordWithMedia#view") {
         if (embed.media?.$type === "app.bsky.embed.images#view") {
           embed.media.images.forEach(img => {
-            allMedia.push({ type: "image", src: img.fullsize, alt: handle, postUrl });
+            allMedia.push({ type: "image", src: img.fullsize, alt: handle, postUrl, date: postDate });
           });
         }
         if (embed.media?.$type === "app.bsky.embed.video#view") {
-          allMedia.push({ type: "video", src: embed.media.video.url, alt: handle, postUrl });
+          allMedia.push({ type: "video", src: embed.media.video.url, alt: handle, postUrl, date: postDate });
         }
       }
     });
@@ -83,6 +89,11 @@ async function fetchProfileMedia(handle) {
 }
 
 function renderPage() {
+  // sort based on toggle
+  allMedia.sort((a, b) => {
+    return sortLatestFirst ? b.date - a.date : a.date - b.date;
+  });
+
   gallery.innerHTML = "";
   const start = currentPage * pageSize;
   const end = start + pageSize;
@@ -206,35 +217,13 @@ function saveJSON() {
 // Attach event listener to existing button by ID
 document.getElementById("saveBtn").addEventListener("click", saveJSON);
 
-
-async function loadProfilesFromFile(file) {
-  try {
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      try {
-        const data = JSON.parse(event.target.result);
-        profiles = data.profiles || [];
-
-        // Save to localStorage for auto-load next time
-        localStorage.setItem("lastProfiles", JSON.stringify(profiles));
-
-        // reset state before loading new profiles
-        allMedia = [];
-        currentPage = 0;
-
-        for (const handle of profiles) {
-          await fetchProfileMedia(handle);
-        }
-      } catch (err) {
-        console.error("Invalid JSON file", err);
-      }
-    };
-    reader.readAsText(file);
-  } catch (err) {
-    console.error("Error reading file", err);
-  }
-}
-
+// Sort toggle button
+sortToggleBtn.addEventListener("click", () => {
+  sortLatestFirst = !sortLatestFirst;
+  sortToggleBtn.textContent = sortLatestFirst ? "Sort: Latest First ↑" : "Sort: Oldest First ↓";
+  currentPage = 0; // reset to first page
+  renderPage();
+});
 
 window.addEventListener("DOMContentLoaded", async () => {
   const savedProfiles = localStorage.getItem("lastProfiles");
