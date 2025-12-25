@@ -240,3 +240,21 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+// Clear localStorage button with confirmation
+document.getElementById("clearStorageBtn").addEventListener("click", () => {
+  const confirmed = confirm("Are you sure you want to clear all saved profiles?");
+  if (confirmed) {
+    localStorage.removeItem("lastProfiles");   // remove saved profiles
+    // optionally also clear sort preference if you store it later:
+    // localStorage.removeItem("sortPreference");
+
+    allMedia = [];
+    profiles = [];
+    currentPage = 0;
+    gallery.innerHTML = "";
+
+//    alert("LocalStorage cleared. Saved profiles have been removed.");
+  }
+});
+
+
