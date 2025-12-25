@@ -2,6 +2,7 @@ body { font-family: sans-serif; background: #fafafa; margin: 0; padding: 16px; }
 h1 { margin-bottom: 16px; font-size: 1.4rem; }
 
 .gallery {
+margin-top:10px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
 }

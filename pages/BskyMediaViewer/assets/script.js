@@ -1,260 +1,96 @@
-let profiles = [];
+let profiles=[],allMedia=[],currentPage=0,pageSize=18,sortLatestFirst=true;
+const gallery=document.getElementById("gallery"),
+prevBtn=document.getElementById("prevBtn"),
+nextBtn=document.getElementById("nextBtn"),
+modal=document.getElementById("modal"),
+modalContent=document.getElementById("modalContent"),
+closeBtn=document.querySelector(".close-btn"),
+fileInput=document.getElementById("fileInput"),
+sortToggleBtn=document.getElementById("sortToggleBtn"),
+pageSizeInput=document.getElementById("pageSizeInput"),
+applyPageSizeBtn=document.getElementById("applyPageSizeBtn");
 
-async function loadProfilesFromFile(file) {
-  try {
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      try {
-        const data = JSON.parse(event.target.result);
-        profiles = data.profiles || [];
-
-        // Save to localStorage for auto-load next time
-        localStorage.setItem("lastProfiles", JSON.stringify(profiles));
-
-        // reset state before loading new profiles
-        allMedia = [];
-        currentPage = 0;
-
-        for (const handle of profiles) {
-          await fetchProfileMedia(handle);
-        }
-      } catch (err) {
-        console.error("Invalid JSON file", err);
-      }
-    };
-    reader.readAsText(file);
-  } catch (err) {
-    console.error("Error reading file", err);
-  }
+async function loadProfilesFromFile(file){
+  const reader=new FileReader();
+  reader.onload=async e=>{
+    try{
+      profiles=JSON.parse(e.target.result).profiles||[];
+      localStorage.setItem("lastProfiles",JSON.stringify(profiles));
+      allMedia=[];currentPage=0;
+      const newSize=parseInt(pageSizeInput.value,10);
+      if(!isNaN(newSize)&&newSize>0){pageSize=newSize;localStorage.setItem("pageSize",pageSize);}
+      for(const h of profiles)await fetchProfileMedia(h);
+      renderPage();
+    }catch(err){console.error("Invalid JSON",err);}
+  };
+  reader.readAsText(file);
 }
 
-const gallery = document.getElementById("gallery");
-const prevBtn = document.getElementById("prevBtn");
-const nextBtn = document.getElementById("nextBtn");
-const modal = document.getElementById("modal");
-const modalContent = document.getElementById("modalContent");
-const closeBtn = document.querySelector(".close-btn");
-const fileInput = document.getElementById("fileInput");
-const sortToggleBtn = document.getElementById("sortToggleBtn");
-
-let allMedia = [];
-let currentPage = 0;
-const pageSize = 18;
-let sortLatestFirst = true; // default sort order
-
-async function fetchProfileMedia(handle) {
-  try {
-    const resp = await fetch(
-      `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${handle}&limit=50`
-    );
-    const data = await resp.json();
-
-    data.feed.forEach(post => {
-      if (post.reason && post.reason.$type === "app.bsky.feed.defs#reasonRepost") return;
-      if (post.reply) return;
-
-      const embed = post.post.embed;
-      const postUri = post.post.uri;
-      const postUrl = `https://bsky.app/profile/${handle}/post/${postUri.split("/").pop()}`;
-      const postDate = new Date(post.post.indexedAt); // capture date
-
-      if (!embed) return;
-
-      if (embed.$type === "app.bsky.embed.images#view" && embed.images) {
-        embed.images.forEach(img => {
-          allMedia.push({ type: "image", src: img.fullsize, alt: handle, postUrl, date: postDate });
-        });
-      }
-
-      if (embed.$type === "app.bsky.embed.video#view" && embed.video) {
-        allMedia.push({ type: "video", src: embed.video.url, alt: handle, postUrl, date: postDate });
-      }
-
-      if (embed.$type === "app.bsky.embed.recordWithMedia#view") {
-        if (embed.media?.$type === "app.bsky.embed.images#view") {
-          embed.media.images.forEach(img => {
-            allMedia.push({ type: "image", src: img.fullsize, alt: handle, postUrl, date: postDate });
-          });
-        }
-        if (embed.media?.$type === "app.bsky.embed.video#view") {
-          allMedia.push({ type: "video", src: embed.media.video.url, alt: handle, postUrl, date: postDate });
-        }
+async function fetchProfileMedia(handle){
+  try{
+    const resp=await fetch(`https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${handle}&limit=50`);
+    const data=await resp.json();
+    data.feed.forEach(p=>{
+      if(p.reason?.$type==="app.bsky.feed.defs#reasonRepost"||p.reply)return;
+      const e=p.post.embed,uri=p.post.uri,url=`https://bsky.app/profile/${handle}/post/${uri.split("/").pop()}`,date=new Date(p.post.indexedAt);
+      if(!e)return;
+      if(e.$type==="app.bsky.embed.images#view")e.images.forEach(img=>allMedia.push({type:"image",src:img.fullsize,alt:handle,postUrl:url,date}));
+      if(e.$type==="app.bsky.embed.video#view")allMedia.push({type:"video",src:e.video.url,alt:handle,postUrl:url,date});
+      if(e.$type==="app.bsky.embed.recordWithMedia#view"){
+        if(e.media?.$type==="app.bsky.embed.images#view")e.media.images.forEach(img=>allMedia.push({type:"image",src:img.fullsize,alt:handle,postUrl:url,date}));
+        if(e.media?.$type==="app.bsky.embed.video#view")allMedia.push({type:"video",src:e.media.video.url,alt:handle,postUrl:url,date});
       }
     });
-
-    renderPage();
-  } catch (err) {
-    console.error("Error fetching media for", handle, err);
-  }
+  }catch(err){console.error("Error fetching",handle,err);}
 }
 
-function renderPage() {
-  // sort based on toggle
-  allMedia.sort((a, b) => {
-    return sortLatestFirst ? b.date - a.date : a.date - b.date;
+function renderPage(){
+  allMedia.sort((a,b)=>sortLatestFirst?b.date-a.date:a.date-b.date);
+  gallery.innerHTML="";
+  const start=currentPage*pageSize,end=start+pageSize;
+  allMedia.slice(start,end).forEach(item=>{
+    const wrap=document.createElement("div");wrap.className="gallery-item";
+    const el=item.type==="image"?Object.assign(document.createElement("img"),{src:item.src,alt:item.alt}):Object.assign(document.createElement("video"),{src:item.src,controls:true,preload:"metadata",style:"max-height:200px"});
+    wrap.appendChild(el);wrap.addEventListener("click",()=>openModal(item));gallery.appendChild(wrap);
   });
-
-  gallery.innerHTML = "";
-  const start = currentPage * pageSize;
-  const end = start + pageSize;
-  const pageItems = allMedia.slice(start, end);
-
-  pageItems.forEach(item => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "gallery-item";
-
-    let el;
-    if (item.type === "image") {
-      el = document.createElement("img");
-      el.src = item.src;
-      el.alt = item.alt;
-    } else {
-      el = document.createElement("video");
-      el.src = item.src;
-      el.controls = true;
-      el.preload = "metadata";
-      el.style.maxHeight = "200px";
-    }
-    wrapper.appendChild(el);
-
-    wrapper.addEventListener("click", () => openModal(item));
-    gallery.appendChild(wrapper);
-  });
-
-  prevBtn.disabled = currentPage === 0;
-  nextBtn.disabled = end >= allMedia.length;
+  prevBtn.disabled=currentPage===0;nextBtn.disabled=end>=allMedia.length;
 }
 
-function openModal(item) {
-  modalContent.innerHTML = "";
-  let el;
-  if (item.type === "image") {
-    el = document.createElement("img");
-    el.src = item.src;
-    el.alt = item.alt;
-  } else {
-    el = document.createElement("video");
-    el.src = item.src;
-    el.controls = true;
-    el.autoplay = true;
-    el.muted = true;
-  }
+function openModal(item){
+  modalContent.innerHTML="";
+  const el=item.type==="image"?Object.assign(document.createElement("img"),{src:item.src,alt:item.alt}):Object.assign(document.createElement("video"),{src:item.src,controls:true,autoplay:true,muted:true});
   modalContent.appendChild(el);
-
-  const btnContainer = document.createElement("div");
-  btnContainer.className = "modal-buttons";
-
-  const linkBtn = document.createElement("a");
-  linkBtn.href = item.postUrl;
-  linkBtn.target = "_blank";
-  linkBtn.textContent = "View Post";
-  btnContainer.appendChild(linkBtn);
-
-  const downloadBtn = document.createElement("a");
-  downloadBtn.href = item.src;
-  downloadBtn.download = "";
-  downloadBtn.textContent = "Download Media";
-  downloadBtn.className = "download";
-  btnContainer.appendChild(downloadBtn);
-
-  modalContent.appendChild(btnContainer);
-  modal.style.display = "flex";
+  const btns=document.createElement("div");btns.className="modal-buttons";
+  btns.appendChild(Object.assign(document.createElement("a"),{href:item.postUrl,target:"_blank",textContent:"View Post"}));
+  btns.appendChild(Object.assign(document.createElement("a"),{href:item.src,download:"",textContent:"Download Media",className:"download"}));
+  modalContent.appendChild(btns);modal.style.display="flex";
 }
 
-closeBtn.addEventListener("click", () => {
-  modal.style.display = "none";
-  modalContent.innerHTML = "";
-});
+closeBtn.onclick=()=>{modal.style.display="none";modalContent.innerHTML="";};
+window.onclick=e=>{if(e.target===modal){modal.style.display="none";modalContent.innerHTML="";}};
+prevBtn.onclick=()=>{if(currentPage>0){currentPage--;renderPage();}};
+nextBtn.onclick=()=>{if((currentPage+1)*pageSize<allMedia.length){currentPage++;renderPage();}};
+fileInput.onchange=async e=>{if(e.target.files[0])await loadProfilesFromFile(e.target.files[0]);};
 
-window.addEventListener("click", (e) => {
-  if (e.target === modal) {
-    modal.style.display = "none";
-    modalContent.innerHTML = "";
-  }
-});
-
-prevBtn.addEventListener("click", () => {
-  if (currentPage > 0) {
-    currentPage--;
-    renderPage();
-  }
-});
-
-nextBtn.addEventListener("click", () => {
-  if ((currentPage + 1) * pageSize < allMedia.length) {
-    currentPage++;
-    renderPage();
-  }
-});
-
-// File input handler
-fileInput.addEventListener("change", async (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    await loadProfilesFromFile(file);
-  }
-});
-
-// The JSON data you want to save
-const data = {
-  "profiles": [
-    "spikysaurus.bsky.social",
-    "sadewoo.bsky.social"
-  ]
+document.getElementById("saveBtn").onclick=()=>{
+  const blob=new Blob([JSON.stringify({profiles:["spikysaurus.bsky.social","sadewoo.bsky.social"]},null,2)],{type:"application/json"});
+  const link=Object.assign(document.createElement("a"),{href:URL.createObjectURL(blob),download:"profiles.json"});document.body.appendChild(link);link.click();document.body.removeChild(link);
 };
 
-// Function to trigger file download
-function saveJSON() {
-  const jsonString = JSON.stringify(data, null, 2);
-  const blob = new Blob([jsonString], { type: "application/json" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "profiles.json";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-// Attach event listener to existing button by ID
-document.getElementById("saveBtn").addEventListener("click", saveJSON);
+sortToggleBtn.onclick=()=>{sortLatestFirst=!sortLatestFirst;sortToggleBtn.textContent=sortLatestFirst?"Sort: Latest First ↑":"Sort: Oldest First ↓";currentPage=0;renderPage();};
+applyPageSizeBtn.onclick=()=>{
+  const n=parseInt(pageSizeInput.value,10);
+  if(!isNaN(n)&&n>0){pageSize=n;localStorage.setItem("pageSize",pageSize);currentPage=0;renderPage();}
+  else alert("Enter valid positive number");
+};
 
-// Sort toggle button
-sortToggleBtn.addEventListener("click", () => {
-  sortLatestFirst = !sortLatestFirst;
-  sortToggleBtn.textContent = sortLatestFirst ? "Sort: Latest First ↑" : "Sort: Oldest First ↓";
-  currentPage = 0; // reset to first page
-  renderPage();
+window.addEventListener("DOMContentLoaded",async()=>{
+  const savedSize=localStorage.getItem("pageSize");if(savedSize){pageSize=parseInt(savedSize,10);pageSizeInput.value=pageSize;}
+  const savedProfiles=localStorage.getItem("lastProfiles");
+  if(savedProfiles){profiles=JSON.parse(savedProfiles);allMedia=[];currentPage=0;for(const h of profiles)await fetchProfileMedia(h);renderPage();}
 });
 
-window.addEventListener("DOMContentLoaded", async () => {
-  const savedProfiles = localStorage.getItem("lastProfiles");
-  if (savedProfiles) {
-    profiles = JSON.parse(savedProfiles);
-
-    // reset state before loading saved profiles
-    allMedia = [];
-    currentPage = 0;
-
-    for (const handle of profiles) {
-      await fetchProfileMedia(handle);
-    }
-  }
-});
-
-// Clear localStorage button with confirmation
-document.getElementById("clearStorageBtn").addEventListener("click", () => {
-  const confirmed = confirm("Are you sure you want to clear all saved (browser) profiles?");
-  if (confirmed) {
-    localStorage.removeItem("lastProfiles");   // remove saved profiles
-    // optionally also clear sort preference if you store it later:
-    // localStorage.removeItem("sortPreference");
-
-    allMedia = [];
-    profiles = [];
-    currentPage = 0;
-    gallery.innerHTML = "";
-
-//    alert("LocalStorage cleared. Saved profiles have been removed.");
-  }
-});
-
+document.getElementById("clearStorageBtn").onclick=()=>{
+  if(confirm("Clear all saved profiles?")){localStorage.removeItem("lastProfiles");localStorage.removeItem("pageSize");allMedia=[];profiles=[];currentPage=0;gallery.innerHTML="";}
+};
 
