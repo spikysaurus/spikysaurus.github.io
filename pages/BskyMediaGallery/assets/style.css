@@ -1,0 +1,119 @@
+body { font-family: sans-serif; background: #fafafa; margin: 0; padding: 16px; }
+h1 { margin-bottom: 16px; font-size: 1.4rem; }
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+}
+
+.gallery-item {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #eee;
+  cursor: pointer;
+}
+
+.gallery-item img,
+.gallery-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Disabled state */
+#prevBtn:disabled,
+#nextBtn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 8px;
+  max-width: 90%;
+  max-height: 90%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.modal-content img,
+.modal-content video {
+  max-width: 100%;
+  max-height: 70vh;
+  margin-bottom: 10px;
+}
+.modal-buttons {
+  display: flex;
+  gap: 8px;
+}
+.modal-buttons a {
+  display: inline-block;
+  padding: 8px 14px;
+  background: #0078d4;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+}
+.modal-buttons a.download {
+  background: #28a745; /* green for download */
+}
+.close-btn {
+  position: absolute;
+  top: 10px; right: 20px;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+}
+
+
+.bottom-center button:hover,.bottom-center label:hover{
+  background-color: #0056b3;
+}
+
+.bottom-center {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: stretch;   /* stretch children to same height */
+}
+
+.bottom-center button,
+.bottom-center label {
+  border: none;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  font-size: 12px;
+  display: flex;          /* normalize label/button */
+  align-items: center;    /* center text vertically */
+}
+
+
+
+
+
