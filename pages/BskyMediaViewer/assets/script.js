@@ -77,7 +77,7 @@ document.getElementById("saveBtn").onclick=()=>{
   const link=Object.assign(document.createElement("a"),{href:URL.createObjectURL(blob),download:"profiles.json"});document.body.appendChild(link);link.click();document.body.removeChild(link);
 };
 
-sortToggleBtn.onclick=()=>{sortLatestFirst=!sortLatestFirst;sortToggleBtn.textContent=sortLatestFirst?"Sort: Latest First ↑":"Sort: Oldest First ↓";currentPage=0;renderPage();};
+sortToggleBtn.onclick=()=>{sortLatestFirst=!sortLatestFirst;sortToggleBtn.textContent=sortLatestFirst?"Sort: Latest":"Sort: Oldest";currentPage=0;renderPage();};
 applyPageSizeBtn.onclick=()=>{
   const n=parseInt(pageSizeInput.value,10);
   if(!isNaN(n)&&n>0){pageSize=n;localStorage.setItem("pageSize",pageSize);currentPage=0;renderPage();}
