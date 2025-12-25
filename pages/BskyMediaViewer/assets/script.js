@@ -147,7 +147,7 @@ function openModal(item) {
   const linkBtn = document.createElement("a");
   linkBtn.href = item.postUrl;
   linkBtn.target = "_blank";
-  linkBtn.textContent = "View Original Post";
+  linkBtn.textContent = "View Post";
   btnContainer.appendChild(linkBtn);
 
   const downloadBtn = document.createElement("a");
