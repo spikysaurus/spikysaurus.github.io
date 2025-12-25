@@ -242,7 +242,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
 // Clear localStorage button with confirmation
 document.getElementById("clearStorageBtn").addEventListener("click", () => {
-  const confirmed = confirm("Are you sure you want to clear all saved profiles?");
+  const confirmed = confirm("Are you sure you want to clear all saved (browser) profiles?");
   if (confirmed) {
     localStorage.removeItem("lastProfiles");   // remove saved profiles
     // optionally also clear sort preference if you store it later:
