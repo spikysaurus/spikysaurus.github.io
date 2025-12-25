@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
    <head>
-  <link rel="manifest" href="pwa/manifest.json">
-  <meta name="theme-color" content="#0d1117">
       <meta charset="UTF-8" />
       <title>Sadewoo</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -173,13 +171,6 @@
               chatBubble.style.display = 'none';
             });
          </script>
-  <script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function() {
-      navigator.serviceWorker.register("/pwa/sw.js").catch(console.error);
-    });
-  }
-  </script>
    </body>
 </html>
 <script>
