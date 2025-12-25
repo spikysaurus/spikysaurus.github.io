@@ -245,6 +245,10 @@ document.addEventListener("keydown", e => {
   }
 });
 
+// --- Deselect ---
+board.addEventListener("click",e=>{if(e.target===board&&selectedBox){selectedBox.classList.remove("selected");selectedBox=null;}});
+
+
 // Real-time scale: bottom-right corner follows the cursor
 document.addEventListener("pointermove", e => {
   if (!isScaling || !scalingBox) return;
@@ -313,8 +317,6 @@ document.addEventListener("pointermove",e=>{
 });
 document.addEventListener("pointerup",e=>{isPanning=false;if(isZooming&&e.pointerId===zid){isZooming=false;zid=null;}});
 
-// --- Deselect ---
-board.addEventListener("click",e=>{if(e.target===board&&selectedBox){selectedBox.classList.remove("selected");selectedBox=null;}});
 
 // SAVE PNG
 document.getElementById("saveBoard").addEventListener("click",()=>{

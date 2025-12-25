@@ -115,11 +115,7 @@ border: none;
   position: relative;
   overflow: hidden;
   background-color: #5e5c64;
-  transform-origin: 0 0; /* important for pan/zoom */
-/*  background-image: */
-/*    linear-gradient(to right, #3f3f3f 1px, transparent 1px),*/
-/*    linear-gradient(to bottom, #3f3f3f 1px, transparent 1px);*/
-/*  background-size: 20px 20px; /* grid size */*/
+  transform-origin: 0 0;
 }
 /* Image container */
 
@@ -136,8 +132,10 @@ position:absolute;width:12px;height:12px;background:blue;z-index:1000;cursor:nws
 
 /* Highlight when selected */
 .image-box.selected {
-/*  border-color: yellow;*/
+  outline: 2px solid yellow;
+  outline-offset: -2px; /* moves outline inward */
 }
+
 
 /* Image itself */
 .image-box img {
