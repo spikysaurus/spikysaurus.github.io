@@ -1,7 +1,7 @@
 {
   "name": "Placeholder App",
-  "short_name": "App",
-  "start_url": "/",
+  "short_name": "Bsky",
+  "start_url": "spikysaurus.github.io/pages/BSKY/index.html",
   "scope": "/",
   "display": "standalone",
   "background_color": "#0d1117",
