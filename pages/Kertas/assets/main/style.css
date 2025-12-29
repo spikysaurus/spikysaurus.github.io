@@ -1,3 +1,7 @@
+:root {
+--fixed-top: 0px;
+--fixed-height: 43px; /* height of fixedDiv */ }
+
 html,body {
   height:100%;
   margin:0;
@@ -8,51 +12,55 @@ html,body {
   touch-action: none;
 }
 .side-by-side{display:flex; align-items:center; gap:5px;}
-#bar {
+
+
+#content {
 position:relative;
 top:0;
 	z-index:100;
-  display: flex;
-  flex-wrap: wrap;       /* allow wrapping on small screens */
-  gap: 5px;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
-  border-bottom: 0px solid #ccc;
 }
 
-
-#bar button{
+.nav-tools{width:100%;}
+.nav-tools button{
 	width:32px;height:32px;
-  flex: 0 0 auto;
+/*  flex: 0 0 auto;*/
 	border:1px darkgray solid;
-  padding: 0.3rem;
   background: lightgray;
   cursor: pointer;
   text-align: center;
 }
 
-#bar button:hover {
+.nav-tools button:hover {
+  background: #e0e0e0;
+}
+
+.panel-bottom button{
+	width:32px;height:32px;
+  flex: 0 0 auto;
+	border:1px darkgray solid;
+  background: lightgray;
+  cursor: pointer;
+  text-align: center;
+}
+
+.panel-bottom button:hover {
   background: #e0e0e0;
 }
 
 /* Grouped color tools */
 .group {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
 }
 
 .group button,
 .group label {
-  flex: 0 1 auto;
-/*  min-width: 40px;*/
+  flex: 0 0 auto;
 }
 
 #url {
   width: 100px;
 }
-
 
 label {
   display:flex;
@@ -65,20 +73,23 @@ input[type=color] {
   padding:0;
   border:none;
 }
-#settings{
-	margin-right:10px;
-	text-align:center;
-	width:auto;
-	z-index:20;
-	position:fixed;
-	bottom:75px;
-	left:0px;
-	background-color:lightgray;
-	color:black;
-	padding:10px;
-	font-size:12px;
-	transition: 0.3s;
+#settings {
+    margin-right: 10px;
+    text-align: center;
+    width: auto;
+    z-index: 20;
+    position: fixed;
+    top: 50%;                  /* anchor vertically */
+    left: 50%;                 /* anchor horizontally */
+    transform: translate(-50%, -50%); /* shift back by half width & height */
+    background-color: lightgray;
+    color: black;
+    padding: 10px;
+    font-size: 14px;
+    transition: 0.3s;
 }
+
+
 #settings button{
 width:auto;
 margin-top:5px;
@@ -116,9 +127,9 @@ input[type=number] {
 /* Toggle button */
 .panel-bottom {
 	position: fixed;
-	bottom: 43px;
+	top: calc(var(--fixed-top) + var(--fixed-height));
 	left: 0px;
-	z-index: 100000000;
+	z-index: 1000;
 	color: black;
 	cursor: pointer;
 }
@@ -127,7 +138,7 @@ input[type=number] {
   
 #timeline {
   position:fixed;   /* stick to viewport */
-  bottom:0;         /* anchor at bottom */
+  top: var(--fixed-top);
   left:0;
   right:0;
   z-index:20;      /* above canvas */
@@ -220,29 +231,32 @@ canvas {
   image-rendering: crisp-edges; /* fallback for some browsers */
 }
 
-/* Mobile tweak: stack vertically */
-@media (max-width: 600px) {
-.BrushPanel{display: flex;bottom:55px;position:fixed;flex-direction: column; gap:5px;}
-
-}
 
 .sliders button{
-width:40px;
+width:32px;height:32px;
+  flex: 0 0 auto;
+	border:1px darkgray solid;
+  background: lightgray;
+  cursor: pointer;
+  text-align: center;
+  
 }
-.sliders{
 
-display:flex;
-flex-direction:row;
-gap:5px;
-position:fixed;
-bottom:90px;
-left:10px;
+.sliders {
+  flex-direction: column;
+  display: flex;
+  gap: 5px;
+  position: fixed;
+  top: 50%;          /* anchor to vertical center */
+  left: 10px;        /* fixed on the left side */
+  transform: translateY(-50%); /* adjust for element height */
 }
+
 
 /*DRAG BUTTONS*/
 :root {
     --btn-bg: rgba(255, 255, 255, 0.5);
-    --btn-bg-active: #111827;
+    --btn-bg-active: yellow;
     --btn-text: black;
     --btn-border: #374151;
     --btn-focus: #3b82f6;
@@ -251,7 +265,7 @@ left:10px;
   .control {
     display: flex;
     width:40px;
-width:100%;
+	width:100%;
     align-items: center;
     margin: 5px 0;
     gap: 5px;
@@ -268,8 +282,6 @@ width:100%;
     background-color: var(--btn-bg);
     color: var(--btn-text);
     border-radius: 15px;
-    padding: 10px 16px;
-    cursor: ew-resize; /* left/right drag */
     user-select: none;
     touch-action: none;
     transition: background 120ms ease, box-shadow 120ms ease, transform 60ms ease;
@@ -309,38 +321,65 @@ width:100%;
     display: inline-block;
   }
   
+  
+  /* Bottom-left button */
+.nav-toggle {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  z-index: 1000;
+  user-select: none; 
+}
+
+.nav-toggle button {
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #28262a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.nav-toggle button:hover {
+  background: #666;
+}
+
+/* Centered overlay controls */
+.overlay-controls {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 1000;
+  
+}
+
+.overlay-btn {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(68,68,68,0.85);
+  color: #fff;
+  border-radius: 50%;
+  cursor: grab;
+  font-size: 22px;
+  transition: background 0.2s;
+}
+
+.overlay-btn:hover {
+  background: rgba(102,102,102,0.9);
+}
+
+
   @media (orientation: landscape) {
-	#timeline {
-		width:24px;
-	  position:fixed;   /* stick to viewport */
-	  top:0;         /* anchor at bottom */
-	  bottom:0;
-	  left:0;
-	  flex-direction: column;
-	  overflow-x:hidden;
-	  overflow-y:auto;
-	  justify-content:flex-start;
-	}
-	.panel-bottom {
-		bottom: 0px;
-		left: 40px;
-	}
-	#settings{
-    bottom:0px;
-    left: 135px;
-/*    transform: translate(-50%, -50%);*/
-	}
-	.sliders{
-		flex-direction:column;
-		gap:0px;
-		left:50px;
-		bottom:50px;
-	}
-/*	#bar{*/
-/*		width:100px;*/
-/*		gap:0px;*/
-/*		left:80px;*/
-/*	}*/
+
   }
 }
 

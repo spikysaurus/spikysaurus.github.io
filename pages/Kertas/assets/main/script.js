@@ -2,12 +2,16 @@ const stack = document.getElementById('stack')
 const cv_background = document.getElementById('background'),cvx_background = cv_background.getContext('2d')
 const cv_checkerboard = document.getElementById('checkerboard'),cvx_checkerboard = cv_checkerboard.getContext('2d')
 const cv_overlay = document.getElementById('overlay'),cvx_overlay = cv_overlay.getContext('2d')
-const layer_1 = document.getElementById('layer_1'),layer_1_ctx = layer_1.getContext('2d')
+const layer_1 = document.getElementById('layer_1')
+let active_layer = layer_1
+let active_layer_ctx = active_layer.getContext('2d')
 
 cvx_overlay.imageSmoothingEnabled = false;
-layer_1_ctx.imageSmoothingEnabled = false;
+active_layer_ctx.imageSmoothingEnabled = false;
 
-const sz = document.getElementById('sz'),op = document.getElementById('op'),col = document.getElementById('col')
+const brush_size = document.getElementById('brush_size')
+const brush_opacity = document.getElementById('brush_opacity')
+const col = document.getElementById('col')
 
 let clipboard = null;
 let drawing = false,
@@ -89,8 +93,8 @@ animate()
 //FILL TOOL
 	
 	function fill(x, y, fillColor, tolerance) {
-  const w = layer_1.width, h = layer_1.height;
-  const imageData = layer_1_ctx.getImageData(0, 0, w, h);
+  const w = active_layer.width, h = active_layer.height;
+  const imageData = active_layer_ctx.getImageData(0, 0, w, h);
   const data = imageData.data;
 
   function getPixel(px, py) {
@@ -151,21 +155,21 @@ animate()
     }
   }
 
-  layer_1_ctx.putImageData(imageData, 0, 0);
+  active_layer_ctx.putImageData(imageData, 0, 0);
 }
 
 // Fill Tool handlers
-layer_1.addEventListener("pointerdown", e => {
+active_layer.addEventListener("pointerdown", e => {
     if (activeTool != "ToolFill") return; // only fill if enabled
 
     // --- Capture undo state BEFORE filling ---
-    undoStack.push(layer_1.toDataURL());
+    undoStack.push(active_layer.toDataURL());
 
-    const rect = layer_1.getBoundingClientRect();
+    const rect = active_layer.getBoundingClientRect();
 
     // Map screen coords back to canvas pixel coords
-    const scaleX = layer_1.width / rect.width;
-    const scaleY = layer_1.height / rect.height;
+    const scaleX = active_layer.width / rect.width;
+    const scaleY = active_layer.height / rect.height;
 
     const x = Math.floor((e.clientX - rect.left) * scaleX);
     const y = Math.floor((e.clientY - rect.top) * scaleY);
@@ -173,7 +177,7 @@ layer_1.addEventListener("pointerdown", e => {
     fill(x, y, col.value, 0); // fill with chosen color
 
     // Optionally update frames[] if you want fills to be stored like strokes
-    frames[cur] = layer_1.toDataURL();
+    frames[cur] = active_layer.toDataURL();
     render();
 });
 
@@ -192,12 +196,12 @@ ToolLassoFillToggle .addEventListener("click", () => {
 });
 
 // --- Lasso tool handlers ---
-layer_1.addEventListener("pointerdown", e => {
+active_layer.addEventListener("pointerdown", e => {
   if (activeTool !== "ToolLassoFill") return;
 
-  const rect = layer_1.getBoundingClientRect();
-  const scaleX = layer_1.width / rect.width;
-  const scaleY = layer_1.height / rect.height;
+  const rect = active_layer.getBoundingClientRect();
+  const scaleX = active_layer.width / rect.width;
+  const scaleY = active_layer.height / rect.height;
   const x = Math.floor((e.clientX - rect.left) * scaleX);
   const y = Math.floor((e.clientY - rect.top) * scaleY);
 
@@ -208,12 +212,12 @@ layer_1.addEventListener("pointerdown", e => {
 
 let rainbowOffset = 0; // animation phase
 
-layer_1.addEventListener("pointermove", e => {
+active_layer.addEventListener("pointermove", e => {
   if (activeTool !== "ToolLassoFill" || !isLassoing) return;
 
-  const rect = layer_1.getBoundingClientRect();
-  const scaleX = layer_1.width / rect.width;
-  const scaleY = layer_1.height / rect.height;
+  const rect = active_layer.getBoundingClientRect();
+  const scaleX = active_layer.width / rect.width;
+  const scaleY = active_layer.height / rect.height;
   const x = Math.floor((e.clientX - rect.left) * scaleX);
   const y = Math.floor((e.clientY - rect.top) * scaleY);
 
@@ -244,16 +248,16 @@ layer_1.addEventListener("pointermove", e => {
 });
 
 
-layer_1.addEventListener("pointerup", e => {
+active_layer.addEventListener("pointerup", e => {
   if (activeTool !== "ToolLassoFill" || !isLassoing) return;
   isLassoing = false;
 
   cvx_overlay.clearRect(0, 0, cv_overlay.width, cv_overlay.height);
 	
 	// --- Capture undo state BEFORE applying lasso fill/erase ---
-  undoStack.push(layer_1.toDataURL());
+  undoStack.push(active_layer.toDataURL());
   
-  const ctx = layer_1_ctx; // main drawing context
+  const ctx = active_layer_ctx; // main drawing context
   ctx.save();
   ctx.beginPath();
   ctx.moveTo(lassoPoints[0].x, lassoPoints[0].y);
@@ -265,17 +269,17 @@ layer_1.addEventListener("pointerup", e => {
 
   if (lassoEraseMode) {
     // erase inside lasso
-    ctx.clearRect(0, 0, layer_1.width, layer_1.height);
+    ctx.clearRect(0, 0, active_layer.width, active_layer.height);
   } else {
     // fill inside lasso
     ctx.fillStyle = col.value;
-    ctx.fillRect(0, 0, layer_1.width, layer_1.height);
+    ctx.fillRect(0, 0, active_layer.width, active_layer.height);
   }
 
   ctx.restore();
 
   lassoPoints = [];
-  frames[cur] = layer_1.toDataURL();
+  frames[cur] = active_layer.toDataURL();
   render();
 });
 
@@ -284,15 +288,15 @@ layer_1.addEventListener("pointerup", e => {
 // --- RESIZE STRETCH ---
 function resize(w, h) {
     const snapshot = new Image();
-    snapshot.src = layer_1.toDataURL();
+    snapshot.src = active_layer.toDataURL();
 
 	cv_checkerboard.width = w;
     cv_checkerboard.height = h;
     
     cv_background.width = w;
     cv_background.height = h;
-    layer_1.width = w;
-    layer_1.height = h;
+    active_layer.width = w;
+    active_layer.height = h;
     
     cv_overlay.width = w;
     cv_overlay.height = h;
@@ -301,7 +305,7 @@ function resize(w, h) {
 
     snapshot.onload = () => {
         // Stretch to fit new size
-        layer_1_ctx.drawImage(snapshot, 0, 0, w, h);
+        active_layer_ctx.drawImage(snapshot, 0, 0, w, h);
     };
 
     document.getElementById('canvasWidth').value = w;
@@ -311,18 +315,18 @@ function resize(w, h) {
 // --- RESIZE ANCHOR PRESERVE ---
 function resizeAnchor(w, h, anchor = "top-left") {
     const snapshot = new Image();
-    snapshot.src = layer_1.toDataURL();
+    snapshot.src = active_layer.toDataURL();
 
-    const oldW = layer_1.width;
-    const oldH = layer_1.height;
+    const oldW = active_layer.width;
+    const oldH = active_layer.height;
 
 	cv_checkerboard.width = w;
     cv_checkerboard.height = h;
     
     cv_background.width = w;
     cv_background.height = h;
-    layer_1.width = w;
-    layer_1.height = h;
+    active_layer.width = w;
+    active_layer.height = h;
     
     cv_overlay.width = w;
     cv_overlay.height = h;
@@ -334,7 +338,7 @@ function resizeAnchor(w, h, anchor = "top-left") {
         if (anchor.includes("right")) offsetX = w - oldW;
         if (anchor.includes("bottom")) offsetY = h - oldH;
         // Draw at original size (no stretch)
-        layer_1_ctx.drawImage(snapshot, offsetX, offsetY);
+        active_layer_ctx.drawImage(snapshot, offsetX, offsetY);
     };
 
     document.getElementById('canvasWidth').value = w;
@@ -345,17 +349,17 @@ function resizeAnchor(w, h, anchor = "top-left") {
 // --- RESIZE CENTER PRESERVE ---
 function resizeCenter(w, h) {
     const snapshot = new Image();
-    snapshot.src = layer_1.toDataURL();
+    snapshot.src = active_layer.toDataURL();
 
-    const oldW = layer_1.width;
-    const oldH = layer_1.height;
+    const oldW = active_layer.width;
+    const oldH = active_layer.height;
 		
 		cv_checkerboard.width = w;
     cv_checkerboard.height = h;
     cv_background.width = w;
     cv_background.height = h;
-    layer_1.width = w;
-    layer_1.height = h;
+    active_layer.width = w;
+    active_layer.height = h;
     cv_overlay.width = w;
     cv_overlay.height = h;
     stack.style.width = w + 'px';
@@ -365,7 +369,7 @@ function resizeCenter(w, h) {
         // Center the old drawing
         const offsetX = (w - oldW) / 2;
         const offsetY = (h - oldH) / 2;
-        layer_1_ctx.drawImage(snapshot, offsetX, offsetY);
+        active_layer_ctx.drawImage(snapshot, offsetX, offsetY);
     };
 
     document.getElementById('canvasWidth').value = w;
@@ -378,7 +382,7 @@ document.getElementById('applySize').onclick = () => {
     const h = parseInt(document.getElementById('canvasHeight').value, 10);
     if (w > 0 && h > 0) {
         resize(w, h); // stretch
-        frames[cur] = layer_1.toDataURL();
+        frames[cur] = active_layer.toDataURL();
         render();
     }
 };
@@ -414,8 +418,8 @@ document.getElementById('resizeCenter').onclick = () => {
 };
 
 function init() {
-    layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
-    frames.push(layer_1.toDataURL());
+    active_layer_ctx.clearRect(0, 0, active_layer.width, active_layer.height);
+    frames.push(active_layer.toDataURL());
     cur = frames.length - 1;
     render()
 
@@ -452,14 +456,14 @@ AliasedBtn.onclick = () => {
 
 ////Painting
 function circ(x, y, s, c, a) {
-  layer_1_ctx.globalAlpha = a;
+  active_layer_ctx.globalAlpha = a;
 
   if (activeTool == "ToolEraser") {
-      layer_1_ctx.globalCompositeOperation = 'destination-out';
-      layer_1_ctx.fillStyle = 'rgba(0,0,0,1)'; // <-- can just use any solid color
+      active_layer_ctx.globalCompositeOperation = 'destination-out';
+      active_layer_ctx.fillStyle = 'rgba(0,0,0,1)'; // <-- can just use any solid color
   } else {
-      layer_1_ctx.globalCompositeOperation = 'source-over';
-      layer_1_ctx.fillStyle = c;
+      active_layer_ctx.globalCompositeOperation = 'source-over';
+      active_layer_ctx.fillStyle = c;
   }
 
   if (useAliased) {
@@ -467,18 +471,18 @@ function circ(x, y, s, c, a) {
       for (let py = -r; py <= r; py++) {
           for (let px = -r; px <= r; px++) {
               if (px * px + py * py <= r * r) {
-                  layer_1_ctx.fillRect(Math.round(x + px), Math.round(y + py), 1, 1);
+                  active_layer_ctx.fillRect(Math.round(x + px), Math.round(y + py), 1, 1);
               }
           }
       }
   } else {
-      layer_1_ctx.beginPath();
-      layer_1_ctx.arc(x, y, s / 2, 0, Math.PI * 2);
-      layer_1_ctx.fill();
+      active_layer_ctx.beginPath();
+      active_layer_ctx.arc(x, y, s / 2, 0, Math.PI * 2);
+      active_layer_ctx.fill();
   }
 
-  layer_1_ctx.globalAlpha = 1;
-  layer_1_ctx.globalCompositeOperation = 'source-over'; // reset after erasing
+  active_layer_ctx.globalAlpha = 1;
+  active_layer_ctx.globalCompositeOperation = 'source-over'; // reset after erasing
     
 }
 
@@ -504,8 +508,8 @@ const pressureSizeToggle = document.getElementById("pressureSizeToggle");
 const pressureOpacityToggle = document.getElementById("pressureOpacityToggle");
 
 function getBrushSettings(e) {
-    const baseSize = parseInt(sz.value);
-    const baseOpacity = parseFloat(op.value);
+    const baseSize = parseInt(brush_size.value);
+    const baseOpacity = parseFloat(brush_opacity.value);
 
     // Default pressure is 1.0 if unsupported or not pressed
     const pressure = e.pressure > 0 ? e.pressure : 1.0;
@@ -517,9 +521,9 @@ function getBrushSettings(e) {
     return { brushSize, brushOpacity };
 }
 
-layer_1.onpointerdown = e => {
+active_layer.onpointerdown = e => {
     if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
-        undoStack.push(layer_1.toDataURL());
+        undoStack.push(active_layer.toDataURL());
         redoStack = []; // clear redo history
 
         drawing = true;
@@ -534,7 +538,7 @@ layer_1.onpointerdown = e => {
     }
 };
 
-//layer_1.onpointermove = e => {
+//active_layer.onpointermove = e => {
 //    if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
 //        if (drawing) {
 //            const { brushSize, brushOpacity } = getBrushSettings(e);
@@ -545,7 +549,7 @@ layer_1.onpointerdown = e => {
 //    }
 //};
 
-layer_1.onpointermove = e => {
+active_layer.onpointermove = e => {
     if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
         if (drawing) {
             // if pressure is enabled, skip zero-length moves
@@ -562,10 +566,10 @@ layer_1.onpointermove = e => {
     }
 };
 
-layer_1.onpointerup = () => {
+active_layer.onpointerup = () => {
     if (activeTool == "ToolBrush" || activeTool == "ToolEraser") {
         drawing = false;
-        frames[cur] = layer_1.toDataURL();
+        frames[cur] = active_layer.toDataURL();
         render();
     }
 };
@@ -576,13 +580,13 @@ document.getElementById("redoBtn").onclick = redo;
 function undo() {
     if (undoStack.length > 0) {
         // Save current state into redoStack
-        redoStack.push(layer_1.toDataURL());
+        redoStack.push(active_layer.toDataURL());
 
         const lastState = undoStack.pop();
         const img = new Image();
         img.onload = () => {
-            layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
-            layer_1_ctx.drawImage(img, 0, 0);
+            active_layer_ctx.clearRect(0, 0, active_layer.width, active_layer.height);
+            active_layer_ctx.drawImage(img, 0, 0);
             frames[cur] = lastState;
             render();
         };
@@ -593,13 +597,13 @@ function undo() {
 function redo() {
     if (redoStack.length > 0) {
         // Save current state into undoStack
-        undoStack.push(layer_1.toDataURL());
+        undoStack.push(active_layer.toDataURL());
 
         const nextState = redoStack.pop();
         const img = new Image();
         img.onload = () => {
-            layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
-            layer_1_ctx.drawImage(img, 0, 0);
+            active_layer_ctx.clearRect(0, 0, active_layer.width, active_layer.height);
+            active_layer_ctx.drawImage(img, 0, 0);
             frames[cur] = nextState;
             render();
         };
@@ -681,7 +685,7 @@ window.addEventListener('load', () => {
 });
 
 function autoFitCanvas() {
-  const rect = layer_1.getBoundingClientRect();
+  const rect = active_layer.getBoundingClientRect();
 
   // available screen size (or container size)
   const screenW = window.innerWidth;
@@ -706,9 +710,9 @@ let frozenStartX = 0, frozenStartY = 0, frozenEndX = 0, frozenEndY = 0;
 //let clipboard = null;
 
 // --- Selection handlers ---
-layer_1.addEventListener('pointerdown', e => {
+active_layer.addEventListener('pointerdown', e => {
   if (activeTool !== "ToolSelect") return;
-  const { x, y } = getCanvasCoords(e, layer_1);
+  const { x, y } = getCanvasCoords(e, active_layer);
 
   // compute center of current selection
   const w = selEndX - selStartX;
@@ -735,9 +739,9 @@ layer_1.addEventListener('pointerdown', e => {
 });
 
 
-layer_1.addEventListener('pointermove', e => {
+active_layer.addEventListener('pointermove', e => {
   if (activeTool !== "ToolSelect") return;
-  const { x, y } = getCanvasCoords(e, layer_1);
+  const { x, y } = getCanvasCoords(e, active_layer);
 
   if (isDraggingHandle) {
     if (e.buttons === 1 || e.pressure > 0) {
@@ -791,7 +795,7 @@ layer_1.addEventListener('pointermove', e => {
   rainbowOffset = (rainbowOffset + 5) % 360; // adjust speed here
 });
 
-layer_1.addEventListener('pointerup', e => {
+active_layer.addEventListener('pointerup', e => {
   if (activeTool !== "ToolSelect") return;
 
   if (isDraggingHandle) {
@@ -801,7 +805,7 @@ layer_1.addEventListener('pointerup', e => {
   }
 
   // normal selection finalize
-  const { x, y } = getCanvasCoords(e, layer_1);
+  const { x, y } = getCanvasCoords(e, active_layer);
   selEndX = x; selEndY = y;
 
   const w = Math.abs(selEndX - selStartX);
@@ -816,7 +820,7 @@ layer_1.addEventListener('pointerup', e => {
 });
 
 // --- Freehand drawing handlers ---
-layer_1.addEventListener('pointerdown', e => {
+active_layer.addEventListener('pointerdown', e => {
   if (["pen","touch","mouse"].includes(e.pointerType)) {
     drawing = true;
     lastX = e.offsetX;
@@ -824,7 +828,7 @@ layer_1.addEventListener('pointerdown', e => {
   }
 });
 
-layer_1.addEventListener('pointermove', e => {
+active_layer.addEventListener('pointermove', e => {
   if (!drawing) return;
   if (["pen","touch","mouse"].includes(e.pointerType)) {
     // ctx.lineTo(e.offsetX, e.offsetY);
@@ -834,7 +838,7 @@ layer_1.addEventListener('pointermove', e => {
   }
 });
 
-layer_1.addEventListener('pointerup', e => {
+active_layer.addEventListener('pointerup', e => {
   drawing = false;
 });
 
@@ -850,7 +854,7 @@ document.getElementById('copy').onclick = () => {
             tmp.width = Math.abs(w);
             tmp.height = Math.abs(h);
             const ctx = tmp.getContext('2d');
-            ctx.drawImage(layer_1, Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(w), Math.abs(h), 0, 0, Math.abs(w), Math.abs(h));
+            ctx.drawImage(active_layer, Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(w), Math.abs(h), 0, 0, Math.abs(w), Math.abs(h));
             clipboard = tmp;
         }
     }
@@ -858,8 +862,8 @@ document.getElementById('copy').onclick = () => {
 
 // Delete
 document.getElementById('delete').onclick = () => {
-	layer_1_ctx.clearRect(Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(selEndX - selStartX), Math.abs(selEndY - selStartY));
-	frames[cur] = layer_1.toDataURL();
+	active_layer_ctx.clearRect(Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(selEndX - selStartX), Math.abs(selEndY - selStartY));
+	frames[cur] = active_layer.toDataURL();
 	render();
 };
 
@@ -878,7 +882,7 @@ document.getElementById('paste').onclick = () => {
     const h = selEndY - selStartY;
 
     // draw clipboard image scaled to fit selection
-    layer_1_ctx.drawImage(
+    active_layer_ctx.drawImage(
       clipboard,
       0, 0, clipboard.width, clipboard.height, // source
       Math.min(selStartX, selEndX),
@@ -887,7 +891,7 @@ document.getElementById('paste').onclick = () => {
       Math.abs(h) // destination size
     );
 
-    frames[cur] = layer_1.toDataURL();
+    frames[cur] = active_layer.toDataURL();
     render();
   }
 };
@@ -895,8 +899,8 @@ document.getElementById('paste').onclick = () => {
 document.getElementById('clr').onclick = () => {
     const confirmClear = confirm("Clear the canvas?");
     if (confirmClear) {
-        layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
-        frames[cur] = layer_1.toDataURL();
+        active_layer_ctx.clearRect(0, 0, active_layer.width, active_layer.height);
+        frames[cur] = active_layer.toDataURL();
         render();
     }
 };
@@ -908,7 +912,7 @@ document.getElementById('save').onclick = () => {
     tmp.height = cv_background.height;
     const tx = tmp.getContext('2d');
     tx.drawImage(cv_background, 0, 0);
-    tx.drawImage(layer_1, 0, 0);
+    tx.drawImage(active_layer, 0, 0);
     const link = document.createElement('a');
     link.download = 'img.png';
     link.href = tmp.toDataURL();
@@ -988,8 +992,8 @@ document.getElementById('export').onclick = () => {
     const data = {
         background: bgUrl, // store the image URL input
         canvas: {
-            width: layer_1.width,
-            height: layer_1.height
+            width: active_layer.width,
+            height: active_layer.height
         },
         frames: frames.map((f, i) => ({
             index: i,
@@ -1037,7 +1041,7 @@ document.getElementById('import').onclick = () => {
 
                         cvx_background.clearRect(0, 0, cv_background.width, cv_background.height);
                         cvx_background.drawImage(img, 0, 0, w, h);
-                        layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
+                        active_layer_ctx.clearRect(0, 0, active_layer.width, active_layer.height);
                     };
                 } else if (obj.canvas && obj.canvas.width && obj.canvas.height) {
                     // Resize even if no background image
@@ -1097,7 +1101,7 @@ function importImageSequence(files, bgUrl = null) {
                 }
 
                 // Compose background + frame into a dataURL using the resized canvas
-                const dataURL = await composeFrame(bgUrl, reader.result, layer_1.width, layer_1.height);
+                const dataURL = await composeFrame(bgUrl, reader.result, active_layer.width, active_layer.height);
                 frames[idx] = dataURL;
                 loaded++;
 
@@ -1205,8 +1209,8 @@ document.getElementById('pdf').onclick = async () => {
 document.getElementById('add').onclick = add
 // Add Frame
 function add() {
-    layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
-    frames.push(layer_1.toDataURL());
+    active_layer_ctx.clearRect(0, 0, active_layer.width, active_layer.height);
+    frames.push(active_layer.toDataURL());
     cur = frames.length - 1;
     render();
     show(cur);
@@ -1247,8 +1251,8 @@ document.getElementById('load').onclick = () => {
         resize(img.width, img.height);
         cvx_background.clearRect(0, 0, cv_background.width, cv_background.height);
         cvx_background.drawImage(img, 0, 0);
-        layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
-        frames[cur] = layer_1.toDataURL();
+        active_layer_ctx.clearRect(0, 0, active_layer.width, active_layer.height);
+        frames[cur] = active_layer.toDataURL();
         render();
     };
     img.src = u
@@ -1371,8 +1375,8 @@ function exportGif() {
         workers: 2,
         quality: 10,
         workerScript: 'assets/gif-js/gif.worker.js', // <-- correct path
-        width: layer_1.width,
-        height: layer_1.height,
+        width: active_layer.width,
+        height: active_layer.height,
         transparent: null, // disable transparency → solid background
     });
 
@@ -1385,13 +1389,13 @@ function exportGif() {
         img.onload = () => {
             // Draw onto a temp canvas to ensure background is filled
             const tempCanvas = document.createElement("canvas");
-            tempCanvas.width = layer_1.width;
-            tempCanvas.height = layer_1.height;
+            tempCanvas.width = active_layer.width;
+            tempCanvas.height = active_layer.height;
             const tempCtx = tempCanvas.getContext("2d");
 
             // Fill background (white here, change if needed)
             tempCtx.fillStyle = "#ffffff";
-            tempCtx.fillRect(0, 0, layer_1.width, layer_1.height);
+            tempCtx.fillRect(0, 0, active_layer.width, active_layer.height);
 
             // Draw the frame image on top
             tempCtx.drawImage(img, 0, 0);
@@ -1462,8 +1466,8 @@ function nextFrame() {
 
     img.onload = () => {
         // clear and draw current frame
-        layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
-        layer_1_ctx.drawImage(img, 0, 0);
+        active_layer_ctx.clearRect(0, 0, active_layer.width, active_layer.height);
+        active_layer_ctx.drawImage(img, 0, 0);
 
         // read FPS from input, convert to ms per frame
         let fps = parseInt(GifDelay.value, 10);
@@ -1527,22 +1531,22 @@ function duplicateFrame() {
 //Onion Skin
 // Create two canvases: underlay (for onion skin) and main (for current frame)
 const underlay = document.createElement("canvas");
-underlay.width = layer_1.width;
-underlay.height = layer_1.height;
+underlay.width = active_layer.width;
+underlay.height = active_layer.height;
 const underCtx = underlay.getContext("2d");
 
 // dr is main canvas
-// 'layer_1_ctx' is its context
+// 'active_layer_ctx' is its context
 // We'll stack them in the DOM so underlay is behind main
-layer_1.parentNode.insertBefore(underlay, layer_1);
-layer_1.style.position = "absolute";
+active_layer.parentNode.insertBefore(underlay, active_layer);
+active_layer.style.position = "absolute";
 underlay.style.position = "absolute";
 
 // Onion Skin toggle
 let showOnionSkin = false;
 function show(i) {
     // clear both layers
-    layer_1_ctx.clearRect(0, 0, layer_1.width, layer_1.height);
+    active_layer_ctx.clearRect(0, 0, active_layer.width, active_layer.height);
     underCtx.clearRect(0, 0, underlay.width, underlay.height);
 
     // previous frame ghost (red tint) on underlay
@@ -1559,10 +1563,10 @@ function show(i) {
     if (frames[i]) {
         const img = new Image();
         img.onload = () => {
-            layer_1_ctx.save();
-            layer_1_ctx.globalAlpha = 1.0;
-            layer_1_ctx.drawImage(img, 0, 0);
-            layer_1_ctx.restore();
+            active_layer_ctx.save();
+            active_layer_ctx.globalAlpha = 1.0;
+            active_layer_ctx.drawImage(img, 0, 0);
+            active_layer_ctx.restore();
         };
         img.src = frames[i];
     }
@@ -1574,13 +1578,13 @@ function tintFrame(src, color, alpha, ctx) {
     img.onload = () => {
         // offscreen canvas for tinting
         const off = document.createElement("canvas");
-        off.width = layer_1.width;
-        off.height = layer_1.height;
+        off.width = active_layer.width;
+        off.height = active_layer.height;
         const offCtx = off.getContext("2d");
 
         offCtx.drawImage(img, 0, 0);
 
-        const imageData = offCtx.getImageData(0, 0, layer_1.width, layer_1.height);
+        const imageData = offCtx.getImageData(0, 0, active_layer.width, active_layer.height);
         const data = imageData.data;
 
         let tintRGB;
@@ -1647,44 +1651,37 @@ function updateUI() {
   });
 }
 
-const bar = document.getElementById('bar');
-let isDragging = false;
-let offsetX, offsetY;
+//const bar = document.getElementById('bar');
+//let isDragging = false;
+//let offsetX, offsetY;
 
-bar.addEventListener('mousedown', (e) => {
-  // Only drag if clicked on empty space, not buttons
-  if (e.target === bar) {
-    isDragging = true;
-    offsetX = e.clientX - bar.offsetLeft;
-    offsetY = e.clientY - bar.offsetTop;
-    document.body.style.userSelect = 'none'; // prevent text selection
-  }
-});
+//bar.addEventListener('mousedown', (e) => {
+//  // Only drag if clicked on empty space, not buttons
+//  if (e.target === bar) {
+//    isDragging = true;
+//    offsetX = e.clientX - bar.offsetLeft;
+//    offsetY = e.clientY - bar.offsetTop;
+//    document.body.style.userSelect = 'none'; // prevent text selection
+//  }
+//});
 
-document.addEventListener('mousemove', (e) => {
-  if (isDragging) {
-    bar.style.left = (e.clientX - offsetX) + 'px';
-    bar.style.top = (e.clientY - offsetY) + 'px';
-  }
-});
+//document.addEventListener('mousemove', (e) => {
+//  if (isDragging) {
+//    bar.style.left = (e.clientX - offsetX) + 'px';
+//    bar.style.top = (e.clientY - offsetY) + 'px';
+//  }
+//});
 
-document.addEventListener('mouseup', () => {
-  isDragging = false;
-  document.body.style.userSelect = '';
-});
+//document.addEventListener('mouseup', () => {
+//  isDragging = false;
+//  document.body.style.userSelect = '';
+//});
 
 
 minUI = false;
 minimalUIBtn = document.getElementById('minimalUI');
 timelineUI = document.getElementById('timeline');
-addBtn = document.getElementById('add');
-deleteFrameBtn = document.getElementById('deleteFrame');
-slidersUI = document.getElementById('sliders');
 panelBottomUI = document.getElementById('panel-bottom');
-swapPrevBtn = document.getElementById('swapPrev');
-swapNextBtn = document.getElementById('swapNext');
-settingsUI = document.getElementById('settings');
-barUI = document.getElementById('bar');
 
 
 minimalUIBtn.addEventListener('click', (e) => {
@@ -1692,81 +1689,21 @@ minimalUIBtn.addEventListener('click', (e) => {
   if (window.matchMedia("(orientation: portrait)").matches) {
 	  if (minUI){
 	  	timelineUI.style.display = 'none';
-	  	prevBtn.style.display = 'none';
-	  	nextBtn.style.display = 'none';
-	  	playBtn.style.display = 'none';
-	  	onionBtn.style.display = 'none';
-	  	addBtn.style.display = 'none';
-	  	swapPrevBtn.style.display = 'none';
-		swapNextBtn.style.display = 'none';
-	  	deleteFrameBtn.style.display = 'none';
-	  	duplicateBtn.style.display = 'none';
-	  	slidersUI.style.bottom = '-5px';
-	  	slidersUI.style.left = '60px';
-	  	panelBottomUI.style.bottom= '0px';
-	  	panelBottomUI.style.left= '0px';
-	  	barUI.style.gap = '0px';
-	  	barUI.style.padding = '0rem';
-	  	settingsUI.style.bottom = '32px';
+	  	panelBottomUI.style.display = 'none';
 	  }
 	  else{
-		timelineUI.style.display = 'block';
-		prevBtn.style.display = 'block';
-		nextBtn.style.display = 'block';
-		playBtn.style.display = 'block';
-		onionBtn.style.display = 'block';
-		addBtn.style.display = 'block';
-		deleteFrameBtn.style.display = 'block';
-		swapPrevBtn.style.display = 'block';
-		swapNextBtn.style.display = 'block';
-		duplicateBtn.style.display = 'block';
-		slidersUI.style.bottom = '80px';
-		slidersUI.style.left = '0px';
-		panelBottomUI.style.bottom = '43px';
-		panelBottomUI.style.left= '0px';
-		barUI.style.gap = '5px';
-		barUI.style.padding = '0.5rem';
-		settingsUI.style.bottom = '75px';
+		timelineUI.style.display = 'flex';
+		panelBottomUI.style.display = 'flex';
 	  }
   }
   else{
   	if (minUI){
 	  	timelineUI.style.display = 'none';
-	  	prevBtn.style.display = 'none';
-	  	nextBtn.style.display = 'none';
-	  	playBtn.style.display = 'none';
-	  	onionBtn.style.display = 'none';
-	  	addBtn.style.display = 'none';
-	  	swapPrevBtn.style.display = 'none';
-		swapNextBtn.style.display = 'none';
-	  	deleteFrameBtn.style.display = 'none';
-	  	duplicateBtn.style.display = 'none';
-	  	slidersUI.style.bottom = '50px';
-	  	slidersUI.style.left = '10px';
-	  	panelBottomUI.style.bottom= '0px';
-	  	panelBottomUI.style.left= '0px';
-	  	barUI.style.gap = '0px';
-	  	barUI.style.padding = '0rem';
-	  	settingsUI.style.bottom = '32px';
+	  	panelBottomUI.style.display = 'none';
 	  }
 	  else{
-		timelineUI.style.display = 'block';
-		prevBtn.style.display = 'block';
-		nextBtn.style.display = 'block';
-		playBtn.style.display = 'block';
-		onionBtn.style.display = 'block';
-		addBtn.style.display = 'block';
-		deleteFrameBtn.style.display = 'block';
-		swapPrevBtn.style.display = 'block';
-		swapNextBtn.style.display = 'block';
-		duplicateBtn.style.display = 'block';
-		slidersUI.style.bottom = '50px';
-		slidersUI.style.left = '50px';
-		panelBottomUI.style.bottom = '0px';
-		panelBottomUI.style.left = '40px';
-		barUI.style.gap = '5px';
-		barUI.style.padding = '0.5rem';
-		settingsUI.style.bottom = '75px';
+		timelineUI.style.display = 'flex';
+		panelBottomUI.style.display = 'flex';
 	  }
   
   
@@ -1781,5 +1718,85 @@ ToolFillBtn.addEventListener("click", () => setActiveTool("ToolFill"));
 ToolLassoFillBtn.addEventListener("click", () => setActiveTool("ToolLassoFill"));
 ToolSelectBtn.addEventListener("click", () => setActiveTool("ToolSelect"));
 ToolPanBtn.addEventListener("click", () => setActiveTool("ToolPan"));
+
+// Pan overlay drag
+let panDragging = false, panStartX = 0, panStartY = 0, panInitX = 0, panInitY = 0;
+const panOverlay = document.getElementById("panOverlay");
+
+panOverlay.addEventListener("pointerdown", e => {
+  panDragging = true;
+  psx = e.clientX - targetPx;
+  psy = e.clientY - targetPy;
+  document.body.style.cursor = 'grab';
+});
+
+panOverlay.addEventListener("pointermove", e => {
+  if (!panDragging) return;
+	if (e.buttons !== 1) return; // only drag with button pressed
+  targetPx = e.clientX - psx;
+  targetPy = e.clientY - psy;
+});
+
+panOverlay.addEventListener("pointerup", e => {
+  panDragging = false;
+   document.body.style.cursor = 'default';
+//  panOverlay.releasePointerCapture(e.pointerId);
+});
+
+// Zoom overlay drag
+let zoomDragging = false, zoomStartY = 0, zoomInit = 1;
+const zoomOverlay = document.getElementById("zoomOverlay");
+
+zoomOverlay.addEventListener("pointerdown", e => {
+  zoomDragging = true;
+  zoomStartY = e.clientY;
+  zoomOverlay.setPointerCapture(e.pointerId);
+});
+
+zoomOverlay.addEventListener("pointermove", e => {
+  if (!zoomDragging) return;
+  const dy = e.clientY - zoomStartY;
+  let nz = targetSc * Math.exp(-0.001 * dy);
+  nz = Math.min(Math.max(nz, 0.1), 12);
+	targetSc = nz
+});
+
+zoomOverlay.addEventListener("pointerup", e => {
+  zoomDragging = false;
+  zoomOverlay.releasePointerCapture(e.pointerId);
+});
+
+const navButton = document.getElementById("navButton");
+const snapButton = document.getElementById("snapButton");
+const navOverlays = document.getElementById("navOverlays");
+
+ShowOverlay = false;
+navButton.addEventListener("click", () => {
+	ShowOverlay = !ShowOverlay;
+	if (ShowOverlay){
+	navOverlays.style.display = "flex";
+	}
+	else{
+	navOverlays.style.display = "none";
+	}
+	
+});
+
+//// Show overlays while holding button
+//navButton.addEventListener("pointerdown", () => {
+//  navOverlays.style.display = "flex";
+//});
+
+//// Hide overlays when released
+//navButton.addEventListener("pointerup", () => {
+//  navOverlays.style.display = "none";
+//});
+
+//// Also hide if pointer leaves button while pressed
+//navButton.addEventListener("pointerleave", () => {
+//  navOverlays.style.display = "none";
+//});
+
+
 
 

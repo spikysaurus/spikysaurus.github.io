@@ -1,23 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <title>Kertas</title>
-      <link rel="stylesheet" href="assets/main/style.css">
-      <link rel="stylesheet" href="assets/bl-icons/bl-icons.css">
-      <link rel="stylesheet" href="assets/color-picker/ColorPicker.css">
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-   </head>
-   <body>
-   
-      <div id="bar">
-      
-         <div class="group">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kertas</title>
+    <link rel="stylesheet" href="assets/main/style.css">
+    <link rel="stylesheet" href="assets/bl-icons/bl-icons.css">
+    <link rel="stylesheet" href="assets/color-picker/ColorPicker.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+
+<body>
+    <div class="nav-toggle">
+        <button id="navButton"><span class="bl-icons-snap_vertex"></span></button>
+        <button id="toggleLabel"><span class="bl-icons-preferences"></span></button>
+        <button id="minimalUI"><span class="bl-icons-statusbar"></span></button>
+        <button id="undoBtn"><span class="bl-icons-loop_back"></span></button>
+        <button id="redoBtn"><span class="bl-icons-loop_forwards"></span></button>
+    </div>
+    <div class="overlay-controls" id="navOverlays" style="display:none;">
+    		<div class="nav-tools">
+        <div class="group">
             <button id="export"><span class="bl-icons-file_tick"></span></button>
             <button id="import"><span class="bl-icons-file_folder"></span></button>
-            
-         </div>
-         <div class="group">
+        </div>
+        <div class="group">
             <input id="col" type="color" value="#000000">
             <button id="ColorPickerBtn"><span class="bl-icons-material"></span></button>
             <button id="ToolBrushBtn" style="background-color:yellow;"><span class="bl-icons-greasepencil"></span></button>
@@ -26,187 +33,144 @@
             <button id="ToolFillBtn"><span class="bl-icons-image"></span></button>
             <button id="ToolLassoFillBtn"><span class="bl-icons-meta_data"></span></button>
             <button id="ToolLassoFillToggle" style="display:none;">Fill</button>
-            </div>
-			<div class="group">
-	         <button id="clr"><span class="bl-icons-file_hidden"></span></button>
-	         <button id="ToolSelectBtn"><span class="bl-icons-select_set"></span></button>
-	         <button id="cut"><span class="bl-icons-node_insert_on"></span></button>
-	         <button id="copy"><span class="bl-icons-duplicate"></span></button>
-	         <button id="paste"><span class="bl-icons-pastedown"></span></button>
-	         <button id="delete"><span class="bl-icons-trash"></span></button>
-         </div>
-           
-         <div class="group">
+        </div>
+        <div class="group">
+            <button id="clr"><span class="bl-icons-file_hidden"></span></button>
+            <button id="ToolSelectBtn"><span class="bl-icons-select_set"></span></button>
+            <button id="cut"><span class="bl-icons-node_insert_on"></span></button>
+            <button id="copy"><span class="bl-icons-duplicate"></span></button>
+            <button id="paste"><span class="bl-icons-pastedown"></span></button>
+            <button id="delete"><span class="bl-icons-trash"></span></button>
+        </div>
+        <div class="group" style="display:none;">
             <button id="ToolPanBtn"><span class="bl-icons-view_pan"></span></button>
             <button id="zoomIn"><span class="bl-icons-zoom_in"></span></button>
-            <button id="zoomOut"><span class="bl-icons-zoom_out"></span></button>    
-            <button id="fitScreen"><span class="bl-icons-fullscreen_enter"></span></button> 
-         </div>
-      	
-
-<div id="settings">
-
-
-  <input type="checkbox" id="pressureSizeToggle" unchecked> Size Pressure
-  <input type="checkbox" id="pressureOpacityToggle" unchecked> Opacity Pressure
-
-<div class="side-by-side">
-  Size<input id="canvasWidth" type="number" value="640" ><input id="canvasHeight" type="number" value="360"><br>
- </div>
-  
-  <div class="anchor-controls">
-  <button id="resizeTop">Top</button>
-  <button id="resizeLeft">Left</button>
-  <button id="resizeCenter">Center</button>
-  <button id="resizeRight">Right</button>
-  <button id="resizeBottom">Bottom</button>
-</div>
-
-<button id="applySize">Resize Center(Stretch)</button>
-
-<input id="url" type="text" value="" placeholder="Image URL">
+            <button id="zoomOut"><span class="bl-icons-zoom_out"></span></button>
+<!--            <button id="fitScreen"><span class="bl-icons-fullscreen_enter"></span></button>-->
+        </div>
+        </div>
+        <div class="group" style="margin-top:10px;">
+            <div id="panOverlay" class="overlay-btn"><span class="bl-icons-view_pan"></span></div>
+            <div id="zoomOverlay" class="overlay-btn"><span class="bl-icons-viewzoom"></span></div>
+            <div id="fitScreen" class="overlay-btn"><span class="bl-icons-fullscreen_enter"></span></div>
+        </div>
+    </div>
+    <div id="content">
+        <div id="settings">
+            <input type="checkbox" id="pressureSizeToggle" unchecked> Brush Size Pressure<br>
+            <input type="checkbox" id="pressureOpacityToggle" unchecked> Brush Opacity Pressure
+            <div class="side-by-side">
+                Size
+                <input id="canvasWidth" type="number" value="640">
+                <input id="canvasHeight" type="number" value="360">
+                <br>
+            </div>
+            <div class="anchor-controls">
+                <button id="resizeTop">Top</button>
+                <button id="resizeLeft">Left</button>
+                <button id="resizeCenter">Center</button>
+                <button id="resizeRight">Right</button>
+                <button id="resizeBottom">Bottom</button>
+            </div>
+            <button id="applySize">Resize Center(Stretch)</button>
+            <input id="url" type="text" value="" placeholder="Image URL">
             <button id="load">Load BG</button>
             <button onclick="window.open('https://spikysaurus.github.io', '_blank');" id="home"><span class="bl-icons-url"></span>Home</button>
             <button onclick="window.open('https://traditionalanimatorindonesia.github.io/pages/Templates/index.html', '_blank');" id="templates"><span class="bl-icons-url"></span>Templates</button>
             <button id="checkerboardBtn"><span class="bl-icons-texture"></span></button>
-            
             <div class="side-by-side">
-  <label for="GifDelay">FPS</label>
-  <input id="GifDelay" type="number" value="24">
-  <button id="exportGif">
-    Export GIF
-  </button>
-</div>
-				<div class="side-by-side">
-				<button id="pdf"><span class="bl-icons-output"></span>Export PDF</button>
-            <button id="save"><span class="bl-icons-restrict_render_off"></span>Snapshot</button>
-            <button id="importSequence">Import Image Sequence</button>
-           </div>
-           
-           
-           
-           
-				</div>
-				
-				<!-- Toggle button -->
-<div id="panel-bottom" class="panel-bottom">
-<div class="group">
-<button id="toggleLabel"><span class="bl-icons-preferences"></span></button>
-<button id="minimalUI"><span class="bl-icons-statusbar"></span></button>
-<button id="swapPrev"><span class="bl-icons-area_join_left"></span></button>
-<button id="swapNext"><span class="bl-icons-area_join"></span></button>
-<button id="deleteFrame"><span class="bl-icons-trash"></span></button>
-<button id="duplicateBtn"><span class="bl-icons-duplicate"></span></button>
-<button id="add"><span class="bl-icons-file_new"></span></button>
-<button id="playBtn"><span id="playBtn_icon"class="bl-icons-play"></span></button>
-<button id="onionBtn"><span class="bl-icons-onionskin_on"></span></button>
-
-</div>
-</div>
-
-<div id="sliders" class="sliders">
-
-	<div class="control">
-	<button id="prevBtn"><span class="bl-icons-frame_prev"></span></button>
-	</div>
-	<div class="control">
-	<button id="nextBtn"><span class="bl-icons-frame_next"></span></button>
-	</div>
-	<div class="control">
-		<button id="undoBtn"><span class="bl-icons-loop_back"></span></button>
-	</div>
-	<div class="control">
-		<button id="redoBtn"><span class="bl-icons-loop_forwards"></button>
-	</div>
-		<div class="control">
-<!--  <span class="control-label">Size</span>-->
-  <button
-    class="drag-btn"
-    data-min="1"
-    data-max="200"
-    data-step="1"
-    data-px-per-step="5"
-  >
-    <span class="value-display">3</span>
-    <input id="sz" class="value-input" type="number" min="1" max="200" step="5" value="3" />
-  </button>
-</div>
-
-<div class="control">
-<!--  <span class="control-label">Opacity</span>-->
-  <button
-    class="drag-btn"
-    data-min="0"
-    data-max="1"
-    data-step="0.01"
-    data-px-per-step="5"
-  >
-    <span class="value-display">1</span>
-    <input id="op" class="value-input" type="number" min="0" max="1" step="0.01" value="1" />
-  </button>
-</div>
-</div>
-		
-      
-      <div id="timeline"></div> 
-      <div id="stage">  
-         <div id="stack">
-				<canvas id="checkerboard"></canvas>
-            <canvas id="background"></canvas>
-            <canvas id="layer_1"></canvas>
-            <canvas id="overlay"></canvas>
-         </div>
-      </div>
-   <div class="picker" id="paintPicker">
-   
-
-    <div class="swatches">
-    	<div>
-<!--        <div class="small">Preview</div>-->
-        <div class="swatch" id="curSwatch"></div>
-        
-      </div>
-      <div>
-<!--        <div class="small">Current</div>-->
-<!--        <div class="swatch" id="prevSwatch"></div>-->
-        <button id="setPrev" style="width:auto;">Set Color</button>
-      </div>
+                <label for="GifDelay">FPS</label>
+                <input id="GifDelay" type="number" value="24">
+                <button id="exportGif">
+                    Export GIF
+                </button>
+            </div>
+            <div class="side-by-side">
+                <button id="pdf">Export PDF</button>
+                <button id="save">Snapshot PNG</button>
+                <button id="importSequence">Import Sequence</button>
+            </div>
+        </div>
+        <!-- Toggle button -->
+        <div id="panel-bottom" class="panel-bottom">
+            <div class="group">
+                
+                <button id="onionBtn"><span class="bl-icons-onionskin_on"></span></button>
+                <button id="swapPrev"><span class="bl-icons-area_join_left"></span></button>
+                <button id="swapNext"><span class="bl-icons-area_join"></span></button>
+                <button id="deleteFrame"><span class="bl-icons-trash"></span></button>
+                <button id="duplicateBtn"><span class="bl-icons-duplicate"></span></button>
+                <button id="add"><span class="bl-icons-file_new"></span></button>
+                <button id="playBtn"><span id="playBtn_icon" class="bl-icons-play"></span></button>
+                <button id="prevBtn"><span class="bl-icons-frame_prev"></span></button>
+                <button id="nextBtn"><span class="bl-icons-frame_next"></span></button>
+                
+            </div>
+        </div>
+        <div id="sliders" class="sliders">
+         <div class="control">
+            <!--  <span class="control-label">Size</span>-->
+                    <button class="drag-btn" data-min="1" data-max="200" data-step="1" data-px-per-step="5">
+                        <span class="value-display">3</span>
+                        <input id="brush_size" class="value-input" type="number" min="1" max="200" step="5" value="3" />
+                    </button>
+            </div>
+            <div class="control">
+                <!--  <span class="control-label">Opacity</span>-->
+                <button class="drag-btn" data-min="0" data-max="1" data-step="0.01" data-px-per-step="5">
+                    <span class="value-display">1</span>
+                    <input id="brush_opacity" class="value-input" type="number" min="0" max="1" step="0.01" value="1" />
+                </button>
+            </div>
+        </div>
+        <div id="timeline"></div>
+        <div id="stage">
+            <div id="stack">
+                <canvas id="checkerboard"></canvas>
+                <canvas id="background"></canvas>
+                <canvas id="layer_1"></canvas>
+                <canvas id="overlay"></canvas>
+            </div>
+        </div>
+        <div class="picker" id="paintPicker">
+            <div class="swatches">
+                <div>
+                    <!--        <div class="small">Preview</div>-->
+                    <div class="swatch" id="curSwatch"></div>
+                </div>
+                <div>
+                    <!--        <div class="small">Current</div>-->
+                    <!--        <div class="swatch" id="prevSwatch"></div>-->
+                    <button id="setPrev" style="width:auto;">Set Color</button>
+                </div>
+            </div>
+            <div class="sv-wrap" id="svWrap">
+                <canvas id="sv"></canvas>
+                <div class="sv-thumb" id="svThumb"></div>
+            </div>
+            <div class="right">
+                <div class="hue-wrap" id="hueWrap">
+                    <canvas id="hue"></canvas>
+                    <div class="hue-thumb" id="hueThumb"></div>
+                </div>
+                <div class="io">
+                    <div class="field">
+                        <input id="hex" placeholder="#RRGGBB" />
+                        <input style="display:none;" id="rgb" placeholder="r, g, b" />
+                    </div>
+                    <div style="display:none;" class="field">
+                        <span class="small" id="readout"></span>
+                    </div>
+                </div>
+                <div class="chips" id="chips"></div>
+            </div>
+        </div>
     </div>
-    
-  <div class="sv-wrap" id="svWrap">
-    <canvas id="sv"></canvas>
-    <div class="sv-thumb" id="svThumb"></div>
-  </div>
+            <script src="assets/main/script.js"></script>
+            <script src="assets/color-picker/ColorPicker.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+            <script src="assets/gif-js/gif.js"></script>
 
-  <div class="right">
-    <div class="hue-wrap" id="hueWrap">
-      <canvas id="hue"></canvas>
-      <div class="hue-thumb" id="hueThumb"></div>
-    </div>
+</body>
 
-    <div class="io">
-      <div class="field">
-        <input id="hex" placeholder="#RRGGBB" />
-        <input style="display:none;"id="rgb" placeholder="r, g, b" />
-      </div>
-      <div style="display:none;" class="field">
-      <span class="small" id="readout"></span>
-      </div>
-    </div>
-
-    <div class="chips" id="chips"></div>
-		
-	
-
-    
-  </div>   
-      
-      <script src="assets/main/script.js"></script>
-      <script src="assets/color-picker/ColorPicker.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-      <script src="assets/gif-js/gif.js"></script>
-      
-      
-   </body>
 </html>
-
