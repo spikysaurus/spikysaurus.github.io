@@ -134,6 +134,7 @@ input[type=number] {
   background:#444;
   padding:8px;
   display:flex;
+  flex-direction:row;
   gap:4px;
   overflow-x:auto;
   justify-content:left;
