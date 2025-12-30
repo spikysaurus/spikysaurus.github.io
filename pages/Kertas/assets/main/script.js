@@ -1,3 +1,5 @@
+
+
 const stack = document.getElementById('stack')
 const cv_background = document.getElementById('background'),cvx_background = cv_background.getContext('2d')
 const cv_checkerboard = document.getElementById('checkerboard'),cvx_checkerboard = cv_checkerboard.getContext('2d')
@@ -38,7 +40,7 @@ const ToolSelectBtn = document.getElementById('ToolSelectBtn');
 const ToolFillBtn = document.getElementById("ToolFillBtn");
 
 const onionBtn = document.getElementById('onionBtn')
-const toggleBtn = document.getElementById('toggleLabel');
+const preferencesBtn = document.getElementById('preferencesBtn');
 const settings = document.getElementById('settings');
 const checkerboardBtn = document.getElementById('checkerboardBtn');
 
@@ -191,7 +193,7 @@ let lassoMode = false; // default: fill mode
 const ToolLassoFillToggle = document.getElementById("ToolLassoFillToggle");
 const ToolLassoFillToggleSpan = ToolLassoFillToggle.querySelector("span");
 
-ToolLassoFillToggle .addEventListener("click", () => {
+ToolLassoFillToggle.onclick = () => {
   lassoMode = !lassoMode;
   if (lassoMode){
   	ToolLassoFillToggleSpan.className = "bl-icons-key_ring";
@@ -200,7 +202,7 @@ ToolLassoFillToggle .addEventListener("click", () => {
   }
   // update button label or style
 //  ToolLassoFillToggle.textContent = lassoEraseMode ? "X" : "+";
-});
+};
 
 
 // --- Lasso tool handlers ---
@@ -479,7 +481,7 @@ function getCanvasCoords(e, canvas) {
 }
 
 let useAliased = false; // user can set this true/false
-const AliasedBtn = document.getElementById('aliased');
+AliasedBtn = document.getElementById('aliased');
 AliasedBtn.onclick = () => {
     aliased = !aliased;
     if (!aliased) {
@@ -631,7 +633,6 @@ function undo() {
         img.src = lastState;
     }
 }
-
 function redo() {
     if (redoStack.length > 0) {
         // Save current state into undoStack
@@ -648,6 +649,11 @@ function redo() {
         img.src = nextState;
     }
 }
+
+
+
+
+
 
 
 
@@ -673,6 +679,12 @@ document.addEventListener('pointerup', () => {
 
 let zoomInterval;
 
+zoomIn.onclick = () => {
+	targetSc *= 1.1;
+}
+zoomOut.onclick = () => {
+	targetSc *= 0.9;
+}
 // Zoom In (hold to repeat)
 zoomIn.onpointerdown = () => {
     zoomInterval = setInterval(() => {
@@ -698,18 +710,7 @@ zoomOut.onpointerup = zoomOut.onpointerleave = () => {
 };
 
 
-document.addEventListener('wheel', e => {
-    e.preventDefault()
-    if (e.ctrlKey) {
-        const d = e.deltaY < 0 ? 1.1 : 0.9
-        targetSc = Math.min(Math.max(targetSc * d, 0.5), 3)
-    } else {
-        targetPx -= e.deltaX
-        targetPy -= e.deltaY
-    }
-}, {
-    passive: false
-})
+
 
 
 // Fit to Screen button
@@ -882,7 +883,8 @@ active_layer.addEventListener('pointerup', e => {
 
 
 // Copy selected region
-document.getElementById('copy').onclick = () => {
+copyBtn = document.getElementById('copy');
+copyBtn.onclick = () => {
     if (selStartX != null) {
 //    		cvx_overlay.clearRect(0, 0, cv_overlay.width, cv_overlay.height);
         const w = selEndX - selStartX;
@@ -899,21 +901,24 @@ document.getElementById('copy').onclick = () => {
 };
 
 // Delete
-document.getElementById('delete').onclick = () => {
+deleteBtn = document.getElementById('delete');
+deleteBtn.onclick = () => {
 	active_layer_ctx.clearRect(Math.min(selStartX, selEndX), Math.min(selStartY, selEndY), Math.abs(selEndX - selStartX), Math.abs(selEndY - selStartY));
 	frames[cur] = active_layer.toDataURL();
 	render();
 };
 
 // Cut = copy + delete
-document.getElementById('cut').onclick = () => {
+cutBtn = document.getElementById('cut');
+cutBtn.onclick = () => {
 	document.getElementById('copy').onclick();
 	document.getElementById('delete').onclick();
 };
 
 
 // --- Paste clipboard into current selection ---
-document.getElementById('paste').onclick = () => {
+pasteBtn = document.getElementById('paste');
+pasteBtn.onclick = () => {
   if (clipboard && selStartX != null && selEndX != null) {
     // compute selection bounds
     const w = selEndX - selStartX;
@@ -934,7 +939,8 @@ document.getElementById('paste').onclick = () => {
   }
 };
 
-document.getElementById('clr').onclick = () => {
+ClearCanvasBtn = document.getElementById('clr');
+ClearCanvasBtn.onclick = () => {
     const confirmClear = confirm("Clear the canvas?");
     if (confirmClear) {
         active_layer_ctx.clearRect(0, 0, active_layer.width, active_layer.height);
@@ -1000,15 +1006,13 @@ function render() {
   const headerRow = table.insertRow();
   const headerCell = headerRow.insertCell();
   headerCell.textContent = "Timeline";
-  headerCell.style.backgroundColor="black";
-  headerCell.style.color="orange";
+  headerCell.style.backgroundColor="#b7b7b7";
 
   // Add frame headers
   frames.forEach((f, i) => {
     const frameHeader = headerRow.insertCell();
     frameHeader.textContent = "" + (i + 1);
-    frameHeader.style.backgroundColor="black";
-    frameHeader.style.color="orange";
+    frameHeader.style.backgroundColor="#b7b7b7";
   });
 
   // Add rows for each layer canvas
@@ -1060,7 +1064,7 @@ function render() {
   enableTimelinePan();
 }
 
-//Tiemline Pan
+//Timeline Pan
 function enableTimelinePan() {
   const container = document.getElementById('timeline_v2');
 
@@ -1103,7 +1107,8 @@ function enableTimelinePan() {
 
 
 // Export JSON
-document.getElementById('export').onclick = () => {
+SaveFileBtn = document.getElementById('export');
+SaveFileBtn.onclick = () => {
     const bgUrl = document.getElementById('url').value.trim();
 
     const data = {
@@ -1128,7 +1133,8 @@ document.getElementById('export').onclick = () => {
 };
 
 // Import JSON
-document.getElementById('import').onclick = () => {
+LoadFileBtn = document.getElementById('import');
+LoadFileBtn.onclick = () => {
     const input = document.createElement('input');
     input.type = "file";
     input.accept = "application/json";
@@ -1323,7 +1329,8 @@ document.getElementById('pdf').onclick = async () => {
     }
 }
 
-document.getElementById('add').onclick = add
+addFrameBtn = document.getElementById('add');
+addFrameBtn.onclick = () => {add()};
 // Add Frame
 function add() {
     active_layer_ctx.clearRect(0, 0, active_layer.width, active_layer.height);
@@ -1333,13 +1340,15 @@ function add() {
     show(cur);
 }
 
+
 // Delete Frame
-document.getElementById('deleteFrame').onclick = deleteFrame;
+deleteFrameBtn = document.getElementById('deleteFrame');
+deleteFrameBtn.onclick = () => {deleteFrame()};
 
 function deleteFrame() {
   if (frames.length === 0) return; // nothing to delete
 
-  const confirmDelete = confirm("Are you sure you want to delete this frame?");
+  const confirmDelete = confirm("Delete this frame? (permanent)");
   if (!confirmDelete) return;
 
   // remove current frame
@@ -1356,6 +1365,7 @@ function deleteFrame() {
   render();
   show(cur);
 }
+
 
 
 
@@ -1541,19 +1551,19 @@ let playTimer = null;
 const playBtn = document.getElementById("playBtn");
 const playBtn_icon = document.getElementById("playBtn_icon");
 
+// Existing play button logic
 playBtn.onclick = () => {
     if (playing) {
         stopAnimation();
         playBtn_icon.classList.replace('bl-icons-pause', 'bl-icons-play');
         show(cur);
-//        render();
-        
+        // render();
     } else {
         playAnimation();
-        playBtn_icon.classList.replace('bl-icons-play', 'bl-icons-pause');	
+        playBtn_icon.classList.replace('bl-icons-play', 'bl-icons-pause');  
     }
-    
 };
+
 
 
 function playAnimation() {
@@ -1562,12 +1572,9 @@ function playAnimation() {
         return;
     }
     playing = true;
-    
     playIndex = 0;
     nextFrame();
 }
-
-///////////////////////
 
 function stopAnimation() {
     playing = false;
@@ -1599,23 +1606,28 @@ function nextFrame() {
     };
 }
 
+
+
+
+
 // Next Prev Frame
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
 
-prevBtn.addEventListener('click', () => {
+prevBtn.onclick = () => {
     if (frames.length === 0) return;
     cur = (cur - 1 + frames.length) % frames.length; // wrap backwards
     render();   // update timeline highlight
     show(cur);  // draw selected frame
-});
+};
 
-nextBtn.addEventListener('click', () => {
+nextBtn.onclick = () => {
     if (frames.length === 0) return;
     cur = (cur + 1) % frames.length; // wrap forwards
     render();   // update timeline highlight
     show(cur);  // draw selected frame
-});
+};
+
 
 
 //Duplicate Frame
@@ -1728,7 +1740,7 @@ function tintFrame(src, color, alpha, ctx) {
 }
 
 
-onionBtn.addEventListener("click", () => {
+onionBtn.onclick = () => {
     	
       showOnionSkin = !showOnionSkin;
 		 if (showOnionSkin) {
@@ -1739,10 +1751,11 @@ onionBtn.addEventListener("click", () => {
 		 show(cur);
 			onionBtn.style.backgroundColor = "";
 		 }
-    });
+    };
+
     
 settings.style.display = 'none';
-toggleBtn.onclick = () => {
+preferencesBtn .onclick = () => {
  if (settings.style.display === 'none') {
    settings.style.display = 'block';
  } else {
@@ -1766,7 +1779,7 @@ minimalUIBtn = document.getElementById('minimalUI');
 timelineWrapper = document.getElementById('timeline-wrapper');
 
 
-minimalUIBtn.addEventListener('click', (e) => {
+minimalUIBtn.onclick = () => {
   minUI = !minUI;
   if (window.matchMedia("(orientation: portrait)").matches) {
 	  if (minUI){
@@ -1784,15 +1797,15 @@ minimalUIBtn.addEventListener('click', (e) => {
 		timelineWrapper.style.display = 'flex';
 	  }
   }
-});
+};
 
 // Tool events
-ToolBrushBtn.addEventListener("click", () => setActiveTool("ToolBrush"));
-ToolEraserBtn.addEventListener("click", () => setActiveTool("ToolEraser"));
-ToolFillBtn.addEventListener("click", () => setActiveTool("ToolFill"));
-ToolLassoFillBtn.addEventListener("click", () => setActiveTool("ToolLassoFill"));
-ToolSelectBtn.addEventListener("click", () => setActiveTool("ToolSelect"));
-ToolPanBtn.addEventListener("click", () => setActiveTool("ToolPan"));
+ToolBrushBtn.onclick = () => { setActiveTool("ToolBrush")};
+ToolEraserBtn.onclick = () => { setActiveTool("ToolEraser")};
+ToolFillBtn.onclick = () => { setActiveTool("ToolFill")};
+ToolLassoFillBtn.onclick = () => { setActiveTool("ToolLassoFill")};
+ToolSelectBtn.onclick = () => { setActiveTool("ToolSelect")};
+ToolPanBtn.onclick = () => { setActiveTool("ToolPan")};
 
 // Pan overlay drag
 let panDragging = false, panStartX = 0, panStartY = 0, panInitX = 0, panInitY = 0;
@@ -1841,12 +1854,14 @@ zoomOverlay.addEventListener("pointerup", e => {
   zoomOverlay.releasePointerCapture(e.pointerId);
 });
 
+
+
 const navButton = document.getElementById("navButton");
 const snapButton = document.getElementById("snapButton");
 const navOverlays = document.getElementById("navOverlays");
 
 ShowOverlay = false;
-navButton.addEventListener("click", () => {
+navButton.onclick = () => {
 	ShowOverlay = !ShowOverlay;
 	if (ShowOverlay){
 	navOverlays.style.display = "flex";
@@ -1855,7 +1870,7 @@ navButton.addEventListener("click", () => {
 	navOverlays.style.display = "none";
 	}
 	
-});
+};
 
 // Update activeTool UI
 
@@ -1881,7 +1896,7 @@ function updateBEToggle() {
 let BEToggleBool = true;
 const iconSpan = BEToggle.querySelector("span"); // get the existing span
 
-BEToggle.addEventListener("click", e => {
+BEToggle.onclick = () => {
   BEToggleBool = !BEToggleBool;
 
   if (BEToggleBool) {
@@ -1891,6 +1906,101 @@ BEToggle.addEventListener("click", e => {
     setActiveTool("ToolEraser");
     iconSpan.className = "bl-icons-meta_ellipsoid"; // change class
   }
+};
+
+// SHORTCUTS dictionary
+const shortcuts = {
+	"t": () => navButton.click(),              // NavButton Toggle
+	"`": () => preferencesBtn.click(),              // Preferences Toggle
+	"h": () => minimalUIBtn.click(),              // Show/Hide Timeline
+    "b": () => BEToggle.click(),              // Tool Brush/Eraser Toggle
+    "w": () => setActiveTool("ToolBrush"),		// Tool Brush
+    "e": () => setActiveTool("ToolEraser"),		// Tool Eraser
+    "B": () => AliasedBtn.click(),            // Aliased Toggle
+    "q": () => setActiveTool("ToolLassoFill"),// Tool Lasso Fill
+    "Q": () => ToolLassoFillToggle.click(),	// Lasso Fill Toggle
+    "f": () => setActiveTool("ToolFill"),		// Tool Fill
+    "v": () => setActiveTool("ToolSelect"),	// Tool Lasso Select
+    " ": () => setActiveTool("ToolPan"),		// Tool Pan
+    "=": () => zoomIn.click(),			// Zoom In
+    "-": () => zoomOut.click(),		// Zoom Out
+    "x": () => deleteBtn.click(),				// Delete Selected Drawing
+    "Delete": () => ClearCanvasBtn.click(),	// Clear Drawing
+    "+": () => add(),                         // Add frame
+    "_": () => deleteFrame(),                 // Delete frame
+    "/": () => onionBtn.click(),              // Onion skin
+    ".": () => nextBtn.click(),               // Next frame
+    ",": () => prevBtn.click(),               // Prev frame
+    "p": () => playBtn.click(),               // Play
+};
+
+
+// Unified keydown handler
+document.addEventListener("keydown", (event) => {
+    if (event.repeat) return; // avoid repeats when holding keys
+
+    const hasCtrlOrMeta = event.ctrlKey || event.metaKey;
+    const key = event.key.toLowerCase();
+
+    // Handle Ctrl/Meta combos
+    if (hasCtrlOrMeta) {
+    		
+    		
+    		if (key === "s") {
+		 		event.preventDefault();
+		 		SaveFileBtn.click();
+    		}
+    		if (key === "o") {
+    			event.preventDefault();
+    			LoadFileBtn.click();
+    		}
+    		
+        if (key === "z") {
+            event.preventDefault();
+            if (event.shiftKey) {
+                redo(); // Ctrl+Shift+Z → Redo
+            } else {
+                undo(); // Ctrl+Z → Undo
+            }
+            return;
+        }
+        if (key === "y") {
+            event.preventDefault();
+            redo(); // Ctrl+Y → Redo
+            return;
+        }
+        if (key === "x") { // Ctrl+x Cut
+            event.preventDefault();
+            cutBtn.onclick();
+            }
+        if (key === "c") { // Ctrl+c Copy
+            event.preventDefault();
+            copyBtn.onclick();
+            }
+        if (key === "v") { // Ctrl+v paste
+            event.preventDefault();
+            pasterBtn.onclick();
+            }
+    }
+
+    // Handle simple shortcuts from dictionary
+    if (shortcuts[event.key]) {
+        event.preventDefault();
+        shortcuts[event.key]();
+    }
 });
 
+//shortcut:zoom_wheel
+document.addEventListener('wheel', e => {
+    e.preventDefault()
+    if (e.ctrlKey) { 
+        const d = e.deltaY < 0 ? 1.1 : 0.9
+        targetSc = Math.min(Math.max(targetSc * d, 0.5), 3)
+    } else {
+        targetPx -= e.deltaX
+        targetPy -= e.deltaY
+    }
+}, {
+    passive: false
+})
 
