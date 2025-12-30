@@ -5,8 +5,7 @@ const cv_background = document.getElementById('background'),cvx_background = cv_
 const cv_checkerboard = document.getElementById('checkerboard'),cvx_checkerboard = cv_checkerboard.getContext('2d')
 const cv_overlay = document.getElementById('overlay'),cvx_overlay = cv_overlay.getContext('2d')
 const layer_0 = document.getElementById('layer_0')
-const layer_1 = document.getElementById('layer_1')
-let active_layer = layer_0
+let active_layer = layer0
 let active_layer_ctx = active_layer.getContext('2d')
 
 cvx_overlay.imageSmoothingEnabled = false;
@@ -997,7 +996,7 @@ function render() {
   const canvases = document.querySelectorAll('#stack canvas');
 
   // Filter only those with id starting with "layer_"
-  const layerCanvases = Array.from(canvases).filter(c => c.id.startsWith('layer_'));
+  const layerCanvases = Array.from(canvases).filter(c => c.id.startsWith('layer'));
 
   // Create table
   let table = document.createElement('table');
@@ -1106,45 +1105,181 @@ function enableTimelinePan() {
 
 
 
-// Export JSON
+//// Save File
+//SaveFileBtn = document.getElementById('export');
+//SaveFileBtn.onclick = () => {
+//    const bgUrl = document.getElementById('url').value.trim();
+
+//    const data = {
+//        background: bgUrl, // store the image URL input
+//        canvas: {
+//            width: active_layer.width,
+//            height: active_layer.height
+//        },
+//        frames: frames.map((f, i) => ({
+//            index: i,
+//            url: f
+//        }))
+//    };
+
+//    const blob = new Blob([JSON.stringify(data, null, 2)], {
+//        type: "application/json"
+//    });
+//    const link = document.createElement('a');
+//    link.download = "Kertas.json";
+//    link.href = URL.createObjectURL(blob);
+//    link.click();
+//};
+
+
+//// Load File
+//LoadFileBtn = document.getElementById('import');
+//LoadFileBtn.onclick = () => {
+//    const input = document.createElement('input');
+//    input.type = "file";
+//    input.accept = "application/json";
+//    input.onchange = e => {
+//        const file = e.target.files[0];
+//        if (!file) return;
+//        const reader = new FileReader();
+//        reader.onload = () => {
+//            try {
+//                const obj = JSON.parse(reader.result);
+
+//                // Restore background
+//                if (obj.background) {
+//                    document.getElementById('url').value = obj.background;
+//                    const img = new Image();
+//                    img.crossOrigin = "anonymous";
+//                    img.src = obj.background;
+//                    img.onload = () => {
+//                        // Prefer canvas size from JSON, fallback to image size
+//                        const w = (obj.canvas && obj.canvas.width) || img.width;
+//                        const h = (obj.canvas && obj.canvas.height) || img.height;
+//                        resize(w, h);
+
+//                        // Update input fields
+//                        document.getElementById('canvasWidth').value = w;
+//                        document.getElementById('canvasHeight').value = h;
+
+//                        cvx_background.clearRect(0, 0, cv_background.width, cv_background.height);
+//                        cvx_background.drawImage(img, 0, 0, w, h);
+//                        active_layer_ctx.clearRect(0, 0, active_layer.width, active_layer.height);
+//                    };
+//                } else if (obj.canvas && obj.canvas.width && obj.canvas.height) {
+//                    // Resize even if no background image
+//                    resize(obj.canvas.width, obj.canvas.height);
+
+//                    // Update input fields
+//                    document.getElementById('canvasWidth').value = obj.canvas.width;
+//                    document.getElementById('canvasHeight').value = obj.canvas.height;
+//                }
+
+//                // Restore frames
+//                if (obj.frames) {
+//                    frames.length = 0;
+//                    obj.frames.forEach(f => frames.push(f.url));
+//                    cur = 0;
+//                    show(cur);
+//                    render();
+//                }
+
+//            } catch (err) {
+//                console.error("Invalid JSON", err);
+//            }
+//        };
+//        reader.readAsText(file);
+//    };
+//    input.click();
+//};
+
+
+//save file as .zip instead, inside the .zip contain exported image sequence frame inside a "frames" folder (eg: layer0_0001.tga, layer0_0002.tga, etc) , then add .json outside the frames folder , the .json contains data :
+
+//"background": bgUrl,
+//"canvas":{
+//"width":0,
+//"height":0},
+//"animation" : {"layer_name" : "layer0","frame":"1":"drawing":"put .tga path here"},{"layer_name" : "layer0","frame":"2":"drawing":"put .tga path here"}, ]
+
+//here is my current script:
 SaveFileBtn = document.getElementById('export');
-SaveFileBtn.onclick = () => {
+SaveFileBtn.onclick = async () => {
     const bgUrl = document.getElementById('url').value.trim();
+    const zip = new JSZip();
+
+    // Create frames folder inside zip
+    const framesFolder = zip.folder("frames");
+
+    // For each frame, composite background + that frame’s image into a PNG
+    for (let i = 0; i < frames.length; i++) {
+        const tmp = document.createElement('canvas');
+        tmp.width = cv_background.width;
+        tmp.height = cv_background.height;
+        const tx = tmp.getContext('2d');
+
+        // Draw background
+//        tx.drawImage(cv_background, 0, 0);
+
+        // Draw this frame’s image (frames[i] should be a URL or blob)
+        const img = new Image();
+        img.src = frames[i];
+        await new Promise(res => { img.onload = res; });
+        tx.drawImage(img, 0, 0);
+
+        // Convert to Blob (PNG)
+        const blob = await new Promise(resolve =>
+            tmp.toBlob(resolve, "image/png")
+        );
+
+        const filename = `layer0_${String(i+1).padStart(4, '0')}.png`;
+        framesFolder.file(filename, blob);
+    }
+
+    // Build JSON metadata
+    const animationData = frames.map((f, i) => ({
+        layer_name: "layer0",
+        frame: i+1,
+        drawing: `frames/layer0_${String(i+1).padStart(4, '0')}.png`
+    }));
 
     const data = {
-        background: bgUrl, // store the image URL input
+        background: bgUrl,
         canvas: {
             width: active_layer.width,
             height: active_layer.height
         },
-        frames: frames.map((f, i) => ({
-            index: i,
-            url: f
-        }))
+        animation: animationData
     };
 
-    const blob = new Blob([JSON.stringify(data, null, 2)], {
-        type: "application/json"
-    });
-    const link = document.createElement('a');
-    link.download = "Kertas.json";
-    link.href = URL.createObjectURL(blob);
-    link.click();
+    // Add JSON file at root of zip
+    zip.file("data.json", JSON.stringify(data, null, 2));
+
+    // Generate zip and trigger download
+    const content = await zip.generateAsync({type:"blob"});
+    saveAs(content, "Kertas.zip");
 };
 
-// Import JSON
+
 LoadFileBtn = document.getElementById('import');
 LoadFileBtn.onclick = () => {
     const input = document.createElement('input');
     input.type = "file";
-    input.accept = "application/json";
+    input.accept = ".zip";
     input.onchange = e => {
         const file = e.target.files[0];
         if (!file) return;
+
         const reader = new FileReader();
-        reader.onload = () => {
+        reader.onload = async () => {
             try {
-                const obj = JSON.parse(reader.result);
+                const zip = await JSZip.loadAsync(reader.result);
+
+                // Read JSON metadata
+                const jsonFile = zip.file("data.json");
+                if (!jsonFile) throw new Error("Missing data.json in zip");
+                const jsonText = await jsonFile.async("string");
+                const obj = JSON.parse(jsonText);
 
                 // Restore background
                 if (obj.background) {
@@ -1153,12 +1288,10 @@ LoadFileBtn.onclick = () => {
                     img.crossOrigin = "anonymous";
                     img.src = obj.background;
                     img.onload = () => {
-                        // Prefer canvas size from JSON, fallback to image size
                         const w = (obj.canvas && obj.canvas.width) || img.width;
                         const h = (obj.canvas && obj.canvas.height) || img.height;
                         resize(w, h);
 
-                        // Update input fields
                         document.getElementById('canvasWidth').value = w;
                         document.getElementById('canvasHeight').value = h;
 
@@ -1167,32 +1300,39 @@ LoadFileBtn.onclick = () => {
                         active_layer_ctx.clearRect(0, 0, active_layer.width, active_layer.height);
                     };
                 } else if (obj.canvas && obj.canvas.width && obj.canvas.height) {
-                    // Resize even if no background image
                     resize(obj.canvas.width, obj.canvas.height);
-
-                    // Update input fields
                     document.getElementById('canvasWidth').value = obj.canvas.width;
                     document.getElementById('canvasHeight').value = obj.canvas.height;
                 }
 
-                // Restore frames
-                if (obj.frames) {
-                    frames.length = 0;
-                    obj.frames.forEach(f => frames.push(f.url));
+                // Restore frames from zip
+                frames.length = 0;
+                if (obj.animation) {
+                    for (const frame of obj.animation) {
+                        const pngPath = frame.drawing; // e.g. "frames/layer0_0001.png"
+                        const pngFile = zip.file(pngPath);
+                        if (pngFile) {
+                            const blob = await pngFile.async("blob");
+                            const url = URL.createObjectURL(blob);
+                            frames.push(url); // ✅ store URL string, not <img>
+                        }
+                    }
                     cur = 0;
                     show(cur);
                     render();
                 }
 
             } catch (err) {
-                console.error("Invalid JSON", err);
+                console.error("Invalid ZIP or JSON", err);
             }
         };
-        reader.readAsText(file);
+        reader.readAsArrayBuffer(file);
     };
     input.click();
 };
 
+
+//////////////////
 
 // Load Image
 function loadImage(url) {
