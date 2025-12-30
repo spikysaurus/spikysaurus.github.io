@@ -1972,14 +1972,16 @@ document.addEventListener("keydown", (event) => {
         if (key === "x") { // Ctrl+x Cut
             event.preventDefault();
             cutBtn.onclick();
+            return;
             }
         if (key === "c") { // Ctrl+c Copy
             event.preventDefault();
             copyBtn.onclick();
+            
             }
         if (key === "v") { // Ctrl+v paste
             event.preventDefault();
-            pasterBtn.onclick();
+            pasteBtn.onclick();
             }
     }
 
