@@ -14,10 +14,14 @@ html,body {
 .side-by-side{display:flex; align-items:center; gap:5px;}
 
 
+
+
 #content {
-position:relative;
-top:0;
-	z-index:100;
+
+position:fixed;
+top: 50%;                  /* anchor vertically */
+left: 50%;                 /* anchor horizontally */
+z-index:100;
 }
 
 .nav-tools{width:100%;}
@@ -73,99 +77,6 @@ input[type=color] {
   padding:0;
   border:none;
 }
-#settings {
-    margin-right: 10px;
-    text-align: center;
-    width: auto;
-    z-index: 20;
-    position: fixed;
-    top: 50%;                  /* anchor vertically */
-    left: 50%;                 /* anchor horizontally */
-    transform: translate(-50%, -50%); /* shift back by half width & height */
-    background-color: lightgray;
-    color: black;
-    padding: 10px;
-    font-size: 14px;
-    transition: 0.3s;
-}
-
-
-#settings button{
-width:auto;
-margin-top:5px;
-}
-
-input[type=number] {
- appearance: textfield;
- width:100%;
- font-size:18px;
-}
-.anchor-controls {
- display: grid;
- grid-template-columns: auto auto auto;
- grid-template-rows: auto auto auto;
- gap: 0px;
- align-items: center;
- margin-top: 10px;
-}
-.anchor-controls button {
- width: 32px;
- height: 32px;
- font-size: 12px;
- cursor: pointer;
-}
-.anchor-controls button:hover {
- background: #ddd;
-}
-/* Place buttons in grid like CSP anchor */
-#resizeTop    { grid-column: 2; grid-row: 1; }
-#resizeLeft   { grid-column: 1; grid-row: 2; }
-#resizeCenter { grid-column: 2; grid-row: 2; }
-#resizeRight  { grid-column: 3; grid-row: 2; }
-#resizeBottom { grid-column: 2; grid-row: 3; }			
-				
-/* Toggle button */
-.panel-bottom {
-	position: fixed;
-	top: calc(var(--fixed-top) + var(--fixed-height));
-	left: 0px;
-	z-index: 1000;
-	color: black;
-	cursor: pointer;
-}
-
-
-  
-#timeline {
-  position:fixed;   /* stick to viewport */
-  top: var(--fixed-top);
-  left:0;
-  right:0;
-  z-index:20;      /* above canvas */
-  background:#444;
-  padding:8px;
-  display:flex;
-  flex-direction:row;
-  gap:4px;
-  overflow-x:auto;
-  justify-content:left;
-}
-.f {
-	flex:0 0 auto;
-/*	flex-shrink: 0; */
-  width:20px;
-  background:#666;
-  border:2px solid #999;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.f.active {
-  border-color:#0f0;
-}
-
 
 #stage {
 	z-index:-1;
@@ -232,6 +143,17 @@ canvas {
 }
 
 
+.sliders {
+  flex-direction: column;
+  display: flex;
+  position: fixed;
+  z-index:100;
+  top: 50%;          /* anchor to vertical center */
+  left: 10px;        /* fixed on the left side */
+  transform: translateY(-50%); /* adjust for element height */
+  
+}
+
 .sliders button{
 width:32px;height:32px;
   flex: 0 0 auto;
@@ -242,14 +164,60 @@ width:32px;height:32px;
   
 }
 
-.sliders {
-  flex-direction: column;
-  display: flex;
-  position: fixed;
-  top: 50%;          /* anchor to vertical center */
-  left: 10px;        /* fixed on the left side */
-  transform: translateY(-50%); /* adjust for element height */
+#timeline-wrapper{
+z-index: 100;
 }
+.panel-bottom {
+	position: fixed;
+	left: 0px;
+	color: black;
+	cursor: pointer;
+}
+.timeline-background {
+	width:100%;
+	position:fixed;
+	top:0;
+	left: 0;
+	background-color:rgba(1,1,1,0.5);
+	
+} 
+
+#timeline_v2 {
+	user-select: none;
+  position: fixed;        /* stays pinned to viewport */
+  top: var(--fixed-top);
+  left: 0;
+  
+  display: flex;          /* allow horizontal expansion */
+  flex-direction: row;
+  justify-content: flex-start;
+  overflow-x: none;       /* scroll if content exceeds viewport */
+  overflow-y:none;
+  width: 100%;            /* expand across viewport width */
+  max-height: 40vh;       /* optional: limit vertical size */
+}
+
+#timeline_v2 table {
+  border-collapse: collapse;
+  width: auto;            /* expand naturally with content */
+}
+
+#timeline_v2 table tr td {
+	background:#444;
+  text-align: center;
+}
+
+.f {
+  min-width: 20px;       /* allow cells to grow beyond 100px */
+  background: #666;
+  border: 2px solid #999;
+  cursor: pointer;
+}
+
+.f.active {
+  border-color: #0f0;
+}
+
 
 
 /*DRAG BUTTONS*/
@@ -327,7 +295,7 @@ width:32px;height:32px;
   position: fixed;
   bottom: 10px;
   left: 10px;
-  z-index: 1000;
+  z-index: 100;
   user-select: none; 
 }
 
@@ -377,6 +345,60 @@ width:32px;height:32px;
 .overlay-btn:hover {
   background: rgba(102,102,102,0.9);
 }
+
+
+#settings {
+    margin-right: 10px;
+    text-align: center;
+    width: auto;
+    
+    position: fixed;
+    z-index: 100;
+    top: 50%;                  /* anchor vertically */
+    left: 50%;                 /* anchor horizontally */
+    transform: translate(-50%, -50%); /* shift back by half width & height */
+    background-color: lightgray;
+    color: black;
+    padding: 10px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+
+#settings button{
+width:auto;
+margin-top:5px;
+}
+
+input[type=number] {
+ appearance: textfield;
+ width:100%;
+ font-size:18px;
+}
+.anchor-controls {
+ display: grid;
+ grid-template-columns: auto auto auto;
+ grid-template-rows: auto auto auto;
+ gap: 0px;
+ align-items: center;
+ margin-top: 10px;
+}
+.anchor-controls button {
+ width: 32px;
+ height: 32px;
+ font-size: 12px;
+ cursor: pointer;
+}
+.anchor-controls button:hover {
+ background: #ddd;
+}
+/* Place buttons in grid like CSP anchor */
+#resizeTop    { grid-column: 2; grid-row: 1; }
+#resizeLeft   { grid-column: 1; grid-row: 2; }
+#resizeCenter { grid-column: 2; grid-row: 2; }
+#resizeRight  { grid-column: 3; grid-row: 2; }
+#resizeBottom { grid-column: 2; grid-row: 3; }			
+
 
 
   @media (orientation: landscape) {

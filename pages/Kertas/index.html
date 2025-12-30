@@ -11,7 +11,10 @@
 </head>
 
 <body>
-    <div class="nav-toggle">
+
+   
+    <div id="content">
+     <div class="nav-toggle">
         <button id="navButton"><span class="bl-icons-snap_vertex"></span></button>
         <button id="toggleLabel"><span class="bl-icons-preferences"></span></button>
         <button id="minimalUI"><span class="bl-icons-statusbar"></span></button>
@@ -57,7 +60,6 @@
             <div id="fitScreen" class="overlay-btn"><span class="bl-icons-fullscreen_enter"></span></div>
         </div>
     </div>
-    <div id="content">
         <div id="settings">
             <input type="checkbox" id="pressureSizeToggle" unchecked> Brush Size Pressure<br>
             <input type="checkbox" id="pressureOpacityToggle" unchecked> Brush Opacity Pressure
@@ -94,21 +96,7 @@
             </div>
         </div>
         <!-- Toggle button -->
-        <div id="panel-bottom" class="panel-bottom">
-            <div class="group">
-                
-                <button id="onionBtn"><span class="bl-icons-onionskin_on"></span></button>
-                <button id="swapPrev"><span class="bl-icons-area_join_left"></span></button>
-                <button id="swapNext"><span class="bl-icons-area_join"></span></button>
-                <button id="deleteFrame"><span class="bl-icons-trash"></span></button>
-                <button id="duplicateBtn"><span class="bl-icons-duplicate"></span></button>
-                <button id="add"><span class="bl-icons-file_new"></span></button>
-                <button id="playBtn"><span id="playBtn_icon" class="bl-icons-play"></span></button>
-                <button id="prevBtn"><span class="bl-icons-frame_prev"></span></button>
-                <button id="nextBtn"><span class="bl-icons-frame_next"></span></button>
-                
-            </div>
-        </div>
+        
         <div id="sliders" class="sliders">
 				<div class="control">
 					<button id="ColorPickerBtn"><span class="bl-icons-material"></span></button>
@@ -130,15 +118,40 @@
            	 </div>
            	 
         </div>
-        <div id="timeline"></div>
+<div id="timeline-wrapper">
+		<div class="timeline-background"></div>
+	  <div id="timeline_v2"></div>
+	  
+	  <div id="panel-bottom" class="panel-bottom">
+					<div class="group">
+
+				    <button id="onionBtn"><span class="bl-icons-onionskin_on"></span></button>
+				    <button id="swapPrev"><span class="bl-icons-area_join_left"></span></button>
+				    <button id="swapNext"><span class="bl-icons-area_join"></span></button>
+				    <button id="deleteFrame"><span class="bl-icons-trash"></span></button>
+				    <button id="duplicateBtn"><span class="bl-icons-duplicate"></span></button>
+				    <button id="add"><span class="bl-icons-file_new"></span></button>
+				    <button id="playBtn"><span id="playBtn_icon" class="bl-icons-play"></span></button>
+				    <button id="prevBtn"><span class="bl-icons-frame_prev"></span></button>
+				    <button id="nextBtn"><span class="bl-icons-frame_next"></span></button>
+					    
+					</div>
+			  </div>
+</div>
+
+			<div id="timeline_v2"></div>
+			
+			
         <div id="stage">
             <div id="stack">
                 <canvas id="checkerboard"></canvas>
                 <canvas id="background"></canvas>
-                <canvas id="layer_1"></canvas>
+                <canvas id="layer_0"></canvas>
+<!--                <canvas id="layer_1"></canvas>-->
                 <canvas id="overlay"></canvas>
             </div>
         </div>
+        
         <div class="picker" id="paintPicker">
             <div class="swatches">
                 <div>

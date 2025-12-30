@@ -2,8 +2,9 @@ const stack = document.getElementById('stack')
 const cv_background = document.getElementById('background'),cvx_background = cv_background.getContext('2d')
 const cv_checkerboard = document.getElementById('checkerboard'),cvx_checkerboard = cv_checkerboard.getContext('2d')
 const cv_overlay = document.getElementById('overlay'),cvx_overlay = cv_overlay.getContext('2d')
+const layer_0 = document.getElementById('layer_0')
 const layer_1 = document.getElementById('layer_1')
-let active_layer = layer_1
+let active_layer = layer_0
 let active_layer_ctx = active_layer.getContext('2d')
 
 cvx_overlay.imageSmoothingEnabled = false;
@@ -289,6 +290,36 @@ active_layer.addEventListener("pointerup", e => {
   frames[cur] = active_layer.toDataURL();
   render();
 });
+
+const timeline = document.querySelector('#timeline_v2');
+const panelBottom = document.querySelector('.panel-bottom');
+
+function positionPanel() {
+  const rect = timeline.getBoundingClientRect();
+  const timelineTop = rect.top;          // distance from viewport top
+  const timelineHeight = rect.height;    // actual rendered height
+  panelBottom.style.top = `${timelineTop + timelineHeight}px`;
+}
+
+window.addEventListener('resize', positionPanel);
+window.addEventListener('load', positionPanel);
+positionPanel();
+
+function syncTimelineBackgroundHeight() {
+  const timeline = document.querySelector('#timeline_v2');
+  const background = document.querySelector('.timeline-background');
+
+  if (timeline && background) {
+    const timelineHeight = timeline.offsetHeight; // actual rendered height
+    background.style.height = timelineHeight + 'px';
+  }
+}
+
+// Run once on load
+window.addEventListener('load', syncTimelineBackgroundHeight);
+
+// Also update on resize (in case #timeline_v2 changes size)
+window.addEventListener('resize', syncTimelineBackgroundHeight);
 
 
  
@@ -954,43 +985,122 @@ document.getElementById('swapPrev').onclick = () => {
     }
 };
 
-
+//Timeline_v2
 function render() {
-    const timeline = document.getElementById('timeline')
-    timeline.innerHTML = ''
+  // Select all canvas elements inside #stack
+  const canvases = document.querySelectorAll('#stack canvas');
+
+  // Filter only those with id starting with "layer_"
+  const layerCanvases = Array.from(canvases).filter(c => c.id.startsWith('layer_'));
+
+  // Create table
+  let table = document.createElement('table');
+
+  // Add header row
+  const headerRow = table.insertRow();
+  const headerCell = headerRow.insertCell();
+  headerCell.textContent = "Timeline";
+  headerCell.style.backgroundColor="black";
+  headerCell.style.color="orange";
+
+  // Add frame headers
+  frames.forEach((f, i) => {
+    const frameHeader = headerRow.insertCell();
+    frameHeader.textContent = "" + (i + 1);
+    frameHeader.style.backgroundColor="black";
+    frameHeader.style.color="orange";
+  });
+
+  // Add rows for each layer canvas
+  layerCanvases.forEach(c => {
+    const row = table.insertRow();
+
+    // First cell: layer name
+    const cell = row.insertCell();
+    cell.textContent = c.id;
+
+    // Then: one cell per frame
     frames.forEach((f, i) => {
-        const d = document.createElement('div')
-        d.className = 'f' + (i === cur ? ' active' : '')
-        d.textContent = i + 1
-        d.draggable = true
-        d.dataset.index = i
-        d.onclick = () => {
-            cur = i;
-            show(i);
-            render()
+      const frameCell = row.insertCell();
+      frameCell.className = 'f' + (i === cur ? ' active' : '');
+      frameCell.textContent = i + 1;
+      frameCell.draggable = true;
+      frameCell.dataset.index = i;
+
+      frameCell.onclick = () => {
+        cur = i;
+        show(i);
+        render();
+      };
+
+      frameCell.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', i);
+      });
+      frameCell.addEventListener('dragover', e => e.preventDefault());
+      frameCell.addEventListener('drop', e => {
+        e.preventDefault();
+        const from = parseInt(e.dataTransfer.getData('text/plain'));
+        const to = parseInt(frameCell.dataset.index);
+        if (from !== to) {
+          const moved = frames.splice(from, 1)[0];
+          frames.splice(to, 0, moved);
+          if (cur === from) cur = to;
+          else if (from < cur && to >= cur) cur--;
+          else if (from > cur && to <= cur) cur++;
+          render();
         }
-        d.addEventListener('dragstart', e => {
-            e.dataTransfer.setData('text/plain', i)
-        })
-        d.addEventListener('dragover', e => {
-            e.preventDefault()
-        })
-        d.addEventListener('drop', e => {
-            e.preventDefault()
-            const from = parseInt(e.dataTransfer.getData('text/plain'))
-            const to = parseInt(d.dataset.index)
-            if (from !== to) {
-                const moved = frames.splice(from, 1)[0]
-                frames.splice(to, 0, moved)
-                if (cur === from) cur = to
-                else if (from < cur && to >= cur) cur--
-                else if (from > cur && to <= cur) cur++
-                render()
-            }
-        })
-        timeline.appendChild(d)
-    })
+      });
+    });
+  });
+
+  // Append table to container
+  const container = document.getElementById('timeline_v2');
+  container.innerHTML = ''; // clear previous
+  container.appendChild(table);
+  enableTimelinePan();
 }
+
+//Tiemline Pan
+function enableTimelinePan() {
+  const container = document.getElementById('timeline_v2');
+
+  let isPanning = false;
+  let startX = 0;
+  let offsetX = 0; // accumulated offset
+
+  container.addEventListener('pointerdown', e => {
+    isPanning = true;
+    startX = e.clientX - offsetX;
+    container.setPointerCapture(e.pointerId);
+  });
+
+  container.addEventListener('pointermove', e => {
+    if (!isPanning) return;
+    offsetX = e.clientX - startX;
+
+    // Clamp so it never goes beyond left:0
+    if (offsetX > 0) {
+      offsetX = 0;
+    }
+
+    container.style.transform = `translateX(${offsetX}px)`;
+  });
+
+  container.addEventListener('pointerup', e => {
+    isPanning = false;
+    container.releasePointerCapture(e.pointerId);
+  });
+
+  container.addEventListener('pointercancel', e => {
+    isPanning = false;
+    container.releasePointerCapture(e.pointerId);
+  });
+}
+
+
+
+
+
 
 // Export JSON
 document.getElementById('export').onclick = () => {
@@ -1651,39 +1761,28 @@ checkerboardBtn.onclick = () => {
 };
 
 
-
-
-
 minUI = false;
 minimalUIBtn = document.getElementById('minimalUI');
-timelineUI = document.getElementById('timeline');
-panelBottomUI = document.getElementById('panel-bottom');
+timelineWrapper = document.getElementById('timeline-wrapper');
 
 
 minimalUIBtn.addEventListener('click', (e) => {
   minUI = !minUI;
   if (window.matchMedia("(orientation: portrait)").matches) {
 	  if (minUI){
-	  	timelineUI.style.display = 'none';
-	  	panelBottomUI.style.display = 'none';
+	  	timelineWrapper.style.display = 'none';
 	  }
 	  else{
-		timelineUI.style.display = 'flex';
-		panelBottomUI.style.display = 'flex';
+		timelineWrapper.style.display = 'flex';
 	  }
   }
   else{
   	if (minUI){
-	  	timelineUI.style.display = 'none';
-	  	panelBottomUI.style.display = 'none';
+	  	timelineWrapper.style.display = 'none';
 	  }
 	  else{
-		timelineUI.style.display = 'flex';
-		panelBottomUI.style.display = 'flex';
+		timelineWrapper.style.display = 'flex';
 	  }
-  
-  
-  
   }
 });
 
@@ -1793,25 +1892,5 @@ BEToggle.addEventListener("click", e => {
     iconSpan.className = "bl-icons-meta_ellipsoid"; // change class
   }
 });
-
-
-
-
-//// Show overlays while holding button
-//navButton.addEventListener("pointerdown", () => {
-//  navOverlays.style.display = "flex";
-//});
-
-//// Hide overlays when released
-//navButton.addEventListener("pointerup", () => {
-//  navOverlays.style.display = "none";
-//});
-
-//// Also hide if pointer leaves button while pressed
-//navButton.addEventListener("pointerleave", () => {
-//  navOverlays.style.display = "none";
-//});
-
-
 
 
