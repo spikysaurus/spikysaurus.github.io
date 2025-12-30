@@ -245,7 +245,6 @@ width:32px;height:32px;
 .sliders {
   flex-direction: column;
   display: flex;
-  gap: 5px;
   position: fixed;
   top: 50%;          /* anchor to vertical center */
   left: 10px;        /* fixed on the left side */
@@ -264,6 +263,7 @@ width:32px;height:32px;
 
   .control {
     display: flex;
+    flex-direction:column;
     width:40px;
 	width:100%;
     align-items: center;
@@ -332,6 +332,7 @@ width:32px;height:32px;
 }
 
 .nav-toggle button {
+	display:inline;
   padding: 8px 14px;
   font-size: 14px;
   cursor: pointer;

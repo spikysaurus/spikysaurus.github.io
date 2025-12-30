@@ -17,6 +17,9 @@
         <button id="minimalUI"><span class="bl-icons-statusbar"></span></button>
         <button id="undoBtn"><span class="bl-icons-loop_back"></span></button>
         <button id="redoBtn"><span class="bl-icons-loop_forwards"></span></button>
+        
+        
+            
     </div>
     <div class="overlay-controls" id="navOverlays" style="display:none;">
     		<div class="nav-tools">
@@ -25,14 +28,13 @@
             <button id="import"><span class="bl-icons-file_folder"></span></button>
         </div>
         <div class="group">
-            <input id="col" type="color" value="#000000">
-            <button id="ColorPickerBtn"><span class="bl-icons-material"></span></button>
+            
             <button id="ToolBrushBtn" style="background-color:yellow;"><span class="bl-icons-greasepencil"></span></button>
             <button id="ToolEraserBtn"><span class="bl-icons-meta_ellipsoid"></span></button>
             <button id="aliased"><span class="bl-icons-aliased"></span></button>
             <button id="ToolFillBtn"><span class="bl-icons-image"></span></button>
             <button id="ToolLassoFillBtn"><span class="bl-icons-meta_data"></span></button>
-            <button id="ToolLassoFillToggle" style="display:none;">Fill</button>
+            
         </div>
         <div class="group">
             <button id="clr"><span class="bl-icons-file_hidden"></span></button>
@@ -108,20 +110,25 @@
             </div>
         </div>
         <div id="sliders" class="sliders">
-         <div class="control">
-            <!--  <span class="control-label">Size</span>-->
-                    <button class="drag-btn" data-min="1" data-max="200" data-step="1" data-px-per-step="5">
-                        <span class="value-display">3</span>
-                        <input id="brush_size" class="value-input" type="number" min="1" max="200" step="5" value="3" />
-                    </button>
-            </div>
-            <div class="control">
-                <!--  <span class="control-label">Opacity</span>-->
-                <button class="drag-btn" data-min="0" data-max="1" data-step="0.01" data-px-per-step="5">
-                    <span class="value-display">1</span>
-                    <input id="brush_opacity" class="value-input" type="number" min="0" max="1" step="0.01" value="1" />
-                </button>
-            </div>
+				<div class="control">
+					<button id="ColorPickerBtn"><span class="bl-icons-material"></span></button>
+					<input id="col" type="color" value="#000000" style="">
+					<button id="ToolLassoFillToggle" style="display:none;"><span class="bl-icons-key_ring_filled"></button>
+				</div>
+				
+				<div id="BrushStuff" class="control">
+				
+<button id="BrushEraserToggle"><span class="bl-icons-greasepencil"></span></button>	  
+<button class="drag-btn" data-min="1" data-max="200" data-step="1" data-px-per-step="5">
+<span class="value-display">3</span>
+<input id="brush_size" class="value-input" type="number" min="1" max="200" step="5" value="3" />
+</button>
+<button class="drag-btn" data-min="0" data-max="1" data-step="0.01" data-px-per-step="5">
+<span class="value-display">1</span>
+<input id="brush_opacity" class="value-input" type="number" min="0" max="1" step="0.01" value="1" /></button>
+                
+           	 </div>
+           	 
         </div>
         <div id="timeline"></div>
         <div id="stage">

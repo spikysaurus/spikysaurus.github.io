@@ -184,16 +184,23 @@ active_layer.addEventListener("pointerdown", e => {
 // --- Globals for lasso ---
 let lassoPoints = [];
 let isLassoing = false;
-let lassoEraseMode = false; // default: fill mode
+let lassoMode = false; // default: fill mode
 
 // --- Toggle button ---
 const ToolLassoFillToggle = document.getElementById("ToolLassoFillToggle");
+const ToolLassoFillToggleSpan = ToolLassoFillToggle.querySelector("span");
 
 ToolLassoFillToggle .addEventListener("click", () => {
-  lassoEraseMode = !lassoEraseMode;
+  lassoMode = !lassoMode;
+  if (lassoMode){
+  	ToolLassoFillToggleSpan.className = "bl-icons-key_ring";
+  }else{
+  	ToolLassoFillToggleSpan.className = "bl-icons-key_ring_filled";
+  }
   // update button label or style
-  ToolLassoFillToggle.textContent = lassoEraseMode ? "Erase" : "Fill";
+//  ToolLassoFillToggle.textContent = lassoEraseMode ? "X" : "+";
 });
+
 
 // --- Lasso tool handlers ---
 active_layer.addEventListener("pointerdown", e => {
@@ -267,7 +274,7 @@ active_layer.addEventListener("pointerup", e => {
   ctx.closePath();
   ctx.clip();
 
-  if (lassoEraseMode) {
+  if (lassoMode) {
     // erase inside lasso
     ctx.clearRect(0, 0, active_layer.width, active_layer.height);
   } else {
@@ -1644,38 +1651,7 @@ checkerboardBtn.onclick = () => {
 };
 
 
-// Update activeTool UI
-function updateUI() {
-  tools.forEach(tool => {
-    tool.btn.style.backgroundColor = tool.active ? "yellow" : "";
-  });
-}
 
-//const bar = document.getElementById('bar');
-//let isDragging = false;
-//let offsetX, offsetY;
-
-//bar.addEventListener('mousedown', (e) => {
-//  // Only drag if clicked on empty space, not buttons
-//  if (e.target === bar) {
-//    isDragging = true;
-//    offsetX = e.clientX - bar.offsetLeft;
-//    offsetY = e.clientY - bar.offsetTop;
-//    document.body.style.userSelect = 'none'; // prevent text selection
-//  }
-//});
-
-//document.addEventListener('mousemove', (e) => {
-//  if (isDragging) {
-//    bar.style.left = (e.clientX - offsetX) + 'px';
-//    bar.style.top = (e.clientY - offsetY) + 'px';
-//  }
-//});
-
-//document.addEventListener('mouseup', () => {
-//  isDragging = false;
-//  document.body.style.userSelect = '';
-//});
 
 
 minUI = false;
@@ -1781,6 +1757,45 @@ navButton.addEventListener("click", () => {
 	}
 	
 });
+
+// Update activeTool UI
+
+function updateUI() {
+  tools.forEach(tool => {
+	updateBEToggle();
+    tool.btn.style.backgroundColor = tool.active ? "yellow" : "";
+    
+  });
+}
+
+const BEToggle = document.getElementById("BrushEraserToggle");
+const BEStuff = document.getElementById("BrushStuff");
+
+function updateBEToggle() {
+  if (activeTool === "ToolBrush" || activeTool === "ToolEraser") {
+    BEStuff.style.display = "flex";
+  } else {
+    BEStuff.style.display = "none";
+  }
+}
+
+let BEToggleBool = true;
+const iconSpan = BEToggle.querySelector("span"); // get the existing span
+
+BEToggle.addEventListener("click", e => {
+  BEToggleBool = !BEToggleBool;
+
+  if (BEToggleBool) {
+    setActiveTool("ToolBrush");
+    iconSpan.className = "bl-icons-greasepencil";   // change class
+  } else {
+    setActiveTool("ToolEraser");
+    iconSpan.className = "bl-icons-meta_ellipsoid"; // change class
+  }
+});
+
+
+
 
 //// Show overlays while holding button
 //navButton.addEventListener("pointerdown", () => {

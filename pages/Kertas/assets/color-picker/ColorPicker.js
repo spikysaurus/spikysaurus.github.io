@@ -143,6 +143,7 @@
     const hueRect = el.hue.getBoundingClientRect();
     const hx = (state.h / 360) * hueRect.width;
     el.hueThumb.style.left = `${hx}px`;
+    
   }
 
   function updateUI() {
@@ -266,6 +267,7 @@
 
   placeThumbs();
   updateUI();
+  
 }
 
 
