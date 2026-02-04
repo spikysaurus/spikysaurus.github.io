@@ -1003,16 +1003,16 @@ function render() {
 
   // Add header row
   const headerRow = table.insertRow();
-  const headerCell = headerRow.insertCell();
-  headerCell.textContent = "Timeline";
-  headerCell.style.backgroundColor="#b7b7b7";
+//  const headerCell = headerRow.insertCell();
+//  headerCell.textContent = "Timeline";
+//  headerCell.style.backgroundColor="#b7b7b7";
 
   // Add frame headers
-  frames.forEach((f, i) => {
-    const frameHeader = headerRow.insertCell();
-    frameHeader.textContent = "" + (i + 1);
-    frameHeader.style.backgroundColor="#b7b7b7";
-  });
+//  frames.forEach((f, i) => {
+//    const frameHeader = headerRow.insertCell();
+//    frameHeader.textContent = "" + (i + 1);
+//    frameHeader.style.backgroundColor="#b7b7b7";
+//  });
 
   // Add rows for each layer canvas
   layerCanvases.forEach(c => {
@@ -1020,7 +1020,8 @@ function render() {
 
     // First cell: layer name
     const cell = row.insertCell();
-    cell.textContent = c.id;
+//    cell.textContent = c.id;
+cell.textContent = "Page";
 
     // Then: one cell per frame
     frames.forEach((f, i) => {
