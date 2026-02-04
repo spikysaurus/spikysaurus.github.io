@@ -122,8 +122,8 @@ body {
 .social-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    max-width: 400px;
+    gap: 5px;
+    max-width: 500px;
     margin: auto;
   }
 
@@ -138,22 +138,30 @@ body {
     border:1px pink solid;
     color: gray;
   }
-
+	
+	.social-btn span{margin-right:5px;font-size:2rem;}
   .social-btn img {
-    width: 32px;
-    height: 32px;
-    margin-right: 12px;
+    width: 2rem;
+    margin-right: 5px;
   }
 
   .social-btn h1 {
     font-size: 1.2rem;
     margin: 0;
   }
+  .social-btn h3 {
+  font-weight:normal;
+    font-size: 1.2rem;
+    margin-left: 5px;
+    margin-top:0px;margin-bottom:0px;
+  }
 
   /* Hover effect */
   .social-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  outline:3px orange solid;
+  outline-offset:-3px;
+/*    transform: translateY(-2px);*/
+/*    box-shadow: 0 4px 12px rgba(0,0,0,0.2);*/
   }
   
   /* Floating profile icon */
@@ -205,22 +213,25 @@ body {
   color: #333;
   text-align: center;
   border-radius: 20px;
-  background: linear-gradient(to bottom, #fefefe 0%, #dcdcdc 100%);
+  background-color:white;
+/*  background: linear-gradient(to bottom, #fefefe 0%, #dcdcdc 100%);*/
 /*  box-shadow: 0 4px 6px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8);*/
-  border: 2px solid #aaa;
-  transition: all 0.2s ease-in-out;
+  border: 1px solid #aaa;
+/*  transition: all 0.2s ease-in-out;*/
   cursor: pointer;
 }
 
 .wii:hover {
-  background: linear-gradient(to bottom, #ffffff 0%, #cfcfcf 100%);
+/*  background: linear-gradient(to bottom, #ffffff 0%, #cfcfcf 100%);*/
 /*  box-shadow: 0 6px 10px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.9);*/
-  transform: scale(1.05);
+/*  transform: scale(1.05);*/
+  outline: 3px solid orange;
+  outline-offset:-3px;
 } 
 /* Responsive adjustments for mobile */  
 @media (max-width: 600px) {
 	.wii{
-	
+	font-weight:normal;
 	margin:10px;
 	width:100%;
 	padding: 0px 0px;
