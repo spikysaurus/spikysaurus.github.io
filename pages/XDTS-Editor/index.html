@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="dropZone">
 <head>
   <meta charset="UTF-8">
   <title>XDTS Editor</title>
   <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
-<body>
+<body >
 
-   <input type="file" id="fileInput" accept=".xdts,.json,.txt" style="display:none">
-  	<div id="dropZone">Drag & Drop .xdts file here or Click to browse</div>
+   
 
   
   
@@ -20,9 +19,10 @@
 <div clas="box">
 <div class="panel">
 		<b><label id="durationLabel">Duration: (0+0) | Frames: 0</label></b>
-		<label><input type="number" id="newDuration" min="1" value="24"></label>
-		<button id="newTimesheetBtn">New Blank Timesheet</button>
-		<button id="exportBtn" style="display:none">Export XDTS</button>
+		
+		<label>Adjust Duration by: <input type="number" id="adjustDuration" value="1" min="1"></label>
+		<button id="increaseDurationBtn">Increase Duration</button>
+		<button id="decreaseDurationBtn">Decrease Duration</button>
 	</div>
   <div class="panel">
 	  <label><b>Symbols : </b></label>
@@ -46,20 +46,27 @@
 
 	<div class="panel" >
 		<button id="addTrackBtn">Add Track</button>
-		<button id="removeTrackBtn">Remove Track</button>
+		<button id="removeTrackBtn">Remove Last Track</button>
 		<button id="autoRenameBtn">Auto-Rename Tracks</button>
+		<br>
 		<label>Track to reorder: <input type="text" id="reorderInput" value="A"></label>
-		<button id="reorderLeftBtn">Reorder Left</button>
-		<button id="reorderRightBtn">Reorder Right</button>
-		<label>Adjust Duration by: <input type="number" id="adjustDuration" value="1" min="1"></label>
-		<button id="increaseDurationBtn">Increase Duration</button>
-		<button id="decreaseDurationBtn">Decrease Duration</button>
+		<button id="reorderLeftBtn">Reorder to Left</button>
+		<button id="reorderRightBtn">Reorder to Right</button>
+		
+	</div>
+	
+	<div class="panel">
+	<button id="loadXDTSbtn">Load XDTS</button>
+	<button id="newTimesheetBtn">New Blank Timesheet</button>
+	<label>Duration (Frames) : </label><label><input type="number" id="newDuration" min="1" value="24"></label>
+	<button id="exportBtn" style="display:none">Export XDTS</button>
+	<br>
+	<label><i>*You can drag and drop .xdts file to load it</i></label>
 	</div>
 		
 </div>
 
-
-  
+<input type="file" id="fileInput" accept=".xdts,.json,.txt" style="display:none">
 
   <div id="tableContainer"></div>
 

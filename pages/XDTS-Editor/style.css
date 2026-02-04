@@ -1,4 +1,4 @@
-body { font-family: sans-serif; margin: 20px; }
+body { font-family: sans-serif; margin: 0px 10px 0px 10px; }
 /*#header {*/
 /*  display: flex;*/
 /*  align-items: center;*/
@@ -16,7 +16,7 @@ body { font-family: sans-serif; margin: 20px; }
 .panel {
   flex: 1 1 220px;          /* smaller minimum width */
   padding: 0.5rem;          /* reduced padding */
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 4px;
   background: #fafafa;
 }
@@ -32,18 +32,38 @@ body { font-family: sans-serif; margin: 20px; }
 max-width:24px;
 appearance: textfield;
 text-align:center;
-
-
-}
-.panel input,
-.panel button {
-  padding: 0.35rem 0.5rem;  /* tighter controls */
-  font-size: 0.85rem;
-  margin-top: 0.2rem;
 }
 
-.panel button {
-  margin-right: 0.25rem;
+
+/*.panel input,*/
+/*.panel button {*/
+
+/*  padding: 0.35rem 0.5rem;  /* tighter controls */*/
+/*  font-size: 0.85rem;*/
+/*  margin-top: 0.2rem;*/
+/*}*/
+
+/*.panel button {*/
+/*  margin-right: 0.25rem;*/
+/*}*/
+
+.panel button,
+.panel label {
+	margin :2px 2px 2px 2px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #28262a;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+
+/* Hover effect */
+.toolbar button:hover,
+.toolbar label:hover {
+  background: #666;
 }
 
 /* Responsive tweaks */
@@ -91,19 +111,20 @@ input.cellInput {
   box-sizing: border-box;
 }
 .nullcell { color: black; font-weight: bold; }
-#dropZone {
-  border: 2px dashed #888;
-  border-radius: 8px;
-  padding: 20px;
-  text-align: center;
-  color: #555;
-/*  margin-top: 20px;*/
-  cursor: pointer;
-}
+/*#dropZone {*/
+/*  border: 2px dashed #888;*/
+/*  */
+/*  border-radius: 8px;*/
+/*  padding: 20px;*/
+/*  text-align: center;*/
+/*  color: #555;*/
+/*/*  margin-top: 20px;*/*/
+/*  cursor: pointer;*/
+/*}*/
 #dropZone.dragover {
   background: #f0f0f0;
-  border-color: #333;
-  color: #000;
+/*  border-color: #333;*/
+/*  color: #000;*/
 }
 #exportBtn {
 /*  padding: 6px 10px;*/

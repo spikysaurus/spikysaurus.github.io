@@ -62,11 +62,20 @@ function handleFile(file) {
 }
 const fileInput = document.getElementById("fileInput");
 const dropZone = document.getElementById("dropZone");
-dropZone.addEventListener("click", () => fileInput.click());
+const loadXDTSbtn = document.getElementById("loadXDTSbtn");
+
+loadXDTSbtn.addEventListener("click", () => fileInput.click());
 fileInput.addEventListener("change", e => {
   const file = e.target.files[0];
   if (file) handleFile(file);
 });
+
+
+//dropZone.addEventListener("click", () => fileInput.click());
+//fileInput.addEventListener("change", e => {
+//  const file = e.target.files[0];
+//  if (file) handleFile(file);
+//});
 dropZone.addEventListener("dragover", e => { e.preventDefault(); dropZone.classList.add("dragover"); });
 dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragover"));
 dropZone.addEventListener("drop", e => {
