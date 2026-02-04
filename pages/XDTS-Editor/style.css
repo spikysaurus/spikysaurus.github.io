@@ -87,6 +87,7 @@ input.cellInput {
 .nullcell { color: black; font-weight: bold; }
 #dropZone {
   background-color:none;
+  
 }
 #dropZone.dragover {
   background-color: #f9f06b;
