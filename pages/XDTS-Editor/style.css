@@ -9,7 +9,9 @@ body { font-family: sans-serif; margin: 0px 10px 0px 10px; }
 .box {
   display: flex;
   flex-wrap: wrap;
+/*
   gap: 0.5rem;              /* tighter spacing */
+*/
   margin-bottom: 1rem;
 }
 
@@ -71,8 +73,6 @@ th, td {
   padding: 2px;           
   text-align: center; 
   width:30px;
-/*  min-width: 25px;        */
-/*  max-width: 30px; */
 }
 th { background: #eee; font-size: 11px; }
 td { font-size: 11px; }
@@ -91,15 +91,5 @@ input.cellInput {
 }
 #dropZone.dragover {
   background-color: #f9f06b;
-/*  border-color: #333;*/
-/*  color: #000;*/
-}
-#exportBtn {
-/*  padding: 6px 10px;*/
-/*  border: 1px solid #444;*/
-/*  background: #eee;*/
-/*  cursor: pointer;*/
-/*  font-size: 12px;*/
-/*  margin-left: 20px;*/
-}
+};
 

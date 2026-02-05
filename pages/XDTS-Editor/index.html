@@ -13,24 +13,26 @@
 </style>
 
 
-<div class="dontprint">
+<div class=" box dontprint">
 
 <div class="panel">
 	<label><b>File :</b></label>
-	<button id="loadXDTSbtn">Load XDTS</button>
-	<button id="newTimesheetBtn">New Blank Timesheet</button>
+	<br>
+	<button id="loadXDTSbtn">Load</button>
+	<button id="newTimesheetBtn">New</button>
+	<button id="exportBtn" style="display:none">Save</button>
+	<br>
 	<label>New Duration (Frames) : </label><label><input type="number" id="newDuration" min="1" value="24"></label>
-	<button id="exportBtn" style="display:none">Export XDTS</button>
 	<br>
 	<label><i>*You can drag and drop .xdts file into the page to load it</i></label>
 	</div>
 	
 
   <div class="panel">
-	  <label><b>Symbols : </b></label>
-	  <label>Empty Cell : <input type="text" id="symNull" value="x"></label>
-	  <label>Inbetween : <input type="text" id="symTick1" value="○"></label>
-	  <label>Reverse Sheet : <input type="text" id="symTick2" value="●"></label>
+	  <label><b>Symbols : </b></label><br>
+	  <label>Empty Cell : <input type="text" id="symNull" value="x"></label><br>
+	  <label>Inbetween : <input type="text" id="symTick1" value="○"></label><br>
+	  <label>Reverse Sheet : <input type="text" id="symTick2" value="●"></label><br>
 	  <label>Hyphen : <input type="text" id="symHyphen" value="｜"></label> 
 	
 
@@ -40,27 +42,29 @@
 
 </div>
 <div class="panel">
-<label><b>Table :</b></label>
+<label><b>Table :</b></label><br>
 <label for="cellWidthInput">Cell Width:</label>
-<input type="number" id="cellWidthInput" min="0" max="999" value="30">
+<input type="number" id="cellWidthInput" min="0" max="999" value="30"><br>
 
 <label for="cellHeightInput">Cell Height:</label>
-<input type="number" id="cellHeightInput" min="0" max="999" value="30">
-</div>
+<input type="number" id="cellHeightInput" min="0" max="999" value="30"><br>
 
-<div class="panel">
-		<label>Adjust Duration by: <input type="number" id="adjustDuration" value="1" min="1"></label>
+<label>Adjust Duration by: <input type="number" id="adjustDuration" value="1" min="1"></label>
+		<br>
 		<button id="increaseDurationBtn">Increase Duration</button>
 		<button id="decreaseDurationBtn">Decrease Duration</button>
-	</div>
+		
+</div>
 	
 	<div class="panel" >
 	<label><b>Track :</b></label>
+	<br>
 		<button id="addTrackBtn">Add Track</button>
 		<button id="removeTrackBtn">Remove Last Track</button>
-		<button id="autoRenameBtn">Auto-Rename Tracks</button>
+		<button id="autoRenameBtn">Auto-Rename</button>
 		<br>
 		<label>Track to reorder: <input type="text" id="reorderInput" value="A"></label>
+		
 		<button id="reorderLeftBtn">Reorder to Left</button>
 		<button id="reorderRightBtn">Reorder to Right</button>
 		
@@ -79,7 +83,7 @@
   background-color: none;
 }
 
-.container div {
+.container div{
 	width:100%;
   background-color: #f1f1f1;
   font-size: 14px;
@@ -94,7 +98,7 @@
 }
 .label {text-align: center;}
 .container input{text-align:center;}
-#durationLabel{color:blue;font-size:18px;}
+#durationLabel{font-size:18px;}
 
 </style>
 
@@ -117,7 +121,7 @@
 	</div>
   <div>
   	<div class="label">TIME</div>
-  	<div><center><label id="durationLabel">0+0 | 00</label></center></div>
+  	<div ><center><label id="durationLabel">0+0 | 00</label></center></div>
 	</div>
 </div>
 
