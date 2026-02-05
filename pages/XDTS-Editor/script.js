@@ -41,6 +41,7 @@ function handleFile(file) {
 
       // Sync headers and tracks
       const tt = xdtsData.timeTables[0];
+      
       const field = tt.fields.find(f => f.fieldId === 0);
       while (tt.timeTableHeaders[0].names.length < field.tracks.length) {
         tt.timeTableHeaders[0].names.push("Track" + (tt.timeTableHeaders[0].names.length));
@@ -88,9 +89,19 @@ dropZone.addEventListener("drop", e => {
 // Render dope sheet
 function renderDopeSheet(data) {
   const container = document.getElementById("tableContainer");
+ 
+  
   container.innerHTML = "";
 
+let hh = {}; if (data.header) { 
+	if (Array.isArray(data.header) && data.header.length > 0)
+	{ hh = data.header[0]; }
+	else if (typeof data.header === "object")
+	{ hh = data.header; } }
+
+
   let tt = data.timeTables ? data.timeTables[0] : data;
+  
   const duration = tt.duration || 30;
   const headers = tt.timeTableHeaders && tt.timeTableHeaders[0].names || [];
   const framesPerColumn = 72;
@@ -183,9 +194,46 @@ function setValueForTrackFrame(tt, trackIndex, frameNo, newVal) {
 }
 
 // Export
+//~ document.getElementById("exportBtn").addEventListener("click", () => {
+  //~ if (!xdtsData) return;
+
+  //~ // ✅ Normalize trackNo to zero-based before export
+  //~ const tt = xdtsData.timeTables[0];
+  //~ const field = tt.fields.find(f => f.fieldId === 0);
+  //~ field.tracks.forEach((t, i) => t.trackNo = i);
+
+  //~ const jsonString = "exchangeDigitalTimeSheet Save Data" + JSON.stringify(xdtsData, null, 2);
+  //~ const blob = new Blob([jsonString], { type: "application/json" });
+  //~ const a = document.createElement("a");
+  //~ a.href = URL.createObjectURL(blob);
+  //~ a.download = "edited_timesheet.xdts";
+  //~ a.click();
+//~ });
 document.getElementById("exportBtn").addEventListener("click", () => {
   if (!xdtsData) return;
 
+// ✅ Normalize header before export
+  //~ if (!xdtsData.header) {
+    //~ xdtsData.header = [{
+      //~ title: "",
+      //~ scene: 0,
+      //~ cut: 0,
+      //~ name: ""
+    //~ }];
+  //~ } else if (!Array.isArray(xdtsData.header)) {
+    //~ xdtsData.header = [xdtsData.header];
+  //~ }
+  //~ if (xdtsData.header.length === 0) {
+    //~ xdtsData.header.push({ title: "", scene: 0, cut: 0, name: "" });
+  //~ }
+
+  const hh = xdtsData.header;
+  hh.title = document.getElementById("titleInput").value || "";
+  hh.scene = parseInt(document.getElementById("sceneInput").value, 10) || 0;
+  hh.cut   = parseInt(document.getElementById("cutInput").value, 10) || 0;
+  hh.name  = document.getElementById("nameInput").value || "";
+  
+  
   // ✅ Normalize trackNo to zero-based before export
   const tt = xdtsData.timeTables[0];
   const field = tt.fields.find(f => f.fieldId === 0);
@@ -198,4 +246,11 @@ document.getElementById("exportBtn").addEventListener("click", () => {
   a.download = "edited_timesheet.xdts";
   a.click();
 });
+
+
+
+
+
+
+
 

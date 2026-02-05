@@ -82,8 +82,19 @@ function reorderTrack(direction) {
 document.getElementById("newTimesheetBtn").addEventListener("click", () => {
   const durationInput = parseInt(document.getElementById("newDuration").value, 10);
   const duration = isNaN(durationInput) || durationInput < 1 ? 30 : durationInput;
-
+	
+	document.getElementById("titleInput").value = "";
+	document.getElementById("sceneInput").value = 0;
+	document.getElementById("cutInput").value = 0;
+	document.getElementById("nameInput").value = "";
+	
   xdtsData = {
+	header:{
+		title: "",
+		scene: 0,
+		cut: 0,
+		name: ""
+		},
     timeTables: [{
       duration: duration,
       timeTableHeaders: [{ names: ["A"] }],
@@ -149,8 +160,11 @@ document.getElementById("autoRenameBtn").addEventListener("click", () => {
 
 function updateDurationLabel() {
   if (!xdtsData) return;
+  const hh = xdtsData.header;
+  
   const tt = xdtsData.timeTables[0];
   const totalFrames = tt.duration || 0;
+  
 
   // Assume 24 fps
   const fps = 24;
@@ -161,7 +175,12 @@ function updateDurationLabel() {
   const secDec = totalFrames % fps; // remainder frames
 
   document.getElementById("durationLabel").textContent =
-    `Duration: (${secInt}+${secDec}) | Frames: ${totalFrames}`;
+    `(${secInt}+${secDec}) | ${totalFrames}`;
+    
+    document.getElementById("titleInput").value = hh.title;
+    document.getElementById("sceneInput").value = hh.scene;
+    document.getElementById("cutInput").value = hh.cut;
+    document.getElementById("nameInput").value = hh.name;
 }
 
 // Adjust cell width
