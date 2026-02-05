@@ -33,9 +33,6 @@ appearance: textfield;
 text-align:center;
 }
 
-
-
-
 /* Hover effect */
 .toolbar button:hover,
 .toolbar label:hover {
@@ -56,10 +53,8 @@ text-align:center;
   .panel input,
   .panel button {
     width: 100%;              /* stretch for touch usability */
-    margin-top: 0.3rem;
   }
 }
-
 
 #tableContainer {
   display: flex;
