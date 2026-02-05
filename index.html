@@ -2,6 +2,8 @@
 <html lang="en">
    <head>
       <meta charset="UTF-8" />
+      <link rel="stylesheet" href="assets/bl-icons/bl-icons.css">
+      
       <title>Sadewoo</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="stylesheet" href="assets/css/style.css">
@@ -12,27 +14,27 @@
          <ul>
             <li>
                <a href="pages/projects.html" class="wii">
-               <span>Animations</span>
+               <span class="bl-icons-file_movie"></span><label>Animations</label>
                </a>
             </li>
             <li>
                <a href="pages/Gallery/index.html" class="wii">
-               <span>Art</span>
+               <span class="bl-icons-file_image"></span><label>Art</label>
                </a>
             </li>
             <li>
                <a href="pages/links.html" class="wii">
-               <span>Links</span>
+               <span class="bl-icons-url"></span><label>Links</label>
                </a>
             </li>
             <li>
                <a href="pages/contact.html" class="wii">
-               <span>Contact</span>
+               <span class="bl-icons-user"></span><label>Contact</label>
                </a>
             </li>
             <li>
                <a href="pages/tools.html" class="wii">
-               <span>Tools</span>
+               <span class="bl-icons-tool_settings"></span><label>Tools</label>
                </a>
             </li>
          </ul>
@@ -148,31 +150,32 @@
             </div>
          </div>
       </div>
-      </head>
-      <body>
-         <div class="profile-icon" id="profileIcon"></div>
-         <div class="chat-bubble" id="chatBubble">Hi! I'm Sadewoo, a Freelance 2D Animator. Here i share my works and tools i created. Thankyou for visiting!
-         </div>
-         <script>
-            const profileIcon = document.getElementById('profileIcon');
-            const chatBubble = document.getElementById('chatBubble');
-            
-            // Toggle chat bubble when profile icon is clicked
-            profileIcon.addEventListener('click', () => {
-              if (chatBubble.style.display === 'none' || chatBubble.style.display === '') {
-                chatBubble.style.display = 'block';
-              } else {
-                chatBubble.style.display = 'none';
-              }
-            });
-            
-            // Hide chat bubble when it is clicked
-            chatBubble.addEventListener('click', () => {
-              chatBubble.style.display = 'none';
-            });
-         </script>
-   </body>
-</html>
+      
+      
+      
+<!--         <div class="profile-icon" id="profileIcon"></div>-->
+<!--         <div class="chat-bubble" id="chatBubble">Hi! I'm Sadewoo, a Freelance 2D Animator. Here i share my works and tools i created. Thankyou for visiting!-->
+<!--         </div>-->
+<!--         <script>-->
+<!--            const profileIcon = document.getElementById('profileIcon');-->
+<!--            const chatBubble = document.getElementById('chatBubble');-->
+<!--            -->
+<!--            // Toggle chat bubble when profile icon is clicked-->
+<!--            profileIcon.addEventListener('click', () => {-->
+<!--              if (chatBubble.style.display === 'none' || chatBubble.style.display === '') {-->
+<!--                chatBubble.style.display = 'block';-->
+<!--              } else {-->
+<!--                chatBubble.style.display = 'none';-->
+<!--              }-->
+<!--            });-->
+<!--            -->
+<!--            // Hide chat bubble when it is clicked-->
+<!--            chatBubble.addEventListener('click', () => {-->
+<!--              chatBubble.style.display = 'none';-->
+<!--            });-->
+<!--         </script>-->
+         
+         
 <script>
    const videoFrame = document.getElementById('videoFrame');
    const cards = document.querySelectorAll('.card');
