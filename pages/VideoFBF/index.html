@@ -1,1 +1,29 @@
-<meta http-equiv="refresh" content="0; url=https://videofbf.netlify.app/">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/bl-icons/bl-icons.css">
+<title>Frame by Frame Video Player</title>
+
+</head>
+<body>
+<video id="video" controls></video>
+<div id="frameDisplay">0</div>
+
+<!-- Grouped top-left controls -->
+<div class="topLeftControls">
+  <label for="fileInput" class="custom-file-label"><span class="bl-icons-filebrowser"></span>‎</label>
+  <button id="saveFrame"><span class="bl-icons-restrict_render_off"></span>‎</button>
+</div>
+<input type="file" id="fileInput" accept="video/*">
+
+<button id="prevFrame"><span class="bl-icons-frame_prev"></span>‎</button>
+<button id="nextFrame"><span class="bl-icons-frame_next"></span>‎</button>
+
+<script src="assets/js/script.js"></script>
+
+</body>
+</html>
+

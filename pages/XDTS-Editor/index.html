@@ -1,1 +1,130 @@
-<meta http-equiv="refresh" content="0; url=https://xdtseditor.netlify.app/">
+<!DOCTYPE html>
+<html lang="en" id="dropZone">
+<head>
+  <meta charset="UTF-8">
+  <title>XDTS Editor</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body >
+
+<style type="text/css" media="print">
+.dontprint{ display: none; }
+#memoInput{border:none;}
+</style>
+
+
+<div class="dontprint">
+	<div class="tab">
+  <button class="tablinks" onclick="openTab(event, 'File')" id="defaultOpen">File</button>
+  <button class="tablinks" onclick="openTab(event, 'Symbols')">Symbols</button>
+  <button class="tablinks" onclick="openTab(event, 'Table')">Table</button>
+  <button class="tablinks" onclick="openTab(event, 'Track')">Track</button>
+</div>
+
+<div id="File" class="tabcontent">
+  <div class="panel">
+	<button id="loadXDTSbtn">Load</button>
+	<button id="newTimesheetBtn">New</button>
+	<button id="exportBtn" style="display:none">Save</button>
+	<br>
+	<label>New Duration (Frames) : </label><label><input type="number" id="newDuration" min="1" value="24"></label>
+	<br>
+	<label><i>*You can drag and drop .xdts file into the page to load it</i></label>
+	</div>
+</div>
+
+<div id="Symbols" class="tabcontent">
+    <div class="panel">
+	  <label>Empty Cell : <input type="text" id="symNull" value="x"></label><br>
+	  <label>Inbetween : <input type="text" id="symTick1" value="○"></label><br>
+	  <label>Reverse Sheet : <input type="text" id="symTick2" value="●"></label><br>
+	  <label>Hyphen : <input type="text" id="symHyphen" value="｜"></label> 
+	
+
+<!--<label for="fontSizeInput">Font Size:</label>-->
+<!--<input type="number" id="fontSizeInput" min="1" max="999" value="14">-->
+	</div>
+</div>
+
+<script> const checkbox = document.getElementById('tcellHideBgBorder'); const table = document.getElementById('tableContainer'); checkbox.addEventListener('change', function() { if (this.checked) { table.classList.add('no-style'); } else { table.classList.remove('no-style'); } }); </script>
+
+
+<div id="Table" class="tabcontent">
+  <div class="panel">
+	<input type="checkbox" id="cellHideBgBorder" unchecked><label>Hide Cell Borders and Backgrounds</label><br>
+	<label for="cellWidthInput">Cell Width:</label>
+	<input type="number" id="cellWidthInput" min="0" max="999" value="30"><br>
+
+	<label for="cellHeightInput">Cell Height:</label>
+	<input type="number" id="cellHeightInput" min="0" max="999" value="30"><br>
+
+	<label>Adjust Duration by: <input type="number" id="adjustDuration" value="1" min="1"></label>
+			<br>
+			<button id="increaseDurationBtn">Increase Duration</button>
+			<button id="decreaseDurationBtn">Decrease Duration</button>
+			
+	</div>
+</div>
+
+<div id="Track" class="tabcontent">
+<div class="panel" >
+		<button id="addTrackBtn">Add Track</button>
+		<button id="removeTrackBtn">Remove Last Track</button>
+		<button id="autoRenameBtn">Auto-Rename</button>
+		<br>
+		<label>Track to reorder: <input type="text" id="reorderInput" value="A"></label>
+		
+		<button id="reorderLeftBtn">Reorder to Left</button>
+		<button id="reorderRightBtn">Reorder to Right</button>
+		
+	</div>
+</div>
+</div>
+<!--
+
+<div class=" box ">
+</div>
+-->
+
+<input type="file" id="fileInput" accept=".xdts,.json,.txt" style="display:none">
+
+<div class="paper" id="paper">
+
+<div class="header">
+  <div>
+	  <div class="label">TITLE</div>
+	  <div class="data"><input id="titleInput" type="text"></div>
+  </div>
+  <div>
+ 		<div class="label">SCENE</div>
+ 		<div class="data"><input id="sceneInput" type="number"></div>
+</div>
+  <div>
+		<div class="label">CUT</div>
+		<div class="data"><input id="cutInput" type="number"></div>
+	</div>
+	<div>
+		<div class="label">NAME</div>
+		<div class="data"><input id="nameInput" type="text"></div>
+	</div>
+  <div>
+  	<div class="label last">TIME</div>
+  	<div class="last" ><center><label id="durationLabel">0+0 | 00</label></center></div>
+	</div>
+</div>
+
+	<div id="memo"><textarea id="memoInput">Memo</textarea></div>
+	
+  <div id="tableContainer"></div>
+ 
+</div>
+
+   
+  <script src="assets/js/script.js"></script>
+  <script src="assets/js/script2.js"></script>
+  <script src="assets/js/tab.js"></script>
+  <script src="assets/js/table/hide-border.js"></script>
+</body>
+</html>
+

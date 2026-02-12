@@ -1,1 +1,96 @@
-<meta http-equiv="refresh" content="0; url=https://animasikan.netlify.app/">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+
+
+<div id="levelStripPanel">
+  <div class="level-strip-header">Strip Previews</div>
+  <div class="level-strip-content" id="levelStripContent"></div>
+</div>
+
+  <!-- Preview area -->
+<!--  <div style="position:fixed;top:0;">-->
+  <center>
+  <label style="position:relative;top:1px;">FPS : </label><input type="number" id="fps" value="24" min="1" max="60">
+  <button id="toggleCamera">Switch Cam</button>
+  <button id="toggleCam">Hide Cam</button>
+  
+  <button id="exportGif" style="margin-top:10px;margin-bottom:10px;">Export GIF</button>
+<!--  <button id="exportZip">PNGs (.zip)</button>-->
+
+  <div id="preview">
+  <video id="camera" autoplay playsinline></video>
+</div>
+<div style="margin-top:10px;">
+
+</div>
+</div>
+  <div class="controls">
+  
+  
+  
+  </div>
+  
+  
+  <div class="controls">
+  
+  
+  <button id="play">Play</button>
+  <button id="stop">Stop</button>
+  <button id="add">Add Track</button>
+  
+  
+  <button id="moveLeft">Move Frame Left</button>
+  <button id="moveRight">Move Frame Right</button>
+  <button class="tl_btn" id="orderUp">Move Track Up</button>
+<button class="tl_btn" id="orderDown">Move Track Down</button>
+ <button class="tl_btn" id="delete">Delete</button>
+ <button class="tl_btn" id="exposeMinus">- Exp</button>
+  <button class="tl_btn" id="exposePlus">+ Exp</button>
+
+  
+  <div>
+  
+  </div>
+<!--</div>-->
+</center>
+<!--</div>-->
+<button style="margin-left:10px;"id="levelStripBtn">🎞️</button>
+<label >🔍 </label><input type="range" id="zoom" min="10" max="100" value="20" style="position:relative;top:5px;width:100px;">
+
+<div style="position:relative;top:-25px;">
+<div style="position:absolute;right:0;">
+	<label id="timecode" >(total duration)</label>
+	<button id="capture" >Capture</button>
+	</div>
+</div>
+
+<div class="timeline" id="tracks">
+ 
+  <div id="playhead" class="playhead"></div>
+  <!-- tracks will be rendered here -->
+</div>
+
+
+
+
+  <!-- Hidden video element for camera -->
+  <video id="camera" autoplay playsinline style="display:none"></video>
+
+  <!-- Scripts -->
+  <script src="script1.js"></script>
+  <script src="script2.js"></script>
+  <script src="gif.js"></script>
+<script src="gif.worker.js"></script>
+<script src="jszip.min.js"></script>
+
+
+</body>
+</html>
+
