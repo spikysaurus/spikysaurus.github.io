@@ -1,0 +1,249 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+body {
+	
+      margin: 0% 20% 0% 20%;
+	font-family: "Barlow", sans-serif;
+	background: #ffffff;
+background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(252, 245, 227, 1) 100%);
+    }
+.navbar {
+display: flex;
+align-items: center;
+justify-content: center;
+background-color: none;
+padding: 0.5rem 1rem;
+flex-wrap: wrap; /* allows wrapping on small screens */
+}
+#hamburgerBtn{
+display:none;
+cursor:pointer;
+position:fixed;
+top:5px;
+right:5px;
+border:2px solid #e23a6b;
+color:#e23a6b;
+background-color:white;
+border-radius:100%;
+padding:10px;
+width:64px;
+height:64px;
+font-size:20pt;
+z-index:999;
+transition:0.2s;
+}
+
+
+.banner{
+text-align:center;
+}
+
+.logo-text{
+width:500px;
+}
+#menu {
+display: flex;
+gap: 1.5rem;
+list-style: none;
+margin: 0;
+padding:5px;
+border:2px solid #e23a6b;
+border-radius:10px;
+background-color:white;
+}
+#menu li a {
+color: #fff;
+text-decoration: none;
+font-size: 1rem;
+transition: color 0.3s;
+}
+#menu li a:hover {
+color: #f39c12;
+}
+
+#menu button{
+border:none;
+color:#e23a6b;
+font-size:20pt;
+background-color:white;
+padding:5px;
+font-family: "Barlow", sans-serif;
+cursor:pointer;
+border-radius:10px;
+}
+
+#menu button:hover{
+background-color:#e23a6b;
+color:white;
+}
+
+.red-button{cursor:pointer;color:white;background-color:#e23a6b;border:none;font-size:14pt;padding:5px;border-radius:10px;}
+h2{color:white;padding:5px;margin:0px;
+background: #6A328D;
+background: linear-gradient(90deg, rgba(106, 50, 141, 1) 0%, rgba(165, 89, 212, 1) 50%, rgba(106, 50, 141, 1) 100%);
+border-top-left-radius:20px;border-top-right-radius:20px;
+}
+.box{text-align:center;background-color:rgba(255,255,255,0.8); padding:10px; margin:0px;}
+
+.image-wrapper {
+	  
+  width:100% ;position: relative;   /* ensures absolutely positioned children are relative to this container */
+}
+
+.image {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* centers horizontally */
+  width: 500px;
+}
+
+.image {
+  max-width: 90%;
+  height: auto;
+}
+
+
+.img1 {
+  top: 100px;
+  transform: translateX(-20%) rotate(15deg);
+  z-index: -3;
+}
+
+.img2 {
+  top: 150px;
+  transform: translateX(-80%) rotate(-15deg);
+  z-index: -2;
+}
+
+.logo-only {
+width:auto;
+height:100px;
+}
+
+/* Mobile layout: stack menu full width */
+@media (max-width: 600px) {
+
+.logo-only {
+width:auto;
+height:64px;
+position:fixed;
+top:5px;
+left:5px;
+}
+.image-wrapper{display:none;}
+body{margin: 0% 0% 0% 0%;}
+	.navbar {
+	flex-direction: column;
+	align-items: flex-start;
+	}
+	#menu {
+	z-index:998;
+	position:relative;
+	top:-5px;
+	left:-3px;
+	flex-direction: column;
+	width: 100%;
+	gap: 0;
+	border-top-right-radius:0px;
+	
+	}
+	
+	#menu li {
+	width: 100%;
+	}
+	#menu li a {
+	display: block;
+	padding: 0.5rem 1rem;
+	}
+	
+	#hamburger{
+	visibility: hidden;
+	transform-origin: top right;
+	transform: scale(0,0);
+	transition: transform 0.3s ease;
+	opacity: 0%;
+	top:50px;
+	transition:0.2s;
+	position:fixed;
+	
+	right:0px;
+	
+	}
+	
+	#hamburgerBtn{display:block;}
+	
+	
+	.banner{
+	margin-top:70px;
+	}
+	.logo-text{
+	width:100%;
+	}
+}
+
+
+.carousel-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .carousel {
+    justify-content: center;
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+    .carousel::-webkit-scrollbar {
+      display: none; /* Hide scrollbar */
+    }
+
+    .carousel-item {
+    
+      flex: 0 0 auto;
+      width: 300px;
+      margin-left: 5px;
+      margin-right: 5px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    iframe {
+    
+      width: 100%;
+      height: 170px;
+      border: none;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .controls {
+    visibility:hidden;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .btn {
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 50%;
+      font-size: 18px;
+    }
+
+    @media (max-width: 600px) {
+    .carousel{justify-content: flex-start;}
+      .carousel-item {
+        width: 250px;
+      }
+      iframe {
+        height: 140px;
+      }
+    }
