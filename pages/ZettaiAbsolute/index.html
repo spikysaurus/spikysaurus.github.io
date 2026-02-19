@@ -12,14 +12,19 @@
       <link rel="stylesheet" href="assets/css/style.css">
    </head>
    <body>
+	 <div id="switchLanguages">
+		<button id="btn-en">English</button>
+		<button id="btn-jp">日本語</button>
+     </div>
+     
       <button id="hamburgerBtn"><i class="fa fa-bars"></i></button>
       <nav id="hamburger" class="navbar">
          <ul id="menu">
             <li><a target="_blank" href="https://www.youtube.com/@ZettaiAbsolute"><button class="social-icons"><i class="fab fa-youtube"></i> Youtube</button></a></li>
             <li><a target="_blank" href="https://x.com/ZettaiAbsolute"><button class="social-icons"><i class="fab fa-twitter"></i> Twitter</button></a></li>
             <li><a target="_blank" href="https://x.com/search?q=%23zettaiabsolute&src=typed_query"><button>#ZettaiAbsolute</button></a></li>
-            <li><a target="_blank" href="https://zettai-absolute.creator-spring.com/"><button>STORE</button></a></li>
-            <li><a href="mailto:ZettaiAbsolute07@gmail.com"><button>CONTACT US</button></a></li>
+            <li><a target="_blank" href="https://zettai-absolute.creator-spring.com/"><button><label id="label_store">STORE</label></button></a></li>
+            <li><a href="mailto:ZettaiAbsolute07@gmail.com"><button><label id="label_contactUs">CONTACT US</label></button></a></li>
          </ul>
          <div></div>
       </nav>
@@ -36,10 +41,10 @@
       <div class="banner">
          <a href="#" ><img class="logo-text" src="assets/images/logo-text.png"></a>
          <h1 style="margin-top:-40px;font-family: 'Tagesschrift', system-ui;">Zettai Absolute</h1>
-         <p style="margin-top:-10px;">A group of web-gen animators. We're a discord community of animators all striving to improve.</p>
+         <p style="margin-top:-10px;"><label id="label_intro">A group of web-gen animators. We're a discord community of animators all striving to improve.</label></p>
       </div>
       <center>
-         <h2>Check out our animations!</h2>
+         <h2><label id="label_checkAnim">Check out our animations!</label></h2>
       </center>
       <div class="box">
          <div class="carousel-container">
@@ -62,19 +67,23 @@
       </div>
       <br>
       <center>
-         <h2>Wish to join our community?</h2>
+         <h2><label id="label_wishJoin">Wish to join our community?</label></h2>
       </center>
       <div class="box">
-         <a target="_blank" href="https://docs.google.com/document/d/1cnCV6-B3ZWljLXzOpv2iylOki4Rqpe_Hrda3mM4sKro/edit?usp=sharing"><button class="red-button">Read this info</button></a>
+         <a target="_blank" href="https://docs.google.com/document/d/1cnCV6-B3ZWljLXzOpv2iylOki4Rqpe_Hrda3mM4sKro/edit?usp=sharing"><button class="red-button"><label id="label_readInfo">Read this info</label></button></a>
       </div>
       <br>
       <center>
-         <h2>Want to work with us?</h2>
+         <h2><label id="label_wantWork">Want to work with us?</label></h2>
       </center>
       <div class="box">
+		  <label id="label_knownAs">
          Our community is known as <b>Zettai Absolute</b><br>
-         While our studio goes by the name <b>Zettai Beyond</b><br><br>
-         <b>Send us an email :</b><br>
+         While our studio goes by the name <b>Zettai Beyond</b>
+         </label>
+         
+         <br><br>
+         <b><label id="label_sendEmail">Send us an email!</label></b><br>
          <a href="mailto:ZettaiAbsolute07@gmail.com"><button class="red-button">ZettaiAbsolute07@gmail.com</button></a>
       </div>
       <br>

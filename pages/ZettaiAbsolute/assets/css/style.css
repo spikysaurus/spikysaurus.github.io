@@ -45,6 +45,29 @@ body {
 	width: 500px;
 }
 
+#switchLanguages{
+	text-align:center;
+	 display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+#switchLanguages button{
+	width:90px;
+	height:30px;
+	border:none;
+	padding:5px;
+}
+
+#btn-en{
+border-bottom-left-radius:10px;
+}
+
+#btn-jp{
+border-bottom-right-radius:10px;
+}
+
 #menu {
 	display: flex;
 	gap: 1.5rem;
@@ -59,7 +82,6 @@ body {
 #menu li a {
 	color: #fff;
 	text-decoration: none;
-	font-size: 1rem;
 	transition: color 0.3s;
 }
 
@@ -68,9 +90,10 @@ body {
 }
 
 #menu button {
+height:40px;
 	border: none;
 	color: #e23a6b;
-	font-size: 20pt;
+	font-size: 14pt;
 	background-color: white;
 	padding: 5px;
 	font-family: "Barlow", sans-serif;
