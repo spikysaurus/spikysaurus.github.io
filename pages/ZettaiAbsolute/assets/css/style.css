@@ -58,7 +58,13 @@ body {
 	height:30px;
 	border:none;
 	padding:5px;
+	background-color:#ffd0f3;
 }
+
+#switchLanguages button:hover{
+background-color:#c4a0bb;
+}
+
 
 #btn-en{
 border-bottom-left-radius:10px;
