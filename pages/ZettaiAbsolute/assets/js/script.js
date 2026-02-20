@@ -58,11 +58,11 @@ const translations = {
     label_store: "店",
     label_contactUs: "お問い合わせ",
     label_intro: "ウェブ制作アニメーターのグループです。向上心旺盛なアニメーターたちが集うDiscordコミュニティです。",
-    label_checkAnim: "私たちのアニメーションをチェックしてください!",
-    label_wishJoin: "私たちのコミュニティに参加したいですか?",
+    label_checkAnim: "のアニメーションをチェックしてください!",
+    label_wishJoin: "のコミュニティに参加したいですか?",
     label_readInfo: "この情報を読む",
-    label_wantWork: "私たちと一緒に働いてみませんか?",
-    label_knownAs: "私たちのコミュニティは<b>「Zettai Absolute」</b>として知られていますが<br>私たちのスタジオは<b>「Zettai Beyond」</b>という名前で知られています",
+    label_wantWork: "と一緒に働いてみませんか?",
+    label_knownAs: "のコミュニティは<b>「Zettai Absolute」</b>として知られていますが<br>のスタジオは<b>「Zettai Beyond」</b>という名前で知られています",
     label_sendEmail: "メールをお送りください！"
   }
 };
