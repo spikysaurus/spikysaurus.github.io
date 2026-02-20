@@ -49,7 +49,8 @@ const translations = {
     label_intro: "A group of web-gen animators. We're a discord community of animators all striving to improve.",
     label_checkAnim: "Check out our animations!",
     label_wishJoin: "Wish to join our community?",
-    label_readInfo: "Read this information",
+    label_ifYouWant:"If you want to join the community",
+    label_readInfo: "Read this",
     label_wantWork: "Want to work with us?",
     label_knownAs: "Our community is known as <b>Zettai Absolute</b><br>While our studio goes by the name <b>Zettai Beyond</b>",
     label_sendEmail: "Send us an email!"
@@ -60,7 +61,8 @@ const translations = {
     label_intro: "ウェブ制作アニメーターのグループです。向上心旺盛なアニメーターたちが集うDiscordコミュニティです。",
     label_checkAnim: "のアニメーションをチェックしてください!",
     label_wishJoin: "のコミュニティに参加したいですか?",
-    label_readInfo: "この情報を読む",
+    label_ifYouWant:"コミュニティに参加したい場合",
+    label_readInfo: "こちらへ",
     label_wantWork: "と一緒に働いてみませんか?",
     label_knownAs: "のコミュニティは<b>「Zettai Absolute」</b>として知られていますが<br>のスタジオは<b>「Zettai Beyond」</b>という名前で知られています",
     label_sendEmail: "メールをお送りください！"
