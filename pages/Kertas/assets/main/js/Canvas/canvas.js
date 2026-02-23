@@ -71,7 +71,7 @@ let brush_size = 1;
 let eraser_size = 15;
 let brush_opacity = 1;
 let brush_aliasing = true;
-let drawBehind = false; 
+let drawBehind; 
 
 //--- Asset Sync ---
 // Updates the active drawing on #canvas and triggers the merged layer bridge
@@ -275,6 +275,13 @@ window.addEventListener("keydown", (event) => {
   if (!isTyping && event.key.toLowerCase() === "b") {
     event.preventDefault(); // Stop browser defaults (like "Bold" shortcuts)
     drawBehind = !drawBehind;
+    if(drawBehind){
+		document.getElementById("drawBehindLabel").textContent = "true";
+		}
+	else{
+		document.getElementById("drawBehindLabel").textContent = "false";
+		}
+    
   }
 });
 
@@ -487,7 +494,6 @@ window.addEventListener('keydown', (event) => {
 
 function updateActiveToolLabel() { const l = document.getElementById("activeToolLabel"); if (l) l.textContent = activeTool; }
 function updateBrushSizeLabel() { const l = document.getElementById("brushSizeLabel"); if (l) l.textContent = brush_size; }
-function updateDrawBehindLabel() { const l = document.getElementById("drawBehindLabel"); if (l) l.textContent = drawBehind; }
 function updateEraserSizeLabel() { const l = document.getElementById("eraserSizeLabel"); if (l) l.textContent = eraser_size; }
 function updateAliasingLabel() { const l = document.getElementById("aliasingLabel"); if (l) l.textContent = brush_aliasing; }
 function updateImageRenderingLabel() { const l = document.getElementById("imageRenderingLabel"); if (l) l.textContent = canvases[0].classList.contains('pixelated-rendering'); }
@@ -495,7 +501,7 @@ function updateImageRenderingLabel() { const l = document.getElementById("imageR
 document.addEventListener("DOMContentLoaded", () => {
   updateActiveToolLabel();
   updateBrushSizeLabel();
-  updateDrawBehindLabel();
+  document.getElementById("drawBehindLabel").textContent = "false";
   updateEraserSizeLabel();
   updateAliasingLabel();
   updateImageRenderingLabel();
