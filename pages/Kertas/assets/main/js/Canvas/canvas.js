@@ -268,6 +268,7 @@ function renderStrokes() {
 
 requestAnimationFrame(renderStrokes);
 
+const drawBehindLabel = document.getElementById("drawBehindLabel");
 window.addEventListener("keydown", (event) => {
   // Check if user is typing in a text field to avoid accidental toggling
   const isTyping = event.target.tagName === "INPUT" || event.target.tagName === "TEXTAREA";
@@ -276,10 +277,10 @@ window.addEventListener("keydown", (event) => {
     event.preventDefault(); // Stop browser defaults (like "Bold" shortcuts)
     drawBehind = !drawBehind;
     if(drawBehind){
-		document.getElementById("drawBehindLabel").textContent = "true";
+		drawBehindLabel.textContent = "true";
 		}
 	else{
-		document.getElementById("drawBehindLabel").textContent = "false";
+		drawBehindLabel.textContent = "false";
 		}
     
   }
@@ -455,6 +456,9 @@ function updateCursorSize() {
   brushCursor.style.borderRadius = brush_aliasing ? "0" : "50%";
 }
 
+
+pixelatedCanvas = false;
+const imageRenderingLabel = document.getElementById("imageRenderingLabel");
 document.addEventListener("keydown", e => {
   // Toggle Rendering Shortcut (Key: 'R')
   if (e.key.toLowerCase() === 'r' && !['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
@@ -462,6 +466,9 @@ document.addEventListener("keydown", e => {
     for (let i = 0; i < canvases.length; i++) {
       canvases[i].classList.toggle('pixelated-rendering');
     }
+    pixelatedCanvas = !pixelatedCanvas;
+    if (pixelatedCanvas){imageRenderingLabel.textContent = true}
+	else{imageRenderingLabel.textContent = false}
   }
 });
 
@@ -496,14 +503,13 @@ function updateActiveToolLabel() { const l = document.getElementById("activeTool
 function updateBrushSizeLabel() { const l = document.getElementById("brushSizeLabel"); if (l) l.textContent = brush_size; }
 function updateEraserSizeLabel() { const l = document.getElementById("eraserSizeLabel"); if (l) l.textContent = eraser_size; }
 function updateAliasingLabel() { const l = document.getElementById("aliasingLabel"); if (l) l.textContent = brush_aliasing; }
-function updateImageRenderingLabel() { const l = document.getElementById("imageRenderingLabel"); if (l) l.textContent = canvases[0].classList.contains('pixelated-rendering'); }
 
 document.addEventListener("DOMContentLoaded", () => {
   updateActiveToolLabel();
   updateBrushSizeLabel();
-  document.getElementById("drawBehindLabel").textContent = "false";
+  drawBehindLabel.textContent = "false";
   updateEraserSizeLabel();
   updateAliasingLabel();
-  updateImageRenderingLabel();
+  imageRenderingLabel.textContent = "false";
 });
 
