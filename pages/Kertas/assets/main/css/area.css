@@ -46,3 +46,11 @@ position:relative;
 color:orange;
 font-style: italic;
 }
+
+.status{
+position:absolute;
+color:black;
+font-size:10pt;
+padding-left:10px;
+z-index:10;
+}

@@ -15,7 +15,7 @@
       position: fixed; bottom: 20px; right: 20px;
       background-color: #303030; padding: 5px;
       border: none; display: flex; flex-direction: row; align-items: center; gap: 6px;
-      z-index: 10000; user-select: none; border-radius: 4px;
+      z-index: 10000; user-select: none;
       width: max-content;
     }
     .cp-handle {

@@ -261,15 +261,17 @@ document.getElementById('nextDrawingBtn').onclick = () => {
 };
 
 document.addEventListener('keydown', (event) => {
-  if (event.altKey && event.key === 'q') {
-    //~ event.preventDefault();
+  // Existing Alt + Q or Shift + <
+  if ((event.altKey && event.key === 'q') || (event.shiftKey && event.key === '<')) {
     document.getElementById('prevDrawingBtn').click();
   }
-  if (event.altKey && event.key === 'w') {
-    //~ event.preventDefault();
+  
+  // Existing Alt + W or Shift + >
+  if ((event.altKey && event.key === 'w') || (event.shiftKey && event.key === '>')) {
     document.getElementById('nextDrawingBtn').click();
   }
 });
+
 
 function autoArrangeLevels() {
   // 1. Remember which levels are currently EXPANDED (display: block)

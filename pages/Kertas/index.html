@@ -9,7 +9,6 @@
       <link rel="icon" href="assets/images/icon.png" type="image/x-icon">
       <link rel="stylesheet" href="assets/bl-icons/bl-icons.css">
       <link rel="stylesheet" href="assets/main/css/area.css">
-      <link rel="stylesheet" href="assets/main/css/toolbox.css">
       <link rel="stylesheet" href="assets/main/css/xsheet.css">
       <link rel="stylesheet" href="assets/main/css/tree.css">
       <link rel="stylesheet" href="assets/main/css/canvas.css">
@@ -119,9 +118,6 @@
                      <div style="text-align:right;">
 						 <button id="canvasRefreshBtn">Refresh Values</button>
                       <button id="canvasResizeBtn">Resize Canvas</button>
-<!--
-                      <button id="" disabled>Expand Canvas</button>
--->
                   </div>
                   </div>
                </div>
@@ -204,11 +200,11 @@
 					</div>
 					
 					<div id="tabDrawingTree" class="tabcontent">
-						 <button id="newDrawingBtn">New Drawing (backtick)</button>
+						 <button id="newDrawingBtn">New Drawing</button>
 						 <button id="deleteDrawingBtn">Delete Drawing</button>
 
-						 <button id="prevDrawingBtn">Prev Drawing (alt+q)</button>
-						 <button id="nextDrawingBtn">Next Drawing (alt+w)</button>
+						 <button id="prevDrawingBtn">Prev Drawing</button>
+						 <button id="nextDrawingBtn">Next Drawing</button>
                      </div>
                      
                   </div>
@@ -221,8 +217,6 @@
          <div class="dragbar" id="dragbar-2"></div>
          <div class="area-canvas" id="drag-right">
             <div class="status">
-					<label style="color:blue;">-- Erase (hold ctrl)</label>
-					<label><b>-- Active Tool : </b></label><label id="activeToolLabel"></label>
 					<label><b>-- Brush Size (bracket) : </b></label><label id="brushSizeLabel"></label>
 					<label><b>-- Eraser Size (ctrl+bracket) : </b></label><label id="eraserSizeLabel"></label>
 					<label style="color:blue;">-- Swap Colors (v)</label>
@@ -238,48 +232,6 @@
 					<label style="color:red;">-- Speedlines (shift+p)</label>
 				
             </div>
-            <div class="toolbox" id="toolbox" style="display:none;">
-               <label>Tools</label>
-               
- <!--              <button id="ToolBrushBtn" style="background-color:#a35293;">
-                  <span class="bl-icons-greasepencil"></span>
-                  <div class="tooltip"><b>Brush</b><br>Paint strokes on canvas<br>Shortcut: b</div>
-               </button>
-               <button id="ToolEraserBtn">
-                  <span class="bl-icons-meta_ellipsoid"></span>
-                  <div class="tooltip"><b>Eraser</b><br>Erase parts of drawing<br>Shortcut: e</div>
-
-               </button>
-               <button id="ToolFillBtn">
-                  <span class="bl-icons-image"></span>
-                  <div class="tooltip"><b>Fill</b><br>Fill area with color<br>Shortcut: f</div>
-               </button>
-               <button id="ToolLassoFillBtn">
-                  <span class="bl-icons-meta_data"></span>
-                  <div class="tooltip"><b>Lasso Fill</b><br>Lasso but fill<br>Shortcut: q</div>
-               </button>
-               <button id="ToolSelectBtn">
-                  <span class="bl-icons-select_set"></span>
-                  <div class="tooltip"><b>Box Select</b><br> <br>Shortcut: v</div>
-               </button>
-               <button id="cut">
-                  <span class="bl-icons-node_insert_on"></span>
-                  <div class="tooltip"><b>Cut</b><br>Cut selected<br>Shortcut: ctrl + x</div>
-               </button>
-               <button id="copy">
-                  <span class="bl-icons-duplicate"></span>
-                  <div class="tooltip"><b>Copy</b><br>Copy selected<br>Shortcut: ctrl + c</div>
-               </button>
-               <button id="paste">
-                  <span class="bl-icons-pastedown"></span>
-                  <div class="tooltip"><b>Paste</b><br>Paste into selected<br>Shortcut: ctrl + v</div>
-               </button>
-               <button id="delete">
-                  <span class="bl-icons-trash"></span>
-                  <div class="tooltip"><b>Delete</b><br>Delete Selected<br>Shortcut: x</div>
-               </button>
--->
-            </div>
             <div id="canvasContainer">
                <canvas id="backgroundColorCanvas" class="canvases"></canvas>
                <canvas id="backdropCanvas" class="canvases"></canvas>
@@ -293,18 +245,19 @@
          <p>Web App by Sadewoo/Spikysaurus - Icons are from Blender</p>
       </footer>
 -->
-     <!-- 1. External Dependencies (Load first) -->
+<!-- 1. External Dependencies (Load first) -->
 <script src="assets/js/jszip.min.js"></script>
 <script src="assets/js/FileSaver.min.js"></script>
 
 <!-- 2. Base UI & Variable Setup -->
+<script src="assets/main/js/Ui/speedlines.js"></script>
 <script src="assets/main/js/Ui/dragBar.js"></script>
 <script src="assets/main/js/xsheetResetVariables.js"></script>
 <script src="assets/main/js/xsheetUpdateVariables.js"></script>
 
 <!-- 3. Core Engine (Canvas & Assets) -->
 <script src="assets/main/js/Canvas/canvas.js"></script>
-<script src="assets/main/js/Tree/levelDrawings.js"></script>
+<script src="assets/main/js/Assets/levelAndDrawings.js"></script>
 
 <!-- 4. THE BRIDGES (Must be loaded BEFORE Rendering/Loading logic) -->
 <script src="assets/main/js/Bridges/xsheetCanvasBridge.js"></script>
@@ -323,12 +276,15 @@
 <script src="assets/main/js/File/newXsheet.js"></script>
 <script src="assets/main/js/File/loadXDTS.js"></script>
 <script src="assets/main/js/File/exportXDTS.js"></script>
-<script src="assets/main/js/Tree/saveLoad.js"></script>
-<script src="assets/main/js/Canvas/toolbox.js"></script>
+<script src="assets/main/js/Assets/saveLoadAssets.js"></script>
 
-<script src="assets/main/js/speedlines.js"></script>
-<script src="assets/main/js/colorPicker.js"></script>
-      
+<!-- 7. Tools that are on the Canvas -->
+<script src="assets/main/js/Canvas/toolbox.js"></script>
+<script src="assets/main/js/Canvas/colorPicker.js"></script>
+
+<!-- 7. UI Stuff -->
 <script src="assets/main/js/Ui/webpageStuff.js"></script>
+<script src="assets/main/js/Ui/tooltips.js"></script>
    </body>
 </html>
+

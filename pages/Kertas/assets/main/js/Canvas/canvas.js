@@ -164,7 +164,6 @@ function switchTool(tool, temporary = false) {
   }
 }
 
-// Add this helper function to canvas.js
 function getMousePos(e) {
   const rect = activeCanvas.getBoundingClientRect();
   
@@ -183,29 +182,37 @@ function getMousePos(e) {
 }
 
 
-// Keep this on the canvas to START the stroke
-activeCanvas.onpointerdown = e => {
-  if ((activeTool === "ToolBrush" || activeTool === "ToolEraser") && activeDrawing) {
+window.addEventListener("pointerdown", e => {
+  const isBrushOrEraser = activeTool === "ToolBrush" || activeTool === "ToolEraser";
+  
+  if (isBrushOrEraser && activeDrawing) {
     isDrawing = true;
-    const pos = getMousePos(e); // Use the helper from previous step
+    
+    // Calculate position relative to canvas even if clicked outside
+    const pos = getMousePos(e); 
     lastX = pos.x; 
     lastY = pos.y;
     
-    if (activeTool === "ToolBrush") circ(lastX, lastY, brush_size, window.colorPicker.activeColor, brush_opacity);
-    else if (activeTool === "ToolEraser") activeCanvasCtx.clearRect(lastX - eraser_size/2, lastY - eraser_size/2, eraser_size, eraser_size);
-    
-    strokePoints.push([lastX, lastY, lastX, lastY]);
+    // Only draw the initial dot if the pointer is actually inside the canvas bounds
+    const rect = activeCanvas.getBoundingClientRect();
+    if (e.clientX >= rect.left && e.clientX <= rect.right && 
+        e.clientY >= rect.top && e.clientY <= rect.bottom) {
+        
+      if (activeTool === "ToolBrush") {
+        circ(lastX, lastY, brush_size, window.colorPicker.activeColor, brush_opacity);
+      } else if (activeTool === "ToolEraser") {
+        activeCanvasCtx.clearRect(lastX - eraser_size/2, lastY - eraser_size/2, eraser_size, eraser_size);
+      }
+      strokePoints.push([lastX, lastY, lastX, lastY]);
+    }
   }
-};
+});
 
-// MOVE THIS TO WINDOW so it tracks even if the mouse leaves the canvas area
 window.addEventListener("pointermove", e => {
-if (activeTool === "ToolBrush" || activeTool === "ToolEraser") {
-  // Check if the mouse is currently over the container
-  const isOverCanvas = canvasContainer.contains(e.target);
   const isBrushOrEraser = activeTool === "ToolBrush" || activeTool === "ToolEraser";
+  const isOverCanvas = canvasContainer.contains(e.target);
 
-  // 1. Move and Toggle the Visual Cursor
+  // Handle Cursor Visibility
   if (isBrushOrEraser && isOverCanvas) {
     brushCursor.style.display = "block";
     brushCursor.style.left = `${e.clientX}px`;
@@ -215,32 +222,23 @@ if (activeTool === "ToolBrush" || activeTool === "ToolEraser") {
     brushCursor.style.display = "none";
   }
 
-  // 2. Existing Drawing Logic (remains window-bound for "edge" drawing)
+  // Handle Drawing Logic
   if (isDrawing && activeDrawing) {
     const pos = getMousePos(e);
+    // Note: getMousePos handles the scaling even if coords are negative or exceed canvas size
     strokePoints.push([lastX, lastY, pos.x, pos.y]);
     lastX = pos.x; 
     lastY = pos.y;
   }
-}
-  
 });
 
-// Hide cursor when leaving window
-window.addEventListener("pointerout", (e) => {
-  if (!e.relatedTarget) brushCursor.style.display = "none";
-});
-
-
-
-activeCanvas.onpointerup = () => {
+// Move pointerup to window to ensure it fires even if released outside
+window.addEventListener("pointerup", () => {
   if (isDrawing && activeDrawing) {
     isDrawing = false;
-    // Save state back to the object
     activeDrawing.data = activeCanvas.toDataURL("image/png");
   }
-};
-
+});
 
 
 function renderStrokes() {
@@ -376,23 +374,19 @@ let currentBackdropOpacity = 1;
 document.addEventListener("keydown", e => {
 	const isEditing = isUserEditing(e);
 	if (isEditing) return;
-  // 1. Updated tool switching
-  // Use Space for Pan
+  // Temporarily tool switching
   if (e.code === "Space") {
     e.preventDefault(); // Prevent page scroll
     switchTool("ToolPan", true);
-  } 
-  // Use Z for Zoom
+  }
   else if (e.key.toLowerCase() === "z") {
     switchTool("ToolZoom", true);
   } 
-  // Keep Ctrl for Eraser
   else if (e.ctrlKey) {
     switchTool("ToolEraser", true);
-    updateActiveToolLabel();
   }
-	
-  // 2. Prevent default and handle [ ] Brackets
+  
+  // Update Brush and Eraser Size Shortcuts
   if (e.key === "[" || e.key === "]") {
     updateCursorSize();
     if (e.ctrlKey || e.metaKey) e.preventDefault();
@@ -406,7 +400,15 @@ document.addEventListener("keydown", e => {
     }
   }
 
-  // 3. Brush Aliasing Toggle (Shortcut "a")
+  // Permanent tool Switch shortcuts
+	if (e.key.toLowerCase() === "e") {
+		switchTool("ToolEraser");
+	} 
+  
+  if (e.key.toLowerCase() === "w") {
+    switchTool("ToolBrush");
+  } 
+  
   if (event.key.toLowerCase() === "a") {
     brush_aliasing = !brush_aliasing;
     
@@ -416,7 +418,6 @@ document.addEventListener("keydown", e => {
   }
   
 
-  // 2. Only toggle if NOT editing and key is "B"
   if (event.key.toLowerCase() === "b") {
     event.preventDefault(); // Prevent browser "Bold" or search shortcuts
     drawBehind = !drawBehind;
@@ -462,18 +463,19 @@ const isEditing = isUserEditing(e);
     backdropCanvas.style.opacity = currentBackdropOpacity;
   }
 });
-
 document.addEventListener("keyup", e => {
-  // Switch back to Brush when the specific keys are released
+  // 2. Switch back to Brush ONLY if Control is released 
+  // and we are currently using the Eraser
+  if (e.key === "Control" && activeTool === "ToolEraser") {
+    switchTool("ToolBrush");
+  }
+
+  // Your existing space/zoom logic
   if (e.code === "Space" && activeTool === "ToolPan") {
     switchTool("ToolBrush");
   }
   if (e.key.toLowerCase() === "z" && activeTool === "ToolZoom") {
     switchTool("ToolBrush");
-  }
-  if (!e.ctrlKey && activeTool === "ToolEraser") {
-    switchTool("ToolBrush");
-    updateActiveToolLabel();
   }
 });
 
@@ -493,17 +495,11 @@ function updateCursorSize() {
   brushCursor.style.borderRadius = brush_aliasing ? "0" : "50%";
 }
 
-
-
-
-
-function updateActiveToolLabel() { const l = document.getElementById("activeToolLabel"); if (l) l.textContent = activeTool; }
 function updateBrushSizeLabel() { const l = document.getElementById("brushSizeLabel"); if (l) l.textContent = brush_size; }
 function updateEraserSizeLabel() { const l = document.getElementById("eraserSizeLabel"); if (l) l.textContent = eraser_size; }
 function updateAliasingLabel() { const l = document.getElementById("aliasingLabel"); if (l) l.textContent = brush_aliasing; }
 
 document.addEventListener("DOMContentLoaded", () => {
-  updateActiveToolLabel();
   updateBrushSizeLabel();
   drawBehindLabel.textContent = "false";
   updateEraserSizeLabel();
