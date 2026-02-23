@@ -1,3 +1,9 @@
+function isUserEditing(e) {
+  return e.target.tagName === "INPUT" || 
+         e.target.tagName === "TEXTAREA" || 
+         e.target.isContentEditable;
+}
+
 // Prevent Backspace from navigating back
 document.addEventListener('keydown', e => {
   if (e.key === 'Backspace' &&
@@ -31,7 +37,3 @@ document.addEventListener('selectstart', e => {
 });
 
 
-// Prevent scroll via CSS and key/mouse events
-//~ document.addEventListener("DOMContentLoaded", () => {
-  //~ document.documentElement.style.overflow = "hidden";
-//~ });

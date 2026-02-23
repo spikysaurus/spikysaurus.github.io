@@ -93,7 +93,10 @@
   // --- NEW: Key Listener ---
   window.addEventListener('keydown', (e) => {
     // Only swap if not typing in an input/textarea
-    if (e.key.toLowerCase() === 'v' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+    const isEditing = isUserEditing(e);
+	if (isEditing) return;
+	
+    if (e.key.toLowerCase() === 'v') {
       swapColors();
     }
   });

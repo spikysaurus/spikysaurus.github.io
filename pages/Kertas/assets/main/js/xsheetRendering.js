@@ -328,6 +328,8 @@ function stopAnimation() {
 
 
 document.addEventListener("keydown", e => {
+const isEditing = isUserEditing(e);
+	if (isEditing) return;
 	
   if (!window.activeTrack || !window.currentTT) return;
   

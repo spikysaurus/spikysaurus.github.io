@@ -268,25 +268,6 @@ function renderStrokes() {
 
 requestAnimationFrame(renderStrokes);
 
-const drawBehindLabel = document.getElementById("drawBehindLabel");
-
-window.addEventListener("keydown", (event) => {
-  // 1. Identify if the user is currently typing in an input, textarea, or our Level span
-  const isEditing = event.target.tagName === "INPUT" || 
-                    event.target.tagName === "TEXTAREA" || 
-                    event.target.isContentEditable;
-
-  // 2. Only toggle if NOT editing and key is "B"
-  if (!isEditing && event.key.toLowerCase() === "b") {
-    event.preventDefault(); // Prevent browser "Bold" or search shortcuts
-    
-    drawBehind = !drawBehind;
-    
-    // Update the label text
-    drawBehindLabel.textContent = drawBehind ? "true" : "false";
-  }
-});
-
 
 
 /// --- 1. GLOBAL STATE (Leave these uninitialized or at 0) ---
@@ -386,7 +367,15 @@ document.addEventListener("mouseup", () => {
 
 
 // --- Shortcuts & Utility ---
+const drawBehindLabel = document.getElementById("drawBehindLabel");
+const imageRenderingLabel = document.getElementById("imageRenderingLabel");
+pixelatedCanvas = false;
+// Initial opacity (range 0 to 1)
+let currentBackdropOpacity = 1;
+
 document.addEventListener("keydown", e => {
+	const isEditing = isUserEditing(e);
+	if (isEditing) return;
   // 1. Updated tool switching
   // Use Space for Pan
   if (e.code === "Space") {
@@ -418,15 +407,61 @@ document.addEventListener("keydown", e => {
   }
 
   // 3. Brush Aliasing Toggle (Shortcut "a")
-  if (e.key.toLowerCase() === 'a' && !['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+  if (event.key.toLowerCase() === "a") {
     brush_aliasing = !brush_aliasing;
     
     const aliasingToggle = document.getElementById('aliasingToggle');
     if (aliasingToggle) aliasingToggle.checked = brush_aliasing;
     updateAliasingLabel();
   }
+  
+
+  // 2. Only toggle if NOT editing and key is "B"
+  if (event.key.toLowerCase() === "b") {
+    event.preventDefault(); // Prevent browser "Bold" or search shortcuts
+    drawBehind = !drawBehind;
+    // Update the label text
+    drawBehindLabel.textContent = drawBehind ? "true" : "false";
+  }
+
+  // Toggle Rendering Shortcut (Key: 'R')
+  if (e.key.toLowerCase() === 'r') {
+    // Loop through the live collection of canvases
+    for (let i = 0; i < canvases.length; i++) {
+      canvases[i].classList.toggle('pixelated-rendering');
+    }
+    pixelatedCanvas = !pixelatedCanvas;
+    if (pixelatedCanvas){imageRenderingLabel.textContent = true}
+	else{imageRenderingLabel.textContent = false}
+  }
+  
 });
 
+
+window.addEventListener('keydown', (e) => {
+const isEditing = isUserEditing(e);
+	if (isEditing) return;
+  // Increase opacity by 10% 
+  if (e.key === '}') {
+    currentBackdropOpacity = Math.min(1, currentBackdropOpacity + 0.1);
+    backdropCanvas.style.opacity = currentBackdropOpacity;
+  } 
+  // Decrease opacity by 10%
+  else if (e.key === '{') {
+    currentBackdropOpacity = Math.max(0, currentBackdropOpacity - 0.1);
+    backdropCanvas.style.opacity = currentBackdropOpacity;
+  } 
+  // Reset opacity to 100%
+  else if (e.key === '\\') {
+    currentBackdropOpacity = 1;
+    backdropCanvas.style.opacity = currentBackdropOpacity;
+  }
+  // opacity 0%
+  else if (e.key === '|') {
+    currentBackdropOpacity = 0;
+    backdropCanvas.style.opacity = currentBackdropOpacity;
+  }
+});
 
 document.addEventListener("keyup", e => {
   // Switch back to Brush when the specific keys are released
@@ -459,46 +494,7 @@ function updateCursorSize() {
 }
 
 
-pixelatedCanvas = false;
-const imageRenderingLabel = document.getElementById("imageRenderingLabel");
-document.addEventListener("keydown", e => {
-  // Toggle Rendering Shortcut (Key: 'R')
-  if (e.key.toLowerCase() === 'r' && !['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
-    // Loop through the live collection of canvases
-    for (let i = 0; i < canvases.length; i++) {
-      canvases[i].classList.toggle('pixelated-rendering');
-    }
-    pixelatedCanvas = !pixelatedCanvas;
-    if (pixelatedCanvas){imageRenderingLabel.textContent = true}
-	else{imageRenderingLabel.textContent = false}
-  }
-});
 
-// Initial opacity (range 0 to 1)
-let currentBackdropOpacity = 1;
-
-window.addEventListener('keydown', (event) => {
-  // Increase opacity by 10% 
-  if (event.key === '}') {
-    currentBackdropOpacity = Math.min(1, currentBackdropOpacity + 0.1);
-    backdropCanvas.style.opacity = currentBackdropOpacity;
-  } 
-  // Decrease opacity by 10%
-  else if (event.key === '{') {
-    currentBackdropOpacity = Math.max(0, currentBackdropOpacity - 0.1);
-    backdropCanvas.style.opacity = currentBackdropOpacity;
-  } 
-  // Reset opacity to 100%
-  else if (event.key === '\\') {
-    currentBackdropOpacity = 1;
-    backdropCanvas.style.opacity = currentBackdropOpacity;
-  }
-  // opacity 0%
-  else if (event.key === '|') {
-    currentBackdropOpacity = 0;
-    backdropCanvas.style.opacity = currentBackdropOpacity;
-  }
-});
 
 
 function updateActiveToolLabel() { const l = document.getElementById("activeToolLabel"); if (l) l.textContent = activeTool; }
