@@ -1,0 +1,65 @@
+/* 1. CONTAINER SETUP */
+#canvasContainer {
+  width: 70%;
+  height: 100%;
+  position: fixed;
+  background-color: lightgray;
+  overflow: auto; 
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+}
+
+/* 2. SHARED LAYER STYLES */
+#canvas, 
+#backdropCanvas, 
+#backgroundColorCanvas, 
+.canvases,
+.track-layer {
+  position: absolute;
+  width: auto; 
+  height: auto;
+  max-width: none; 
+  background-color: transparent !important;
+  pointer-events: none; 
+  image-rendering: auto; 
+}
+
+.pixelated-rendering {
+  image-rendering: pixelated !important;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+#canvasContainer::before {
+  content: "";
+  min-width: 1280px;
+  min-height: 720px;
+  visibility: hidden;
+}
+
+/* 4. THE BOTTOM-MOST LAYER */
+#backgroundColorCanvas {
+  background-color: white !important;
+  z-index: -1;
+}
+
+/* 5. THE ACTIVE DRAWING LAYER */
+#canvas { 
+  z-index: 10;
+  cursor: crosshair; 
+  pointer-events: auto;
+}
+
+
+#brushCursor {
+  position: fixed;
+  pointer-events: none; /* Crucial: clicks must pass through to canvas */
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5); /* Inverted outline for visibility on all colors */
+  border-radius: 50%;
+  display: none; /* Hidden by default */
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  image-rendering: pixelated; 
+}

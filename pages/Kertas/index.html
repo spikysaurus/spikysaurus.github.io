@@ -1,199 +1,326 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
+   <head>
+      <meta charset="UTF-8">
+      <title>Kertas (2026-02-23)</title>
+      <meta property="og:title" content="Zettai Absolute" />
+      <meta property="og:image" content="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreicazv32xvsf4lhsfhjzpej6k3n3t23ppjjaxcalnquewonbw6dpq4@jpeg" />
+      <meta property="og:description" content="A simple animation web app." />
+      <link rel="icon" href="assets/images/icon.png" type="image/x-icon">
+      <link rel="stylesheet" href="assets/bl-icons/bl-icons.css">
+      <link rel="stylesheet" href="assets/main/css/area.css">
+      <link rel="stylesheet" href="assets/main/css/toolbox.css">
+      <link rel="stylesheet" href="assets/main/css/xsheet.css">
+      <link rel="stylesheet" href="assets/main/css/tree.css">
+      <link rel="stylesheet" href="assets/main/css/canvas.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <style>
+         * { box-sizing: border-box; }
+      </style>
+   </head>
+   <body>
+	   <div id="brushCursor"></div>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Kertas</title>
-    <link rel="stylesheet" href="assets/main/style.css">
-    <link rel="stylesheet" href="assets/bl-icons/bl-icons.css">
-    <link rel="stylesheet" href="assets/color-picker/ColorPicker.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-</head>
-
-<body>
-
-   
-    <div id="content">
-     <div class="nav-toggle">
-        <button id="navButton"><span class="bl-icons-snap_vertex"></span></button>
-        <button id="preferencesBtn"><span class="bl-icons-preferences"></span></button>
-        <button id="minimalUI"><span class="bl-icons-statusbar"></span></button>
-        <button id="undoBtn"><span class="bl-icons-loop_back"></span></button>
-        <button id="redoBtn"><span class="bl-icons-loop_forwards"></span></button>
-        
-        
-            
-    </div>
-    <div class="overlay-controls" id="navOverlays" style="display:none;">
-    		<div class="nav-tools">
-        <div class="group">
-            <button id="export"><span class="bl-icons-file_tick"></span></button>
-            <button id="import"><span class="bl-icons-file_folder"></span></button>
-        </div>
-        <div class="group">
-            
-            <button id="ToolBrushBtn" style="background-color:yellow;"><span class="bl-icons-greasepencil"></span></button>
-            <button id="ToolEraserBtn"><span class="bl-icons-meta_ellipsoid"></span></button>
-            <button id="aliased"><span class="bl-icons-aliased"></span></button>
-            <button id="ToolFillBtn"><span class="bl-icons-image"></span></button>
-            <button id="ToolLassoFillBtn"><span class="bl-icons-meta_data"></span></button>
-            
-        </div>
-        <div class="group">
-            <button id="clr"><span class="bl-icons-file_hidden"></span></button>
-            <button id="ToolSelectBtn"><span class="bl-icons-select_set"></span></button>
-            <button id="cut"><span class="bl-icons-node_insert_on"></span></button>
-            <button id="copy"><span class="bl-icons-duplicate"></span></button>
-            <button id="paste"><span class="bl-icons-pastedown"></span></button>
-            <button id="delete"><span class="bl-icons-trash"></span></button>
-        </div>
-        <div class="group" style="display:none;">
-            <button id="ToolPanBtn"><span class="bl-icons-view_pan"></span></button>
-            <button id="zoomIn"><span class="bl-icons-zoom_in"></span></button>
-            <button id="zoomOut"><span class="bl-icons-zoom_out"></span></button>
-<!--            <button id="fitScreen"><span class="bl-icons-fullscreen_enter"></span></button>-->
-        </div>
-        </div>
-        <div class="group" style="margin-top:10px;">
-            <div id="panOverlay" class="overlay-btn"><span class="bl-icons-view_pan"></span></div>
-            <div id="zoomOverlay" class="overlay-btn"><span class="bl-icons-viewzoom"></span></div>
-            <div id="fitScreen" class="overlay-btn"><span class="bl-icons-fullscreen_enter"></span></div>
-        </div>
-    </div>
-        <div id="settings">
-            <input type="checkbox" id="pressureSizeToggle" unchecked> Brush Size Pressure<br>
-            <input type="checkbox" id="pressureOpacityToggle" unchecked> Brush Opacity Pressure
-            <div class="side-by-side">
-                Size
-                <input id="canvasWidth" type="number" value="640">
-                <input id="canvasHeight" type="number" value="360">
-                <br>
+      <div class="page-container">
+      <div class="drag-container">
+         <div class="area-xsheet" id="drag-left-1" >
+            <div id="dropZone">
+               <div class="tab" >
+                  <button class="tablinks defaultOpen" onclick="openTab(event, 'File')">File</button>
+                  <button class="tablinks" onclick="openTab(event, 'Track')">Track</button>
+                  <button class="tablinks" onclick="openTab(event, 'Time')">Time</button>
+                  <button class="tablinks" onclick="openTab(event, 'Symbols')">Symbols</button>
+                  <button class="tablinks" onclick="openTab(event, 'tabProperties')">Properties</button>
+                  <button class="tablinks" onclick="openTab(event, 'Debug')">Debug</button>
+               </div>
+               <div id="File" class="tabcontent">
+                  <div class="panel" >
+                     <button id="loadXDTSbtn">Load Xsheet</button>
+                     <button id="newTimesheetBtn">New Xsheet</button>
+                     <button id="exportBtn" style="display:none">Save Xsheet</button>
+                     <div class="info-table">
+                        <div class="info-row1">
+                           <label for="newDuration">New Xsheet Duration (in Frames) </label>
+                           <input type="number" id="newDuration" min="1" value="24">
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div id="Track" class="tabcontent">
+                  <div class="panel" >
+                     <button id="addTrackBtn">Add Track</button>
+                     <button id="removeTrackBtn">Remove Last Track</button>
+                     <button id="autoRenameBtn">Auto-Rename Tracks</button>
+                     <div class="info-table">
+                        <div class="info-row1">
+                           <label for="reorderInput">Track to reorder</label>
+                           <input type="text" id="reorderInput" value="A">
+                           <button id="reorderLeftBtn">Left</button>
+                           <button id="reorderRightBtn">Right</button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div id="Time" class="tabcontent">
+                  <div class="panel">
+                     <div class="info-table">
+                        <div class="info-row1">
+                           <label for="adjustDuration">Adjust Duration</label>
+                           <input type="number" id="adjustDuration" value="1" min="1">
+                           <button id="increaseDurationBtn">Increase</button>
+                           <button id="decreaseDurationBtn">Decrease</button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div id="Symbols" class="tabcontent">
+                  <div class="panel">
+                     <div class="info-table">
+                        <div class="info-row1">
+                           <label for="symNull">Empty Cell</label>
+                           <input type="text" id="symNull" value="x">
+                           <button onclick="navigator.clipboard.writeText(symNull.value)">Copy</button>
+                        </div>
+                        <div class="info-row1">
+                           <label for="symTick1">Inbetween</label>
+                           <input type="text" id="symTick1" value="○">
+                           <button onclick="navigator.clipboard.writeText(symTick1.value)">Copy</button>
+                        </div>
+                        <div class="info-row1">
+                           <label for="symTick2" >Reverse Sheet</label>
+                           <input type="text" id="symTick2" value="●">
+                           <button onclick="navigator.clipboard.writeText(symTick2.value)">Copy</button>
+                        </div>
+                        <div class="info-row1">
+                           <label for="symHyphen">Hyphen</label>
+                           <input type="text" id="symHyphen" value="｜">
+                           <button onclick="navigator.clipboard.writeText(symHyphen.value)">Copy</button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+             <div id="tabProperties" class="tabcontent">
+                  <div class="panel">
+                     <div class="info-table">
+						 
+                        <div class="info-row1">
+                           <label for="canvasWidth">Canvas Width</label>
+                           <input type="number" id="canvasWidthInput" value="1280" min="1">
+                         </div>
+                         <div class="info-row1">
+                           <label for="canvasHeight">Canvas Height</label>
+                           <input type="number" id="canvasHeightInput" value="720" min="1">
+                        </div>
+                        
+                     </div>
+                     <div style="text-align:right;">
+						 <button id="canvasRefreshBtn">Refresh Values</button>
+                      <button id="canvasResizeBtn">Resize Canvas</button>
+<!--
+                      <button id="" disabled>Expand Canvas</button>
+-->
+                  </div>
+                  </div>
+               </div>
+            <div id="Debug" class="tabcontent">
+               <div class="panel">
+                  [Xsheet]
+                  <br><label id="activeTrackLabel" style="color:yellow;">No active Track</label>
+                  <br><label id="activeCelLabel" style="color:yellow;" >No active Cel</label>
+                  <br>
+                  [Tree] 
+                  <br><label id="activeLevelLabel">No active Level</label>
+                  <br><label id="activeDrawingLabel">No active Drawing</label>
+               </div>
             </div>
-            <div class="anchor-controls">
-                <button id="resizeTop">Top</button>
-                <button id="resizeLeft">Left</button>
-                <button id="resizeCenter">Center</button>
-                <button id="resizeRight">Right</button>
-                <button id="resizeBottom">Bottom</button>
+            <input type="file" id="fileInput" accept=".xdts,.json,.txt" style="display:none">
+            <div class="paper" id="paper">
+               <div class="header" >
+                  <div class="info-table panel">
+                     <div class="info-row collapseHeaderArea">
+                        <label for="titleInput">Title</label>
+                        <input id="titleInput" type="text">
+                     </div>
+                     <div class="info-row collapseHeaderArea">
+                        <label for="sceneInput">Scene</label>
+                        <input id="sceneInput" type="number">
+                     </div>
+                     <div class="info-row collapseHeaderArea">
+                        <label for="cutInput">Cut</label>
+                        <input id="cutInput" type="number">
+                     </div>
+                     <div class="info-row collapseHeaderArea">
+                        <label for="nameInput">Name</label>
+                        <input id="nameInput" type="text">
+                     </div>
+                     <div class="info-row collapseHeaderArea">
+                        <label for="memoInput">Memo</label>
+                        <textarea id="memoInput">Memo</textarea>
+                     </div>
+                     <div class="info-row">
+                        <label for="durationLabel">Time</label>
+                        <span id="durationLabel">0+0 | 00</span>
+                        <button id="collapseHeaderBtn"><span class="bl-icons-align_top"></span></button>
+                     </div>
+                  </div>
+               </div>
+               <div id="xsheetContainer">
+                  <div id="tableContainer" ></div>
+               </div>
+               </div>
             </div>
-            <button id="applySize">Resize Center(Stretch)</button>
-            <input id="url" type="text" value="" placeholder="Image URL">
-            <button id="load">Load BG</button>
-            <button onclick="window.open('https://spikysaurus.github.io', '_blank');" id="home"><span class="bl-icons-url"></span>Home</button>
-            <button onclick="window.open('https://traditionalanimatorindonesia.github.io/pages/Templates/index.html', '_blank');" id="templates"><span class="bl-icons-url"></span>Templates</button>
-            <button id="checkerboardBtn"><span class="bl-icons-texture"></span></button>
-            <div class="side-by-side">
-                <label for="GifDelay">FPS</label>
-                <input id="GifDelay" type="number" value="24">
-                <button id="exportGif">
-                    Export GIF
-                </button>
-            </div>
-            <div class="side-by-side">
-                <button id="pdf">Export PDF</button>
-                <button id="save">Snapshot PNG</button>
-                <button id="importSequence">Import Sequence</button>
-            </div>
-        </div>
-        <!-- Toggle button -->
-        
-        <div id="sliders" class="sliders">
-				<div class="control">
-					<button id="ColorPickerBtn"><span class="bl-icons-material"></span></button>
-					<input id="col" type="color" value="#000000" style="">
-					<button id="ToolLassoFillToggle" style="display:none;"><span class="bl-icons-key_ring_filled"></button>
-				</div>
-				
-				<div id="BrushStuff" class="control">
-				
-<button id="BrushEraserToggle"><span class="bl-icons-greasepencil"></span></button>	  
-<button class="drag-btn" data-min="1" data-max="200" data-step="1" data-px-per-step="5">
-<span class="value-display">3</span>
-<input id="brush_size" class="value-input" type="number" min="1" max="200" step="5" value="3" />
-</button>
-<button class="drag-btn" data-min="0" data-max="1" data-step="0.01" data-px-per-step="5">
-<span class="value-display">1</span>
-<input id="brush_opacity" class="value-input" type="number" min="0" max="1" step="0.01" value="1" /></button>
-                
-           	 </div>
-           	 
-        </div>
-<div id="timeline-wrapper">
-		<div class="timeline-background"></div>
-	  <div id="timeline_v2"></div>
-	  
-	  <div id="panel-bottom" class="panel-bottom">
-					<div class="group">
-
-				    <button id="onionBtn"><span class="bl-icons-onionskin_on"></span></button>
-				    <button id="swapPrev"><span class="bl-icons-area_join_left"></span></button>
-				    <button id="swapNext"><span class="bl-icons-area_join"></span></button>
-				    <button id="deleteFrame"><span class="bl-icons-trash"></span></button>
-				    <button id="duplicateBtn"><span class="bl-icons-duplicate"></span></button>
-				    <button id="add"><span class="bl-icons-file_new"></span></button>
-				    <button id="playBtn"><span id="playBtn_icon" class="bl-icons-play"></span></button>
-				    <button id="prevBtn"><span class="bl-icons-frame_prev"></span></button>
-				    <button id="nextBtn"><span class="bl-icons-frame_next"></span></button>
-					    
+         </div>
+         <div class="dragbar" id="dragbar-1"></div>
+         <div class="area-tree" id="drag-middle">
+			 <div id="dropZoneTree">
+				 <div class="tab" >
+                  <button class="tablinks defaultOpen" onclick="openTab(event, 'tabFileTree')">File</button>
+                  <button class="tablinks" onclick="openTab(event, 'tabLevelTree')">Level</button>
+                  <button class="tablinks" onclick="openTab(event, 'tabDrawingTree')">Drawing</button>
+               </div>
+               <div class="panel" >
+				   
+                  <div class="controls">
+					 <div id="tabFileTree" class="tabcontent">
+						 <button id="saveZipBtn">Save Assets</button>
+						 <button id="loadZipBtn">Load Assets</button>
+						 <input type="file" id="zipInput" accept=".zip" style="display:none">
+						 <button id="loadBackdropBtn">Import Backdrop</button>
+						 <input type="file" id="backdropInput" accept="image/*" style="display:none">
 					</div>
-			  </div>
-</div>
+                     
+                     <div id="tabLevelTree" class="tabcontent">
+						 <button id="newLevelBtn">New Level</button>
+						 <button id="deleteLevelBtn">Delete Level</button>
+						 <button id="arrangeLevelsBtn">Arrange Levels</button>
+					</div>
+					
+					<div id="tabDrawingTree" class="tabcontent">
+						 <button id="newDrawingBtn">New Drawing (backtick)</button>
+						 <button id="deleteDrawingBtn">Delete Drawing</button>
 
-			<div id="timeline_v2"></div>
-			
-			
-        <div id="stage">
-            <div id="stack">
-                <canvas id="checkerboard"></canvas>
-                <canvas id="background"></canvas>
-                <canvas id="layer0"></canvas>
-<!--                <canvas id="layer1"></canvas>-->
-<!--                <canvas id="layer2"></canvas>-->
-                <canvas id="overlay"></canvas>
+						 <button id="prevDrawingBtn">Prev Drawing (alt+q)</button>
+						 <button id="nextDrawingBtn">Next Drawing (alt+w)</button>
+                     </div>
+                     
+                  </div>
+               </div>
+            <div id="levelsTreeContainer">
+				<div id="levelsTree"></div>
             </div>
-        </div>
-        
-        <div class="picker" id="paintPicker">
-            <div class="swatches">
-                <div>
-                    <!--        <div class="small">Preview</div>-->
-                    <div class="swatch" id="curSwatch"></div>
-                </div>
-                <div>
-                    <!--        <div class="small">Current</div>-->
-                    <!--        <div class="swatch" id="prevSwatch"></div>-->
-                    <button id="setPrev" style="width:auto;">Set Color</button>
-                </div>
             </div>
-            <div class="sv-wrap" id="svWrap">
-                <canvas id="sv"></canvas>
-                <div class="sv-thumb" id="svThumb"></div>
+         </div>
+         <div class="dragbar" id="dragbar-2"></div>
+         <div class="area-canvas" id="drag-right">
+            <div class="status">
+					<label style="color:blue;">-- Erase (hold ctrl)</label>
+					<label><b>-- Active Tool : </b></label><label id="activeToolLabel"></label>
+					<label><b>-- Brush Size (bracket) : </b></label><label id="brushSizeLabel"></label>
+					<label><b>-- Eraser Size (ctrl+bracket) : </b></label><label id="eraserSizeLabel"></label>
+					<label><b>-- Brush Aliasing (a) : </b></label><label id="aliasingLabel"></label>
+					<label><b>-- Draw Behind (b) : </b></label><label id="drawBehindLabel"></label>
+					<label><b>-- Pixelated Canvas (r) : </b></label><label id="imageRenderingLabel"></label>
+					<label style="color:blue;">-- Pan (hold space)</label>
+					<label style="color:blue;">-- Zoom (hold z)</label>
+					<label style="color:blue;">-- Backdrop Opacity (shift+bracket)</label>
+					<label style="color:blue;">-- Reset Backdrop Opacity (\)</label>
+					<label style="color:blue;">-- Backdrop Opacity to Zero (shift+\)</label>
+					<label style="color:red;">-- Play/Pause (p) 24fps Only</label>
+					<label style="color:red;">-- Speedlines (shift+p)</label>
+				
             </div>
-            <div class="right">
-                <div class="hue-wrap" id="hueWrap">
-                    <canvas id="hue"></canvas>
-                    <div class="hue-thumb" id="hueThumb"></div>
-                </div>
-                <div class="io">
-                    <div class="field">
-                        <input id="hex" placeholder="#RRGGBB" />
-                        <input style="display:none;" id="rgb" placeholder="r, g, b" />
-                    </div>
-                    <div style="display:none;" class="field">
-                        <span class="small" id="readout"></span>
-                    </div>
-                </div>
-                <div class="chips" id="chips"></div>
-            </div>
-        </div>
-    </div>
-            <script src="assets/main/script.js"></script>
-            <script src="assets/color-picker/ColorPicker.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-            <script src="assets/gif-js/gif.js"></script>
-            <script src="assets/js/jszip.min.js"></script>
-				<script src="assets/js/FileSaver.min.js"></script>
+            <div class="toolbox" id="toolbox" style="display:none;">
+               <label>Tools</label>
+               
+ <!--              <button id="ToolBrushBtn" style="background-color:#a35293;">
+                  <span class="bl-icons-greasepencil"></span>
+                  <div class="tooltip"><b>Brush</b><br>Paint strokes on canvas<br>Shortcut: b</div>
+               </button>
+               <button id="ToolEraserBtn">
+                  <span class="bl-icons-meta_ellipsoid"></span>
+                  <div class="tooltip"><b>Eraser</b><br>Erase parts of drawing<br>Shortcut: e</div>
 
-</body>
+               </button>
+               <button id="ToolFillBtn">
+                  <span class="bl-icons-image"></span>
+                  <div class="tooltip"><b>Fill</b><br>Fill area with color<br>Shortcut: f</div>
+               </button>
+               <button id="ToolLassoFillBtn">
+                  <span class="bl-icons-meta_data"></span>
+                  <div class="tooltip"><b>Lasso Fill</b><br>Lasso but fill<br>Shortcut: q</div>
+               </button>
+               <button id="ToolSelectBtn">
+                  <span class="bl-icons-select_set"></span>
+                  <div class="tooltip"><b>Box Select</b><br> <br>Shortcut: v</div>
+               </button>
+               <button id="cut">
+                  <span class="bl-icons-node_insert_on"></span>
+                  <div class="tooltip"><b>Cut</b><br>Cut selected<br>Shortcut: ctrl + x</div>
+               </button>
+               <button id="copy">
+                  <span class="bl-icons-duplicate"></span>
+                  <div class="tooltip"><b>Copy</b><br>Copy selected<br>Shortcut: ctrl + c</div>
+               </button>
+               <button id="paste">
+                  <span class="bl-icons-pastedown"></span>
+                  <div class="tooltip"><b>Paste</b><br>Paste into selected<br>Shortcut: ctrl + v</div>
+               </button>
+               <button id="delete">
+                  <span class="bl-icons-trash"></span>
+                  <div class="tooltip"><b>Delete</b><br>Delete Selected<br>Shortcut: x</div>
+               </button>
+-->
+            </div>
+            <div id="canvasContainer">
+               <canvas id="backgroundColorCanvas" class="canvases"></canvas>
+               <canvas id="backdropCanvas" class="canvases"></canvas>
+               
+               <canvas id="canvas"  class="canvases"></canvas>
+            </div>
+         </div>
+      </div>
+<!--
+      <footer class="global-footer">
+         <p>Web App by Sadewoo/Spikysaurus - Icons are from Blender</p>
+      </footer>
+-->
+     <!-- 1. External Dependencies (Load first) -->
+<script src="assets/js/jszip.min.js"></script>
+<script src="assets/js/FileSaver.min.js"></script>
 
+<!-- 2. Base UI & Variable Setup -->
+<script src="assets/main/js/Ui/webpageStuff.js"></script>
+<script src="assets/main/js/Ui/dragBar.js"></script>
+<script src="assets/main/js/xsheetResetVariables.js"></script>
+<script src="assets/main/js/xsheetUpdateVariables.js"></script>
+
+<!-- 3. Core Engine (Canvas & Assets) -->
+<script src="assets/main/js/Canvas/canvas.js"></script>
+<script src="assets/main/js/Tree/levelDrawings.js"></script>
+
+<!-- 4. THE BRIDGES (Must be loaded BEFORE Rendering/Loading logic) -->
+<script src="assets/main/js/Bridges/xsheetCanvasBridge.js"></script>
+<script src="assets/main/js/Bridges/xsheetLevelDrawingBridge.js"></script>
+
+<!-- 5. Xsheet Logic & Symbols -->
+<script src="assets/main/js/Ui/xsheetCellUi.js"></script>
+<script src="assets/main/js/Symbols/xsheetSymbols.js"></script>
+<script src="assets/main/js/Table/adjustDuration.js"></script>
+<script src="assets/main/js/Track/editTrack.js"></script>
+
+<!-- 6. Rendering & File Operations (Load last so they can see the Bridges) -->
+<script src="assets/main/js/xsheetRendering.js"></script>
+<script src="assets/main/js/xsheetTabs.js"></script>
+<script src="assets/main/js/xsheetCollapseHeader.js"></script>
+<script src="assets/main/js/File/newXsheet.js"></script>
+<script src="assets/main/js/File/loadXDTS.js"></script>
+<script src="assets/main/js/File/exportXDTS.js"></script>
+<script src="assets/main/js/Tree/saveLoad.js"></script>
+<script src="assets/main/js/Canvas/toolbox.js"></script>
+
+<script src="assets/main/js/speedlines.js"></script>
+<script src="assets/main/js/colorPicker.js"></script>
+      
+      
+   </body>
 </html>

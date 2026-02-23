@@ -1,0 +1,117 @@
+#durationLabel{color:yellow;}
+
+#dropZoneTree.dragover {
+	opacity:0.5;
+}
+
+.level {
+  padding: 0px;
+  width:100%;
+  color: white;
+  background: #252525;
+  border-bottom:3px solid black;
+}
+
+.drawing {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.level span {
+  flex: 2;
+}
+
+.level button {
+  color: white;
+  width: 20px;
+  height: 20px;
+  background: #4c4c4c;
+  border: none;
+  cursor: pointer;
+  font-size: 10pt;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.level button span{
+position:relative;
+left:5px;
+}
+
+.level button:hover {
+  background: #a35293;
+}
+
+.level-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.level-label {
+font-weight:bold; cursor:pointer;
+
+background-color: #1c1c1c;
+  border: 1px solid #5f5f5f;
+  appearance: textfield;
+  font-size: 10pt;
+  text-align: left;
+  color: white;
+  
+  }
+.level-label.active { color:#4073a3 ;}
+.toggle-icon { margin-right:5px; cursor:pointer; text-align:center; }
+
+
+.drawing {
+  display: flex;
+  align-items: center;
+  margin: 2px 0;
+}
+
+.drawing span {
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.drawing input {
+  flex: 2; /* input takes more space */
+  min-width: 0; /* prevents overflow */
+  background-color: #1c1c1c;
+  border: 1px solid #5f5f5f;
+  appearance: textfield;
+  font-size: 10pt;
+  text-align: left;
+  color: white;
+}
+
+.drawing input.active {
+  color: #007acc;
+}
+
+.drawing button {
+  flex: 1; /* button smaller than input */
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#activeLevelLabel, #activedrawingLabel { margin-bottom:5px;}
+#activeLevelLabel { color:yellow }
+#activeDrawingLabel { color:yellow }
+
+#levelsTreeContainer {
+  display: flex;
+  height: 800px;
+}
+
+#levelsTree {
+width:100%;
+  display: flex;
+  flex-direction: column;   /* stack items vertically */
+  align-items: flex-start;  /* align items to the left */
+  overflow-y: auto;         /* scroll vertically */
+  flex-wrap: nowrap;        /* prevent wrapping into extra columns */
+}
+
+
