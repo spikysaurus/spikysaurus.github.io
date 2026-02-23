@@ -51,16 +51,22 @@ left:5px;
 
 .level-label {
 font-weight:bold; cursor:pointer;
+font-size: 10pt;
 
-background-color: #1c1c1c;
-  border: 1px solid #5f5f5f;
-  appearance: textfield;
-  font-size: 10pt;
-  text-align: left;
-  color: white;
+
   
   }
 .level-label.active { color:#4073a3 ;}
+
+.level-label[contenteditable="true"] {
+    
+  background-color: #1c1c1c;
+  appearance: textfield;
+  text-align: left;
+  color: white;
+}
+
+
 .toggle-icon { margin-right:5px; cursor:pointer; text-align:center; }
 
 

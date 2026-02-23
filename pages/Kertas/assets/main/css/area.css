@@ -41,3 +41,8 @@ html, body {
 position:relative;
     z-index:999;
 }
+
+.noteText {
+color:orange;
+font-style: italic;
+}

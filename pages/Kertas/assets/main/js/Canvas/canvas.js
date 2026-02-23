@@ -269,22 +269,24 @@ function renderStrokes() {
 requestAnimationFrame(renderStrokes);
 
 const drawBehindLabel = document.getElementById("drawBehindLabel");
-window.addEventListener("keydown", (event) => {
-  // Check if user is typing in a text field to avoid accidental toggling
-  const isTyping = event.target.tagName === "INPUT" || event.target.tagName === "TEXTAREA";
 
-  if (!isTyping && event.key.toLowerCase() === "b") {
-    event.preventDefault(); // Stop browser defaults (like "Bold" shortcuts)
-    drawBehind = !drawBehind;
-    if(drawBehind){
-		drawBehindLabel.textContent = "true";
-		}
-	else{
-		drawBehindLabel.textContent = "false";
-		}
+window.addEventListener("keydown", (event) => {
+  // 1. Identify if the user is currently typing in an input, textarea, or our Level span
+  const isEditing = event.target.tagName === "INPUT" || 
+                    event.target.tagName === "TEXTAREA" || 
+                    event.target.isContentEditable;
+
+  // 2. Only toggle if NOT editing and key is "B"
+  if (!isEditing && event.key.toLowerCase() === "b") {
+    event.preventDefault(); // Prevent browser "Bold" or search shortcuts
     
+    drawBehind = !drawBehind;
+    
+    // Update the label text
+    drawBehindLabel.textContent = drawBehind ? "true" : "false";
   }
 });
+
 
 
 /// --- 1. GLOBAL STATE (Leave these uninitialized or at 0) ---

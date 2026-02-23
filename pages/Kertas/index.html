@@ -28,7 +28,7 @@
                <div class="tab" >
                   <button class="tablinks defaultOpen" onclick="openTab(event, 'File')">File</button>
                   <button class="tablinks" onclick="openTab(event, 'Track')">Track</button>
-                  <button class="tablinks" onclick="openTab(event, 'Time')">Time</button>
+                  <button class="tablinks" onclick="openTab(event, 'Cell')">Cell</button>
                   <button class="tablinks" onclick="openTab(event, 'Symbols')">Symbols</button>
                   <button class="tablinks" onclick="openTab(event, 'tabProperties')">Properties</button>
                   <button class="tablinks" onclick="openTab(event, 'Debug')">Debug</button>
@@ -61,9 +61,12 @@
                      </div>
                   </div>
                </div>
-               <div id="Time" class="tabcontent">
+               <div id="Cell" class="tabcontent">
                   <div class="panel">
                      <div class="info-table">
+						 <div>
+							 <label class="noteText">!! ctrl+LMB on the cell to edit their values</label>
+						</div>
                         <div class="info-row1">
                            <label for="adjustDuration">Adjust Duration</label>
                            <input type="number" id="adjustDuration" value="1" min="1">
@@ -190,9 +193,14 @@
 					</div>
                      
                      <div id="tabLevelTree" class="tabcontent">
+						
+						<div>
 						 <button id="newLevelBtn">New Level</button>
 						 <button id="deleteLevelBtn">Delete Level</button>
 						 <button id="arrangeLevelsBtn">Arrange Levels</button>
+						 </div>
+						 
+						 <div> <label class="noteText">!! Rename levels by ctrl+LMB</label></div>
 					</div>
 					
 					<div id="tabDrawingTree" class="tabcontent">

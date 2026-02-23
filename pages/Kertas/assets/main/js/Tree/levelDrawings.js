@@ -52,68 +52,161 @@ function addDrawingElement(level, c) {
   input.value = c.name.replace(/\.png$/, "");
   input.onblur = () => {
     c.name = input.value.trim() + ".png";
-    autoArrange(level);
+    autoArrange(level); // This re-sorts and re-adds elements
   };
 
-  // Use the new function here
+  // Use your existing edit button logic
   const edit = createEditButton(level, c);
 
   div.append(input, edit);
-  levelsTree.querySelector(`[data-label="${level}"] .drawing-list`).appendChild(div);
+  
+  // Find the container
+  const listContainer = levelsTree.querySelector(`[data-label="${level}"] .drawing-list`);
+  if (listContainer) {
+    listContainer.appendChild(div);
+    // CRITICAL: Ensure the list is visible when a drawing is added
+    listContainer.style.display = 'block'; 
+  }
 }
 
 
-function autoArrange(level){
-  levels[level].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));
-  const list=levelsTree.querySelector(`[data-label="${level}"] .drawing-list`);
-  list.innerHTML="";
-  levels[level].forEach(c=>addDrawingElement(level,c));
+
+function autoArrange(level) {
+  // Sort the actual data array
+  levels[level].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+  
+  const list = levelsTree.querySelector(`[data-label="${level}"] .drawing-list`);
+  if (list) {
+    // Save the current visibility state (if it was block, keep it block)
+    const wasVisible = list.style.display === 'block';
+    
+    list.innerHTML = ""; // Clear the UI list
+    
+    // Re-add all drawings
+    levels[level].forEach(c => addDrawingElement(level, c));
+    
+    // Re-apply visibility
+    if (wasVisible) {
+      list.style.display = 'block';
+    }
+  }
 }
 
-document.getElementById('newLevelBtn').onclick=()=>{
-  const label=String.fromCharCode(65+levelCount++);
-  levels[label]=[];
-  const div=document.createElement('div');div.className='level';div.dataset.label=label;
-  const toggle=document.createElement('span');toggle.className='toggle-icon';toggle.innerHTML='<span class="bl-icons-outliner"></span>';
+document.getElementById('newLevelBtn').onclick = () => {
+  // 1. Generate the base label (A, B, C...)
+  let label = String.fromCharCode(65 + levelCount++);
+  
+  // 2. Collision Check: If name exists, append "x"
+  while (levels.hasOwnProperty(label)) {
+    label += "x";
+  }
 
-  const lblInput=document.createElement('input');
-  lblInput.type='text';lblInput.value=label;lblInput.className='level-label';
-  lblInput.onblur=()=>{
-    const newLabel=lblInput.value.trim();
-    if(newLabel && newLabel!==label){
-      levels[newLabel]=levels[label];
-      delete levels[label];
-      div.dataset.label=newLabel;
-      activeLevel=newLabel;
-      activeLevelLabel.textContent=`Active Level: ${newLabel}`;
-      autoArrange(newLabel);
+  // 3. Initialize level data structure
+  levels[label] = [];
+  
+  const div = document.createElement('div');
+  div.className = 'level';
+  div.dataset.label = label;
+  
+  const toggle = document.createElement('span');
+  toggle.className = 'toggle-icon';
+  toggle.innerHTML = '<span class="bl-icons-outliner"></span>';
+
+  // 4. Create Span for the label
+  const lblSpan = document.createElement('span');
+  lblSpan.className = 'level-label';
+  lblSpan.textContent = label;
+  lblSpan.spellcheck = false;
+
+  // Handle manual renaming (triggered by blur after editing)
+  lblSpan.onblur = () => {
+    lblSpan.contentEditable = false;
+    lblSpan.classList.remove('editing');
+
+    let newLabel = lblSpan.textContent.trim();
+    const oldLabel = div.dataset.label;
+
+    if (newLabel && newLabel !== oldLabel) {
+      // Prevent duplicate names
+      while (levels.hasOwnProperty(newLabel)) {
+        newLabel += "x";
+      }
+      
+      // CRITICAL: Transfer data array to prevent drawing loss
+      levels[newLabel] = levels[oldLabel];
+      delete levels[oldLabel];
+      
+      lblSpan.textContent = newLabel;
+      div.dataset.label = newLabel;
+      activeLevel = newLabel;
+      
+      if(window.activeLevelLabel) {
+        activeLevelLabel.textContent = `Active Level: ${newLabel}`;
+      }
+
+      // Rebuild UI to sort correctly and maintain state
+      autoArrangeLevels();
+    } else if (!newLabel) {
+      lblSpan.textContent = oldLabel;
     }
   };
-  lblInput.onclick=()=>{
-    document.querySelectorAll('.level-label').forEach(el=>el.classList.remove('active'));
-    lblInput.classList.add('active');
-    activeLevel=lblInput.value.trim();
-    activeLevelLabel.textContent=`Active Level: ${activeLevel}`;
+
+  // Trigger blur on Enter
+  lblSpan.onkeydown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      lblSpan.blur();
+    }
   };
 
-  toggle.onclick=()=>{
-    const list=div.querySelector('.drawing-list');
-    list.style.display=list.style.display==='none'?'block':'none';
-    toggle.innerHTML='<span class="bl-icons-outliner"></span>';
+  lblSpan.onclick = (e) => {
+    // 5. Ctrl + Click Logic to Edit
+    if (e.ctrlKey || e.metaKey) {
+      lblSpan.contentEditable = true;
+      lblSpan.classList.add('editing');
+      lblSpan.focus();
+      document.execCommand('selectAll', false, null);
+    } else {
+      // Standard Click: Select active level
+      document.querySelectorAll('.level-label').forEach(el => el.classList.remove('active'));
+      lblSpan.classList.add('active');
+      activeLevel = div.dataset.label;
+      if(window.activeLevelLabel) {
+        activeLevelLabel.textContent = `Active Level: ${activeLevel}`;
+      }
+    }
   };
 
-  const list=document.createElement('div');list.className='drawing-list';
+  // --- Drawing List Setup ---
+  const list = document.createElement('div');
+  list.className = 'drawing-list';
+  
+  // NEW: Default new levels to be EXPANDED (display: block)
+  list.style.display = 'block';
 
-  // Wrap toggle + label in flex row
-  const header=document.createElement('div');
-  header.className='level-header';
-  header.append(toggle,lblInput);
+  toggle.onclick = () => {
+    const isHidden = list.style.display === 'none';
+    list.style.display = isHidden ? 'block' : 'none';
+  };
 
-  div.append(header,list);
+  // Layout Setup
+  const header = document.createElement('div');
+  header.className = 'level-header';
+  header.append(toggle, lblSpan);
+
+  div.append(header, list);
   levelsTree.appendChild(div);
-  lblInput.click();
-  autoArrange(label);
+  
+  // Set as active level immediately
+  lblSpan.click();
+
+  // Call the sorting/arrangement function
+  // Note: Using autoArrangeLevels() ensures the whole list refreshes
+  autoArrangeLevels();
 };
+
+
+
 
 document.getElementById('deleteLevelBtn').onclick=()=>{
   if(!activeLevel){alert("No active level selected!");return}
@@ -178,52 +271,118 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
+function autoArrangeLevels() {
+  // 1. Remember which levels are currently EXPANDED (display: block)
+  const expandedLevels = new Set();
+  document.querySelectorAll('.level').forEach(div => {
+    const list = div.querySelector('.drawing-list');
+    if (list && list.style.display === 'block') {
+      expandedLevels.add(div.dataset.label);
+    }
+  });
 
-function autoArrangeLevels(){
-  const levelLabels = Object.keys(levels).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
-  levelsTree.innerHTML = "";
-  levelLabels.forEach(label=>{
-    const div=document.createElement('div');div.className='level';div.dataset.label=label;
-    const toggle=document.createElement('span');toggle.className='toggle-icon';toggle.innerHTML='<span class="bl-icons-outliner"></span>';
+  // 2. Sort the level keys
+  const levelLabels = Object.keys(levels).sort((a, b) => 
+    a.localeCompare(b, undefined, { numeric: true })
+  );
+  
+  levelsTree.innerHTML = ""; // Clear UI
 
-    const lblInput=document.createElement('input');
-    lblInput.type='text';lblInput.value=label;lblInput.className='level-label';
-    lblInput.onblur=()=>{
-      const newLabel=lblInput.value.trim();
-      if(newLabel && newLabel!==label){
-        levels[newLabel]=levels[label];
-        delete levels[label];
-        div.dataset.label=newLabel;
-        activeLevel=newLabel;
-        activeLevelLabel.textContent=`Active Level: ${newLabel}`;
-        autoArrange(newLabel);
+  levelLabels.forEach(label => {
+    const div = document.createElement('div');
+    div.className = 'level';
+    div.dataset.label = label;
+    
+    const toggle = document.createElement('span');
+    toggle.className = 'toggle-icon';
+    toggle.innerHTML = '<span class="bl-icons-outliner"></span>';
+
+    const lblSpan = document.createElement('span');
+    lblSpan.className = 'level-label';
+    lblSpan.textContent = label;
+    lblSpan.spellcheck = false;
+
+    // --- Renaming Logic ---
+    lblSpan.onblur = () => {
+      lblSpan.contentEditable = false;
+      lblSpan.classList.remove('editing');
+
+      let newLabel = lblSpan.textContent.trim();
+      const oldLabel = div.dataset.label;
+
+      if (newLabel && newLabel !== oldLabel) {
+        while (levels.hasOwnProperty(newLabel)) {
+          newLabel += "x";
+        }
+        
+        // Transfer data
+        levels[newLabel] = levels[oldLabel]; 
+        delete levels[oldLabel];
+        
+        activeLevel = newLabel;
+        if(window.activeLevelLabel) activeLevelLabel.textContent = `Active Level: ${newLabel}`;
+        
+        // If the old level was expanded, make sure the new name is expanded too
+        if (expandedLevels.has(oldLabel)) {
+          expandedLevels.delete(oldLabel);
+          expandedLevels.add(newLabel);
+        }
+
+        autoArrangeLevels(); 
+      } else {
+        lblSpan.textContent = oldLabel;
       }
     };
-    lblInput.onclick=()=>{
-      document.querySelectorAll('.level-label').forEach(el=>el.classList.remove('active'));
-      lblInput.classList.add('active');
-      activeLevel=lblInput.value.trim();
-      activeLevelLabel.textContent=`Active Level: ${activeLevel}`;
+
+    lblSpan.onkeydown = (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); lblSpan.blur(); }
     };
 
-    toggle.onclick=()=>{
-      const list=div.querySelector('.drawing-list');
-      list.style.display=list.style.display==='none'?'block':'none';
-      toggle.innerHTML='<span class="bl-icons-outliner"></span>';
+    lblSpan.onclick = (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        lblSpan.contentEditable = true;
+        lblSpan.classList.add('editing');
+        lblSpan.focus();
+        document.execCommand('selectAll', false, null);
+      } else {
+        document.querySelectorAll('.level-label').forEach(el => el.classList.remove('active'));
+        lblSpan.classList.add('active');
+        activeLevel = div.dataset.label;
+        if(window.activeLevelLabel) activeLevelLabel.textContent = `Active Level: ${activeLevel}`;
+      }
     };
 
-    const list=document.createElement('div');list.className='drawing-list';
+    // --- The Drawing List ---
+    const list = document.createElement('div');
+    list.className = 'drawing-list';
+    
+    // 3. RESTORE THE STATE: If it was open before, keep it open now
+    list.style.display = expandedLevels.has(label) ? 'block' : 'none';
 
-    // Wrap toggle + label in flex row
-    const header=document.createElement('div');
-    header.className='level-header';
-    header.append(toggle,lblInput);
+    const header = document.createElement('div');
+    header.className = 'level-header';
+    header.append(toggle, lblSpan);
 
-    div.append(header,list);
+    div.append(header, list);
     levelsTree.appendChild(div);
-    autoArrange(label);
+
+    // Re-populate drawings
+    if (levels[label]) {
+      levels[label].forEach(drawing => {
+        addDrawingElement(label, drawing);
+      });
+    }
+
+    toggle.onclick = () => {
+      list.style.display = list.style.display === 'none' ? 'block' : 'none';
+    };
+
+    if (label === activeLevel) lblSpan.classList.add('active');
   });
 }
+
+
+
 
 document.getElementById('arrangeLevelsBtn').onclick=()=>{
   autoArrangeLevels();

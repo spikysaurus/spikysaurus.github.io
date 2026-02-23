@@ -14,10 +14,6 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// Prevent scroll via CSS and key/mouse events
-//~ document.addEventListener("DOMContentLoaded", () => {
-  //~ document.documentElement.style.overflow = "hidden";
-//~ });
 
 window.addEventListener('wheel', e => e.preventDefault(), { passive: false });
 window.addEventListener('keydown', e => {
@@ -33,3 +29,9 @@ document.addEventListener('selectstart', e => {
     e.preventDefault();
   }
 });
+
+
+// Prevent scroll via CSS and key/mouse events
+//~ document.addEventListener("DOMContentLoaded", () => {
+  //~ document.documentElement.style.overflow = "hidden";
+//~ });
