@@ -1,4 +1,4 @@
-document.getElementById('saveZipBtn').onclick = () => {
+document.getElementById('saveAssetsBtn').onclick = () => {
   const zip = new JSZip(),
     folder = zip.folder("drawings"),
     dataFolder = zip.folder("data"); // Create the data folder
@@ -138,7 +138,7 @@ function fileLoadAssets(file) {
   });
 }
 
-const zipInput = document.getElementById("zipInput");
+const assetsInput = document.getElementById("assetsInput");
 const dropZoneTree = document.getElementById("dropZoneTree");
 
 dropZoneTree.addEventListener("dragover", e => { 
@@ -175,3 +175,11 @@ document.getElementById('backdropInput').onchange = e => {
   reader.readAsDataURL(file);
   
 };
+
+document.getElementById('loadAssetsBtn').addEventListener("click", () => assetsInput.click());
+assetsInput.addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (file) fileLoadAssets(file);
+});
+
+
