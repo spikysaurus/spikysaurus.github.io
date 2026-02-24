@@ -23,26 +23,43 @@ const canvases = document.getElementsByClassName("canvases");
 });
 
 function resizeCanvases(w = CANVAS_WIDTH, h = CANVAS_HEIGHT) {
-  // 1. Update internal resolution for all layers (including dynamic ones)
+  // 1. Loop through all canvases to preserve content
   for (let i = 0; i < canvases.length; i++) {
-    canvases[i].width = w;
-    canvases[i].height = h;
+    const canvas = canvases[i];
+    const ctx = canvas.getContext('2d');
+
+    // Create a temporary "backup" canvas
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+    const tempCtx = tempCanvas.getContext('2d');
+
+    // Copy current drawing to backup
+    tempCtx.drawImage(canvas, 0, 0);
+
+    // 2. Resize the actual canvas (This clears it)
+    canvas.width = w;
+    canvas.height = h;
+
+    // 3. Draw the backup back (stays at top-left 0,0)
+    ctx.drawImage(tempCanvas, 0, 0);
   }
 
-  // 2. Update the container's CSS variables to resize the scrollable area
-  // This ensures the ::before spacer (from the previous step) triggers scrollbars
+  // 4. Update CSS and Metadata
   const container = document.getElementById("canvasContainer");
   if (container) {
     container.style.setProperty('--canvas-width', `${w}px`);
     container.style.setProperty('--canvas-height', `${h}px`);
   }
 
-  // 3. Update active drawing metadata if it exists
   if (activeDrawing) {
     activeDrawing.width = w;
     activeDrawing.height = h;
+    // Update the data string so future pointerup events don't save a blank canvas
+    activeDrawing.data = activeCanvas.toDataURL("image/png");
   }
 }
+
 
 const canvasResizeBtn = document.getElementById('canvasResizeBtn');
 canvasResizeBtn.addEventListener("click", (e) => {
