@@ -4,7 +4,7 @@ let showInfos = true;
 document.addEventListener("keydown", e => {
 	showInfos = !showInfos;
 	if (e.key === "F1") {
-		if (showInfos){
+		if (!showInfos){
 			infos.style.display = "none";
 			}
 			else{
