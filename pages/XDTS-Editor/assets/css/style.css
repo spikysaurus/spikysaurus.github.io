@@ -1,0 +1,174 @@
+body { font-family: sans-serif; margin: 0px 0px 0px 0px; background-color:gray;}
+
+/*#header {*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  justify-content: space-between;*/
+/*}*/
+
+.tab {
+  overflow: hidden;
+  background-color: white;
+}
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding:5px;
+}
+
+.tab button:hover {
+  background-color: #ddd;
+}
+
+.tab button.active {
+  background-color: #ccc;
+}
+
+.tabcontent {
+  display: none;
+}
+
+/* Compact responsive layout */
+.box {
+  display: flex;
+  flex-wrap: wrap;
+/*
+  gap: 0.5rem;              /* tighter spacing */
+
+  margin-bottom: 1rem;
+}
+
+.panel {
+	margin:0px;
+  flex: 1 1 220px;          /* smaller minimum width */
+  padding: 0.5rem;          /* reduced padding */
+  border: 1px solid lightgray;
+  background: #fafafa;
+}
+
+/* Labels and inputs compact */
+.panel label {
+  font-size: 0.85rem;
+}
+.panel input{
+max-width:24px;
+appearance: textfield;
+text-align:center;
+}
+
+/* Hover effect */
+.toolbar button:hover,
+.toolbar label:hover {
+  background: #666;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .box {
+    flex-direction: column;   /* stack panels vertically */
+  }
+}
+
+@media (max-width: 480px) {
+  .panel {
+    flex: 1 1 100%;           /* full width on mobile */
+  }
+  .panel input,
+  .panel button {
+    width: 100%;              /* stretch for touch usability */
+  }
+}
+
+#tableContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+table,th,td{box-sizing: border-box;}
+table { border-collapse: collapse; border-spacing: 0;
+}
+th, td { 
+  border: 1px solid #444; 
+  text-align: center; 
+  width:auto;
+  height:auto;
+  padding:0px;
+}
+th { background: #eee; font-size: 12px; }
+td { font-size: 12px; }
+
+input.cellInput { 
+  width: 30px;
+  text-align: center; 
+  outline:none;
+  font-size: 12px;
+  border-radius:0px;
+}
+.nullcell {
+color: black;
+font-weight: bold;
+
+}
+#dropZone {
+	background-color:none;
+  
+}
+#dropZone.dragover {
+	opacity:0.5;
+}
+
+.paper{
+display: flex;
+  flex-direction: column;
+	margin:10px;
+	background-color:white;
+	padding:3mm;
+/*
+	width:297mm;
+*/
+	}
+		
+.header {
+  display: flex;
+   flex: 1 1 0px; 
+  background-color: white;
+}
+
+.header div{
+	width:100%;
+	font-size: 14px;
+}
+
+.header input {
+	background-color: white; border:none;appearance: textfield;
+	width:100%;
+	font-size:20px;
+	
+}
+input[type=text]{border:none;}
+#memoInput{width:100%;border:1px solid black;}
+.label {
+	background-color: #f1f1f1;
+	text-align: center;
+	border-bottom:1px black solid;
+	border-left:1px black solid;
+	border-top:1px black solid
+	}
+.data{border-bottom:1px black solid;
+	border-left:1px black solid;}
+.header input{text-align:center;}
+#durationLabel{font-size:17.5px;font-weight:bold;}
+.last{border-bottom:1px black solid;
+	border-left:1px black solid;
+	border-right:1px black solid}
+	
+	
+	.no-style, .no-style th, .no-style td {
+  border: none !important;
+  background-color: transparent !important;
+}

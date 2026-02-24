@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bluesky Media Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Link external CSS -->
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<button id="sortToggleBtn">Sort: Latest</button>
+<button id="clearStorageBtn">Clear</button>
+<label for="pageSizeInput">Per-page:</label>
+<input style="width:48px;" type="number" id="pageSizeInput" value="18" min="1" />
+<button id="applyPageSizeBtn">Apply</button>
+
+<!-- Hidden file input -->
+<input type="file" id="fileInput" accept=".json" style="display:none">
+
+<!-- Label styled as button -->
+<div class="bottom-center">
+<button id="prevBtn">Prev</button>
+<button id="saveBtn">Sample</button>
+<label for="fileInput" id="browseLabel">Load</label>
+
+
+    <button id="nextBtn">Next</button>
+</div>
+
+
+  <div id="gallery" class="gallery"></div>
+<!--  Click "Sample" button to download a json sample . then "Load" to load the json-->
+  
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <span class="close-btn">&times;</span>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+
+  <!-- Load external JS -->
+  <script src="assets/script.js"></script>
+</body>
+</html>
+
