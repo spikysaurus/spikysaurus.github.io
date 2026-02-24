@@ -13,7 +13,7 @@
       background: #303030;
       cursor: move;
       padding: 6px;
-      z-index: 1000;
+      z-index: 10;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -34,7 +34,7 @@
     }
     /* HIGHLIGHT ACTIVE TOOL */
     .toolbox button.active {
-      background: Red !important;
+      background: #4073a3 !important;
     }
     .toolbox button:hover { background: #a35293; }
     .toolbox span { pointer-events: none; }

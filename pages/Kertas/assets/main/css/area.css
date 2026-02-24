@@ -2,7 +2,7 @@
 *{ 
 font-family: "Roboto", sans-serif;
 }
-
+a{color:yellow;}
 html, body {
   height: 100%;  
   margin: 0;
@@ -47,7 +47,7 @@ color:orange;
 font-style: italic;
 }
 
-.status{
+#debug{
 position:absolute;
 color:black;
 font-size:10pt;

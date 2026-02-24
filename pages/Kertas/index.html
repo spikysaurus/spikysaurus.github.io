@@ -2,7 +2,7 @@
 <html>
    <head>
       <meta charset="UTF-8">
-      <title>Kertas (2026-02-24)</title>
+      <title>Kertas</title>
       <meta property="og:title" content="Zettai Absolute" />
       <meta property="og:image" content="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreicazv32xvsf4lhsfhjzpej6k3n3t23ppjjaxcalnquewonbw6dpq4@jpeg" />
       <meta property="og:description" content="A simple animation web app." />
@@ -30,7 +30,6 @@
                   <button class="tablinks" onclick="openTab(event, 'Cell')">Cell</button>
                   <button class="tablinks" onclick="openTab(event, 'Symbols')">Symbols</button>
                   <button class="tablinks" onclick="openTab(event, 'tabProperties')">Properties</button>
-                  <button class="tablinks" onclick="openTab(event, 'Debug')">Debug</button>
                </div>
                <div id="File" class="tabcontent">
                   <div class="panel" >
@@ -63,15 +62,14 @@
                <div id="Cell" class="tabcontent">
                   <div class="panel">
                      <div class="info-table">
-						 <div>
-							 <label class="noteText">!! ctrl+LMB on the cell to edit their values</label>
-						</div>
+						 
                         <div class="info-row1">
                            <label for="adjustDuration">Adjust Duration</label>
                            <input type="number" id="adjustDuration" value="1" min="1">
                            <button id="increaseDurationBtn">Increase</button>
                            <button id="decreaseDurationBtn">Decrease</button>
                         </div>
+                        
                      </div>
                   </div>
                </div>
@@ -121,17 +119,7 @@
                   </div>
                   </div>
                </div>
-            <div id="Debug" class="tabcontent">
-               <div class="panel">
-                  [Xsheet]
-                  <br><label id="activeTrackLabel" style="color:yellow;">No active Track</label>
-                  <br><label id="activeCelLabel" style="color:yellow;" >No active Cel</label>
-                  <br>
-                  [Tree] 
-                  <br><label id="activeLevelLabel">No active Level</label>
-                  <br><label id="activeDrawingLabel">No active Drawing</label>
-               </div>
-            </div>
+            
             <input type="file" id="fileInput" accept=".xdts,.json,.txt" style="display:none">
             <div class="paper" id="paper">
                <div class="header" >
@@ -196,7 +184,6 @@
 						 <button id="arrangeLevelsBtn">Arrange Levels</button>
 						 </div>
 						 
-						 <div> <label class="noteText">!! Rename levels by ctrl+LMB</label></div>
 					</div>
 					
 					<div id="tabDrawingTree" class="tabcontent">
@@ -216,20 +203,31 @@
          </div>
          <div class="dragbar" id="dragbar-2"></div>
          <div class="area-canvas" id="drag-right">
-            <div class="status">
-					<label><b>-- Brush Size (bracket) : </b></label><label id="brushSizeLabel"></label>
-					<label><b>-- Eraser Size (ctrl+bracket) : </b></label><label id="eraserSizeLabel"></label>
-					<label style="color:blue;">-- Swap Colors (v)</label>
-					<label><b>-- Brush Aliasing (a) : </b></label><label id="aliasingLabel"></label>
-					<label><b>-- Draw Behind (b) : </b></label><label id="drawBehindLabel"></label>
-					<label><b>-- Pixelated Canvas (r) : </b></label><label id="imageRenderingLabel"></label>
-					<label style="color:blue;">-- Pan (hold space)</label>
-					<label style="color:blue;">-- Zoom (hold z)</label>
-					<label style="color:blue;">-- Backdrop Opacity (shift+bracket)</label>
-					<label style="color:blue;">-- Reset Backdrop Opacity (\)</label>
-					<label style="color:blue;">-- Backdrop Opacity to Zero (shift+\)</label>
-					<label style="color:red;">-- Play/Pause (p) 24fps Only</label>
-					<label style="color:red;">-- Speedlines (shift+p)</label>
+            <div id="debug">
+				<li>Toggle show/hide these texts (F1)</li>
+					<li><b>Brush Size (Bracket) : </b></label><label id="brushSizeLabel"></li>
+					<li><b>Eraser Size (Ctrl+Bracket) : </b></label><label id="eraserSizeLabel"></li>
+					<li style="color:blue;">Swap Colors (v)</li>
+					<li><b>Brush Aliasing (A) : </b></label><label id="aliasingLabel"></li>
+					<li><b>Draw Behind (B) : </b></label><label id="drawBehindLabel"></li>
+					<li><b>Pixelated Canvas (R) : </b></label><label id="imageRenderingLabel"></li>
+					<li style="color:blue;">Pan (hold Space + LMB Drag)</label>
+					<li style="color:blue;">Zoom (hold Z + LMB Drag Up/Down)</label>
+					<li style="color:blue;">Backdrop Opacity (Shift+bBacket)</li>
+					<li style="color:blue;">Reset Backdrop Opacity (\)</label>
+					<li style="color:blue;">Backdrop Opacity to Zero (Shift+\)</li>
+					<li style="color:red;">Speedlines (shift+p)</li>
+					<li>Ctrl+LMB on the cell to edit their values</li>
+					<li>Ctrl+LMB on the level name to edit their name</li>
+				 <li>Jump to next/prev keyframe (Alt+1 / Alt+2)</li>
+				 <li>Next/prev frame (Arrow Right / Arrow Left) </li>
+				 <li>Play/Pause (P)(Only 24 Fps for now)</li>
+                  <li><label id="activeTrackLabel" style="color:red;">No active Track</li>
+                  <li><label id="activeCelLabel" style="color:red;" >No active Cel</li>
+                  <li><label id="activeLevelLabel" style="color:blue;">No active Level</li>
+                  <li><label id="activeDrawingLabel" style="color:blue;">No active Drawing</li>
+                  
+                  
 				
             </div>
             <div id="canvasContainer">
@@ -264,7 +262,6 @@
 <script src="assets/main/js/Bridges/xsheetLevelDrawingBridge.js"></script>
 
 <!-- 5. Xsheet Logic & Symbols -->
-<script src="assets/main/js/Ui/xsheetCellUi.js"></script>
 <script src="assets/main/js/Symbols/xsheetSymbols.js"></script>
 <script src="assets/main/js/Table/adjustDuration.js"></script>
 <script src="assets/main/js/Track/editTrack.js"></script>
@@ -283,8 +280,10 @@
 <script src="assets/main/js/Canvas/colorPicker.js"></script>
 
 <!-- 7. UI Stuff -->
+<script src="assets/main/js/Ui/splashScreen.js"></script>
 <script src="assets/main/js/Ui/webpageStuff.js"></script>
 <script src="assets/main/js/Ui/tooltips.js"></script>
+<script src="assets/main/js/Ui/debug.js"></script>
    </body>
 </html>
 
