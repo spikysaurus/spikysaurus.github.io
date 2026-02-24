@@ -181,14 +181,76 @@ function switchTool(tool, temporary = false) {
   }
 }
 
+/// --- 1. GLOBAL STATE ---
+let currentScale, currentTop, currentLeft;
+let startX, startY, startTop, startLeft, startScale;
+
+// Flip State: 1 is normal, -1 is mirrored
+let flipH = 1;
+let flipV = 1;
+
+/**
+ * --- 2. INITIALIZATION & TRANSFORMS ---
+ */
+function initializeTransformState() {
+  if (!activeCanvas) return;
+  const rect = activeCanvas.getBoundingClientRect();
+  const parentRect = container.getBoundingClientRect();
+  currentTop = rect.top - parentRect.top + rect.height / 2;
+  currentLeft = rect.left - parentRect.left + rect.width / 2;
+  const style = window.getComputedStyle(activeCanvas);
+  const matrix = new WebKitCSSMatrix(style.transform);
+  currentScale = Math.abs(matrix.a) || 1; 
+}
+
+initializeTransformState();
+
+function applyTransforms() {
+	const isFlipped = flipH === -1 || flipV === -1;
+  for (let i = 0; i < canvases.length; i++) {
+    canvases[i].style.top = `${currentTop}px`;
+    canvases[i].style.left = `${currentLeft}px`;
+    const scaleX = currentScale * flipH;
+    const scaleY = currentScale * flipV;
+    canvases[i].style.transform = `translate(-50%, -50%) scale(${scaleX}, ${scaleY})`;
+    if (isFlipped) {
+      canvases[i].style.outline = "4px solid #adadad";
+      //~ canvases[i].style.outlineOffset = "2px"; 
+    } else {
+      canvases[i].style.outline = "none";
+    }
+  }
+}
+
+function resetTransform() {
+  const parentRect = container.getBoundingClientRect();
+  currentScale = 1;
+  flipH = 1;
+  flipV = 1;
+  currentLeft = parentRect.width / 2;
+  currentTop = parentRect.height / 2;
+  applyTransforms();
+}
+
+/**
+ * --- 3. THE FIX: MOUSE POSITION WITH FLIP ---
+ */
 function getMousePos(e) {
   const rect = activeCanvas.getBoundingClientRect();
   
-  // Calculate position relative to canvas top-left
+  // 1. Get raw distance from the top-left of the BOUNDING BOX
   let mouseX = e.clientX - rect.left;
   let mouseY = e.clientY - rect.top;
 
-  // Scale coordinates based on internal resolution vs display size
+  // 2. If flipped, we need to measure from the opposite edge of the box
+  if (flipH === -1) {
+    mouseX = rect.width - mouseX;
+  }
+  if (flipV === -1) {
+    mouseY = rect.height - mouseY;
+  }
+
+  // 3. Scale coordinates based on internal resolution vs display size
   const scaleX = activeCanvas.width / rect.width;
   const scaleY = activeCanvas.height / rect.height;
 
@@ -198,19 +260,19 @@ function getMousePos(e) {
   };
 }
 
+/**
+ * --- 4. DRAWING & INTERACTION ---
+ */
 
 window.addEventListener("pointerdown", e => {
   const isBrushOrEraser = activeTool === "ToolBrush" || activeTool === "ToolEraser";
   
   if (isBrushOrEraser && activeDrawing) {
     isDrawing = true;
-    
-    // Calculate position relative to canvas even if clicked outside
     const pos = getMousePos(e); 
     lastX = pos.x; 
     lastY = pos.y;
     
-    // Only draw the initial dot if the pointer is actually inside the canvas bounds
     const rect = activeCanvas.getBoundingClientRect();
     if (e.clientX >= rect.left && e.clientX <= rect.right && 
         e.clientY >= rect.top && e.clientY <= rect.bottom) {
@@ -229,45 +291,83 @@ window.addEventListener("pointermove", e => {
   const isBrushOrEraser = activeTool === "ToolBrush" || activeTool === "ToolEraser";
   const isOverCanvas = canvasContainer.contains(e.target);
 
-  // Handle Cursor Visibility
   if (isBrushOrEraser && isOverCanvas) {
     brushCursor.style.display = "block";
     brushCursor.style.left = `${e.clientX}px`;
     brushCursor.style.top = `${e.clientY}px`;
-    updateCursorSize();
+    if (typeof updateCursorSize === 'function') updateCursorSize();
   } else {
     brushCursor.style.display = "none";
   }
 
-  // Handle Drawing Logic
   if (isDrawing && activeDrawing) {
     const pos = getMousePos(e);
-    // Note: getMousePos handles the scaling even if coords are negative or exceed canvas size
     strokePoints.push([lastX, lastY, pos.x, pos.y]);
     lastX = pos.x; 
     lastY = pos.y;
   }
+
+  // Pan/Zoom Handling
+  if (isDragging) {
+    if (activeTool === "ToolPan") {
+      currentLeft = startLeft + (e.clientX - startX);
+      currentTop = startTop + (e.clientY - startY);
+    } 
+    else if (activeTool === "ToolZoom") {
+      const dy = e.clientY - startY;
+      currentScale = Math.max(0.1, startScale - dy * 0.01);
+    }
+    applyTransforms();
+  }
 });
 
-// Move pointerup to window to ensure it fires even if released outside
+document.addEventListener("mousedown", e => {
+  if (activeTool === "ToolPan" || activeTool === "ToolZoom") {
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    startTop = currentTop;
+    startLeft = currentLeft;
+    startScale = currentScale;
+    e.preventDefault();
+  }
+});
+
 window.addEventListener("pointerup", () => {
   if (isDrawing && activeDrawing) {
     isDrawing = false;
     activeDrawing.data = activeCanvas.toDataURL("image/png");
   }
+  isDragging = false;
 });
 
+document.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+
+  // "/" (slash) for Flip Horizontal
+  if (e.key === "/") {
+    e.preventDefault(); // Prevent browser search shortcut
+    flipH *= -1;
+    applyTransforms();
+  } 
+  // "?" (Shift + slash) for Flip Vertical
+  else if (e.key === "?") {
+    e.preventDefault();
+    flipV *= -1;
+    applyTransforms();
+  } 
+  // "0" to Reset View
+  else if (e.key === "0") {
+    resetTransform();
+  }
+});
 
 function renderStrokes() {
   if (strokePoints.length > 0) {
     for (const [x0, y0, x1, y1] of strokePoints) {
       if (activeTool === "ToolBrush") {
-        // Set mode: 'destination-over' draws new pixels behind existing ones
         activeCanvasCtx.globalCompositeOperation = drawBehind ? "destination-over" : "source-over";
-        
         line(x0, y0, x1, y1, brush_size, window.colorPicker.activeColor, brush_opacity);
-        
-        // Reset to default
         activeCanvasCtx.globalCompositeOperation = "source-over";
       } 
       else if (activeTool === "ToolEraser") {
@@ -284,102 +384,7 @@ function renderStrokes() {
 requestAnimationFrame(renderStrokes);
 
 
-
-/// --- 1. GLOBAL STATE (Leave these uninitialized or at 0) ---
-let currentScale, currentTop, currentLeft;
-let startX, startY, startTop, startLeft, startScale;
-
-/**
- * --- 2. THE FIX: SYNC ON LOAD ---
- * Run this immediately to "catch" the CSS values from the browser.
- */
-function initializeTransformState() {
-  const rect = activeCanvas.getBoundingClientRect();
-  const parentRect = container.getBoundingClientRect();
-  
-  // Calculate the current center-point position in pixels
-  currentTop = rect.top - parentRect.top + rect.height / 2;
-  currentLeft = rect.left - parentRect.left + rect.width / 2;
-
-  // Get the current scale from the CSS transform matrix
-  const style = window.getComputedStyle(activeCanvas);
-  const matrix = new WebKitCSSMatrix(style.transform);
-  currentScale = matrix.a || 1; // 'a' is the horizontal scale (m11)
-}
-
-// IMPORTANT: Run this once before any interaction
-initializeTransformState();
-
-// --- 3. UPDATED EVENT LISTENERS ---
-
-document.addEventListener("mousedown", e => {
-  if (activeTool === "ToolPan" || activeTool === "ToolZoom") {
-    isDragging = true;
-    startX = e.clientX;
-    startY = e.clientY;
-    
-    // Always snap the "starting point" to the LAST KNOWN global state
-    startTop = currentTop;
-    startLeft = currentLeft;
-    startScale = currentScale;
-    
-    e.preventDefault();
-  }
-});
-
-document.addEventListener("mousemove", e => {
-  if (!isDragging) return;
-
-  if (activeTool === "ToolPan") {
-    // Math: [New Position] = [Last Position] + [Mouse Distance Moved]
-    currentLeft = startLeft + (e.clientX - startX);
-    currentTop = startTop + (e.clientY - startY);
-  } 
-  else if (activeTool === "ToolZoom") {
-    const dy = e.clientY - startY;
-    // Math: [New Scale] = [Last Scale] - [Vertical Mouse Movement]
-    currentScale = Math.max(0.1, startScale - dy * 0.01);
-  }
-
-  applyTransforms();
-});
-
-document.addEventListener("mouseup", () => isDragging = false);
-
-
-function applyTransforms() {
-  for (let i = 0; i < canvases.length; i++) {
-    // 1. Set position via top/left
-    canvases[i].style.top = `${currentTop}px`;
-    canvases[i].style.left = `${currentLeft}px`;
-    
-    // 2. Set scale via transform (keep translate(-50%, -50%) for centering)
-    canvases[i].style.transform = `translate(-50%, -50%) scale(${currentScale})`;
-  };
-}
-
-
-// GLOBAL UP: Safety net for both Drawing and Dragging
-document.addEventListener("mouseup", () => {
-  // 1. Stop Drawing if active
-  if (isDrawing && activeDrawing) {
-    isDrawing = false;
-    activeDrawing.data = activeCanvas.toDataURL("image/png");
-  }
-
-  // 2. Stop Dragging (Pan/Zoom)
-  if (isDragging) {
-    isDragging = false;
-    if (activeTool === "ToolZoom" && canvases.length > 0) {
-      const transform = activeCanvas.style.transform;
-      const match = transform.match(/scale\(([^)]+)\)/);
-      if (match) startScale = parseFloat(match[1]);
-    }
-    // Optional: revert to brush after pan/zoom session
-    switchTool("ToolBrush"); 
-  }
-});
-
+///////////////
 
 // --- Shortcuts & Utility ---
 const drawBehindLabel = document.getElementById("drawBehindLabel");
