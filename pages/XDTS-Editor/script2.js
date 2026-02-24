@@ -11,7 +11,7 @@ document.getElementById("addTrackBtn").addEventListener("click", () => {
   const field = tt.fields.find(f => f.fieldId === 0);
   field.tracks.push({ trackNo: field.tracks.length, frames: [] });
 
-  // Reassign trackNo zero-based
+  // ✅ Reassign trackNo zero-based
   field.tracks.forEach((t, i) => t.trackNo = i);
 
   renderDopeSheet(xdtsData);
@@ -27,7 +27,7 @@ document.getElementById("removeTrackBtn").addEventListener("click", () => {
   const field = tt.fields.find(f => f.fieldId === 0);
   field.tracks.pop();
 
-  // Reassign trackNo zero-based
+  // ✅ Reassign trackNo zero-based
   field.tracks.forEach((t, i) => t.trackNo = i);
 
   renderDopeSheet(xdtsData);
@@ -72,7 +72,7 @@ function reorderTrack(direction) {
   tracks[idx] = tracks[newIdx];
   tracks[newIdx] = tmpTrack;
 
-  // Reassign trackNo zero-based
+  // ✅ Reassign trackNo zero-based
   tracks.forEach((t, i) => t.trackNo = i);
 
   renderDopeSheet(xdtsData);
@@ -87,22 +87,20 @@ document.getElementById("newTimesheetBtn").addEventListener("click", () => {
 	document.getElementById("sceneInput").value = 0;
 	document.getElementById("cutInput").value = 0;
 	document.getElementById("nameInput").value = "";
-	document.getElementById("memoInput").value = "Memo";
 	
   xdtsData = {
 	header:{
 		title: "",
 		scene: 0,
 		cut: 0,
-		name: "",
-		memo: ""
+		name: ""
 		},
     timeTables: [{
       duration: duration,
       timeTableHeaders: [{ names: ["A"] }],
       fields: [{
         fieldId: 0,
-        tracks: [{ trackNo: 0, frames: [] }]   // start at 0
+        tracks: [{ trackNo: 0, frames: [] }]   // ✅ start at 0
       }]
     }]
   };
@@ -154,7 +152,7 @@ document.getElementById("autoRenameBtn").addEventListener("click", () => {
     headers[i] = String.fromCharCode("A".charCodeAt(0) + i);
   }
 
-  // Ensure trackNo stays zero-based
+  // ✅ Ensure trackNo stays zero-based
   field.tracks.forEach((t, i) => t.trackNo = i);
 
   renderDopeSheet(xdtsData);
@@ -183,7 +181,6 @@ function updateDurationLabel() {
     document.getElementById("sceneInput").value = hh.scene;
     document.getElementById("cutInput").value = hh.cut;
     document.getElementById("nameInput").value = hh.name;
-     document.getElementById("memoInput").value = hh.memo;
 }
 
 // Adjust cell width

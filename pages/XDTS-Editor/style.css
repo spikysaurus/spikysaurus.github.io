@@ -1,0 +1,90 @@
+body { font-family: sans-serif; margin: 0px 10px 0px 10px; }
+/*#header {*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  justify-content: space-between;*/
+/*}*/
+
+/* Compact responsive layout */
+.box {
+  display: flex;
+  flex-wrap: wrap;
+/*
+  gap: 0.5rem;              /* tighter spacing */
+*/
+  margin-bottom: 1rem;
+}
+
+.panel {
+	margin:5px;
+  flex: 1 1 220px;          /* smaller minimum width */
+  padding: 0.5rem;          /* reduced padding */
+  border: 1px solid lightgray;
+  background: #fafafa;
+}
+
+/* Labels and inputs compact */
+.panel label {
+  font-size: 0.85rem;
+}
+.panel input{
+max-width:24px;
+appearance: textfield;
+text-align:center;
+}
+
+/* Hover effect */
+.toolbar button:hover,
+.toolbar label:hover {
+  background: #666;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .box {
+    flex-direction: column;   /* stack panels vertically */
+  }
+}
+
+@media (max-width: 480px) {
+  .panel {
+    flex: 1 1 100%;           /* full width on mobile */
+  }
+  .panel input,
+  .panel button {
+    width: 100%;              /* stretch for touch usability */
+  }
+}
+
+#tableContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+table { border-collapse: collapse; margin: 10px; }
+th, td { 
+  border: 1px solid #444; 
+  padding: 2px;           
+  text-align: center; 
+  width:30px;
+}
+th { background: #eee; font-size: 11px; }
+td { font-size: 11px; }
+input.cellInput { 
+  width: 100%; 
+  border: none; 
+  text-align: center; 
+  font-size: 11px; 
+  padding: 0; 
+  box-sizing: border-box;
+}
+.nullcell { color: black; font-weight: bold; }
+#dropZone {
+  background-color:none;
+  
+}
+#dropZone.dragover {
+  background-color: #f9f06b;
+};
+

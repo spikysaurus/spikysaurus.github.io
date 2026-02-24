@@ -1,289 +1,216 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
    <head>
-      <meta charset="UTF-8">
-      <title>Kertas</title>
-      <meta property="og:title" content="Kertas" />
-      <meta property="og:image" content="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreicazv32xvsf4lhsfhjzpej6k3n3t23ppjjaxcalnquewonbw6dpq4@jpeg" />
-      <meta property="og:description" content="Animation Tool" />
-      <link rel="icon" href="assets/images/icon.png" type="image/x-icon">
+      <meta charset="UTF-8" />
       <link rel="stylesheet" href="assets/bl-icons/bl-icons.css">
-      <link rel="stylesheet" href="assets/main/css/area.css">
-      <link rel="stylesheet" href="assets/main/css/xsheet.css">
-      <link rel="stylesheet" href="assets/main/css/tree.css">
-      <link rel="stylesheet" href="assets/main/css/canvas.css">
+      
+      <title>Sadewoo</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <style>
-         * { box-sizing: border-box; }
-      </style>
+      <link rel="stylesheet" href="assets/css/style.css">
    </head>
    <body>
-	   <div id="brushCursor"></div>
-
-      <div class="page-container">
-      <div class="drag-container">
-         <div class="area-xsheet" id="drag-left-1" >
-            <div id="dropZone">
-               <div class="tab" >
-                  <button class="tablinks defaultOpen" onclick="openTab(event, 'File')">File</button>
-                  <button class="tablinks" onclick="openTab(event, 'Track')">Track</button>
-                  <button class="tablinks" onclick="openTab(event, 'Cell')">Cell</button>
-                  <button class="tablinks" onclick="openTab(event, 'Symbols')">Symbols</button>
-                  <button class="tablinks" onclick="openTab(event, 'tabProperties')">Properties</button>
-               </div>
-               <div id="File" class="tabcontent">
-                  <div class="panel" >
-                     <button id="loadXDTSbtn">Load Xsheet</button>
-                     <button id="newTimesheetBtn">New Xsheet</button>
-                     <button id="exportBtn" style="display:none">Save Xsheet</button>
-                     <div class="info-table">
-                        <div class="info-row1">
-                           <label for="newDuration">New Xsheet Duration (in Frames) </label>
-                           <input type="number" id="newDuration" min="1" value="24">
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div id="Track" class="tabcontent">
-                  <div class="panel" >
-                     <button id="addTrackBtn">Add Track</button>
-                     <button id="removeTrackBtn">Remove Last Track</button>
-                     <button id="autoRenameBtn">Auto-Rename Tracks</button>
-                     <div class="info-table">
-                        <div class="info-row1">
-                           <label for="reorderInput">Track to reorder</label>
-                           <input type="text" id="reorderInput" value="A">
-                           <button id="reorderLeftBtn">Left</button>
-                           <button id="reorderRightBtn">Right</button>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div id="Cell" class="tabcontent">
-                  <div class="panel">
-                     <div class="info-table">
-						 
-                        <div class="info-row1">
-                           <label for="adjustDuration">Adjust Duration</label>
-                           <input type="number" id="adjustDuration" value="1" min="1">
-                           <button id="increaseDurationBtn">Increase</button>
-                           <button id="decreaseDurationBtn">Decrease</button>
-                        </div>
-                        
-                     </div>
-                  </div>
-               </div>
-               <div id="Symbols" class="tabcontent">
-                  <div class="panel">
-                     <div class="info-table">
-                        <div class="info-row1">
-                           <label for="symNull">Empty Cell</label>
-                           <input type="text" id="symNull" value="x">
-                           <button onclick="navigator.clipboard.writeText(symNull.value)">Copy</button>
-                        </div>
-                        <div class="info-row1">
-                           <label for="symTick1">Inbetween</label>
-                           <input type="text" id="symTick1" value="○">
-                           <button onclick="navigator.clipboard.writeText(symTick1.value)">Copy</button>
-                        </div>
-                        <div class="info-row1">
-                           <label for="symTick2" >Reverse Sheet</label>
-                           <input type="text" id="symTick2" value="●">
-                           <button onclick="navigator.clipboard.writeText(symTick2.value)">Copy</button>
-                        </div>
-                        <div class="info-row1">
-                           <label for="symHyphen">Hyphen</label>
-                           <input type="text" id="symHyphen" value="｜">
-                           <button onclick="navigator.clipboard.writeText(symHyphen.value)">Copy</button>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-             <div id="tabProperties" class="tabcontent">
-                  <div class="panel">
-                     <div class="info-table">
-						 
-                        <div class="info-row1">
-                           <label for="canvasWidth">Canvas Width</label>
-                           <input type="number" id="canvasWidthInput" value="1280" min="1">
-                         </div>
-                         <div class="info-row1">
-                           <label for="canvasHeight">Canvas Height</label>
-                           <input type="number" id="canvasHeightInput" value="720" min="1">
-                        </div>
-                        
-                     </div>
-                     <div style="text-align:right;">
-						 <button id="canvasRefreshBtn">Refresh Values</button>
-                      <button id="canvasResizeBtn">Resize Canvas</button>
-                  </div>
-                  </div>
-               </div>
-            
-            <input type="file" id="fileInput" accept=".xdts,.json,.txt" style="display:none">
-            <div class="paper" id="paper">
-               <div class="header" >
-                  <div class="info-table panel">
-                     <div class="info-row collapseHeaderArea">
-                        <label for="titleInput">Title</label>
-                        <input id="titleInput" type="text">
-                     </div>
-                     <div class="info-row collapseHeaderArea">
-                        <label for="sceneInput">Scene</label>
-                        <input id="sceneInput" type="number">
-                     </div>
-                     <div class="info-row collapseHeaderArea">
-                        <label for="cutInput">Cut</label>
-                        <input id="cutInput" type="number">
-                     </div>
-                     <div class="info-row collapseHeaderArea">
-                        <label for="nameInput">Name</label>
-                        <input id="nameInput" type="text">
-                     </div>
-                     <div class="info-row collapseHeaderArea">
-                        <label for="memoInput">Memo</label>
-                        <textarea id="memoInput">Memo</textarea>
-                     </div>
-                     <div class="info-row">
-                        <label for="durationLabel">Time</label>
-                        <span id="durationLabel">0+0 | 00</span>
-                        <button id="collapseHeaderBtn"><span class="bl-icons-align_top"></span></button>
-                     </div>
-                  </div>
-               </div>
-               <div id="xsheetContainer">
-                  <div id="tableContainer" ></div>
-               </div>
-               </div>
+      <!-- Navigation Bar -->
+      <nav class="nav-bar">
+         <ul>
+            <li>
+               <a href="pages/projects.html" class="wii">
+               <span class="bl-icons-file_movie"></span><label>Animations</label>
+               </a>
+            </li>
+            <li>
+               <a href="pages/Gallery/index.html" class="wii">
+               <span class="bl-icons-file_image"></span><label>Art</label>
+               </a>
+            </li>
+            <li>
+               <a href="pages/links.html" class="wii">
+               <span class="bl-icons-url"></span><label>Links</label>
+               </a>
+            </li>
+            <li>
+               <a href="pages/contact.html" class="wii">
+               <span class="bl-icons-user"></span><label>Contact</label>
+               </a>
+            </li>
+            <li>
+               <a href="pages/tools.html" class="wii">
+               <span class="bl-icons-tool_settings"></span><label>Tools</label>
+               </a>
+            </li>
+         </ul>
+      </nav>
+      <div class="ocean" style="z-index:-1;position:fixed;width:100%;"">
+         <div class="wave"></div>
+         <div class="wave"></div>
+      </div>
+      <div class="container">
+         <!-- Left side -->
+         <div class="left">
+            <!-- Make the title clickable -->
+            <div class="section-title" id="resetVideo">Animation Reel</div>
+            <div class="video-wrapper">
+               <iframe id="videoFrame" tabindex="0"
+                  src="https://www.youtube.com/embed/ywGcoaYo3-k?list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ"
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen>
+               </iframe>
             </div>
          </div>
-         <div class="dragbar" id="dragbar-1"></div>
-         <div class="area-tree" id="drag-middle">
-			 <div id="dropZoneTree">
-				 <div class="tab" >
-                  <button class="tablinks defaultOpen" onclick="openTab(event, 'tabFileTree')">File</button>
-                  <button class="tablinks" onclick="openTab(event, 'tabLevelTree')">Level</button>
-                  <button class="tablinks" onclick="openTab(event, 'tabDrawingTree')">Drawing</button>
+         <!-- Right side -->
+         <div class="right">
+            <div class="section-title">Featured Works (click to play)</div>
+            <div class="grid">
+               <div class="card" data-video="https://www.youtube.com/embed/Bi_s_g2l1Yk">
+                  <img src="https://cdn.myanimelist.net/images/anime/1993/143335.jpg" alt="">
+                  <div class="overlay-genre">Anime</div>
+                  <div class="overlay-title">Kinnikuman</div>
                </div>
-               <div class="panel" >
-				   
-                  <div class="controls">
-					 <div id="tabFileTree" class="tabcontent">
-						 <button id="loadAssetsBtn">Load Assets</button>
-						 <button id="saveAssetsBtn">Save Assets</button>
-						 <input type="file" id="assetsInput" accept=".zip" style="display:none">
-						 <button id="loadBackdropBtn">Import Backdrop</button>
-						 <input type="file" id="backdropInput" accept="image/*" style="display:none">
-					</div>
-                     
-                     <div id="tabLevelTree" class="tabcontent">
-						
-						<div>
-						 <button id="newLevelBtn">New Level</button>
-						 <button id="deleteLevelBtn">Delete Level</button>
-						 <button id="arrangeLevelsBtn">Arrange Levels</button>
-						 </div>
-						 
-					</div>
-					
-					<div id="tabDrawingTree" class="tabcontent">
-						 <button id="newDrawingBtn">New Drawing</button>
-						 <button id="deleteDrawingBtn">Delete Drawing</button>
-
-						 <button id="prevDrawingBtn">Prev Drawing</button>
-						 <button id="nextDrawingBtn">Next Drawing</button>
-                     </div>
-                     
-                  </div>
+               <div class="card" data-video="https://www.youtube.com/embed/nTF6QBu7vMA">
+                  <img src="https://cdn.myanimelist.net/images/anime/1937/146622l.jpg" alt="">
+                  <div class="overlay-genre">Anime</div>
+                  <div class="overlay-title">Yaiba</div>
                </div>
-            <div id="levelsTreeContainer">
-				<div id="levelsTree"></div>
-            </div>
-            </div>
-         </div>
-         <div class="dragbar" id="dragbar-2"></div>
-         <div class="area-canvas" id="drag-right">
-            <div id="debug">
-				<li>Toggle show/hide these texts (F1)</li>
-					<li><b>Brush Size (Bracket) : </b></label><label id="brushSizeLabel"></li>
-					<li><b>Eraser Size (Ctrl+Bracket) : </b></label><label id="eraserSizeLabel"></li>
-					<li style="color:blue;">Swap Colors (v)</li>
-					<li><b>Brush Aliasing (A) : </b></label><label id="aliasingLabel"></li>
-					<li><b>Draw Behind (B) : </b></label><label id="drawBehindLabel"></li>
-					<li><b>Pixelated Canvas (R) : </b></label><label id="imageRenderingLabel"></li>
-					<li style="color:blue;">Pan (hold Space + LMB Drag)</label>
-					<li style="color:blue;">Zoom (hold Z + LMB Drag Up/Down)</label>
-					<li style="color:blue;">Backdrop Opacity (Shift+bBacket)</li>
-					<li style="color:blue;">Reset Backdrop Opacity (\)</label>
-					<li style="color:blue;">Backdrop Opacity to Zero (Shift+\)</li>
-					<li style="color:red;">Speedlines (shift+p)</li>
-					<li>Ctrl+LMB on the cell to edit their values</li>
-					<li>Ctrl+LMB on the level name to edit their name</li>
-				 <li>Jump to next/prev keyframe (Alt+1 / Alt+2)</li>
-				 <li>Next/prev frame (Arrow Right / Arrow Left) </li>
-				 <li>Play/Pause (P)(Only 24 Fps for now)</li>
-                  <li><label id="activeTrackLabel" style="color:red;">No active Track</li>
-                  <li><label id="activeCelLabel" style="color:red;" >No active Cel</li>
-                  <li><label id="activeLevelLabel" style="color:blue;">No active Level</li>
-                  <li><label id="activeDrawingLabel" style="color:blue;">No active Drawing</li>
-                  
-                  
-				
-            </div>
-            <div id="canvasContainer">
-               <canvas id="backgroundColorCanvas" class="canvases"></canvas>
-               <canvas id="backdropCanvas" class="canvases"></canvas>
-               
-               <canvas id="canvas"  class="canvases"></canvas>
+               <div class="card" data-video="">
+                  <a href="https://x.com/sadewoo0/status/1998608699368288736">
+                  <img src="https://cdn.myanimelist.net/images/anime/1885/127108.jpg" alt="">
+                  </a>
+                  <div class="overlay-genre">Anime</div>
+                  <div class="overlay-title">OPM S3</div>
+               </div>
+               <div class="card" data-video="">
+                  <a href="https://www.instagram.com/sadewoo0/p/DR_tgEwE8k4/">
+                  <img src="https://cdn.myanimelist.net/images/anime/1333/151768.jpg" alt="">
+                  </a>
+                  <div class="overlay-genre">Anime</div>
+                  <div class="overlay-title">Ganglion</div>
+               </div>
+               <div class="card tba" data-video="">
+                  <img src="https://cdn.myanimelist.net/images/anime/1679/152682.jpg" alt="">
+                  <div class="overlay-genre">Anime</div>
+                  <div class="overlay-title">Rayearth</div>
+               </div>
+               <div class="card" data-video="https://www.youtube.com/embed/BLUcapqwyuU">
+                  <img src="https://m.media-amazon.com/images/M/MV5BMmMwYzZjMzAtN2I3Ny00MTdhLTg1Y2YtNDZiMzhhODY3ZjJjXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="">
+                  <div class="overlay-genre">Video Game</div>
+                  <div class="overlay-title">FNF</div>
+               </div>
+               <div class="card" data-video="https://www.youtube.com/embed/XhhEXK3NkzU">
+                  <img src="https://m.media-amazon.com/images/M/MV5BZWJlZTM2OWYtYTkxZC00OTQyLThjOWEtN2VkOGE1MTFmNGQxXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="">
+                  <div class="overlay-genre">Video Game</div>
+                  <div class="overlay-title">Hi-Fi Rush</div>
+               </div>
+               <div class="card" data-video="https://www.youtube.com/embed/akaQ1tarUQo">
+                  <img src="https://e.snmc.io/lk/f/x/edfaf7f229be0f8c28839bc97b4f82e9/10511778" alt="">
+                  <div class="overlay-genre">Video Game</div>
+                  <div class="overlay-title">Inkbound</div>
+               </div>
+               <div class="card" data-video="https://www.youtube.com/embed/iZw1_2PFsZE">
+                  <img src="https://m.media-amazon.com/images/M/MV5BYzE3ZjIxZDYtMDFjNi00OTBjLWI0NmQtY2IyM2YzZTYwMjA1XkEyXkFqcGc@._V1_.jpg" alt="">
+                  <div class="overlay-genre">Video Game</div>
+                  <div class="overlay-title">Vampire Survivors</div>
+               </div>
+               <div class="card" data-video="https://www.youtube.com/embed/YQXp2gEoevs">
+                  <img src="https://images.igdb.com/igdb/image/upload/t_cover_big/co30qj.jpg" alt="">
+                  <div class="overlay-genre">Video Game</div>
+                  <div class="overlay-title">Nova Island</div>
+               </div>
+               <div class="card" data-video="">
+                  <a href="https://sadewoo.tumblr.com/post/732936987201404928/post-animation-little-goody-two-shoes-trailer">
+                  <img src="https://m.media-amazon.com/images/M/MV5BZjkwNDkwMzEtZDZhZC00MGI1LTk0YmUtMzE0NWUzZjdlYjM1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="">
+                  </a>
+                  <div class="overlay-genre">Video Game</div>
+                  <div class="overlay-title">Little Goody Two Shoes</div>
+               </div>
+               <div class="card" data-video="https://www.youtube.com/embed/tkAB6crm764">
+                  <img src="https://m.media-amazon.com/images/M/MV5BOGExYmQ1N2QtYzE2YS00ZTE2LWEwZTItZjUwNTNhYzJiYjdlXkEyXkFqcGc@._V1_.jpg" alt="">
+                  <div class="overlay-genre">Cartoon</div>
+                  <div class="overlay-title">Animaniacs</div>
+               </div>
+               <div class="card" data-video="https://www.youtube.com/embed/ZArlzeNNAEs">
+                  <img src="https://m.media-amazon.com/images/M/MV5BM2E4MDU4NDctNjIxZC00ZWM5LTkyNDQtOGU0MTRhYWVmNzQ5XkEyXkFqcGc@._V1_.jpg" alt="">
+                  <div class="overlay-genre">Cartoon</div>
+                  <div class="overlay-title">Helluvaboss</div>
+               </div>
+               <div class="card" data-video="https://www.youtube.com/embed/p5pbg6SNWDg">
+                  <img src="https://m.media-amazon.com/images/M/MV5BYjhmNTAzYmQtMzFkMi00NzEyLWJhMzctZmM2NzRmYmE3MTU4XkEyXkFqcGc@._V1_.jpg" alt="">
+                  <div class="overlay-genre">Cartoon</div>
+                  <div class="overlay-title">Craig Before The Creek</div>
+               </div>
+               <div class="card" data-video="https://www.youtube.com/embed/IeXNLjLW2FY">
+                  <img src="https://m.media-amazon.com/images/M/MV5BZTg4MDRiMTktOWYyZS00YTIwLTg5ODItYWFmNGExZTg1NWEzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="">
+                  <div class="overlay-genre">Cartoon</div>
+                  <div class="overlay-title">I Heart Arlo</div>
+               </div>
+               <div class="card" data-video="https://www.youtube.com/embed/00_sb0h2mRQ">
+                  <img src="https://resizing.flixster.com/l-_w1KP9x9U4KRTaKSF9i3_FjtU=/206x305/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p21364888_b_v8_aa.jpg" alt="">
+                  <div class="overlay-genre">Cartoon</div>
+                  <div class="overlay-title">Smiling Friends</div>
+               </div>
             </div>
          </div>
       </div>
-<!--
-      <footer class="global-footer">
-         <p>Web App by Sadewoo/Spikysaurus - Icons are from Blender</p>
-      </footer>
--->
-<!-- 1. External Dependencies (Load first) -->
-<script src="assets/js/jszip.min.js"></script>
-<script src="assets/js/FileSaver.min.js"></script>
-
-<!-- 2. Base UI & Variable Setup -->
-<script src="assets/main/js/Ui/speedlines.js"></script>
-<script src="assets/main/js/Ui/dragBar.js"></script>
-<script src="assets/main/js/xsheetResetVariables.js"></script>
-<script src="assets/main/js/xsheetUpdateVariables.js"></script>
-
-<!-- 3. Core Engine (Canvas & Assets) -->
-<script src="assets/main/js/Canvas/canvas.js"></script>
-<script src="assets/main/js/Assets/levelAndDrawings.js"></script>
-
-<!-- 4. THE BRIDGES (Must be loaded BEFORE Rendering/Loading logic) -->
-<script src="assets/main/js/Bridges/xsheetCanvasBridge.js"></script>
-<script src="assets/main/js/Bridges/xsheetLevelDrawingBridge.js"></script>
-
-<!-- 5. Xsheet Logic & Symbols -->
-<script src="assets/main/js/Symbols/xsheetSymbols.js"></script>
-<script src="assets/main/js/Table/adjustDuration.js"></script>
-<script src="assets/main/js/Track/editTrack.js"></script>
-
-<!-- 6. Rendering & File Operations (Load last so they can see the Bridges) -->
-<script src="assets/main/js/xsheetRendering.js"></script>
-<script src="assets/main/js/xsheetTabs.js"></script>
-<script src="assets/main/js/xsheetCollapseHeader.js"></script>
-<script src="assets/main/js/File/newXsheet.js"></script>
-<script src="assets/main/js/File/loadXDTS.js"></script>
-<script src="assets/main/js/File/exportXDTS.js"></script>
-<script src="assets/main/js/Assets/saveLoadAssets.js"></script>
-
-<!-- 7. Tools that are on the Canvas -->
-<script src="assets/main/js/Canvas/toolbox.js"></script>
-<script src="assets/main/js/Canvas/colorPicker.js"></script>
-
-<!-- 7. UI Stuff -->
-<script src="assets/main/js/Ui/splashScreen.js"></script>
-<script src="assets/main/js/Ui/webpageStuff.js"></script>
-<script src="assets/main/js/Ui/tooltips.js"></script>
-<script src="assets/main/js/Ui/debug.js"></script>
-   </body>
+      
+      
+      
+<!--         <div class="profile-icon" id="profileIcon"></div>-->
+<!--         <div class="chat-bubble" id="chatBubble">Hi! I'm Sadewoo, a Freelance 2D Animator. Here i share my works and tools i created. Thankyou for visiting!-->
+<!--         </div>-->
+<!--         <script>-->
+<!--            const profileIcon = document.getElementById('profileIcon');-->
+<!--            const chatBubble = document.getElementById('chatBubble');-->
+<!--            -->
+<!--            // Toggle chat bubble when profile icon is clicked-->
+<!--            profileIcon.addEventListener('click', () => {-->
+<!--              if (chatBubble.style.display === 'none' || chatBubble.style.display === '') {-->
+<!--                chatBubble.style.display = 'block';-->
+<!--              } else {-->
+<!--                chatBubble.style.display = 'none';-->
+<!--              }-->
+<!--            });-->
+<!--            -->
+<!--            // Hide chat bubble when it is clicked-->
+<!--            chatBubble.addEventListener('click', () => {-->
+<!--              chatBubble.style.display = 'none';-->
+<!--            });-->
+<!--         </script>-->
+         
+         
+<script>
+   const videoFrame = document.getElementById('videoFrame');
+   const cards = document.querySelectorAll('.card');
+   const resetTitle = document.getElementById('resetVideo');
+   
+   // original link
+   const originalLink = "https://www.youtube.com/embed/ywGcoaYo3-k?list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ";
+   
+   // swap video when card clicked
+   cards.forEach(card => {
+     card.addEventListener('click', () => {
+       let newVideo = card.getAttribute('data-video');
+       if (newVideo) {
+         // ensure autoplay param is added correctly
+         if (newVideo.includes("?")) {
+           newVideo += "&autoplay=1";
+         } else {
+           newVideo += "?autoplay=1";
+         }
+   
+         videoFrame.src = newVideo;
+   
+         // Scroll and focus on the video
+         videoFrame.scrollIntoView({ behavior: 'smooth', block: 'center' });
+         videoFrame.focus();
+       }
+     });
+   });
+   
+   // reset to original when title clicked
+   resetTitle.addEventListener('click', () => {
+     // also reset with autoplay off
+     videoFrame.src = originalLink;
+   });
+</script>
+</body>
 </html>
 

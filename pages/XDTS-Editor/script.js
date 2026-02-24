@@ -49,7 +49,7 @@ function handleFile(file) {
       while (field.tracks.length < tt.timeTableHeaders[0].names.length) {
         field.tracks.push({ trackNo: field.tracks.length, frames: [] });
       }
-      // Reassign trackNo zero-based
+      // ✅ Reassign trackNo zero-based
       field.tracks.forEach((t, i) => t.trackNo = i);
 
       renderDopeSheet(xdtsData);
@@ -71,6 +71,12 @@ fileInput.addEventListener("change", e => {
   if (file) handleFile(file);
 });
 
+
+//dropZone.addEventListener("click", () => fileInput.click());
+//fileInput.addEventListener("change", e => {
+//  const file = e.target.files[0];
+//  if (file) handleFile(file);
+//});
 dropZone.addEventListener("dragover", e => { e.preventDefault(); dropZone.classList.add("dragover"); });
 dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragover"));
 dropZone.addEventListener("drop", e => {
@@ -125,8 +131,6 @@ let hh = {}; if (data.header) {
       const tr = document.createElement("tr");
       const tdFrame = document.createElement("td");
       tdFrame.textContent = f;
-      tdFrame.style.backgroundColor = "#eeeeee";
-      
       tr.appendChild(tdFrame);
 
       headers.forEach((label, idx) => {
@@ -144,10 +148,10 @@ let hh = {}; if (data.header) {
           input.value = val;
           if (val && val.trim() !== "") shadingActive[idx] = false;
         }
-        //~ if (shadingActive[idx]) {
-          //~ td.style.backgroundColor = "lightgray";
-          //~ input.style.backgroundColor = "lightgray";
-        //~ }
+        if (shadingActive[idx]) {
+          td.style.backgroundColor = "lightgray";
+          input.style.backgroundColor = "lightgray";
+        }
         input.addEventListener("change", () => {
           setValueForTrackFrame(tt, idx, f-1, input.value);
           renderDopeSheet(tt);
@@ -189,18 +193,48 @@ function setValueForTrackFrame(tt, trackIndex, frameNo, newVal) {
   else frame.data[0].values = [newVal];
 }
 
+// Export
+//~ document.getElementById("exportBtn").addEventListener("click", () => {
+  //~ if (!xdtsData) return;
+
+  //~ // ✅ Normalize trackNo to zero-based before export
+  //~ const tt = xdtsData.timeTables[0];
+  //~ const field = tt.fields.find(f => f.fieldId === 0);
+  //~ field.tracks.forEach((t, i) => t.trackNo = i);
+
+  //~ const jsonString = "exchangeDigitalTimeSheet Save Data" + JSON.stringify(xdtsData, null, 2);
+  //~ const blob = new Blob([jsonString], { type: "application/json" });
+  //~ const a = document.createElement("a");
+  //~ a.href = URL.createObjectURL(blob);
+  //~ a.download = "edited_timesheet.xdts";
+  //~ a.click();
+//~ });
 document.getElementById("exportBtn").addEventListener("click", () => {
   if (!xdtsData) return;
 
+// ✅ Normalize header before export
+  //~ if (!xdtsData.header) {
+    //~ xdtsData.header = [{
+      //~ title: "",
+      //~ scene: 0,
+      //~ cut: 0,
+      //~ name: ""
+    //~ }];
+  //~ } else if (!Array.isArray(xdtsData.header)) {
+    //~ xdtsData.header = [xdtsData.header];
+  //~ }
+  //~ if (xdtsData.header.length === 0) {
+    //~ xdtsData.header.push({ title: "", scene: 0, cut: 0, name: "" });
+  //~ }
 
   const hh = xdtsData.header;
   hh.title = document.getElementById("titleInput").value || "";
   hh.scene = parseInt(document.getElementById("sceneInput").value, 10) || 0;
   hh.cut   = parseInt(document.getElementById("cutInput").value, 10) || 0;
   hh.name  = document.getElementById("nameInput").value || "";
-  hh.memo = document.getElementById("memoInput").value;
   
-  // Normalize trackNo to zero-based before export
+  
+  // ✅ Normalize trackNo to zero-based before export
   const tt = xdtsData.timeTables[0];
   const field = tt.fields.find(f => f.fieldId === 0);
   field.tracks.forEach((t, i) => t.trackNo = i);

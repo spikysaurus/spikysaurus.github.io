@@ -3,27 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>XDTS Editor</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body >
 
 <style type="text/css" media="print">
 .dontprint{ display: none; }
-#memoInput{border:none;}
 </style>
 
 
-<div class="dontprint">
-	<div class="tab">
-  <button class="tablinks" onclick="openTab(event, 'File')" id="defaultOpen">File</button>
-  <button class="tablinks" onclick="openTab(event, 'Symbols')">Symbols</button>
-  <button class="tablinks" onclick="openTab(event, 'Table')">Table</button>
-  <button class="tablinks" onclick="openTab(event, 'Track')">Track</button>
-</div>
+<div class=" box dontprint">
 
-<div id="File" class="tabcontent">
-  <div class="panel">
+<div class="panel">
+	<label><b>File :</b></label>
+	<br>
 	<button id="loadXDTSbtn">Load</button>
 	<button id="newTimesheetBtn">New</button>
 	<button id="exportBtn" style="display:none">Save</button>
@@ -32,10 +26,10 @@
 	<br>
 	<label><i>*You can drag and drop .xdts file into the page to load it</i></label>
 	</div>
-</div>
+	
 
-<div id="Symbols" class="tabcontent">
-    <div class="panel">
+  <div class="panel">
+	  <label><b>Symbols : </b></label><br>
 	  <label>Empty Cell : <input type="text" id="symNull" value="x"></label><br>
 	  <label>Inbetween : <input type="text" id="symTick1" value="○"></label><br>
 	  <label>Reverse Sheet : <input type="text" id="symTick2" value="●"></label><br>
@@ -44,31 +38,27 @@
 
 <!--<label for="fontSizeInput">Font Size:</label>-->
 <!--<input type="number" id="fontSizeInput" min="1" max="999" value="14">-->
-	</div>
+
+
 </div>
+<div class="panel">
+<label><b>Table :</b></label><br>
+<label for="cellWidthInput">Cell Width:</label>
+<input type="number" id="cellWidthInput" min="0" max="999" value="30"><br>
 
-<script> const checkbox = document.getElementById('tcellHideBgBorder'); const table = document.getElementById('tableContainer'); checkbox.addEventListener('change', function() { if (this.checked) { table.classList.add('no-style'); } else { table.classList.remove('no-style'); } }); </script>
+<label for="cellHeightInput">Cell Height:</label>
+<input type="number" id="cellHeightInput" min="0" max="999" value="30"><br>
 
-
-<div id="Table" class="tabcontent">
-  <div class="panel">
-	<input type="checkbox" id="cellHideBgBorder" unchecked><label>Hide Cell Borders and Backgrounds</label><br>
-	<label for="cellWidthInput">Cell Width:</label>
-	<input type="number" id="cellWidthInput" min="0" max="999" value="30"><br>
-
-	<label for="cellHeightInput">Cell Height:</label>
-	<input type="number" id="cellHeightInput" min="0" max="999" value="30"><br>
-
-	<label>Adjust Duration by: <input type="number" id="adjustDuration" value="1" min="1"></label>
-			<br>
-			<button id="increaseDurationBtn">Increase Duration</button>
-			<button id="decreaseDurationBtn">Decrease Duration</button>
-			
-	</div>
+<label>Adjust Duration by: <input type="number" id="adjustDuration" value="1" min="1"></label>
+		<br>
+		<button id="increaseDurationBtn">Increase Duration</button>
+		<button id="decreaseDurationBtn">Decrease Duration</button>
+		
 </div>
-
-<div id="Track" class="tabcontent">
-<div class="panel" >
+	
+	<div class="panel" >
+	<label><b>Track :</b></label>
+	<br>
 		<button id="addTrackBtn">Add Track</button>
 		<button id="removeTrackBtn">Remove Last Track</button>
 		<button id="autoRenameBtn">Auto-Rename</button>
@@ -79,19 +69,49 @@
 		<button id="reorderRightBtn">Reorder to Right</button>
 		
 	</div>
+	
+	
+		
 </div>
-</div>
-<!--
-
-<div class=" box ">
-</div>
--->
 
 <input type="file" id="fileInput" accept=".xdts,.json,.txt" style="display:none">
 
-<div class="paper" id="paper">
+<style>
+.container {
+  display: flex;
+   flex: 1 1 0px; 
+  background-color: none;
+}
 
-<div class="header">
+.container div{
+	width:100%;
+  
+  font-size: 14px;
+}
+
+.container input {
+	background-color: white; border:none;appearance: textfield;
+	width:100%;
+	font-size:20px;
+	
+}
+.label {
+	background-color: #f1f1f1;
+	text-align: center;
+	border-bottom:1px black solid;
+	border-left:1px black solid;
+	border-top:1px black solid
+	}
+.data{border-bottom:1px black solid;
+	border-left:1px black solid;}
+.container input{text-align:center;}
+#durationLabel{font-size:17.5px;font-weight:bold;}
+.last{border-bottom:1px black solid;
+	border-left:1px black solid;
+	border-right:1px black solid}
+</style>
+
+<div class="container">
   <div>
 	  <div class="label">TITLE</div>
 	  <div class="data"><input id="titleInput" type="text"></div>
@@ -114,17 +134,11 @@
 	</div>
 </div>
 
-	<div id="memo"><textarea id="memoInput">Memo</textarea></div>
-	
-  <div id="tableContainer"></div>
- 
-</div>
 
-   
-  <script src="assets/js/script.js"></script>
-  <script src="assets/js/script2.js"></script>
-  <script src="assets/js/tab.js"></script>
-  <script src="assets/js/table/hide-border.js"></script>
+  <div id="tableContainer"></div>
+
+  <script src="script.js"></script>
+  <script src="script2.js"></script>
 </body>
 </html>
 
