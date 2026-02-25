@@ -12,10 +12,10 @@
   const style = document.createElement('style');
   style.textContent = `
     .cp-panel {
-      position: fixed; bottom: 20px; right: 20px;
+      position: fixed; bottom: 20px; right: 270px;
       background-color: #303030; padding: 5px;
       border: none; display: flex; flex-direction: row; align-items: center; gap: 6px;
-      z-index: 10; user-select: none;
+      z-index: 998; user-select: none;
       width: max-content;
     }
     .cp-handle {
@@ -139,6 +139,7 @@
   };
   document.onmousemove = (e) => {
     if (!isDragging) return;
+    isDrawing = false;
     panel.style.bottom = 'auto';
     panel.style.left = (e.clientX - offX) + 'px';
     panel.style.top = (e.clientY - offY) + 'px';

@@ -232,9 +232,6 @@ function resetTransform() {
   applyTransforms();
 }
 
-/**
- * --- 3. THE FIX: MOUSE POSITION WITH FLIP ---
- */
 function getMousePos(e) {
   const rect = activeCanvas.getBoundingClientRect();
   
@@ -259,10 +256,6 @@ function getMousePos(e) {
     y: mouseY * scaleY
   };
 }
-
-/**
- * --- 4. DRAWING & INTERACTION ---
- */
 
 window.addEventListener("pointerdown", e => {
   const isBrushOrEraser = activeTool === "ToolBrush" || activeTool === "ToolEraser";
@@ -382,9 +375,6 @@ function renderStrokes() {
 }
 
 requestAnimationFrame(renderStrokes);
-
-
-///////////////
 
 // --- Shortcuts & Utility ---
 const drawBehindLabel = document.getElementById("drawBehindLabel");

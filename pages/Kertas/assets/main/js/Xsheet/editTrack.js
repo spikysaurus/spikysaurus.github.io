@@ -17,21 +17,35 @@ document.getElementById("addTrackBtn").addEventListener("click", () => {
   renderDopeSheet(xdtsData);
 });
 
+
 document.getElementById("removeTrackBtn").addEventListener("click", () => {
-  if (!xdtsData) return;
+  if (!xdtsData || !window.activeTrack) return;
+  
   const tt = xdtsData.timeTables[0];
   const headers = tt.timeTableHeaders[0].names;
-  if (!headers.length) return;
-
-  headers.pop();
   const field = tt.fields.find(f => f.fieldId === 0);
-  field.tracks.pop();
+  
+  // Find the index of the active track
+  const idx = headers.indexOf(window.activeTrack);
+  
+  if (idx === -1) {
+    console.warn("Active track not found in data.");
+    return;
+  }
+
+  // Remove the specific track and header
+  headers.splice(idx, 1);
+  field.tracks.splice(idx, 1);
 
   // Reassign trackNo zero-based
   field.tracks.forEach((t, i) => t.trackNo = i);
 
+  // Clear activeTrack since it no longer exists
+  window.activeTrack = null;
+
   renderDopeSheet(xdtsData);
 });
+
 
 // --- Track reorder ---
 document.getElementById("reorderLeftBtn").addEventListener("click", () => reorderTrack("left"));
@@ -43,7 +57,8 @@ function reorderTrack(direction) {
   const headers = tt.timeTableHeaders[0].names;
   const field = tt.fields.find(f => f.fieldId === 0);
 
-  const targetName = document.getElementById("reorderInput").value.trim();
+  //~ const targetName = document.getElementById("reorderInput").value.trim();
+  const targetName = window.activeTrack;
   if (!targetName) return;
 
   const idx = headers.indexOf(targetName);

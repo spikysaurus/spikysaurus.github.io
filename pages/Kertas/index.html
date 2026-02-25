@@ -1,260 +1,61 @@
-<!doctype html>
-<html>
-   <head>
-      <meta charset="UTF-8">
-      <title>Kertas</title>
-      <meta property="og:title" content="Kertas" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Kertas</title>
+    <meta property="og:title" content="Kertas" />
       <meta property="og:image" content="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreicazv32xvsf4lhsfhjzpej6k3n3t23ppjjaxcalnquewonbw6dpq4@jpeg" />
       <meta property="og:description" content="Animation Tool" />
       <link rel="icon" href="assets/images/icon.png" type="image/x-icon">
       <link rel="stylesheet" href="assets/bl-icons/bl-icons.css">
       <link rel="stylesheet" href="assets/main/css/area.css">
       <link rel="stylesheet" href="assets/main/css/xsheet.css">
-      <link rel="stylesheet" href="assets/main/css/tree.css">
+      <link rel="stylesheet" href="assets/main/css/assets.css">
       <link rel="stylesheet" href="assets/main/css/canvas.css">
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <style>
-         * { box-sizing: border-box; }
-      </style>
-   </head>
-   <body>
-	   <div id="brushCursor"></div>
+      
+      
+</head>
+<body>
+<div id="brushCursor"></div>
+<div id="ctrl-indicator" style="display:none;">DOCKING MODE</div>
 
-      <div class="page-container">
-      <div class="drag-container">
-         <div class="area-xsheet" id="drag-left-1" >
-            <div id="dropZone">
-               <div class="tab" >
-                  <button class="tablinks defaultOpen" onclick="openTab(event, 'File')">File</button>
-                  <button class="tablinks" onclick="openTab(event, 'Track')">Track</button>
-                  <button class="tablinks" onclick="openTab(event, 'Cell')">Cell</button>
-                  <button class="tablinks" onclick="openTab(event, 'Symbols')">Symbols</button>
-                  <button class="tablinks" onclick="openTab(event, 'tabProperties')">Properties</button>
-               </div>
-               <div id="File" class="tabcontent">
-                  <div class="panel" >
-                     <button id="loadXDTSbtn">Load Xsheet</button>
-                     <button id="newTimesheetBtn">New Xsheet</button>
-                     <button id="exportBtn" style="display:none">Save Xsheet</button>
-                     <div class="info-table">
-                        <div class="info-row1">
-                           <label for="newDuration">New Xsheet Duration (in Frames) </label>
-                           <input type="number" id="newDuration" min="1" value="24">
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div id="Track" class="tabcontent">
-                  <div class="panel" >
-                     <button id="addTrackBtn">Add Track</button>
-                     <button id="removeTrackBtn">Remove Last Track</button>
-                     <button id="autoRenameBtn">Auto-Rename Tracks</button>
-                     <div class="info-table">
-                        <div class="info-row1">
-                           <label for="reorderInput">Track to reorder</label>
-                           <input type="text" id="reorderInput" value="A">
-                           <button id="reorderLeftBtn">Left</button>
-                           <button id="reorderRightBtn">Right</button>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div id="Cell" class="tabcontent">
-                  <div class="panel">
-                     <div class="info-table">
-						 
-                        <div class="info-row1">
-                           <label for="adjustDuration">Adjust Duration</label>
-                           <input type="number" id="adjustDuration" value="1" min="1">
-                           <button id="increaseDurationBtn">Increase</button>
-                           <button id="decreaseDurationBtn">Decrease</button>
-                        </div>
-                        
-                     </div>
-                  </div>
-               </div>
-               <div id="Symbols" class="tabcontent">
-                  <div class="panel">
-                     <div class="info-table">
-                        <div class="info-row1">
-                           <label for="symNull">Empty Cell</label>
-                           <input type="text" id="symNull" value="x">
-                           <button onclick="navigator.clipboard.writeText(symNull.value)">Copy</button>
-                        </div>
-                        <div class="info-row1">
-                           <label for="symTick1">Inbetween</label>
-                           <input type="text" id="symTick1" value="○">
-                           <button onclick="navigator.clipboard.writeText(symTick1.value)">Copy</button>
-                        </div>
-                        <div class="info-row1">
-                           <label for="symTick2" >Reverse Sheet</label>
-                           <input type="text" id="symTick2" value="●">
-                           <button onclick="navigator.clipboard.writeText(symTick2.value)">Copy</button>
-                        </div>
-                        <div class="info-row1">
-                           <label for="symHyphen">Hyphen</label>
-                           <input type="text" id="symHyphen" value="｜">
-                           <button onclick="navigator.clipboard.writeText(symHyphen.value)">Copy</button>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-             <div id="tabProperties" class="tabcontent">
-                  <div class="panel">
-                     <div class="info-table">
-						 
-                        <div class="info-row1">
-                           <label for="canvasWidth">Canvas Width</label>
-                           <input type="number" id="canvasWidthInput" value="1280" min="1">
-                         </div>
-                         <div class="info-row1">
-                           <label for="canvasHeight">Canvas Height</label>
-                           <input type="number" id="canvasHeightInput" value="720" min="1">
-                        </div>
-                        
-                     </div>
-                     <div style="text-align:right;">
-						 <button id="canvasRefreshBtn">Refresh Values</button>
-                      <button id="canvasResizeBtn">Resize Canvas</button>
-                  </div>
-                  </div>
-               </div>
-            
-            <input type="file" id="fileInput" accept=".xdts,.json,.txt" style="display:none">
-            <div class="paper" id="paper">
-               <div class="header" >
-                  <div class="info-table panel">
-                     <div class="info-row collapseHeaderArea">
-                        <label for="titleInput">Title</label>
-                        <input id="titleInput" type="text">
-                     </div>
-                     <div class="info-row collapseHeaderArea">
-                        <label for="sceneInput">Scene</label>
-                        <input id="sceneInput" type="number">
-                     </div>
-                     <div class="info-row collapseHeaderArea">
-                        <label for="cutInput">Cut</label>
-                        <input id="cutInput" type="number">
-                     </div>
-                     <div class="info-row collapseHeaderArea">
-                        <label for="nameInput">Name</label>
-                        <input id="nameInput" type="text">
-                     </div>
-                     <div class="info-row collapseHeaderArea">
-                        <label for="memoInput">Memo</label>
-                        <textarea id="memoInput">Memo</textarea>
-                     </div>
-                     <div class="info-row">
-                        <label for="durationLabel">Time</label>
-                        <span id="durationLabel">0+0 | 00</span>
-                        <button id="collapseHeaderBtn"><span class="bl-icons-align_top"></span></button>
-                     </div>
-                  </div>
-               </div>
-               <div id="xsheetContainer">
-                  <div id="tableContainer" ></div>
-               </div>
-               </div>
-            </div>
-         </div>
-         <div class="dragbar" id="dragbar-1"></div>
-         <div class="area-tree" id="drag-middle">
-			 <div id="dropZoneTree">
-				 <div class="tab" >
-                  <button class="tablinks defaultOpen" onclick="openTab(event, 'tabFileTree')">File</button>
-                  <button class="tablinks" onclick="openTab(event, 'tabLevelTree')">Level</button>
-                  <button class="tablinks" onclick="openTab(event, 'tabDrawingTree')">Drawing</button>
-               </div>
-               <div class="panel" >
-				   
-                  <div class="controls">
-					 <div id="tabFileTree" class="tabcontent">
-						 <button id="loadAssetsBtn">Load Assets</button>
-						 <button id="saveAssetsBtn">Save Assets</button>
-						 <input type="file" id="assetsInput" accept=".zip" style="display:none">
-						 <button id="loadBackdropBtn">Import Backdrop</button>
-						 <input type="file" id="backdropInput" accept="image/*" style="display:none">
-					</div>
-                     
-                     <div id="tabLevelTree" class="tabcontent">
-						
-						<div>
-						 <button id="newLevelBtn">New Level</button>
-						 <button id="deleteLevelBtn">Delete Level</button>
-						 <button id="arrangeLevelsBtn">Arrange Levels</button>
-						 </div>
-						 
-					</div>
-					
-					<div id="tabDrawingTree" class="tabcontent">
-						 <button id="newDrawingBtn">New Drawing</button>
-						 <button id="deleteDrawingBtn">Delete Drawing</button>
+<div id="viewport">
+    <div class="snap-area vertical collapsed dropZone" id="a-left" data-last="220px"><div class="tab-strip"></div></div>
+    <div class="resizer resizer-v" data-target="a-left" data-dir="right"></div>
 
-						 <button id="prevDrawingBtn">Prev Drawing</button>
-						 <button id="nextDrawingBtn">Next Drawing</button>
-                     </div>
-                     
-                  </div>
-               </div>
-            <div id="levelsTreeContainer">
-				<div id="levelsTree"></div>
-            </div>
-            </div>
-         </div>
-         <div class="dragbar" id="dragbar-2"></div>
-         <div class="area-canvas" id="drag-right">
-            <div id="debug">
-				<li>Toggle show/hide these texts (F1)</li>
-					<li><b>Brush Size (Bracket) : </b></label><label id="brushSizeLabel"></li>
-					<li><b>Eraser Size (Ctrl+Bracket) : </b></label><label id="eraserSizeLabel"></li>
-					<li style="color:blue;">Swap Colors (v)</li>
-					<li><b>Brush Aliasing (A) : </b></label><label id="aliasingLabel"></li>
-					<li><b>Draw Behind (B) : </b></label><label id="drawBehindLabel"></li>
-					<li><b>Pixelated Canvas (R) : </b></label><label id="imageRenderingLabel"></li>
-					<li style="color:blue;">Pan (hold Space + LMB Drag)</label>
-					<li style="color:blue;">Zoom (hold Z + LMB Drag Up/Down)</label>
-					<li style="color:red;">FlipH (/)</label>
-					<li style="color:red;">FlipV (Shift+/)</label>
-					<li style="color:red;">Reset View (0)</label>
-					<li style="color:gray;">Backdrop Opacity (Shift+Bracket)</li>
-					<li style="color:gray;">Reset Backdrop Opacity (\)</label>
-					<li style="color:gray;">Backdrop Opacity to Zero (Shift+\)</li>
-					<li style="color:red;">Speedlines (shift+p)</li>
-					<li>Ctrl+LMB on the cell to edit their values</li>
-					<li>Ctrl+LMB on the level name to edit their name</li>
-				 <li>Jump to next/prev keyframe (Alt+1 / Alt+2)</li>
-				 <li>Next/prev frame (Arrow Right / Arrow Left) </li>
-				 <li>Play/Pause (P)(Only 24 Fps for now)</li>
-                  <li><label id="activeTrackLabel" style="color:red;">No active Track</li>
-                  <li><label id="activeCelLabel" style="color:red;" >No active Cel</li>
-                  <li><label id="activeLevelLabel" style="color:blue;">No active Level</li>
-                  <li><label id="activeDrawingLabel" style="color:blue;">No active Drawing</li>
-                  
-                  
-				
-            </div>
-            <div id="canvasContainer">
+    <div id="center-stack">
+        <div class="snap-area horizontal collapsed" id="a-top" data-last="80px"><div class="tab-strip"></div></div>
+        <div class="resizer resizer-h" data-target="a-top" data-dir="bottom"></div>
+        <div class="snap-area" id="a-center">
+			
+			 <div id="canvasContainer">
                <canvas id="backgroundColorCanvas" class="canvases"></canvas>
                <canvas id="backdropCanvas" class="canvases"></canvas>
-               
                <canvas id="canvas"  class="canvases"></canvas>
             </div>
-         </div>
-      </div>
-<!--
-      <footer class="global-footer">
-         <p>Web App by Sadewoo/Spikysaurus - Icons are from Blender</p>
-      </footer>
--->
-<!-- 1. External Dependencies (Load first) -->
+            
+			</div>
+        <div class="resizer resizer-h" data-target="a-bottom" data-dir="top"></div>
+        <div class="snap-area horizontal collapsed" id="a-bottom" data-last="150px"><div class="tab-strip"></div></div>
+    </div>
+
+    <div class="resizer resizer-v" data-target="a-right" data-dir="left"></div>
+    <div class="snap-area vertical collapsed dropZoneTree" id="a-right" data-last="250px"><div class="tab-strip"></div></div>
+</div>
+
+<script src="assets/main/js/Ui/mainLayout.js"></script>
 <script src="assets/js/jszip.min.js"></script>
 <script src="assets/js/FileSaver.min.js"></script>
 
 <!-- 2. Base UI & Variable Setup -->
 <script src="assets/main/js/Ui/speedlines.js"></script>
+<!--
 <script src="assets/main/js/Ui/dragBar.js"></script>
-<script src="assets/main/js/xsheetResetVariables.js"></script>
-<script src="assets/main/js/xsheetUpdateVariables.js"></script>
+-->
+<script src="assets/main/js/Xsheet/xsheetResetVariables.js"></script>
+<script src="assets/main/js/Xsheet/xsheetUpdateVariables.js"></script>
 
 <!-- 3. Core Engine (Canvas & Assets) -->
 <script src="assets/main/js/Canvas/canvas.js"></script>
@@ -265,17 +66,21 @@
 <script src="assets/main/js/Bridges/xsheetLevelDrawingBridge.js"></script>
 
 <!-- 5. Xsheet Logic & Symbols -->
-<script src="assets/main/js/Symbols/xsheetSymbols.js"></script>
-<script src="assets/main/js/Table/adjustDuration.js"></script>
-<script src="assets/main/js/Track/editTrack.js"></script>
+<script src="assets/main/js/Xsheet/xsheetSymbols.js"></script>
+<script src="assets/main/js/Xsheet/adjustDuration.js"></script>
+<script src="assets/main/js/Xsheet/editTrack.js"></script>
 
 <!-- 6. Rendering & File Operations (Load last so they can see the Bridges) -->
-<script src="assets/main/js/xsheetRendering.js"></script>
-<script src="assets/main/js/xsheetTabs.js"></script>
+<script src="assets/main/js/Xsheet/xsheetRendering.js"></script>
+<script src="assets/main/js/Xsheet/xsheetTabs.js"></script>
+<!--
 <script src="assets/main/js/xsheetCollapseHeader.js"></script>
-<script src="assets/main/js/File/newXsheet.js"></script>
-<script src="assets/main/js/File/loadXDTS.js"></script>
+-->
+<script src="assets/main/js/Xsheet/newXsheet.js"></script>
+<script src="assets/main/js/Xsheet/saveLoadXDTS.js"></script>
+<!--
 <script src="assets/main/js/File/exportXDTS.js"></script>
+-->
 <script src="assets/main/js/Assets/saveLoadAssets.js"></script>
 
 <!-- 7. Tools that are on the Canvas -->
@@ -287,6 +92,7 @@
 <script src="assets/main/js/Ui/webpageStuff.js"></script>
 <script src="assets/main/js/Ui/tooltips.js"></script>
 <script src="assets/main/js/Ui/debug.js"></script>
-   </body>
-</html>
 
+
+</body>
+</html>

@@ -139,21 +139,24 @@ function fileLoadAssets(file) {
 }
 
 const assetsInput = document.getElementById("assetsInput");
-const dropZoneTree = document.getElementById("dropZoneTree");
+const dropZoneTree = document.querySelector(".dropZoneTree");
 
 dropZoneTree.addEventListener("dragover", e => { 
   e.preventDefault(); 
-  dropZoneTree.classList.add("dragover"); 
+   dropZoneTree.style.opacity = "0.5";
 });
-dropZoneTree.addEventListener("dragleave", () => 
-  dropZoneTree.classList.remove("dragover")
-);
+dropZoneTree.addEventListener("dragleave", () => {
+  
+   dropZoneTree.style.opacity = "1";
+});
 dropZoneTree.addEventListener("drop", e => {
   e.preventDefault();
-  dropZoneTree.classList.remove("dragover");
+  
+   dropZoneTree.style.opacity = "1";
   const file = e.dataTransfer.files[0];
   if (file){fileLoadAssets(file);}
 });
+
 
 document.getElementById('loadBackdropBtn').onclick = () => document.getElementById('backdropInput').click();
 

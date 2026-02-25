@@ -85,14 +85,14 @@
 window.TooltipLib.assign({
 	//~ Assets > Drawing
 	'newDrawingBtn': { 
-        name: "New Drawing", 
+        name: "Add Drawing", 
         desc: "Creates new Drawing in the Active Level", 
         keys: ["Backtick"] 
     },
     'deleteDrawingBtn': { 
         name: "Delete Drawing", 
-        desc: "Delete Active Drawing", 
-        keys: [] 
+        desc: "Delete Active Drawing (no undo)", 
+        keys: ["Shift + Backtick"] 
     },
 	'prevDrawingBtn': { 
         name: "Prev Drawing", 

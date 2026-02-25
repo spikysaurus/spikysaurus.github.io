@@ -260,6 +260,7 @@ document.getElementById('nextDrawingBtn').onclick = () => {
   setactiveDrawing(levels[activeLevel][activeDrawingIndex]);
 };
 
+//Shortcuts
 document.addEventListener('keydown', (event) => {
   // Existing Alt + Q or Shift + <
   if ((event.altKey && event.key === 'q') || (event.shiftKey && event.key === '<')) {
@@ -269,6 +270,10 @@ document.addEventListener('keydown', (event) => {
   // Existing Alt + W or Shift + >
   if ((event.altKey && event.key === 'w') || (event.shiftKey && event.key === '>')) {
     document.getElementById('nextDrawingBtn').click();
+  }
+  
+  if ((event.key === '~')) {
+    document.getElementById('deleteDrawingBtn').click();
   }
 });
 

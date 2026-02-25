@@ -6,14 +6,14 @@
       color: white;
       user-select: none;
       position: fixed;
-      right: 20px;
+      right: 270px;
       top: 50%;
       transform: translateY(-50%);
       width: 44px;
       background: #303030;
       cursor: move;
       padding: 6px;
-      z-index: 10;
+      z-index: 998;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -51,12 +51,14 @@
     <label>TOOLS</label>
     <button id="toolBrushBtn" data-tool="ToolBrush"><span class="bl-icons-greasepencil"></span></button>
     <button id="toolEraserBtn" data-tool="ToolEraser"><span class="bl-icons-meta_ellipsoid"></span></button>
-    <button id="ToolLassoFillBtn" data-tool="ToolLasso" class="disabled"><span class="bl-icons-meta_data"></span></button>
-    <button id="ToolSelectBtn" data-tool="ToolSelect" class="disabled"><span class="bl-icons-select_set"></span></button>
-    <button id="cut" class="disabled"><span class="bl-icons-node_insert_on"></span></button>
-    <button id="copy" class="disabled"><span class="bl-icons-duplicate"></span></button>
-    <button id="paste" class="disabled"><span class="bl-icons-pastedown"></span></button>
-    <button id="delete" class="disabled"><span class="bl-icons-trash"></span></button>
+    <div style="display:none;">
+    <button id="ToolLassoFillBtn" data-tool="ToolLasso" ><span class="bl-icons-meta_data"></span></button>
+    <button id="ToolSelectBtn" data-tool="ToolSelect" ><span class="bl-icons-select_set"></span></button>
+    <button id="cut" ><span class="bl-icons-node_insert_on"></span></button>
+    <button id="copy" ><span class="bl-icons-duplicate"></span></button>
+    <button id="paste" ><span class="bl-icons-pastedown"></span></button>
+    <button id="delete" "><span class="bl-icons-trash"></span></button>
+    </div>
   `;
   
   document.body.appendChild(toolbox);
@@ -106,10 +108,11 @@
 
   document.addEventListener('mousemove', (e) => {
     if (isDragging) {
+		isDrawing = false;
       toolbox.style.left = (e.clientX - offsetX) + 'px';
       toolbox.style.top = (e.clientY - offsetY) + 'px';
     }
   });
 
-  document.addEventListener('mouseup', () => isDragging = false);
+  document.addEventListener('mouseup', () => {isDragging = false});
 })();

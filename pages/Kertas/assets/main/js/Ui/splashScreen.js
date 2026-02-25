@@ -9,20 +9,22 @@
                 <div class="top-content">
                     <!-- Top: Logo & Title -->
                     <header class="splash-header">
-                        <h1>Kertas<span>(2026-02-24)</span></h1>
+                        <h1>Kertas<span>(2026-02-25)</span></h1>
                     </header>
 
                     <!-- Middle: Changelog Section -->
                     <div class="changelog-section">
                         <h3>Click anywhere outside the box to close this</h3>
                         <ul>
-							<li>Create Drawing by go to <b>Assets Area > Level Tab > New Level</b>, then go to <b>Drawing Tab > New Drawing</b> </li>
-							<li>Create Xsheet by go to <b>Xsheet Area > File Tab > New Xsheet</b></li>
-							<li>Ctrl+LMB on the Xsheet cell to edit their values</li>
-                            <li>You can load .xdts file by dropping the file into <b>Xsheet Area</b></li>
+							<li>Create Drawing by go to <b>Assets Stuff > Click Add Level</b>, then <b>Click Add Drawing</b> </li>
+							<li>Create Xsheet by go to <b>Xsheet Stuff > New Xsheet</b></li>
+							<li>Or click this button to create all of them and start drawing! <button id="newProjectBtn">Create New Project</button></li>
+							<li><b>Ctrl+LMB</b> on the Xsheet cell to edit their values</li>
+                            <li>You can load .xdts by dropping the file into <b>Xsheet Area</b></li>
                             <li>Dropping assets .zip file into <b>Assets Area</b> also works</li>
-							<li>You can hover over a button to display a tooltip to see its keyboard shortcut, currently only a few buttons has it.</li>
-                            
+							<li>You can hover over a button to display a tooltip to see its keyboard shortcut</li>
+                            <li>Press <b>F1</b> to show more shortcuts</li>
+                            <li><b>Hold Shift and Drag</b> tabs to detatch it into a floating window, <b>Hold Shift and Drag</b> the window's title bar into any areas and <b>Release LMB</b> to dock it</li>
                         </ul>
                     </div>
                 </div>
@@ -41,7 +43,7 @@
         #splash-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
-            z-index: 10000; transition: opacity 0.4s ease;
+            z-index: 9999; transition: opacity 0.4s ease;
             /* Allow clicking through the overlay to the app below */
             pointer-events: none; 
         }
@@ -82,21 +84,35 @@
 
     document.head.appendChild(style);
     document.body.appendChild(overlay);
-
-    // Global listener to detect clicks outside the container
-    const handleOutsideClick = (e) => {
-        const container = document.getElementById('splash-container');
-        if (container && !container.contains(e.target)) {
-            overlay.style.opacity = '0';
+	
+	function removeSplash(){
+        overlay.style.opacity = '0';
             setTimeout(() => { 
                 overlay.remove(); 
                 style.remove(); 
                 document.removeEventListener('mousedown', handleOutsideClick);
             }, 400);
         }
+    // Global listener to detect clicks outside the container
+    const handleOutsideClick = (e) => {
+		const container = document.getElementById('splash-container');
+        if (container && !container.contains(e.target)) {
+            
+            removeSplash();
+        }
     };
 
     // Attach listener to document so we catch clicks passing through the overlay
     document.addEventListener('mousedown', handleOutsideClick);
+	document.getElementById('newProjectBtn').addEventListener("click", (e) => {
+		newTimesheetBtn.click();
+		newLevelBtn.click();
+		newDrawingBtn.click();
+		removeSplash();
+		
+	});
 
 })();
+
+
+

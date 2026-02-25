@@ -21,13 +21,6 @@ document.addEventListener('keydown', e => {
 });
 
 
-window.addEventListener('wheel', e => e.preventDefault(), { passive: false });
-window.addEventListener('keydown', e => {
-  if (['ArrowUp','ArrowDown','PageUp','PageDown','Home','End','Space'].includes(e.key)) {
-    e.preventDefault();
-  }
-});
-
 // Prevent text selection except for inputs, textareas, and editable elements
 document.addEventListener('selectstart', e => {
   const tag = e.target.tagName;
@@ -36,4 +29,17 @@ document.addEventListener('selectstart', e => {
   }
 });
 
+// Prevent "/" from triggering browser "Quick Find"
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && !isUserEditing(e)) {
+    e.preventDefault();
+  }
+});
 
+
+//~ window.addEventListener('wheel', e => e.preventDefault(), { passive: false });
+//~ window.addEventListener('keydown', e => {
+  //~ if (['ArrowUp','ArrowDown','PageUp','PageDown','Home','End','Space'].includes(e.key)) {
+    //~ e.preventDefault();
+  //~ }
+//~ });

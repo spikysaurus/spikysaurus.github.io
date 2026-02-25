@@ -4,10 +4,10 @@
     style.textContent = `
         #speedCanvas {
             position: fixed;
-            top: -15%;
+            top: 0;
             left: 0;
-            width: 130vw;
-            height: 130vh;
+            width: 100vw;
+            height: 100vh;
             z-index: 9999;
             pointer-events: none;
             display: none; 
