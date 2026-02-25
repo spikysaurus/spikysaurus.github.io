@@ -1,18 +1,21 @@
 window.isMultiLayerMode = true; // Set to true to see all layers merged
 
-function clearDynamicLayers() {
-    document.querySelectorAll('.track-layer').forEach(el => el.remove());
-}
-
-window.xsheetCanvasBridge = {
+function clearDynamicLayers(){
+	 document.querySelectorAll('.track-layer').forEach(el => el.remove());
+	}
+	
+const xsheetCanvasBridge = {
+    // Cache for track-specific canvases (A, B, C, etc.)
     trackCanvases: {},
-    lastDrawnCel: {},
 
     syncCanvasStack: function() {
         const headers = window.currentHeaders;
         const active = window.activeTrack;
-
-        if (!headers || headers.length === 0) return;
+        
+        if (!headers || headers.length === 0) {
+            //~ console.warn("Bridge: No headers found. Xsheet data might not be ready.");
+            return;
+        }
 
         const container = document.getElementById("canvasContainer");
         const bdrop = document.getElementById("backdropCanvas");
@@ -21,67 +24,112 @@ window.xsheetCanvasBridge = {
 
         if (!container || !activeDrawingCanvas) return;
 
-        // 1. Clear current dynamic layers
-        clearDynamicLayers();
+        // 1. Clear current dynamic layers from DOM
+       clearDynamicLayers();
 
         // 2. Process all tracks in Xsheet Order
-        headers.forEach((trackName, idx) => {
-            let layer;
+        //~ headers.forEach((trackName) => {
+            //~ if (trackName === active) {
+                //~ // The editable drawing layer
+                //~ container.appendChild(activeDrawingCanvas);
+                //~ return;
+            //~ }
 
-            if (trackName === active) {
-                layer = activeDrawingCanvas;
-            } else {
-                if (!this.trackCanvases[trackName]) {
-                    const newCanvas = document.createElement('canvas');
-                    newCanvas.className = 'canvases track-layer';
-                    newCanvas.id = trackName;
-                    newCanvas.width = activeDrawingCanvas.width;
-                    newCanvas.height = activeDrawingCanvas.height;
-                    newCanvas.style.pointerEvents = "none";
-                    newCanvas.style.backgroundColor = "transparent";
-                    this.trackCanvases[trackName] = newCanvas;
-                }
-                layer = this.trackCanvases[trackName];
-            }
+            //~ // Create/Reuse static layer for this track
+            //~ if (!this.trackCanvases[trackName]) {
+                //~ const newCanvas = document.createElement('canvas');
+                //~ newCanvas.className = 'canvases track-layer';
+                //~ newCanvas.id = trackName;
+                //~ newCanvas.width = activeCanvas.width;
+                //~ newCanvas.height = activeCanvas.height;
+                //~ newCanvas.style.pointerEvents = "none"; 
+                //~ newCanvas.style.backgroundColor = "transparent";
+                //~ this.trackCanvases[trackName] = newCanvas;
+                //~ console.log(`Bridge: Created Layer [${trackName}]`);
+            //~ }
 
-            // Sync visual position
-            layer.style.top = activeDrawingCanvas.style.top;
-            layer.style.left = activeDrawingCanvas.style.left;
-            layer.style.transform = activeDrawingCanvas.style.transform;
+            //~ const layer = this.trackCanvases[trackName];
 
-            // Assign z-index based on order in headers
-            layer.style.zIndex = idx + 10; // offset so bg/backdrop stay lower
+            //~ // Sync visual position with main canvas (Pan/Zoom)
+            //~ layer.style.top = activeDrawingCanvas.style.top;
+            //~ layer.style.left = activeDrawingCanvas.style.left;
+            //~ layer.style.transform = activeDrawingCanvas.style.transform;
 
-            if (trackName !== active) {
-                if (window.isMultiLayerMode) {
-                    layer.style.display = "block";
-                    layer.style.opacity = "1;
-                } else {
-                    layer.style.display = "none";
-                }
-            }
+            //~ // --- MULTI-LAYER VISIBILITY LOGIC ---
+            //~ if (window.isMultiLayerMode) {
+                //~ layer.style.display = "block";
+                //~ layer.style.opacity = "0.5"; // Dim background layers slightly (Light Table effect)
+            //~ } else {
+                //~ layer.style.display = "none";
+            //~ }
 
-            container.appendChild(layer);
-        });
+            //~ container.appendChild(layer);
+        //~ });
 
-        // Ensure BG/Backdrop stay at the bottom
-        if (bgCanvas) {
-            bgCanvas.style.zIndex = 0;
-            container.insertBefore(bgCanvas, container.firstChild);
-        }
-        if (bdrop) {
-            bdrop.style.zIndex = 1;
-            container.insertBefore(bdrop, container.firstChild);
-        }
+        //~ // Ensure BG/Backdrop stay at the bottom of the stack
+        //~ if (bgCanvas) container.insertBefore(bgCanvas, container.firstChild);
+        //~ if (bdrop) container.insertBefore(bdrop, container.firstChild);
+        
+				headers.forEach((trackName, idx) => {
+			let layer;
+
+			if (trackName === active) {
+				layer = activeDrawingCanvas;
+			} else {
+				if (!this.trackCanvases[trackName]) {
+					const newCanvas = document.createElement('canvas');
+					newCanvas.className = 'canvases track-layer';
+					newCanvas.id = trackName;
+					newCanvas.width = activeCanvas.width;
+					newCanvas.height = activeCanvas.height;
+					newCanvas.style.pointerEvents = "none"; 
+					newCanvas.style.backgroundColor = "transparent";
+					this.trackCanvases[trackName] = newCanvas;
+				}
+				layer = this.trackCanvases[trackName];
+			}
+
+			// Sync visual position
+			layer.style.top = activeDrawingCanvas.style.top;
+			layer.style.left = activeDrawingCanvas.style.left;
+			layer.style.transform = activeDrawingCanvas.style.transform;
+
+			// Assign z-index based on order in headers
+			layer.style.zIndex = idx + 10; // offset so bg/backdrop can stay lower
+
+			if (trackName !== active) {
+				if (window.isMultiLayerMode) {
+					layer.style.display = "block";
+					layer.style.opacity = "1";
+				} else {
+					layer.style.display = "none";
+				}
+			}
+
+			container.appendChild(layer);
+		});
+
+		// Background and backdrop always lowest
+		if (bgCanvas) {
+			bgCanvas.style.zIndex = 0;
+			container.appendChild(bgCanvas);
+		}
+		if (bdrop) {
+			bdrop.style.zIndex = 1;
+			container.appendChild(bdrop);
+		}
+
 
         // 3. Redraw frame content
         this.updateTrackDrawings();
-    },
+    }
+    ,
 
+    /**
+     * Scans for keyframes and draws them on respective track canvases.
+     */
     updateTrackDrawings: function() {
         if (!window.currentHeaders || !window.isMultiLayerMode) return;
-
-        const frame = window.activeFrame || 1;
 
         window.currentHeaders.forEach((trackName, idx) => {
             if (trackName === window.activeTrack) return;
@@ -90,27 +138,27 @@ window.xsheetCanvasBridge = {
             if (!canvas) return;
 
             const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const frame = window.activeFrame || 1;
             const resolvedName = this.resolveKeyframe(idx, frame);
-
-            // Only redraw if cel changed
-            if (this.lastDrawnCel[trackName] !== resolvedName) {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                if (resolvedName && typeof levels !== 'undefined' && levels[trackName]) {
-                    const drawing = levels[trackName].find(d => d.name.replace(/\.png$/, "") === resolvedName);
-                    if (drawing && drawing.data && drawing.data.startsWith('data:image')) {
-                        const img = new Image();
-                        img.onload = () => ctx.drawImage(img, 0, 0);
-                        img.src = drawing.data;
-                    }
+            
+            if (resolvedName && typeof levels !== 'undefined' && levels[trackName]) {
+                const drawing = levels[trackName].find(d => d.name.replace(/\.png$/, "") === resolvedName);
+                if (drawing && drawing.data && drawing.data.startsWith('data:image')) {
+                    const img = new Image();
+                    img.onload = () => ctx.drawImage(img, 0, 0);
+                    img.src = drawing.data;
                 }
-
-                // Update cache
-                this.lastDrawnCel[trackName] = resolvedName;
             }
         });
-    },
+    }
+    
+    ,
 
+    /**
+     * Helper: Scans back from current frame to find the latest valid drawing name.
+     */
     resolveKeyframe: function(trackIdx, frame) {
         if (!window.currentTT || frame < 1) return null;
         for (let f = frame; f >= 1; f--) {
@@ -124,9 +172,12 @@ window.xsheetCanvasBridge = {
     }
 };
 
-// --- INITIALIZATION ---
+/**
+ * --- INITIALIZATION & AUTO-RUN ---
+ */
 (function() {
+    // Immediate sync if data is already loaded
     if (window.currentHeaders && window.currentHeaders.length > 0) {
-        setTimeout(() => window.xsheetCanvasBridge.syncCanvasStack(), 50);
+        setTimeout(() => xsheetCanvasBridge.syncCanvasStack(), 50);
     }
 })();
