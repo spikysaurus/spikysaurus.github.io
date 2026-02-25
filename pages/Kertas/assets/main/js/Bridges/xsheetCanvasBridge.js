@@ -8,9 +8,6 @@ const xsheetCanvasBridge = {
     // Cache for track-specific canvases (A, B, C, etc.)
     trackCanvases: {},
 
-    /**
-     * Rebuilds the DOM stack based on Xsheet order and Visibility Mode.
-     */
     syncCanvasStack: function() {
         const headers = window.currentHeaders;
         const active = window.activeTrack;
@@ -31,51 +28,102 @@ const xsheetCanvasBridge = {
        clearDynamicLayers();
 
         // 2. Process all tracks in Xsheet Order
-        headers.forEach((trackName) => {
-            if (trackName === active) {
-                // The editable drawing layer
-                container.appendChild(activeDrawingCanvas);
-                return;
-            }
+        //~ headers.forEach((trackName) => {
+            //~ if (trackName === active) {
+                //~ // The editable drawing layer
+                //~ container.appendChild(activeDrawingCanvas);
+                //~ return;
+            //~ }
 
-            // Create/Reuse static layer for this track
-            if (!this.trackCanvases[trackName]) {
-                const newCanvas = document.createElement('canvas');
-                newCanvas.className = 'canvases track-layer';
-                newCanvas.id = trackName;
-                newCanvas.width = activeCanvas.width;
-                newCanvas.height = activeCanvas.height;
-                newCanvas.style.pointerEvents = "none"; 
-                newCanvas.style.backgroundColor = "transparent";
-                this.trackCanvases[trackName] = newCanvas;
+            //~ // Create/Reuse static layer for this track
+            //~ if (!this.trackCanvases[trackName]) {
+                //~ const newCanvas = document.createElement('canvas');
+                //~ newCanvas.className = 'canvases track-layer';
+                //~ newCanvas.id = trackName;
+                //~ newCanvas.width = activeCanvas.width;
+                //~ newCanvas.height = activeCanvas.height;
+                //~ newCanvas.style.pointerEvents = "none"; 
+                //~ newCanvas.style.backgroundColor = "transparent";
+                //~ this.trackCanvases[trackName] = newCanvas;
                 //~ console.log(`Bridge: Created Layer [${trackName}]`);
-            }
+            //~ }
 
-            const layer = this.trackCanvases[trackName];
+            //~ const layer = this.trackCanvases[trackName];
 
-            // Sync visual position with main canvas (Pan/Zoom)
-            layer.style.top = activeDrawingCanvas.style.top;
-            layer.style.left = activeDrawingCanvas.style.left;
-            layer.style.transform = activeDrawingCanvas.style.transform;
+            //~ // Sync visual position with main canvas (Pan/Zoom)
+            //~ layer.style.top = activeDrawingCanvas.style.top;
+            //~ layer.style.left = activeDrawingCanvas.style.left;
+            //~ layer.style.transform = activeDrawingCanvas.style.transform;
 
-            // --- MULTI-LAYER VISIBILITY LOGIC ---
-            if (window.isMultiLayerMode) {
-                layer.style.display = "block";
-                layer.style.opacity = "0.5"; // Dim background layers slightly (Light Table effect)
-            } else {
-                layer.style.display = "none";
-            }
+            //~ // --- MULTI-LAYER VISIBILITY LOGIC ---
+            //~ if (window.isMultiLayerMode) {
+                //~ layer.style.display = "block";
+                //~ layer.style.opacity = "0.5"; // Dim background layers slightly (Light Table effect)
+            //~ } else {
+                //~ layer.style.display = "none";
+            //~ }
 
-            container.appendChild(layer);
-        });
+            //~ container.appendChild(layer);
+        //~ });
 
-        // Ensure BG/Backdrop stay at the bottom of the stack
-        if (bgCanvas) container.insertBefore(bgCanvas, container.firstChild);
-        if (bdrop) container.insertBefore(bdrop, container.firstChild);
+        //~ // Ensure BG/Backdrop stay at the bottom of the stack
+        //~ if (bgCanvas) container.insertBefore(bgCanvas, container.firstChild);
+        //~ if (bdrop) container.insertBefore(bdrop, container.firstChild);
+        
+				headers.forEach((trackName, idx) => {
+			let layer;
+
+			if (trackName === active) {
+				layer = activeDrawingCanvas;
+			} else {
+				if (!this.trackCanvases[trackName]) {
+					const newCanvas = document.createElement('canvas');
+					newCanvas.className = 'canvases track-layer';
+					newCanvas.id = trackName;
+					newCanvas.width = activeCanvas.width;
+					newCanvas.height = activeCanvas.height;
+					newCanvas.style.pointerEvents = "none"; 
+					newCanvas.style.backgroundColor = "transparent";
+					this.trackCanvases[trackName] = newCanvas;
+				}
+				layer = this.trackCanvases[trackName];
+			}
+
+			// Sync visual position
+			layer.style.top = activeDrawingCanvas.style.top;
+			layer.style.left = activeDrawingCanvas.style.left;
+			layer.style.transform = activeDrawingCanvas.style.transform;
+
+			// Assign z-index based on order in headers
+			layer.style.zIndex = idx + 10; // offset so bg/backdrop can stay lower
+
+			if (trackName !== active) {
+				if (window.isMultiLayerMode) {
+					layer.style.display = "block";
+					layer.style.opacity = "1";
+				} else {
+					layer.style.display = "none";
+				}
+			}
+
+			container.appendChild(layer);
+		});
+
+		// Background and backdrop always lowest
+		if (bgCanvas) {
+			bgCanvas.style.zIndex = 0;
+			container.appendChild(bgCanvas);
+		}
+		if (bdrop) {
+			bdrop.style.zIndex = 1;
+			container.appendChild(bdrop);
+		}
+
 
         // 3. Redraw frame content
         this.updateTrackDrawings();
-    },
+    }
+    ,
 
     /**
      * Scans for keyframes and draws them on respective track canvases.
@@ -131,4 +179,3 @@ const xsheetCanvasBridge = {
         setTimeout(() => xsheetCanvasBridge.syncCanvasStack(), 50);
     }
 })();
-
