@@ -1,3 +1,7 @@
+
+
+let isOverWindow = false;
+
 const viewport = document.getElementById('viewport');
     const areas = document.querySelectorAll('.snap-area');
     let isCtrl = false;
@@ -29,6 +33,25 @@ function createWindow(title, targetArea = null, content = null) {
     if (targetArea) { dockWindow(win, targetArea); } 
     else { win.style.left = '100px'; win.style.top = '100px'; viewport.appendChild(win); }
     
+    
+			// Prevent drawing when mouse enters the window
+			win.addEventListener('mouseenter', () => {
+				isOverWindow = true;
+				isDrawing = false; 
+			});
+
+			// Allow drawing again when mouse leaves
+			win.addEventListener('mouseleave', () => {
+				isOverWindow = false;
+			});
+
+			// Ensure clicking the window doesn't trigger a draw start
+			win.addEventListener('mousedown', (e) => {
+				isDrawing = false;
+				// Optional: stop propagation so the viewport doesn't see the click
+				e.stopPropagation(); 
+			});
+
     return win;
 }
 
@@ -209,8 +232,8 @@ createWindow("Symbols", document.getElementById('a-top'),
 
 
 createWindow("Assets Stuff", document.getElementById('a-top'), 
-`
-<button id="loadAssetsBtn">Load Assets</button>
+`	<div class="flex-wrap-row">
+		<button id="loadAssetsBtn">Load Assets</button>
 		<button id="saveAssetsBtn">Save Assets</button>
 		<input type="file" id="assetsInput" accept=".zip" style="display:none">
 		<button id="loadBackdropBtn">Import Backdrop</button>
@@ -226,6 +249,7 @@ createWindow("Assets Stuff", document.getElementById('a-top'),
 
 		<button id="prevDrawingBtn"><span class="bl-icons-frame_prev"></span> Prev Drawing</button>
 		<button id="nextDrawingBtn"><span class="bl-icons-frame_next"></span> Next Drawing</button>
+	</div>
 `);
 
 

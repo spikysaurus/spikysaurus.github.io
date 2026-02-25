@@ -18,6 +18,7 @@
       flex-direction: column;
       gap: 8px;
       box-sizing: border-box;
+      border-radius: 8px;
     }
     .toolbox label { cursor: move; font-size: 10px; text-align: center; display: block; }
     .toolbox button {

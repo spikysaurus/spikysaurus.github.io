@@ -74,7 +74,7 @@
 
         .window-panel {
             position: absolute; width: 350px; height: 250px; min-width: 150px; min-height: 100px;
-            background: var(--panel-bg); color: var(--text-color); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: var(--panel-bg); color: var(--text-color);;
             display: flex; flex-direction: column; z-index: 5; border-radius: 8px; overflow: hidden;
         }
 

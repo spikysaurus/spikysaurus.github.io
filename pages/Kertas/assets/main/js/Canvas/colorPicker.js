@@ -16,10 +16,10 @@
       background-color: #303030; padding: 5px;
       border: none; display: flex; flex-direction: row; align-items: center; gap: 6px;
       z-index: 998; user-select: none;
-      width: max-content;
+      width: max-content;border-radius: 8px;
     }
     .cp-handle {
-      width: 8px; height: 48px; cursor: move;
+      width: 15px; height: 48px; cursor: move;
       background: #4c4c4c;
       border-radius: 2px; margin-right: 2px;
     }
