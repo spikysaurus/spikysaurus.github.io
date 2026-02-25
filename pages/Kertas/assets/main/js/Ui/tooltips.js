@@ -114,6 +114,11 @@ window.TooltipLib.assign({
         name: "Eraser Tool", 
         desc: "", 
         keys: ["E"] 
+    },
+     'toolLassoBtn': { 
+        name: "Lasso Selection Tool", 
+        desc: "Hold [Shift] to maintain aspect ratio, [M/Shift + M] for mirroring", 
+        keys: ["L"] 
     }
     
 });

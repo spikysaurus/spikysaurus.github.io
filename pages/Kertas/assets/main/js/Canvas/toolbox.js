@@ -52,9 +52,10 @@
     <label>TOOLS</label>
     <button id="toolBrushBtn" data-tool="ToolBrush"><span class="bl-icons-greasepencil"></span></button>
     <button id="toolEraserBtn" data-tool="ToolEraser"><span class="bl-icons-meta_ellipsoid"></span></button>
+     <button id="toolLassoBtn" data-tool="ToolLasso" ><span class="bl-icons-normalize_fcurves"></span></button>
     <div style="display:none;">
     <button id="ToolLassoFillBtn" data-tool="ToolLasso" ><span class="bl-icons-meta_data"></span></button>
-    <button id="ToolSelectBtn" data-tool="ToolSelect" ><span class="bl-icons-select_set"></span></button>
+   
     <button id="cut" ><span class="bl-icons-node_insert_on"></span></button>
     <button id="copy" ><span class="bl-icons-duplicate"></span></button>
     <button id="paste" ><span class="bl-icons-pastedown"></span></button>
