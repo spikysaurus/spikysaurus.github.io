@@ -55,7 +55,7 @@ window.xsheetCanvasBridge = {
             if (trackName !== active) {
                 if (window.isMultiLayerMode) {
                     layer.style.display = "block";
-                    layer.style.opacity = "0.5";
+                    layer.style.opacity = "1;
                 } else {
                     layer.style.display = "none";
                 }
