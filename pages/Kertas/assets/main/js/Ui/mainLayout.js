@@ -10,8 +10,11 @@ const viewport = document.getElementById('viewport');
     window.addEventListener('keydown', (e) => { if(e.key === 'Shift') { isCtrl = true; document.body.classList.add('ctrl-down'); } });
     window.addEventListener('keyup', (e) => { if(e.key === 'Shift') { isCtrl = false; document.body.classList.remove('ctrl-down'); } });
 
+const areaTop = document.getElementById('a-top');
 const areaBottom = document.getElementById('a-bottom');
 const areaLeft = document.getElementById('a-left');
+const areaRight = document.getElementById('a-right');
+
     // Add 'content' as a parameter with a default fallback
 function createWindow(title, targetArea = null, content = null) {
     const win = document.createElement('div');
@@ -188,7 +191,9 @@ function createWindow(title, targetArea = null, content = null) {
             }
         });
     };
-    createWindow("Xsheet Stuff", document.getElementById('a-top'), 
+    
+    
+    createWindow("Xsheet Stuff", areaTop, 
     `
     <div class="flex-wrap-row">
 		<button id="loadXDTSbtn">Load Xsheet</button>
@@ -212,7 +217,7 @@ function createWindow(title, targetArea = null, content = null) {
 	</div>
     `);
 
-createWindow("Symbols", document.getElementById('a-top'), 
+createWindow("Symbols", areaTop, 
 `
 	<div class="flex-wrap-row">
 	<label>Click to copy : </label>
@@ -231,7 +236,7 @@ createWindow("Symbols", document.getElementById('a-top'),
 `);
 
 
-createWindow("Assets Stuff", document.getElementById('a-top'), 
+createWindow("Assets Stuff", areaTop, 
 `	<div class="flex-wrap-row">
 		<button id="loadAssetsBtn">Load Assets</button>
 		<button id="saveAssetsBtn">Save Assets</button>
@@ -253,11 +258,10 @@ createWindow("Assets Stuff", document.getElementById('a-top'),
 `);
 
 
-createWindow("Xsheet", document.getElementById('a-left'), 
+createWindow("Xsheet", areaLeft, 
     `
-    
-   
-    <div id="tableContainer"></div>`);
+    <div id="tableContainer"></div>
+    `);
     
 createWindow("Info", areaLeft,
 `<div class="flex-wrap-column">
@@ -278,12 +282,12 @@ createWindow("Info", areaLeft,
 	</div>
 `);
     
-createWindow("Assets", document.getElementById('a-right'), 
+createWindow("Assets", areaRight, 
 `
 	<div id="levelsTree"></div>
 `);
 
-createWindow("Properties", document.getElementById('a-right'), 
+createWindow("Properties", areaRight, 
 `	<div class="flex-wrap-column">
 	<label for="newDuration">Default Xsheet Frame Duration</label>
 	<input type="number" id="newDuration" min="1" value="24">
@@ -333,5 +337,13 @@ createWindow("Debug and Shortcuts (F1)", areaBottom,
 	</div
     `);
 
+createWindow("Render & Export", areaTop, 
+    `
+    <div class="flex-wrap-row">
+   <button id="flipbookBtn">Flipbook</div>
+   </div>
+    `);
+    
+    
     updateLayoutStates();
 
