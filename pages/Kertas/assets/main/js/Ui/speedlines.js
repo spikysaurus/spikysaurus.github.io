@@ -41,7 +41,7 @@
     // 3. Updated Toggle Logic: Shift + P
     window.addEventListener('keydown', (e) => {
         // e.shiftKey checks for Shift, e.code 'KeyP' detects the P key
-        if (e.shiftKey && e.code === 'KeyP') {
+        if (e.shiftKey && e.code === 'KeyO') {
             isActive = !isActive;
             canvas.style.display = isActive ? 'block' : 'none';
         }

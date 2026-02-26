@@ -19,6 +19,7 @@
       gap: 8px;
       box-sizing: border-box;
       border-radius: 8px;
+      pointer-events: auto;
     }
     .toolbox label { cursor: move; font-size: 10px; text-align: center; display: block; }
     .toolbox button {
@@ -52,9 +53,15 @@
     <label>TOOLS</label>
     <button id="toolBrushBtn" data-tool="ToolBrush"><span class="bl-icons-greasepencil"></span></button>
     <button id="toolEraserBtn" data-tool="ToolEraser"><span class="bl-icons-meta_ellipsoid"></span></button>
-     <button id="toolLassoBtn" data-tool="ToolLasso" ><span class="bl-icons-normalize_fcurves"></span></button>
+    <button id="ToolFillBtn" data-tool="ToolFill" ><span class="bl-icons-image"></span></button>
+    <button id="toolLassoFillBtn" data-tool="ToolLassoFill" ><span class="bl-icons-sculptmode_hlt"></span></button>
+	<button id="toolLassoBtn" data-tool="ToolLasso" ><span class="bl-icons-normalize_fcurves"></span></button>
+	<button id="toolPanBtn" data-tool="ToolPan" ><span class="bl-icons-view_pan"></span></button>
+	<button id="toolZoomBtn" data-tool="ToolZoom" ><span class="bl-icons-view_zoom"></span></button>
+	
+	
     <div style="display:none;">
-    <button id="ToolLassoFillBtn" data-tool="ToolLasso" ><span class="bl-icons-meta_data"></span></button>
+    
    
     <button id="cut" ><span class="bl-icons-node_insert_on"></span></button>
     <button id="copy" ><span class="bl-icons-duplicate"></span></button>

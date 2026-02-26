@@ -22,44 +22,59 @@ const canvases = document.getElementsByClassName("canvases");
   }
 });
 
-function resizeCanvases(w = CANVAS_WIDTH, h = CANVAS_HEIGHT) {
-  // 1. Loop through all canvases to preserve content
+function resizeCanvases(w, h, anchor) {
+  const oldW = activeCanvas.width;
+  const oldH = activeCanvas.height;
+
   for (let i = 0; i < canvases.length; i++) {
     const canvas = canvases[i];
     const ctx = canvas.getContext('2d');
 
-    // Create a temporary "backup" canvas
+    // Backup current content
     const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = canvas.width;
-    tempCanvas.height = canvas.height;
-    const tempCtx = tempCanvas.getContext('2d');
+    tempCanvas.width = oldW;
+    tempCanvas.height = oldH;
+    tempCanvas.getContext('2d').drawImage(canvas, 0, 0);
 
-    // Copy current drawing to backup
-    tempCtx.drawImage(canvas, 0, 0);
-
-    // 2. Resize the actual canvas (This clears it)
+    // Resize (clears canvas)
     canvas.width = w;
     canvas.height = h;
 
-    // 3. Draw the backup back (stays at top-left 0,0)
-    ctx.drawImage(tempCanvas, 0, 0);
+    let offsetX = 0;
+    let offsetY = 0;
+
+    // Anchor logic
+    switch (anchor) {
+      case 'tr': // anchor bottom-left
+        offsetX = 0;
+        offsetY = h - oldH;
+        break;
+      case 'tl': // anchor bottom-right
+        offsetX = w - oldW;
+        offsetY = h - oldH;
+        break;
+      case 'br': // anchor top-left
+        offsetX = 0;
+        offsetY = 0;
+        break;
+      case 'bl': // anchor top-right
+        offsetX = w - oldW;
+        offsetY = 0;
+        break;
+      default: // fallback to center
+        offsetX = (w - oldW) / 2;
+        offsetY = (h - oldH) / 2;
+    }
+
+    ctx.drawImage(tempCanvas, offsetX, offsetY);
   }
 
-  // 4. Update CSS and Metadata
   const container = document.getElementById("canvasContainer");
   if (container) {
     container.style.setProperty('--canvas-width', `${w}px`);
     container.style.setProperty('--canvas-height', `${h}px`);
   }
-
-  if (activeDrawing) {
-    activeDrawing.width = w;
-    activeDrawing.height = h;
-    // Update the data string so future pointerup events don't save a blank canvas
-    activeDrawing.data = activeCanvas.toDataURL("image/png");
-  }
 }
-
 
 const canvasResizeBtn = document.getElementById('canvasResizeBtn');
 canvasResizeBtn.addEventListener("click", (e) => {
@@ -232,31 +247,6 @@ function resetTransform() {
   applyTransforms();
 }
 
-//~ function getMousePos(e) {
-	
-  //~ const rect = activeCanvas.getBoundingClientRect();
-  
-  //~ // 1. Get raw distance from the top-left of the BOUNDING BOX
-  //~ let mouseX = e.clientX - rect.left;
-  //~ let mouseY = e.clientY - rect.top;
-
-  //~ // 2. If flipped, we need to measure from the opposite edge of the box
-  //~ if (flipH === -1) {
-    //~ mouseX = rect.width - mouseX;
-  //~ }
-  //~ if (flipV === -1) {
-    //~ mouseY = rect.height - mouseY;
-  //~ }
-
-  //~ // 3. Scale coordinates based on internal resolution vs display size
-  //~ const scaleX = activeCanvas.width / rect.width;
-  //~ const scaleY = activeCanvas.height / rect.height;
-
-  //~ return {
-    //~ x: mouseX * scaleX,
-    //~ y: mouseY * scaleY
-  //~ };
-//~ }
 function getMousePos(e) {
     const rect = activeCanvas.getBoundingClientRect();
     
@@ -282,11 +272,10 @@ function getMousePos(e) {
     if (flipV === -1) {
         y = activeCanvas.height - y;
     }
+    
 
     return { x, y };
 }
-
-
 
 window.addEventListener("pointerdown", e => {
   const isBrushOrEraser = activeTool === "ToolBrush" || activeTool === "ToolEraser";
@@ -415,20 +404,30 @@ pixelatedCanvas = false;
 let currentBackdropOpacity = 1;
 
 document.addEventListener("keydown", e => {
-	const isEditing = isUserEditing(e);
-	if (isEditing) return;
+  const isEditing = isUserEditing(e);
+  if (isEditing) return;
+
   // Temporarily tool switching
-  if (e.code === "Space") {
-    e.preventDefault(); // Prevent page scroll
-    switchTool("ToolPan", true);
-  }
-  else if (e.key.toLowerCase() === "z") {
+  if (e.ctrlKey && e.code === "Space") {
+    e.preventDefault();
+    previousTool = activeTool;
     switchTool("ToolZoom", true);
   } 
+  else if (e.code === "Space") {
+    e.preventDefault();
+    previousTool = activeTool;
+    switchTool("ToolPan", true);
+  } 
   else if (e.ctrlKey) {
-    switchTool("ToolEraser", true);
+    if (activeTool === "ToolBrush") {
+      previousTool = activeTool;
+      switchTool("ToolEraser", true);
+    } else if (activeTool === "ToolLassoFill") {
+      previousTool = activeTool;
+      switchToLasso(true, true);
+    }
   }
-  
+
   // Update Brush and Eraser Size Shortcuts
   if (e.key === "[" || e.key === "]") {
     updateCursorSize();
@@ -444,15 +443,15 @@ document.addEventListener("keydown", e => {
   }
 
   // Permanent tool Switch shortcuts
-	if (e.key.toLowerCase() === "e") {
-		switchTool("ToolEraser");
-	} 
+  if (e.key.toLowerCase() === "e") {
+    switchTool("ToolEraser");
+  } 
   
   if (e.key.toLowerCase() === "w") {
     switchTool("ToolBrush");
   } 
   
-  if (event.key.toLowerCase() === "a") {
+  if (e.key.toLowerCase() === "a") {
     brush_aliasing = !brush_aliasing;
     
     const aliasingToggle = document.getElementById('aliasingToggle');
@@ -460,25 +459,37 @@ document.addEventListener("keydown", e => {
     updateAliasingLabel();
   }
   
-
-  if (event.key.toLowerCase() === "b") {
-    event.preventDefault(); // Prevent browser "Bold" or search shortcuts
+  if (e.key.toLowerCase() === "b") {
+    e.preventDefault(); // Prevent browser "Bold" or search shortcuts
     drawBehind = !drawBehind;
-    // Update the label text
     drawBehindLabel.textContent = drawBehind ? "true" : "false";
   }
 
   // Toggle Rendering Shortcut (Key: 'R')
   if (e.key.toLowerCase() === 'r') {
-    // Loop through the live collection of canvases
     for (let i = 0; i < canvases.length; i++) {
       canvases[i].classList.toggle('pixelated-rendering');
     }
     pixelatedCanvas = !pixelatedCanvas;
-    if (pixelatedCanvas){imageRenderingLabel.textContent = true}
-	else{imageRenderingLabel.textContent = false}
+    imageRenderingLabel.textContent = pixelatedCanvas ? true : false;
   }
-  
+
+  // New: D → switch to Lasso Fill tool
+  if (e.key.toLowerCase() === "d") {
+    switchTool("ToolLassoFill");
+  }
+});
+
+document.addEventListener("keyup", e => {
+  // Switch back when Control is released
+  if (e.key === "Control") {
+    if (activeTool === "ToolEraser") {
+      switchTool("ToolBrush"); // restore brush
+    } else if (activeTool === "ToolLassoErase") {
+      switchTool("ToolLassoFill"); // restore lasso fill
+    }
+  }
+
 });
 
 
@@ -506,21 +517,65 @@ const isEditing = isUserEditing(e);
     backdropCanvas.style.opacity = currentBackdropOpacity;
   }
 });
-document.addEventListener("keyup", e => {
-  // 2. Switch back to Brush ONLY if Control is released 
-  // and we are currently using the Eraser
-  if (e.key === "Control" && activeTool === "ToolEraser") {
-    switchTool("ToolBrush");
-  }
 
-  // Your existing space/zoom logic
-  if (e.code === "Space" && activeTool === "ToolPan") {
-    switchTool("ToolBrush");
-  }
-  if (e.key.toLowerCase() === "z" && activeTool === "ToolZoom") {
-    switchTool("ToolBrush");
+//STRAIGHT LINE FOR BRUSH using SHIFT
+let isShiftDown = false;
+let shiftStartX = null, shiftStartY = null; // Track the anchor point for Shift
+
+window.addEventListener("keydown", e => { 
+  if (e.key === "Shift" && !isShiftDown) {
+    isShiftDown = true;
+    // Lock the start point to the last known mouse position when Shift is first pressed
+    shiftStartX = lastX; 
+    shiftStartY = lastY;
   }
 });
+
+window.addEventListener("keyup", e => { 
+  if (e.key === "Shift") {
+    isShiftDown = false;
+    shiftStartX = null;
+    shiftStartY = null;
+  }
+});
+
+window.addEventListener("pointermove", e => {
+  if (!isDrawing) return;
+  const pos = getMousePos(e);
+
+  if (isShiftDown) {
+    // 1. Calculate the start point: Use the locked Shift anchor, 
+    // or fall back to the very first point of the current stroke.
+    const x0 = shiftStartX ?? (strokePoints.length ? strokePoints[0][0] : pos.x);
+    const y0 = shiftStartY ?? (strokePoints.length ? strokePoints[0][1] : pos.y);
+
+    if (activeTool === "ToolBrush") {
+      // Note: For a "preview" effect, you would typically clear a temp canvas here.
+      line(x0, y0, pos.x, pos.y, brush_size, window.colorPicker.activeColor, brush_opacity);
+    } else if (activeTool === "ToolEraser") {
+      activeCanvasCtx.save();
+      activeCanvasCtx.globalCompositeOperation = "destination-out";
+      line(x0, y0, pos.x, pos.y, eraser_size, "#000", 1);
+      activeCanvasCtx.restore();
+    }
+  } else {
+    // 2. Standard Freehand drawing (connecting last segment)
+    const [xPrev, yPrev] = strokePoints.length ? strokePoints[strokePoints.length - 1] : [pos.x, pos.y];
+    
+    if (activeTool === "ToolBrush") {
+      line(xPrev, yPrev, pos.x, pos.y, brush_size, window.colorPicker.activeColor, brush_opacity);
+    } else if (activeTool === "ToolEraser") {
+      activeCanvasCtx.clearRect(pos.x - eraser_size/2, pos.y - eraser_size/2, eraser_size, eraser_size);
+    }
+  }
+
+  strokePoints.push([pos.x, pos.y]);
+  lastX = pos.x; 
+  lastY = pos.y;
+});
+
+
+
 
 const brushCursor = document.getElementById('brushCursor');
 
@@ -538,258 +593,9 @@ function updateCursorSize() {
   brushCursor.style.borderRadius = brush_aliasing ? "0" : "50%";
 }
 
-// LASSO state
-const lasso={
-  points:[],pos:{x:0,y:0},active:false,dragging:false,dash:0,
-  resizing:null,handleSize:8,originalBuffer:null,transform:null,preRes:null,
-  origBounds:null,rotation:0,rotating:false,startRotation:0,startAngle:0
-};
-
-// Overlay canvas
-const overlay=document.createElement('canvas');
-overlay.id="lassoOverlay";
-container.appendChild(overlay);
-
-function syncOverlay(){
-  const r=activeCanvas.getBoundingClientRect(),c=container.getBoundingClientRect();
-  overlay.width=activeCanvas.width;overlay.height=activeCanvas.height;
-  Object.assign(overlay.style,{
-    position:"absolute",left:(r.left-c.left)+"px",top:(r.top-c.top)+"px",
-    width:r.width+"px",height:r.height+"px",pointerEvents:"none",zIndex:"100",transform:"none"
-  });
-}
-
-function getHandleAt(pos){
-  if(!lasso.originalBuffer)return null;
-  const {x,y}=lasso.pos,{width:w,height:h}=lasso.transform,hs=lasso.handleSize;
-  const handles=[
-    {id:'nw',x,y},{id:'n',x:x+w/2,y},{id:'ne',x:x+w,y},
-    {id:'w',x,y:y+h/2},{id:'e',x:x+w,y:y+h/2},
-    {id:'sw',x,y:y+h},{id:'s',x:x+w/2,y:y+h},{id:'se',x:x+w,y:y+h}
-  ];
-  const found=handles.find(p=>Math.abs(pos.x-p.x)<hs&&Math.abs(pos.y-p.y)<hs)?.id;
-  if(found)return found;
-  // rotation handle above top-center
-  const rx=x+w/2,ry=y-30;
-  if(Math.hypot(pos.x-rx,pos.y-ry)<hs)return 'rotate';
-  return null;
-}
-
-function handleLasso(e,type){
-  const pos=getMousePos(e);syncOverlay();
-  if(type==='down'){
-    const h=getHandleAt(pos);
-    if(h==='rotate'){
-      lasso.rotating=true;
-      const cx=lasso.pos.x+lasso.transform.width/2,cy=lasso.pos.y+lasso.transform.height/2;
-      lasso.startRotation=lasso.rotation;
-      lasso.startAngle=Math.atan2(pos.y-cy,pos.x-cx);
-    }
-    else if(h){
-      lasso.resizing=h;startX=pos.x;startY=pos.y;
-      lasso.preRes={...lasso.pos,w:lasso.transform.width,h:lasso.transform.height};
-    }
-    else if(lasso.originalBuffer&&pos.x>lasso.pos.x&&pos.x<lasso.pos.x+lasso.transform.width&&pos.y>lasso.pos.y&&pos.y<lasso.pos.y+lasso.transform.height){
-      lasso.dragging=true;startX=pos.x-lasso.pos.x;startY=pos.y-lasso.pos.y;
-    }
-    else{
-      if(lasso.originalBuffer)commitLasso();
-      lasso.active=true;lasso.points=[pos];
-    }
-  }
-  if(type==='move'){
-    if(lasso.rotating){
-      const cx=lasso.pos.x+lasso.transform.width/2,cy=lasso.pos.y+lasso.transform.height/2;
-      const currentAngle=Math.atan2(pos.y-cy,pos.x-cx);
-      const delta=currentAngle-lasso.startAngle;
-      lasso.rotation=lasso.startRotation+delta;
-    }
-    else if(lasso.resizing){
-      const dx=pos.x-startX,dy=pos.y-startY,r=lasso.preRes;
-      let newW=r.w,newH=r.h;
-      if(lasso.resizing.includes('e'))newW=Math.max(10,r.w+dx);
-      if(lasso.resizing.includes('s'))newH=Math.max(10,r.h+dy);
-      if(lasso.resizing.includes('w')){newW=Math.max(10,r.w-dx);lasso.pos.x=r.x+(r.w-newW);}
-      if(lasso.resizing.includes('n')){newH=Math.max(10,r.h-dy);lasso.pos.y=r.y+(r.h-newH);}
-      if(e.shiftKey){const ratio=r.w/r.h;if(newW/newH>ratio)newW=Math.round(newH*ratio);else newH=Math.round(newW/ratio);}
-      lasso.transform.width=newW;lasso.transform.height=newH;
-    }
-    if(lasso.active)lasso.points.push(pos);
-    if(lasso.dragging){lasso.pos.x=pos.x-startX;lasso.pos.y=pos.y-startY;}
-  }
-  if(type==='up'){
-    lasso.resizing=null;lasso.rotating=false;
-    if(lasso.active&&lasso.points.length>5){
-      const xs=lasso.points.map(p=>p.x),ys=lasso.points.map(p=>p.y),
-        x=Math.min(...xs),y=Math.min(...ys),w=Math.max(...xs)-x,h=Math.max(...ys)-y;
-      lasso.originalBuffer=document.createElement('canvas');
-      lasso.originalBuffer.width=w;lasso.originalBuffer.height=h;
-      const bCtx=lasso.originalBuffer.getContext('2d');
-      bCtx.imageSmoothingEnabled=false;bCtx.save();bCtx.beginPath();
-      lasso.points.forEach((p,i)=>i===0?bCtx.moveTo(p.x-x,p.y-y):bCtx.lineTo(p.x-x,p.y-y));
-      bCtx.closePath();bCtx.clip();
-      bCtx.drawImage(activeCanvas,x,y,w,h,0,0,w,h);bCtx.restore();
-      activeCanvasCtx.save();activeCanvasCtx.setTransform(1,0,0,1,0,0);
-      activeCanvasCtx.globalCompositeOperation='destination-out';
-      activeCanvasCtx.beginPath();
-      lasso.points.forEach((p,i)=>i===0?activeCanvasCtx.moveTo(p.x,p.y):activeCanvasCtx.lineTo(p.x,p.y));
-      activeCanvasCtx.closePath();activeCanvasCtx.fill();activeCanvasCtx.restore();
-      lasso.pos={x,y};lasso.transform={width:w,height:h};lasso.origBounds={x,y,w,h};
-    }
-    lasso.active=false;lasso.dragging=false;
-  }
-}
-function commitLasso(){
-  if(!lasso.originalBuffer)return;
-  activeCanvasCtx.save();
-  activeCanvasCtx.imageSmoothingEnabled=false;
-  activeCanvasCtx.globalCompositeOperation='source-over'; // draw over, not clear
-  const cx=Math.round(lasso.pos.x+lasso.transform.width/2);
-  const cy=Math.round(lasso.pos.y+lasso.transform.height/2);
-  activeCanvasCtx.translate(cx,cy);
-  activeCanvasCtx.rotate(lasso.rotation);
-  activeCanvasCtx.drawImage(
-    lasso.originalBuffer,
-    -Math.round(lasso.transform.width/2),
-    -Math.round(lasso.transform.height/2),
-    Math.round(lasso.transform.width),
-    Math.round(lasso.transform.height)
-  );
-  activeCanvasCtx.restore();
-  lasso.originalBuffer=null;
-  lasso.transform=null;
-  lasso.origBounds=null;
-  lasso.rotation=0;
-  if(activeDrawing)activeDrawing.data=activeCanvas.toDataURL();
-}
 
 
-function drawLassoUI(){
-  const oCtx=overlay.getContext('2d');
-  oCtx.clearRect(0,0,overlay.width,overlay.height);
-  if(!lasso.active&&!lasso.originalBuffer){requestAnimationFrame(drawLassoUI);return;}
-  oCtx.save();oCtx.setLineDash([5,5]);oCtx.lineDashOffset=lasso.dash-=0.5;oCtx.imageSmoothingEnabled=false;
-  if(lasso.active){
-    oCtx.strokeStyle="blue";oCtx.beginPath();
-    lasso.points.forEach((p,i)=>i===0?oCtx.moveTo(p.x,p.y):oCtx.lineTo(p.x,p.y));
-    oCtx.closePath();oCtx.stroke();
-  }
-  else if(lasso.originalBuffer){
-    const {x,y}=lasso.pos,{width:w,height:h}=lasso.transform;
-    const cx=Math.round(x+w/2),cy=Math.round(y+h/2);
-    oCtx.translate(cx,cy);oCtx.rotate(lasso.rotation);
-    oCtx.drawImage(lasso.originalBuffer,-Math.round(w/2),-Math.round(h/2),Math.round(w),Math.round(h));
-    oCtx.strokeStyle="blue";oCtx.strokeRect(-w/2,-h/2,w,h);
-    oCtx.strokeStyle="black";oCtx.lineDashOffset+=5;oCtx.strokeRect(-w/2,-h/2,w,h);
-    const {x:ox,y:oy,w:ow,h:oh}=lasso.origBounds;const scaleX=w/ow,scaleY=h/oh;
-    oCtx.strokeStyle="blue";oCtx.beginPath();
-    lasso.points.forEach((p,i)=>{
-      const sx=(p.x-ox)*scaleX-w/2,sy=(p.y-oy)*scaleY-h/2;
-      i===0?oCtx.moveTo(sx,sy):oCtx.lineTo(sx,sy);
-    });
-    oCtx.closePath();oCtx.stroke();
-    // handles
-    oCtx.setLineDash([]);oCtx.fillStyle="white";oCtx.strokeStyle="black";const hs=lasso.handleSize;
-    [{px:-w/2,py:-h/2},{px:0,py:-h/2},{px:w/2,py:-h/2},{px:-w/2,py:0},{px:w/2,py:0},
-     {px:-w/2,py:h/2},{px:0,py:h/2},{px:w/2,py:h/2}]
-      .forEach(p=>{oCtx.fillRect(p.px-hs/2,p.py-hs/2,hs,hs);oCtx.strokeRect(p.px-hs/2,p.py-hs/2,hs,hs);});
-    // rotation handle
-    oCtx.beginPath();oCtx.arc(0,-h/2-30,hs/2,0,Math.PI*2);
-    oCtx.fillStyle="white";oCtx.fill();oCtx.strokeStyle="black";oCtx.stroke();
-  }
-  oCtx.restore();requestAnimationFrame(drawLassoUI);
-}
-drawLassoUI();
 
-// Keyboard & Pointer
-window.addEventListener('keydown', e=>{
-  if(e.target.tagName!=='INPUT'){
-    const key = e.key.toLowerCase();
-
-    // Toggle lasso tool with "L"
-    if(key==='l'){
-      activeTool==="ToolLasso" ? (commitLasso(), switchTool("ToolBrush")) : switchTool("ToolLasso");
-    }
-
-    // Mirror horizontally with "M"
-    if(key==='m' && !e.shiftKey && lasso.originalBuffer){
-      const buf = document.createElement('canvas');
-      buf.width = lasso.originalBuffer.width;
-      buf.height = lasso.originalBuffer.height;
-      const ctx = buf.getContext('2d');
-      ctx.translate(buf.width, 0);
-      ctx.scale(-1, 1);
-      ctx.drawImage(lasso.originalBuffer, 0, 0);
-      lasso.originalBuffer = buf;
-
-      // Mirror polygon points horizontally
-      const {x:ox,y:oy,w:ow} = lasso.origBounds;
-      lasso.points = lasso.points.map(p => ({
-        x: ox + ow - (p.x - ox),
-        y: p.y
-      }));
-    }
-
-    // Mirror vertically with "Shift+M"
-    if(key==='m' && e.shiftKey && lasso.originalBuffer){
-      const buf = document.createElement('canvas');
-      buf.width = lasso.originalBuffer.width;
-      buf.height = lasso.originalBuffer.height;
-      const ctx = buf.getContext('2d');
-      ctx.translate(0, buf.height);
-      ctx.scale(1, -1);
-      ctx.drawImage(lasso.originalBuffer, 0, 0);
-      lasso.originalBuffer = buf;
-
-      // Mirror polygon points vertically
-      const {x:ox,y:oy,h:oh} = lasso.origBounds;
-      lasso.points = lasso.points.map(p => ({
-        x: p.x,
-        y: oy + oh - (p.y - oy)
-      }));
-    }
-  }
-});
-
-
-activeCanvas.addEventListener('pointerdown',e=>{
-  if(activeTool==="ToolLasso"){
-    const pos=getMousePos(e);
-    const handle=getHandleAt(pos);
-    if(handle==='rotate'){
-      const cx=lasso.pos.x+lasso.transform.width/2;
-      const cy=lasso.pos.y+lasso.transform.height/2;
-      lasso.rotating=true;
-      lasso.startRotation=lasso.rotation;
-      lasso.startAngle=Math.atan2(pos.y-cy,pos.x-cx);
-    }
-    handleLasso(e,'down');
-  } else if(lasso.originalBuffer){
-    commitLasso();
-  }
-});
-
-activeCanvas.addEventListener('pointermove',e=>{
-  if(activeTool==="ToolLasso"){
-    if(lasso.rotating){
-      const pos=getMousePos(e);
-      const cx=lasso.pos.x+lasso.transform.width/2;
-      const cy=lasso.pos.y+lasso.transform.height/2;
-      const currentAngle=Math.atan2(pos.y-cy,pos.x-cx);
-      const delta=currentAngle-lasso.startAngle;
-      lasso.rotation=lasso.startRotation+delta;
-    } else {
-      handleLasso(e,'move');
-    }
-  }
-});
-
-activeCanvas.addEventListener('pointerup',e=>{
-  if(activeTool==="ToolLasso"){
-    lasso.rotating=false;
-    handleLasso(e,'up');
-  }
-});
 
 
 

@@ -43,3 +43,12 @@ flipBtn.onclick = async function() {
     flipWindow.document.write(getFlipbookHTML(frames, width, height));
     flipWindow.document.close();
 };
+
+window.addEventListener('keydown', e => {
+    if (e.shiftKey && (e.key === 'P' || e.code === 'KeyP')) {
+        e.preventDefault();
+        flipBtn.onclick();
+    }
+});
+
+		

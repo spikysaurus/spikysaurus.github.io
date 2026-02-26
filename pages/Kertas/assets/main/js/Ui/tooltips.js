@@ -107,18 +107,43 @@ window.TooltipLib.assign({
     //~ Tools
     'toolBrushBtn': { 
         name: "Brush Tool", 
-        desc: "Hold [Ctrl] to Erase", 
+        desc: "Hold [Ctrl] to Erase, Hold [Shift] for Line", 
         keys: ["W"] 
     },
      'toolEraserBtn': { 
         name: "Eraser Tool", 
-        desc: "", 
+        desc: "Hold [Shift] for Line", 
         keys: ["E"] 
+    },
+    'toolFillBtn': { 
+        name: "Fill Tool", 
+        desc: "Hold [Ctrl] for erase fill", 
+        keys: ["F"] 
+    },
+    'toolLassoFillBtn': { 
+        name: "Lasso Fill Tool", 
+        desc: "Hold [Ctrl] for erase fill", 
+        keys: ["D"] 
     },
      'toolLassoBtn': { 
         name: "Lasso Selection Tool", 
-        desc: "Hold [Shift] to maintain aspect ratio, [M/Shift + M] for mirroring", 
-        keys: ["L"] 
+        desc: "Hold [Shift] to maintain aspect ratio, [M/Shift + M] for mirroring , [X] for Erase", 
+        keys: ["V"] 
+    },
+    'toolPanBtn': { 
+        name: "Pan Tool", 
+        desc: "Panning the Canvas", 
+        keys: ["Space"] 
+    },
+    'toolZoomBtn': { 
+        name: "Zoom Tool", 
+        desc: "Zoom Zoom Zoooom", 
+        keys: ["Ctrl+Space"] 
+    },
+    'flipbookBtn': { 
+        name: "Flipbook", 
+        desc: "For previewing and rendering animation", 
+        keys: ["Shift+P"] 
     }
     
 });

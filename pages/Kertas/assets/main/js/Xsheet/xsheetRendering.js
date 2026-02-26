@@ -155,6 +155,22 @@ function jumpToCel(tt, trackIdx, duration, direction) {
   return cycle(tt, trackIdx, duration, direction);
 }
 
+// --- Input Bindings ---
+window.addEventListener("pointerdown",e=>{
+  if(activeTool==="ToolFill"&&activeDrawing)toolFill.fillAtClick(e);
+});
+document.addEventListener("keydown",e=>{
+  if(e.key.toLowerCase()==="f")switchTool("ToolFill");
+  if(e.ctrlKey&&e.key.toLowerCase()==="z"){
+    e.preventDefault();
+    if(e.shiftKey)toolFill.redo();else toolFill.undo();
+  }
+});
+
+
+
+
+
 function cycle(tt, trackIdx, duration, direction) {
   const checkOrder = direction === "up" 
     ? Array.from({length: duration}, (_, i) => duration - i) 

@@ -388,7 +388,27 @@ function autoArrangeLevels() {
   });
 }
 
+function activateAndEdit(level, index, changes = {}) {
+  if (!levels[level] || !levels[level][index]) {
+    console.warn(`Drawing ${index} in level ${level} not found.`);
+    return;
+  }
 
+  const drawing = levels[level][index];
+
+  // Activate level + drawing
+  editButtonHandler(level, drawing);
+
+  // Apply changes
+  Object.keys(changes).forEach(key => {
+    drawing[key] = changes[key];
+  });
+
+  // Optional redraw
+  if (typeof refreshDrawingsUI === "function") {
+    refreshDrawingsUI(level);
+  }
+}
 
 
 document.getElementById('arrangeLevelsBtn').onclick=()=>{

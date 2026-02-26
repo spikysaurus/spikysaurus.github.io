@@ -9,7 +9,7 @@
                 <div class="top-content">
                     <!-- Top: Logo & Title -->
                     <header class="splash-header">
-                        <h1>Kertas<span>(2026-02-25)</span></h1>
+                        <h1>Kertas<span>(2026-02-26)</span></h1>
                     </header>
 
                     <!-- Middle: Changelog Section -->
@@ -102,15 +102,37 @@
         }
     };
 
-    // Attach listener to document so we catch clicks passing through the overlay
-    document.addEventListener('mousedown', handleOutsideClick);
-	document.getElementById('newProjectBtn').addEventListener("click", (e) => {
-		newTimesheetBtn.click();
-		newLevelBtn.click();
-		newDrawingBtn.click();
-		removeSplash();
-		
-	});
+
+// Attach listener to document so we catch clicks passing through the overlay
+document.addEventListener("mousedown", handleOutsideClick);
+
+document.getElementById("newProjectBtn").addEventListener("click", () => {
+  // Simulate creating tracks/levels/drawings
+  newTimesheetBtn.click();
+  addTrackBtn.click();
+  addTrackBtn.click();
+
+  newLevelBtn.click();
+  newDrawingBtn.click();
+
+  newLevelBtn.click();
+  newDrawingBtn.click();
+
+  newLevelBtn.click();
+  newDrawingBtn.click();
+
+  // Now activate and edit Drawing 1 in Level A
+  activateAndEdit("A", 0, {
+    color: "blue",
+    x: 50,
+    y: 20
+  });
+
+  removeSplash();
+});
+
+
+
 
 })();
 

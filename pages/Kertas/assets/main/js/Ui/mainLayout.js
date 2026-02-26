@@ -314,16 +314,14 @@ createWindow("Debug and Shortcuts (F1)", areaBottom,
 		<li style="color:yellow;">Brush Aliasing (A) : <span id="aliasingLabel"></span></li>
 		<li style="color:yellow;">Draw Behind (B) : <span id="drawBehindLabel"></span></li>
 		<li style="color:yellow;">Pixelated Canvas (R) : <span id="imageRenderingLabel"></span></li>
-		<li>Swap Colors (v)</li>
-		<li>Pan (hold Space + LMB Drag)</li>
-		<li>Zoom (hold Z + LMB Drag Up/Down)</li>
+		<li>Swap Colors (g)</li>
 		<li>FlipH (/)</li>
 		<li>FlipV (Shift+/)</li>
 		<li>Reset View (0)</li>
 		<li>Backdrop Opacity (Shift+Bracket)</li>
-		<li>Reset Backdrop Opacity (\)</li>
-		<li>Backdrop Opacity to Zero (Shift+\)</li>
-		<li>Speedlines (shift+p)</li>
+		<li>Reset Backdrop Opacity (\\)</li>
+		<li>Backdrop Opacity to Zero (Shift+\\)</li>
+		<li>Speedlines (shift+o)</li>
 		<li>Ctrl+LMB on the cell to edit their values</li>
 		<li>Ctrl+LMB on the level name to edit their name</li>
 		<li>Jump to next/prev keyframe (Alt+1 / Alt+2)</li>
@@ -340,7 +338,7 @@ createWindow("Debug and Shortcuts (F1)", areaBottom,
 createWindow("Render & Export", areaTop, 
     `
     <div class="flex-wrap-row">
-   <button id="flipbookBtn">Flipbook</div>
+		<button id="flipbookBtn"><span class="bl-icons-play"></span> Flipbook</button>
    </div>
     `);
     

@@ -1,6 +1,6 @@
 
-//window.colorPicker.activeColor); // Returns Hex/RGB of Foreground
-//window.colorPicker.activeColorSecondary); // Returns Hex/RGB of Foreground
+//window.colorPicker.activeColor ; // Returns Hex/RGB of Foreground
+//window.colorPicker.activeColorSecondary; // Returns Hex/RGB of Foreground
 (function() {
   // 1. Global State Object
   window.colorPicker = {
@@ -96,7 +96,7 @@
     const isEditing = isUserEditing(e);
 	if (isEditing) return;
 	
-    if (e.key.toLowerCase() === 'v') {
+    if (e.key.toLowerCase() === 'g') {
       swapColors();
     }
   });

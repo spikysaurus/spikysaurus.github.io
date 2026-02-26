@@ -1,5 +1,6 @@
 	// --- Track add/remove ---
-document.getElementById("addTrackBtn").addEventListener("click", () => {
+	const addTrackBtn = document.getElementById("addTrackBtn");
+addTrackBtn.addEventListener("click", () => {
   if (!xdtsData) return;
   const tt = xdtsData.timeTables[0];
   const headers = tt.timeTableHeaders[0].names;
@@ -17,8 +18,8 @@ document.getElementById("addTrackBtn").addEventListener("click", () => {
   renderDopeSheet(xdtsData);
 });
 
-
-document.getElementById("removeTrackBtn").addEventListener("click", () => {
+const removeTrackBtn = document.getElementById("removeTrackBtn");
+removeTrackBtn.addEventListener("click", () => {
   if (!xdtsData || !window.activeTrack) return;
   
   const tt = xdtsData.timeTables[0];

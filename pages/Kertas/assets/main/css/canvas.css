@@ -1,5 +1,7 @@
 #canvasContainer {
   position: fixed;
+  
+  
   background-color: lightgray;
   overflow-x: auto;
   overflow-y:auto; 
