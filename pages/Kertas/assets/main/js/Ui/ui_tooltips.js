@@ -117,7 +117,7 @@ window.TooltipLib.assign({
     },
     'toolFillBtn': { 
         name: "Fill Tool", 
-        desc: "Hold [Ctrl] for erase fill", 
+        desc: "Detect multi-layers! , Hold [Ctrl] for erase fill", 
         keys: ["F"] 
     },
     'toolLassoFillBtn': { 

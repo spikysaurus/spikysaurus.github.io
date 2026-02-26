@@ -1,5 +1,5 @@
-let colorTolerance = 5;
-let fillGrowShrink = 1; // positive = grow, negative = shrink
+let colorTolerance = 0;
+let fillGrowShrink = 0.5; // positive = grow, negative = shrink
 
 const toolFill = {
   getMergedImageData() {

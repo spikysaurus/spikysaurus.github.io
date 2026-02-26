@@ -1,5 +1,3 @@
-
-// lassoFillTool.js - Dedicated Overlay & Pixelated Logic
 let lassoPoints = [], isLassoDrawing = false, lassoAnimateReq;
 
 // 1. Unique Overlay Setup
@@ -21,8 +19,6 @@ function syncOverlaySize() {
     lassoOverlay.style.left = rect.left + "px";
     lassoOverlay.style.top = rect.top + "px";
 }
-
-
 
 function switchToLasso(temp = false, erase = false) {
     if (!temp) window.previousTool = "ToolLassoFill";

@@ -217,7 +217,7 @@ function createWindow(title, targetArea = null, content = null) {
 	</div>
     `);
 
-createWindow("Symbols", areaTop, 
+createWindow("Xsheet Symbols", areaTop, 
 `
 	<div class="flex-wrap-row">
 	<label>Click to copy : </label>

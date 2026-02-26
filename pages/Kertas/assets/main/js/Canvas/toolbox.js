@@ -53,7 +53,7 @@
     <label>TOOLS</label>
     <button id="toolBrushBtn" data-tool="ToolBrush"><span class="bl-icons-greasepencil"></span></button>
     <button id="toolEraserBtn" data-tool="ToolEraser"><span class="bl-icons-meta_ellipsoid"></span></button>
-    <button id="ToolFillBtn" data-tool="ToolFill" ><span class="bl-icons-image"></span></button>
+    <button id="toolFillBtn" data-tool="ToolFill" ><span class="bl-icons-image"></span></button>
     <button id="toolLassoFillBtn" data-tool="ToolLassoFill" ><span class="bl-icons-sculptmode_hlt"></span></button>
 	<button id="toolLassoBtn" data-tool="ToolLasso" ><span class="bl-icons-normalize_fcurves"></span></button>
 	<button id="toolPanBtn" data-tool="ToolPan" ><span class="bl-icons-view_pan"></span></button>

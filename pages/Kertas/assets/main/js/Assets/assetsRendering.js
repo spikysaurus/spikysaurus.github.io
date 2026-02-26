@@ -414,3 +414,38 @@ function activateAndEdit(level, index, changes = {}) {
 document.getElementById('arrangeLevelsBtn').onclick=()=>{
   autoArrangeLevels();
 };
+
+function setactiveDrawing(c) {
+  const img = new Image();
+  img.onload = () => {
+    // Clear the active drawing layer only
+    activeCanvasCtx.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
+    activeCanvasCtx.drawImage(img, 0, 0);
+    
+    // Sync the background/foreground track layers (the merged view)
+    if (window.xsheetCanvasBridge) {
+        window.xsheetCanvasBridge.syncCanvasStack();
+    }
+  };
+  img.src = c.data;
+  activeDrawing = c;
+  
+  if (typeof activeLevel !== 'undefined' && levels[activeLevel]) {
+    activeDrawingIndex = levels[activeLevel].indexOf(c);
+  }
+
+  const label = document.getElementById('activeDrawingLabel');
+  if (label) label.textContent = `Active Drawing: ${c.name.replace(/\.png$/, "")}`;
+  
+  activeCanvas.style.cursor = "crosshair";
+  
+  // Update sidebar UI highlights
+  document.querySelectorAll('.drawing input').forEach(el => el.classList.remove('active'));
+  const list = document.querySelector(`[data-label="${activeLevel}"] .drawing-list`);
+  if (list) {
+    list.querySelectorAll('.drawing').forEach(div => {
+      const input = div.querySelector('input');
+      if (input.value.trim() === c.name.replace(/\.png$/, "")) input.classList.add('active');
+    });
+  }
+}

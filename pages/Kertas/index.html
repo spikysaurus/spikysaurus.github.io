@@ -29,12 +29,10 @@
         <div class="snap-area horizontal collapsed" id="a-top" data-last="80px"><div class="tab-strip"></div></div>
         <div class="resizer resizer-h" data-target="a-top" data-dir="bottom"></div>
         <div class="snap-area" id="a-center">
-			
 			 <div id="canvasContainer">
                <canvas id="backgroundColorCanvas" class="canvases"></canvas>
                <canvas id="backdropCanvas" class="canvases"></canvas>
                <canvas id="canvas"  class="canvases"></canvas>
-               
             </div>
             
 			</div>
@@ -46,59 +44,42 @@
     <div class="snap-area vertical collapsed dropZoneTree" id="a-right" data-last="250px"><div class="tab-strip"></div></div>
 </div>
 
-<script src="assets/main/js/Ui/mainLayout.js"></script>
+<script src="assets/main/js/Ui/ui_main.js"></script>
 <script src="assets/js/jszip.min.js"></script>
 <script src="assets/js/FileSaver.min.js"></script>
 
-<!-- 2. Base UI & Variable Setup -->
-<script src="assets/main/js/Ui/speedlines.js"></script>
-<!--
-<script src="assets/main/js/Ui/dragBar.js"></script>
--->
-<script src="assets/main/js/Xsheet/xsheetResetVariables.js"></script>
-<script src="assets/main/js/Xsheet/xsheetUpdateVariables.js"></script>
+<script src="assets/main/js/Ui/ui_speedlines.js"></script>
+<script src="assets/main/js/Xsheet/xs_resetVariables.js"></script>
+<script src="assets/main/js/Xsheet/xs_updateVariables.js"></script>
 
-<!-- Canvas & Assets -->
 <script src="assets/main/js/Canvas/canvas.js"></script>
 <script src="assets/main/js/Canvas/canvasResizeHandles.js"></script>
+<script src="assets/main/js/Canvas/toolEventsShortcuts.js"></script>
+<script src="assets/main/js/Canvas/toolBrushEraser.js"></script>
 <script src="assets/main/js/Canvas/toolFill.js"></script>
 <script src="assets/main/js/Canvas/toolLassoFill.js"></script>
 <script src="assets/main/js/Canvas/toolLassoSelect.js"></script>
-<script src="assets/main/js/Assets/levelAndDrawings.js"></script>
+<script src="assets/main/js/Assets/assetsRendering.js"></script>
 
-<!-- 4. THE BRIDGES (Must be loaded BEFORE Rendering/Loading logic) -->
 <script src="assets/main/js/Bridges/xsheetCanvasBridge.js"></script>
-<script src="assets/main/js/Bridges/xsheetLevelDrawingBridge.js"></script>
+<script src="assets/main/js/Bridges/xsheetAssetsBridge.js"></script>
 
-<!-- 5. Xsheet Logic & Symbols -->
-<script src="assets/main/js/Xsheet/xsheetSymbols.js"></script>
-<script src="assets/main/js/Xsheet/adjustDuration.js"></script>
-<script src="assets/main/js/Xsheet/editTrack.js"></script>
+<script src="assets/main/js/Xsheet/xs_symbols.js"></script>
+<script src="assets/main/js/Xsheet/xs_adjustDuration.js"></script>
+<script src="assets/main/js/Xsheet/xs_editTrack.js"></script>
 
-<!-- 6. Rendering & File Operations (Load last so they can see the Bridges) -->
-<script src="assets/main/js/Xsheet/xsheetRendering.js"></script>
-<script src="assets/main/js/Xsheet/xsheetTabs.js"></script>
-<!--
-<script src="assets/main/js/xsheetCollapseHeader.js"></script>
--->
-<script src="assets/main/js/Xsheet/newXsheet.js"></script>
-<script src="assets/main/js/Xsheet/saveLoadXDTS.js"></script>
-<!--
-<script src="assets/main/js/File/exportXDTS.js"></script>
--->
-<script src="assets/main/js/Assets/saveLoadAssets.js"></script>
+<script src="assets/main/js/Xsheet/xs_rendering.js"></script>
+<script src="assets/main/js/Xsheet/xs_loadSave.js"></script>
+<script src="assets/main/js/Assets/assetsLoadSave.js"></script>
 
-<!-- 7. Tools that are on the Canvas -->
 <script src="assets/main/js/Canvas/toolbox.js"></script>
 <script src="assets/main/js/Canvas/colorPicker.js"></script>
 
-<!-- 7. UI Stuff -->
-<script src="assets/main/js/Ui/splashScreen.js"></script>
-<script src="assets/main/js/Ui/webpageStuff.js"></script>
-<script src="assets/main/js/Ui/tooltips.js"></script>
-<script src="assets/main/js/Ui/debug.js"></script>
+<script src="assets/main/js/Ui/ui_splashScreen.js"></script>
+<script src="assets/main/js/Ui/ui_preventDefaults.js"></script>
+<script src="assets/main/js/Ui/ui_tooltips.js"></script>
+<script src="assets/main/js/Ui/ui_debug.js"></script>
 
-<!-- 8. Render & Export -->
 <script src="assets/main/js/Flipbook/flipbookBtn.js"></script>
 <script src="assets/main/js/Flipbook/flipbookPage.js"></script>
 
