@@ -16,10 +16,16 @@ const areaLeft = document.getElementById('a-left');
 const areaRight = document.getElementById('a-right');
 
     // Add 'content' as a parameter with a default fallback
-function createWindow(title, targetArea = null, content = null) {
+function createWindow(title, targetArea = null, content = null, showResizer = true, isDockable = true) {
     const win = document.createElement('div');
     win.className = 'window-panel';
     win.dataset.title = title;
+    win.dataset.dockable = isDockable; 
+    
+     // Apply the class if showResizer is false
+    if (!showResizer) {
+        win.classList.add('hide-resizer');
+    }
     
     // Use custom content if provided, otherwise use the default template
     const bodyContent = content || `Content for ${title}.<br><br><b>Docked:</b> Drag tab to move.<br><b>Floating:</b> Drag title bar or resize bottom-right corner.`;
@@ -33,7 +39,7 @@ function createWindow(title, targetArea = null, content = null) {
     setupDragging(win);
     setupFloatingResize(win);
 
-    if (targetArea) { dockWindow(win, targetArea); } 
+    if (targetArea && isDockable) { dockWindow(win, targetArea); } 
     else { win.style.left = '100px'; win.style.top = '100px'; viewport.appendChild(win); }
     
     
@@ -54,7 +60,7 @@ function createWindow(title, targetArea = null, content = null) {
 				// Optional: stop propagation so the viewport doesn't see the click
 				e.stopPropagation(); 
 			});
-
+	
     return win;
 }
 
@@ -121,7 +127,7 @@ function createWindow(title, targetArea = null, content = null) {
                 win.style.top = (mE.clientY - offsetY) + 'px';
                 
                 areas.forEach(a => a.classList.remove('hover-active'));
-                if (isCtrl) {
+                if (isCtrl && win.dataset.dockable === "true") {
                     win.style.pointerEvents = 'none';
                     const target = document.elementFromPoint(mE.clientX, mE.clientY)?.closest('.snap-area');
                     win.style.pointerEvents = 'auto';
@@ -131,7 +137,7 @@ function createWindow(title, targetArea = null, content = null) {
 
             const onUp = (uE) => {
                 document.body.classList.remove('is-interacting');
-                if (isCtrl) {
+                 if (isCtrl && win.dataset.dockable === "true") {
                     win.style.pointerEvents = 'none';
                     const target = document.elementFromPoint(uE.clientX, uE.clientY)?.closest('.snap-area');
                     win.style.pointerEvents = 'auto';
@@ -149,20 +155,23 @@ function createWindow(title, targetArea = null, content = null) {
         win._startDrag = handleMove;
     }
 
-    function setupFloatingResize(win) {
-        const resizer = win.querySelector('.win-resizer');
-        resizer.onmousedown = (e) => {
-            e.stopPropagation();
-            const startW = win.offsetWidth, startH = win.offsetHeight, startX = e.clientX, startY = e.clientY;
-            const onMove = (mE) => {
-                win.style.width = Math.max(150, (startW + (mE.clientX - startX))) + 'px';
-                win.style.height = Math.max(100, (startH + (mE.clientY - startY))) + 'px';
-            };
-            const onUp = () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
-            window.addEventListener('mousemove', onMove);
-            window.addEventListener('mouseup', onUp);
+function setupFloatingResize(win) {
+    const resizer = win.querySelector('.win-resizer');
+    resizer.onmousedown = (e) => {
+		if (win.classList.contains('hide-resizer')) return;
+
+        e.stopPropagation();
+        const startW = win.offsetWidth, startH = win.offsetHeight, startX = e.clientX, startY = e.clientY;
+        const onMove = (mE) => {
+            // Limits removed: width and height now follow the mouse exactly
+            win.style.width = (startW + (mE.clientX - startX)) + 'px';
+            win.style.height = (startH + (mE.clientY - startY)) + 'px';
         };
-    }
+        const onUp = () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+    };
+}
 
     document.querySelectorAll('.resizer').forEach(r => {
         r.onmousedown = (e) => {
@@ -193,33 +202,6 @@ function createWindow(title, targetArea = null, content = null) {
     };
     
     
-    //~ window.addEventListener('DOMContentLoaded', () => {
-    //~ const startX = 100, startY = 100, offset = 40;
-
-	//~ const win = createWindow("Welcome", null, `
-	
-	//~ <div class="toolboxx">
-	//~ <button id="toolBrushBtn" data-tool="ToolBrush"><span class="bl-icons-greasepencil"></span></button>
-    //~ <button id="toolEraserBtn" data-tool="ToolEraser"><span class="bl-icons-meta_ellipsoid"></span></button>
-    //~ <button id="toolFillBtn" data-tool="ToolFill" ><span class="bl-icons-image"></span></button>
-    //~ <button id="toolLassoFillBtn" data-tool="ToolLassoFill" ><span class="bl-icons-sculptmode_hlt"></span></button>
-	//~ <button id="toolLassoBtn" data-tool="ToolLasso" ><span class="bl-icons-normalize_fcurves"></span></button>
-	//~ <button id="toolPanBtn" data-tool="ToolPan" ><span class="bl-icons-view_pan"></span></button>
-	//~ <button id="toolZoomBtn" data-tool="ToolZoom" ><span class="bl-icons-view_zoom"></span></button>
-	//~ </div>
-	
-	
-	//~ `);
-	//~ viewport.appendChild(win);
-
-	//~ // Stagger positions so they don’t overlap
-	//~ win.style.left = (startX + offset) + 'px';
-	//~ win.style.top  = (startY + offset) + 'px';
-	
-	
-	
-	//~ });
-
 
     createWindow("Xsheet Stuff", areaTop, 
     `
@@ -227,8 +209,7 @@ function createWindow(title, targetArea = null, content = null) {
 		<button id="loadXDTSbtn">Load Xsheet</button>
 		<button id="newTimesheetBtn">New Xsheet</button>
 		<button id="exportBtn" style="display:none">Save Xsheet</button>
-		
-		
+
 		<button id="addTrackBtn">Add Track</button>
 		<button id="removeTrackBtn">Remove Track</button>
 		<button id="autoRenameBtn">Auto-Rename Tracks</button>

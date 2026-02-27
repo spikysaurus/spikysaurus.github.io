@@ -131,7 +131,25 @@
         .is-docked.active-content { display: flex; }
         .is-docked .title-bar { display: none; } 
 
-        .title-bar { background: #1a1a1a; color: #fff; padding: 10px; cursor: move; display: flex; justify-content: space-between; user-select: none; font-size: 12px; flex-shrink: 0; }
+       .title-bar { 
+			background: #1a1a1a; 
+			color: #fff; 
+			padding: 4px 10px; 
+			cursor: move;
+			display: flex;
+			justify-content: center; /* This centers the span horizontally */
+			align-items: center;     /* This centers the span vertically */
+			user-select: none; 
+			font-size: 12px; 
+			flex-shrink: 0;
+			min-height: 24px; /* Ensures a consistent height */
+		}
+
+		.title-bar span {
+			text-align: center;
+			width: 100%;
+		}
+
         .content { flex: 1; padding: 10px; overflow: auto; font-size: 13px; background: inherit; }
         
         .win-resizer {

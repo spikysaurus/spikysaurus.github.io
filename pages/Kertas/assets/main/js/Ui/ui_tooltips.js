@@ -22,11 +22,14 @@
     let delayTimer;
 
     const update = (e) => {
-        const b = e.currentTarget, d = b.dataset;
+        // Use e.target.closest to find the element with the data attributes
+        const b = e.target.closest('[data-name], [data-description]');
+        if (!b) return;
+
+        const d = b.dataset;
         clearTimeout(delayTimer);
 
         delayTimer = setTimeout(() => {
-            // Logic to handle multiple keys from the data attribute
             const keysAttr = d.shortcut || "";
             const keysHtml = keysAttr ? keysAttr.split('|').map(k => `<span class="tip-key">${k}</span>`).join('') : '';
 
@@ -41,7 +44,6 @@
             
             let x = r.right + 10;
             let y = r.top + (r.height / 2) - (tip.offsetHeight / 2);
-
             if (x + tip.offsetWidth > window.innerWidth) x = r.left - tip.offsetWidth - 10;
             if (y + tip.offsetHeight > window.innerHeight) y = window.innerHeight - tip.offsetHeight - 10;
             
@@ -53,30 +55,32 @@
         clearTimeout(delayTimer);
         tip.classList.remove('tip-show');
     };
+	// Use delegation: Listen on the window/body instead of individual elements
+    window.addEventListener('mouseover', update);
+    window.addEventListener('mouseout', (e) => {
+        if (e.target.closest('[data-name], [data-description]')) hide();
+    });
 
     window.TooltipLib = {
-        refresh: () => {
-            document.querySelectorAll('[data-name], [data-description]').forEach(el => {
-                el.removeEventListener('mouseenter', update);
-                el.removeEventListener('mouseleave', hide);
-                el.addEventListener('mouseenter', update);
-                el.addEventListener('mouseleave', hide);
-            });
-        },
+        refresh: () => { /* No longer strictly needed with delegation */ },
         assign: function(config) {
-            Object.entries(config).forEach(([id, data]) => {
+            // We still need this to attach the DATA to the elements
+            // But since IDs might not exist yet, we should store this config
+            this.savedConfig = config;
+            this.applyConfig();
+        },
+        applyConfig: function() {
+            if (!this.savedConfig) return;
+            Object.entries(this.savedConfig).forEach(([id, data]) => {
                 const el = document.getElementById(id);
                 if (el) {
                     if (data.name) el.dataset.name = data.name;
                     if (data.desc) el.dataset.description = data.desc;
-                    
-                    // NEW: Join array of keys with a separator for storage in dataset
                     if (data.keys) {
                         el.dataset.shortcut = Array.isArray(data.keys) ? data.keys.join('|') : data.keys;
                     }
                 }
             });
-            this.refresh();
         }
     };
 })();
