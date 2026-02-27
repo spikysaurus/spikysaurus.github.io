@@ -201,11 +201,13 @@ function setupFloatingResize(win) {
         });
     };
     
-    
+    //~ <button id="toggleOrientationBtn"><span class="bl-icons-gesture_rotate"></span></button>
 
     createWindow("Xsheet Stuff", areaTop, 
     `
     <div class="flex-wrap-row">
+    
+		
 		<button id="loadXDTSbtn">Load Xsheet</button>
 		<button id="newTimesheetBtn">New Xsheet</button>
 		<button id="exportBtn" style="display:none">Save Xsheet</button>
@@ -218,11 +220,11 @@ function setupFloatingResize(win) {
 		<button id="reorderRightBtn">Reorder Track to Right</button>
 		
 		<label for="adjustDuration">Adjust Duration</label>
-		<input type="number" id="adjustDuration" value="1" min="1">
+		<input style="width:32px;text-align:center;" type="number" id="adjustDuration" value="1" min="1">
 		<button id="increaseDurationBtn">Increase</button>
 		<button id="decreaseDurationBtn">Decrease</button>
-		
 		<label>Time (<b id="durationLabel">0+0 | 00</b>)</label>
+		
 	</div>
     `);
 
