@@ -8,6 +8,7 @@ const corners = [
   { name: 'br', cursor: 'nwse-resize', x: 1, y: 1 }
 ];
 
+ 
 // 2. POSITIONING LOGIC
 function updateHandlePositions() {
   const rect = activeCanvas.getBoundingClientRect();
@@ -26,6 +27,7 @@ function updateHandlePositions() {
       display: 'block'
     });
   });
+  setTimeout(() => xsheetCanvasBridge.syncCanvasStack(), 50);
 }
 
 // 3. CREATE HANDLES
@@ -93,6 +95,7 @@ corners.forEach(c => {
   updateHandlePositions();
   canvasRefreshInputValues();
   isDrawing = false;
+  
 };
 
 

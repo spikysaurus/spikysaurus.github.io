@@ -371,7 +371,7 @@ const isEditing = isUserEditing(e);
   }
 
 // Play/Stop Shortcut
-  if (e.key === "p") {
+  if (e.altKey && e.key === 'l') {
     e.preventDefault();
     togglePlayback();
     return; // Exit so it doesn't trigger other logic
@@ -390,3 +390,4 @@ const isEditing = isUserEditing(e);
     if (targetInput) targetInput.focus();
   }
 });
+

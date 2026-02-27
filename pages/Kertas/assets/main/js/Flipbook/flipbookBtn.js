@@ -1,4 +1,5 @@
 const flipBtn = document.getElementById('flipbookBtn');
+const backdropToggle = document.getElementById('includeBackdrop');
 
 flipBtn.onclick = async function() {
     const totalFrames = (window.currentTT) ? (window.currentTT.duration || window.currentTT.length) : 0;
@@ -6,7 +7,6 @@ flipBtn.onclick = async function() {
     const height = activeCanvas.height;
     const frames = [];
 
-    // Helper to load image from dataURI
     const loadImage = (src) => new Promise(res => {
         const img = new Image();
         img.onload = () => res(img);
@@ -18,11 +18,18 @@ flipBtn.onclick = async function() {
     mergeCanvas.height = height;
     const mctx = mergeCanvas.getContext('2d');
 
+    const backdropCanvas = document.getElementById('backdropCanvas');
+
     console.log("Generating Flipbook for " + totalFrames + " frames...");
 
     for (let f = 1; f <= totalFrames; f++) {
         mctx.clearRect(0, 0, width, height);
-        
+
+        // Only draw backdrop if toggle is checked
+        if (backdropCanvas && backdropToggle.checked) {
+            mctx.drawImage(backdropCanvas, 0, 0, width, height);
+        }
+
         // Draw layers from bottom to top (Xsheet order)
         for (let idx = 0; idx < window.currentHeaders.length; idx++) {
             const trackName = window.currentHeaders[idx];
@@ -50,5 +57,3 @@ window.addEventListener('keydown', e => {
         flipBtn.onclick();
     }
 });
-
-		

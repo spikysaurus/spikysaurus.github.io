@@ -312,7 +312,19 @@ createWindow("Properties", areaRight,
 
 	<button id="canvasResizeBtn">Resize Canvas</button>
 	<button id="canvasRefreshBtn">Refresh Values</button>
+	
+	<label for="shiftAmount">Shift Amount</label>
+	<input type="number" id="shiftAmount" value="10">
+    <button onclick="shiftAllDrawings(0, -document.getElementById('shiftAmount').value)">Shift Drawings Up</button>
+    <button onclick="shiftAllDrawings(0, document.getElementById('shiftAmount').value)">Shift Drawings Down</button>
+    <button onclick="shiftAllDrawings(-document.getElementById('shiftAmount').value, 0)">Shift Drawings Left</button>
+    <button onclick="shiftAllDrawings(document.getElementById('shiftAmount').value, 0)">Shift Drawings Right</button>
+    
 	</div>
+	
+    
+
+
 `);
 
 
@@ -337,7 +349,8 @@ createWindow("Debug and Shortcuts (F1)", areaBottom,
 		<li>Ctrl+LMB on the level name to edit their name</li>
 		<li>Jump to next/prev keyframe (Alt+1 / Alt+2)</li>
 		<li>Next/prev frame (Arrow Right / Arrow Left)</li>
-		<li>Play/Pause (P) (Only 24 Fps for now)</li>
+		<li>Play/Stop (P) (Cached)(Only 24 Fps for now)</li>
+		<li>Play/Pause (Alt+L) (Not Cached)</li>
 		<li style="color:yellow;" id="activeTrackLabel">No active Track</li>
 		<li style="color:yellow;" id="activeCelLabel">No active Cel</li>
 		<li style="color:yellow;" id="activeLevelLabel">No active Level</li>
@@ -350,6 +363,7 @@ createWindow("Render & Export", areaTop,
     `
     <div class="flex-wrap-row">
 		<button id="flipbookBtn"><span class="bl-icons-play"></span> Flipbook</button>
+		<label> <input type="checkbox" id="includeBackdrop" checked> Include backdrop </label>
    </div>
     `);
     

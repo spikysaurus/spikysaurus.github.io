@@ -449,3 +449,49 @@ function setactiveDrawing(c) {
     });
   }
 }
+
+
+// Persistent buffer kept in memory to avoid garbage collection
+const shiftBuffer = document.createElement('canvas');
+const shiftCtx = shiftBuffer.getContext('2d');
+
+async function shiftAllDrawings(offsetX, offsetY) {
+    // 1. Match current workspace size exactly
+    shiftBuffer.width = activeCanvas.width;
+    shiftBuffer.height = activeCanvas.height;
+    
+    // 2. Force integer offsets for faster pixel-snapped rendering
+    const offX = Math.round(offsetX);
+    const offY = Math.round(offsetY);
+
+    const updatePromises = [];
+
+    Object.keys(levels).forEach(levelName => {
+        levels[levelName].forEach(drawing => {
+            updatePromises.push(new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                    // Reuse the same context memory
+                    shiftCtx.clearRect(0, 0, shiftBuffer.width, shiftBuffer.height);
+                    shiftCtx.drawImage(img, offX, offY);
+                    
+                    // Update the drawing data directly
+                    drawing.data = shiftBuffer.toDataURL("image/png");
+                    resolve();
+                };
+                img.src = drawing.data;
+            }));
+        });
+    });
+
+    // 3. Process all in parallel
+    await Promise.all(updatePromises);
+
+    // 4. Single UI refresh at the end
+    if (activeDrawing) {
+        setactiveDrawing(activeDrawing);
+        setTimeout(() => xsheetCanvasBridge.syncCanvasStack(), 50);
+    }
+    
+}
+

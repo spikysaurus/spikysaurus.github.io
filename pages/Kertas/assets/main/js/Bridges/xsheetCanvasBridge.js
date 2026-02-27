@@ -9,77 +9,94 @@ const xsheetCanvasBridge = {
     trackCanvases: {},
 
     syncCanvasStack: function() {
-        const headers = window.currentHeaders;
-        const active = window.activeTrack;
-        
-        if (!headers || headers.length === 0) {
-            //~ console.warn("Bridge: No headers found. Xsheet data might not be ready.");
-            return;
+    const headers = window.currentHeaders;
+    const active = window.activeTrack;
+
+    if (!headers || headers.length === 0) return;
+
+    const container = document.getElementById("canvasContainer");
+    const bdrop = document.getElementById("backdropCanvas");
+    const activeDrawingCanvas = document.getElementById("canvas");
+    const bgCanvas = document.getElementById("backgroundColorCanvas");
+
+    if (!container || !activeDrawingCanvas) return;
+
+    clearDynamicLayers();
+
+    headers.forEach((trackName, idx) => {
+        let layer;
+
+        if (trackName === active) {
+            layer = activeDrawingCanvas;
+        } else {
+            if (!this.trackCanvases[trackName]) {
+                const newCanvas = document.createElement('canvas');
+                newCanvas.className = 'canvases track-layer';
+                newCanvas.id = trackName;
+                newCanvas.width = activeDrawingCanvas.width;
+                newCanvas.height = activeDrawingCanvas.height;
+                newCanvas.style.pointerEvents = "none"; 
+                newCanvas.style.backgroundColor = "transparent";
+                this.trackCanvases[trackName] = newCanvas;
+            }
+            layer = this.trackCanvases[trackName];
         }
 
-        const container = document.getElementById("canvasContainer");
-        const bdrop = document.getElementById("backdropCanvas");
-        const activeDrawingCanvas = document.getElementById("canvas");
-        const bgCanvas = document.getElementById("backgroundColorCanvas");
+        // Sync visual position
+        layer.style.top = activeDrawingCanvas.style.top;
+        layer.style.left = activeDrawingCanvas.style.left;
+        layer.style.transform = activeDrawingCanvas.style.transform;
 
-        if (!container || !activeDrawingCanvas) return;
+        // Assign z-index
+        layer.style.zIndex = idx + 10;
 
-        // 1. Clear current dynamic layers from DOM
-       clearDynamicLayers();
+        if (trackName !== active) {
+            if (window.isMultiLayerMode) {
+                layer.style.display = "block";
+                layer.style.opacity = "1";
+            } else {
+                layer.style.display = "none";
+            }
+        }
 
-				headers.forEach((trackName, idx) => {
-			let layer;
+        container.appendChild(layer);
+    });
 
-			if (trackName === active) {
-				layer = activeDrawingCanvas;
-			} else {
-				if (!this.trackCanvases[trackName]) {
-					const newCanvas = document.createElement('canvas');
-					newCanvas.className = 'canvases track-layer';
-					newCanvas.id = trackName;
-					newCanvas.width = activeCanvas.width;
-					newCanvas.height = activeCanvas.height;
-					newCanvas.style.pointerEvents = "none"; 
-					newCanvas.style.backgroundColor = "transparent";
-					this.trackCanvases[trackName] = newCanvas;
-				}
-				layer = this.trackCanvases[trackName];
-			}
-
-			// Sync visual position
-			layer.style.top = activeDrawingCanvas.style.top;
-			layer.style.left = activeDrawingCanvas.style.left;
-			layer.style.transform = activeDrawingCanvas.style.transform;
-
-			// Assign z-index based on order in headers
-			layer.style.zIndex = idx + 10; // offset so bg/backdrop can stay lower
-
-			if (trackName !== active) {
-				if (window.isMultiLayerMode) {
-					layer.style.display = "block";
-					layer.style.opacity = "1";
-				} else {
-					layer.style.display = "none";
-				}
-			}
-
-			container.appendChild(layer);
-		});
-
-		// Background and backdrop always lowest
-		if (bgCanvas) {
-			bgCanvas.style.zIndex = 0;
-			container.appendChild(bgCanvas);
-		}
-		if (bdrop) {
-			bdrop.style.zIndex = 1;
-			container.appendChild(bdrop);
-		}
-
-
-        // 3. Redraw frame content
-        this.updateTrackDrawings();
+    if (bgCanvas) {
+        bgCanvas.style.zIndex = 0;
+        container.appendChild(bgCanvas);
     }
+    if (bdrop) {
+        bdrop.style.zIndex = 1;
+        container.appendChild(bdrop);
+    }
+
+    // Refresh drawings
+    this.updateTrackDrawings();
+    this.updateActiveDrawing(); // NEW
+},
+
+updateActiveDrawing: function() {
+    const activeCanvas = document.getElementById("canvas");
+    if (!activeCanvas) return;
+
+    const ctx = activeCanvas.getContext('2d');
+    ctx.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
+
+    const frame = window.activeFrame || 1;
+    const activeIdx = window.currentHeaders.indexOf(window.activeTrack);
+    const resolvedName = this.resolveKeyframe(activeIdx, frame);
+
+    if (resolvedName && typeof levels !== 'undefined' && levels[window.activeTrack]) {
+        const drawing = levels[window.activeTrack].find(d => d.name.replace(/\.png$/, "") === resolvedName);
+        if (drawing && drawing.data && drawing.data.startsWith('data:image')) {
+            const img = new Image();
+            img.onload = () => ctx.drawImage(img, 0, 0);
+            img.src = drawing.data;
+        }
+    }
+}
+
     ,
 
     /**

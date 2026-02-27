@@ -35,6 +35,8 @@
                <canvas id="backgroundColorCanvas" class="canvases"></canvas>
                <canvas id="backdropCanvas" class="canvases"></canvas>
                <canvas id="canvas"  class="canvases"></canvas>
+               <canvas id="playbackCanvas" class="canvases" style="display:none; z-index: 100; pointer-events: none;"></canvas>
+
             </div>
             
 			</div>
@@ -51,10 +53,8 @@
 <script src="assets/main/js/Windows/colorPicker.js"></script>
 <script src="assets/main/js/Windows/toolbox.js"></script>
 
-<script src="assets/js/jszip.min.js"></script>
-<script src="assets/js/FileSaver.min.js"></script>
 
-<script src="assets/main/js/Ui/ui_speedlines.js"></script>
+
 <script src="assets/main/js/Xsheet/xs_resetVariables.js"></script>
 <script src="assets/main/js/Xsheet/xs_updateVariables.js"></script>
 
@@ -78,11 +78,13 @@
 <script src="assets/main/js/Xsheet/xs_toggleOrientation.js"></script>
 -->
 <script src="assets/main/js/Xsheet/xs_rendering.js"></script>
+
 <script src="assets/main/js/Xsheet/xs_loadSave.js"></script>
 <script src="assets/main/js/Assets/assetsLoadSave.js"></script>
+<script src="assets/js/jszip.min.js"></script>
+<script src="assets/js/FileSaver.min.js"></script>
 
-
-
+<script src="assets/main/js/Ui/ui_speedlines.js"></script>
 <script src="assets/main/js/Ui/ui_splashScreen.js"></script>
 <script src="assets/main/js/Ui/ui_preventDefaults.js"></script>
 <script src="assets/main/js/Ui/ui_tooltips.js"></script>
@@ -90,6 +92,7 @@
 
 <script src="assets/main/js/Flipbook/flipbookBtn.js"></script>
 <script src="assets/main/js/Flipbook/flipbookPage.js"></script>
+<script src="assets/main/js/Xsheet/xs_playbackManager.js"></script>
 
 
 </body>
