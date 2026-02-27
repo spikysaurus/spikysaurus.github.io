@@ -8,6 +8,34 @@ let brush_opacity = 1;
 let brush_aliasing = true;
 let drawBehind; 
 
+function getMousePos(e) {
+    const rect = activeCanvas.getBoundingClientRect();
+    
+    // Get position relative to the VISUAL box (this includes CSS zoom)
+    let mouseX = e.clientX - rect.left;
+    let mouseY = e.clientY - rect.top;
+
+    // Scale coordinates based on internal resolution vs display size
+    // This ratio AUTOMATICALLY handles CSS zoom because rect.width 
+    // grows/shrinks when zoom,ing but activeCanvas.width does not
+    const scaleX = activeCanvas.width / rect.width;
+    const scaleY = activeCanvas.height / rect.height;
+
+    // Apply the scale first to get into "Internal Pixel Space"
+    let x = mouseX * scaleX;
+    let y = mouseY * scaleY;
+
+    // andle Flipping in "Internal Pixel Space"
+    // We use activeCanvas.width because we are now in the internal coordinate system
+    if (flipH === -1) {
+        x = activeCanvas.width - x;
+    }
+    if (flipV === -1) {
+        y = activeCanvas.height - y;
+    }
+    return { x, y };
+}
+
 window.addEventListener("pointerdown", e => {
   const isBrushOrEraser = activeTool === "ToolBrush" || activeTool === "ToolEraser";
   

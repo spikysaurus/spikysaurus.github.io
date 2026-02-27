@@ -193,6 +193,34 @@ function createWindow(title, targetArea = null, content = null) {
     };
     
     
+    //~ window.addEventListener('DOMContentLoaded', () => {
+    //~ const startX = 100, startY = 100, offset = 40;
+
+	//~ const win = createWindow("Welcome", null, `
+	
+	//~ <div class="toolboxx">
+	//~ <button id="toolBrushBtn" data-tool="ToolBrush"><span class="bl-icons-greasepencil"></span></button>
+    //~ <button id="toolEraserBtn" data-tool="ToolEraser"><span class="bl-icons-meta_ellipsoid"></span></button>
+    //~ <button id="toolFillBtn" data-tool="ToolFill" ><span class="bl-icons-image"></span></button>
+    //~ <button id="toolLassoFillBtn" data-tool="ToolLassoFill" ><span class="bl-icons-sculptmode_hlt"></span></button>
+	//~ <button id="toolLassoBtn" data-tool="ToolLasso" ><span class="bl-icons-normalize_fcurves"></span></button>
+	//~ <button id="toolPanBtn" data-tool="ToolPan" ><span class="bl-icons-view_pan"></span></button>
+	//~ <button id="toolZoomBtn" data-tool="ToolZoom" ><span class="bl-icons-view_zoom"></span></button>
+	//~ </div>
+	
+	
+	//~ `);
+	//~ viewport.appendChild(win);
+
+	//~ // Stagger positions so they don’t overlap
+	//~ win.style.left = (startX + offset) + 'px';
+	//~ win.style.top  = (startY + offset) + 'px';
+	
+	
+	
+	//~ });
+
+
     createWindow("Xsheet Stuff", areaTop, 
     `
     <div class="flex-wrap-row">
