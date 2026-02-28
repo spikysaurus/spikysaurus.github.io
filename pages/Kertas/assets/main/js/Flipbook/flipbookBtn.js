@@ -58,3 +58,10 @@ flipBtn.onclick = async function() {
     // Use your existing flipbook function
     flipWindow.document.write(getFlipbookHTML(frames, resW, resH));
 };
+
+window.addEventListener('keydown', e => {
+    if (e.shiftKey && (e.key === 'P' || e.code === 'KeyP')) {
+        e.preventDefault();
+        flipBtn.onclick();
+    }
+});
