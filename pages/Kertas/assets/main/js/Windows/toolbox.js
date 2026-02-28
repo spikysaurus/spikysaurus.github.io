@@ -4,6 +4,7 @@
 
     const win = createWindow("Tools", null, `
         <div id="toolbox" class="toolbox">
+			<button id="toolCameraBtn" data-tool="ToolCamera"><span class="bl-icons-outliner_ob_camera"></span></button>
             <button id="toolBrushBtn" data-tool="ToolBrush"><span class="bl-icons-greasepencil"></span></button>
             <button id="toolEraserBtn" data-tool="ToolEraser"><span class="bl-icons-meta_ellipsoid"></span></button>
             <button id="toolFillBtn" data-tool="ToolFill" ><span class="bl-icons-image"></span></button>
@@ -56,7 +57,12 @@
         const tool = btn.getAttribute('data-tool');
         if (tool) {
             window.switchTool(tool);
+            
+            if (tool === "ToolCamera") {
+				window.cameraState.showHandles = true;
+			}else{window.cameraState.showHandles = false;}
         }
+        
     });
 
     // 4. Set the initial active tool highlight

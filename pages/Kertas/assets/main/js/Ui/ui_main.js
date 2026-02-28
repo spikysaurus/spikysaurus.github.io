@@ -304,10 +304,10 @@ createWindow("Properties", areaRight,
 	<input type="file" id="fileInput" accept=".xdts,.json,.txt" style="display:none">
 
 	<label for="canvasWidth">Canvas Width</label>
-	<input type="number" id="canvasWidthInput" value="1280" min="1">
+	<input type="number" id="canvasWidthInput" value="2340" min="1">
 
 	<label for="canvasHeight">Canvas Height</label>
-	<input type="number" id="canvasHeightInput" value="720" min="1">
+	<input type="number" id="canvasHeightInput" value="1654" min="1">
 
 	<button id="canvasResizeBtn">Resize Canvas</button>
 	<button id="canvasRefreshBtn">Refresh Values</button>
@@ -325,8 +325,6 @@ createWindow("Properties", areaRight,
 
 
 `);
-
-
 
 createWindow("Debug and Shortcuts (F1)", areaBottom, 
 	`<div class="flex-wrap-column">
@@ -366,6 +364,23 @@ createWindow("Render & Export", areaTop,
    </div>
     `);
     
+    //~ <button onclick="cameraManager.addKeyframe()" class="ui-btn add-key">
+			//~ + Add Keyframe
+		//~ </button>
+createWindow("Camera", areaTop, 
+    `
+    <div class="flex-wrap-row">
+		<button onclick="cameraManager.loadCameraData()" class="ui-btn load-cam">
+			Load Camera
+		</button>
+		
+		<button onclick="cameraManager.saveCameraData()" class="ui-btn save-cam">
+			Save Camera
+		</button>
+		
+   </div>
+    `);    
     
     updateLayoutStates();
+window.isAutoKeyOn = true; 
 

@@ -109,6 +109,11 @@ window.TooltipLib.assign({
         keys: ["Alt + W", "Shift + Dot"] // Array of keys
     },
     //~ Tools
+    'toolCameraBtn': { 
+        name: "Camera Tool", 
+        desc: "Keyframe will automatically added if camera is moved, Can only do linear interpolation for now", 
+        keys: ["Q"] 
+    },
     'toolBrushBtn': { 
         name: "Brush Tool", 
         desc: "Hold [Ctrl] to Erase, Hold [Shift] for Line", 

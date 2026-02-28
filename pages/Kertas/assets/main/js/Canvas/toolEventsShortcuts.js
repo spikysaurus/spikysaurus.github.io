@@ -8,6 +8,13 @@ let brush_opacity = 1;
 let brush_aliasing = true;
 let drawBehind; 
 
+// Tool switching
+function switchTool(tool,tmp=false){
+  if(tool!==activeTool){ if(!tmp) previousTool=tool; activeTool=tool; isDrawing=false; isDragging=false; strokePoints=[]; }
+  if(tool==="ToolFill") activeCanvas.style.cursor="crosshair";
+  
+}
+
 function getMousePos(e) {
     const rect = activeCanvas.getBoundingClientRect();
     
@@ -165,7 +172,8 @@ document.addEventListener("keydown", e => {
       switchToLasso(true, true);
     }
   }
-
+	
+	
   // Update Brush and Eraser Size Shortcuts
   if (e.key === "[" || e.key === "]") {
     updateCursorSize();
@@ -188,6 +196,8 @@ document.addEventListener("keydown", e => {
   if (e.key.toLowerCase() === "w") {
     switchTool("ToolBrush");
   } 
+  
+  
   
   if (e.key.toLowerCase() === "a") {
     brush_aliasing = !brush_aliasing;

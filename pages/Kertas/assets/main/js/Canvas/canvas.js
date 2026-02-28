@@ -1,8 +1,8 @@
 // 1. CONSTANTS & INITIALIZATION
 const canvasWidthInput = document.getElementById('canvasWidthInput');
 const canvasHeightInput = document.getElementById('canvasHeightInput');
-const CANVAS_WIDTH = 1280;
-const CANVAS_HEIGHT = 720;
+const CANVAS_WIDTH = 2340;
+const CANVAS_HEIGHT = 1654;
 
 const activeCanvas = document.getElementById('canvas');
 const activeCanvasCtx = activeCanvas.getContext('2d');

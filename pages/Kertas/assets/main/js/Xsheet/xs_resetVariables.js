@@ -4,8 +4,8 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("symTick1").value = "○";
   document.getElementById("symTick2").value = "●";
   document.getElementById("symHyphen").value = "｜";
-	canvasWidthInput.value = "1280";
-	canvasHeightInput.value = "720";
+	canvasWidthInput.value = "2340";
+	canvasHeightInput.value = "1654";
   // Reset symbol map in JS
   symbolDisplayMap = {
     SYMBOL_NULL_CELL: "x",

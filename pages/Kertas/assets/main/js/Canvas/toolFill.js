@@ -1,6 +1,7 @@
 let colorTolerance = 5;
 let fillGrowShrink = 0; // positive = grow, negative = shrink
 
+
 const toolFill = {
   getMergedImageData() {
     if (!activeCanvas) return null;
@@ -8,7 +9,7 @@ const toolFill = {
     const temp = document.createElement("canvas"); temp.width = w; temp.height = h;
     const tctx = temp.getContext("2d");
     [...document.querySelectorAll("#canvasContainer canvas")]
-      .filter(c => c !== backdropCanvas && c.style.display !== "none" && c.width > 0 && c.height > 0) // ignore backdrop
+      .filter(c => c !== backdropCanvas && c.id !== "cameraOverlay" && c.style.display !== "none" && c.width > 0 && c.height > 0) // ignore backdrop
       .forEach(c => tctx.drawImage(c, 0, 0));
     return tctx.getImageData(0, 0, w, h);
   },
@@ -95,11 +96,7 @@ const toolFill = {
   }
 };
 
-// Tool switching
-function switchTool(tool,tmp=false){
-  if(tool!==activeTool){ if(!tmp) previousTool=tool; activeTool=tool; isDrawing=false; isDragging=false; strokePoints=[]; }
-  if(tool==="ToolFill") activeCanvas.style.cursor="crosshair";
-}
+
 
 // Input bindings
 window.addEventListener("pointerdown",e=>{ if(activeTool==="ToolFill"&&activeDrawing) toolFill.fillAtClick(e); });

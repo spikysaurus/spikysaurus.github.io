@@ -136,7 +136,20 @@ canvas.width=${width};canvas.height=${height};ctx.imageSmoothingEnabled=false;
 let imgObjects=[],currentFrame=0,isPlaying=true,fps=24,timer;
 async function init(){for(let i=0;i<frameData.length;i++){const img=new Image();img.src=frameData[i];await img.decode();imgObjects.push(img);prog.innerText=Math.round((i/frameData.length)*100)+"%";}loading.style.display='none';render();startLoop();}
 function render(){if(!imgObjects[currentFrame])return;ctx.clearRect(0,0,canvas.width,canvas.height);if(!bgTrans.checked){ctx.fillStyle=bgColor.value;ctx.fillRect(0,0,canvas.width,canvas.height);}const alias=aliasToggle.checked,strength=parseInt(smoothFactor.value)||0;if(alias&&strength>0&&'filter' in ctx){ctx.imageSmoothingEnabled=true;ctx.filter=\`blur(\${strength}px)\`;ctx.drawImage(imgObjects[currentFrame],0,0,canvas.width,canvas.height);ctx.filter='none';}else{ctx.imageSmoothingEnabled=alias;ctx.filter='none';ctx.drawImage(imgObjects[currentFrame],0,0,canvas.width,canvas.height);}fnum.innerText=currentFrame+1;scrub.value=currentFrame;}
-function startLoop(){if(timer)clearTimeout(timer);if(isPlaying){currentFrame=(currentFrame+1)%imgObjects.length;render();}timer=setTimeout(()=>requestAnimationFrame(startLoop),1000/fps);}
+
+//function startLoop(){if(timer)clearTimeout(timer);if(isPlaying){currentFrame=(currentFrame+1)%imgObjects.length;render();}timer=setTimeout(()=>requestAnimationFrame(startLoop),1000/fps);}
+
+function startLoop() {
+    if (timer) clearTimeout(timer);
+    if (isPlaying) {
+        currentFrame = (currentFrame + 1) % imgObjects.length;
+        render();
+    }
+    // Fixed: Standardized 24 FPS delay
+    timer = setTimeout(startLoop, 1000 / fps); 
+}
+
+
 function updateFPS(){fps=parseInt(fpsInp.value)||24;}
 function togglePlay(){isPlaying=!isPlaying;playPause.innerText=isPlaying?"Pause":"Play";}
 function next(){isPlaying=false;currentFrame=(currentFrame+1)%imgObjects.length;render();}
