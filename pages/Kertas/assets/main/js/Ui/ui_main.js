@@ -16,9 +16,14 @@ const areaLeft = document.getElementById('a-left');
 const areaRight = document.getElementById('a-right');
 
     // Add 'content' as a parameter with a default fallback
-function createWindow(title, targetArea = null, content = null, showResizer = true, isDockable = true) {
+function createWindow(title, targetArea = null, content = null, showResizer = true, isDockable = true, customClass = '') {
     const win = document.createElement('div');
     win.className = 'window-panel';
+    
+    if (customClass) {
+        win.classList.add(customClass);
+    }
+    
     win.dataset.title = title;
     win.dataset.dockable = isDockable; 
     
@@ -271,7 +276,7 @@ createWindow("Assets Stuff", areaTop,
 createWindow("Xsheet", areaLeft, 
     `
     <div id="tableContainer"></div>
-    `);
+    `,true,true,"dropZone");
     
 createWindow("Info", areaLeft,
 `<div class="flex-wrap-column">
@@ -295,7 +300,7 @@ createWindow("Info", areaLeft,
 createWindow("Assets", areaRight, 
 `
 	<div id="levelsTree"></div>
-`);
+`,true,true,"dropZoneTree");
 
 createWindow("Properties", areaRight, 
 `	<div class="flex-wrap-column">
@@ -368,7 +373,7 @@ createWindow("Camera", areaTop,
 		</button>
 		
    </div>
-    `);    
+    `,true,true,"dropZoneCamera");    
     
  createWindow("Playback", areaTop, 
     `

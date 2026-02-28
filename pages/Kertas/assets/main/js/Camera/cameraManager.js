@@ -42,54 +42,44 @@ const cameraManager = {
         console.log("Camera JSON saved.");
     },
 	
-	
-	loadCameraData: function() {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".json";
-
-    input.onchange = e => {
-        const file = e.target.files[0]; // Targeted specifically
+	processCameraFile: function(file) {
         if (!file) return;
 
         const reader = new FileReader();
         reader.onload = event => {
             try {
                 const imported = JSON.parse(event.target.result);
-                
-                // Validate structure
                 if (imported && imported.keyframes) {
-                    // Update global data
                     window.cameraKeyframes = imported.keyframes;
                     
-                    // Update Resolution if present
                     if (imported.resolution && window.cameraState) {
                         window.cameraState.resW = imported.resolution.w;
                         window.cameraState.resH = imported.resolution.h;
                     }
 
-                    // Sync the camera to the current frame immediately
                     this.updateStateForFrame(window.activeFrame || 1);
-                    
-                    // IMPORTANT: Refresh the Dope Sheet UI to show keyframes
-                    if (window.currentTT) {
+                    if (window.currentTT && typeof renderDopeSheet === "function") {
                         renderDopeSheet(window.currentTT);
                     }
-                    
-                    console.log("Camera Sync Complete");
+                    console.log("Camera Data Loaded successfully.");
                 } else {
-                    alert("JSON format incorrect: Missing 'keyframes' object.");
+                    alert("JSON format incorrect: Missing 'keyframes'.");
                 }
             } catch (err) {
                 console.error("JSON Parse Error:", err);
-                alert("The file is not a valid JSON or is corrupted.");
+                alert("Invalid JSON file.");
             }
         };
         reader.readAsText(file);
-    };
-    input.click();
-},
-
+    },
+    
+     loadCameraData: function() {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".json";
+        input.onchange = e => this.processCameraFile(e.target.files[0]);
+        input.click();
+    },
 
     // 4. INTERPOLATION (Call this when changing frames)
     // This updates window.cameraState based on the timeline
@@ -120,6 +110,61 @@ const cameraManager = {
     }
 };
 
+// Shared processing logic for both click and drop
+const processCameraFile = (file) => {
+    if (!file) return;
 
+    const reader = new FileReader();
+    reader.onload = event => {
+        try {
+            const imported = JSON.parse(event.target.result);
+            
+            if (imported && imported.keyframes) {
+                window.cameraKeyframes = imported.keyframes;
+                
+                if (imported.resolution && window.cameraState) {
+                    window.cameraState.resW = imported.resolution.w;
+                    window.cameraState.resH = imported.resolution.h;
+                }
+
+                cameraManager.updateStateForFrame(window.activeFrame || 1);
+                if (window.currentTT) renderDopeSheet(window.currentTT);
+                
+                console.log("Camera Sync Complete via Drop/Load");
+            } else {
+                alert("JSON format incorrect: Missing 'keyframes' object.");
+            }
+        } catch (err) {
+            console.error("JSON Parse Error:", err);
+            alert("The file is not a valid JSON.");
+        }
+    };
+    reader.readAsText(file);
+};
+
+// 5. DRAG AND DROP SETUP
+const dropZoneCamera = document.querySelector(".dropZoneCamera");
+
+if (dropZoneCamera) {
+    dropZoneCamera.addEventListener("dragover", e => { 
+        e.preventDefault(); 
+        dropZoneCamera.style.opacity = "0.5";
+        dropZoneCamera.style.border = "2px dashed #fff"; // Visual hint
+    });
+
+    dropZoneCamera.addEventListener("dragleave", () => {
+        dropZoneCamera.style.opacity = "1";
+        dropZoneCamera.style.border = "none";
+    });
+
+    dropZoneCamera.addEventListener("drop", e => {
+        e.preventDefault();
+        dropZoneCamera.style.opacity = "1";
+        dropZoneCamera.style.border = "none";
+        
+        const file = e.dataTransfer.files[0];
+        processCameraFile(file);
+    });
+}
 
 
