@@ -1,0 +1,52 @@
+/* Hover effect */
+.toolbar button:hover,
+.toolbar label:hover {
+  background: #666;
+}
+
+
+table { 
+margin:-10px;
+border-collapse: collapse;
+border-spacing: 0;
+}
+
+th, td { 
+  border: 1px solid #444; 
+  text-align: center; 
+  width: 50px;
+  height: 25px;
+  padding: 0;
+}
+th { background: #4073a3; font-size: 12px; color:white;}
+td { font-size: 12px; background:#4c6e4c;color:white;}
+td:hover {background:#5f895f;}
+
+.cellLabel, input.cellInput {
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 3px;
+  text-align: center;
+  font-size: 12px;
+  border: none;
+  background: transparent;
+  color: inherit;
+}
+
+input.cellInput { 
+  outline: none;
+  background: #2d452d;
+  color: white;
+}
+
+
+.nullcell {
+color: black;
+font-weight: bold;
+
+}
+
+
