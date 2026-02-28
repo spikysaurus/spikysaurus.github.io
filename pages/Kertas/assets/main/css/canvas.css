@@ -1,5 +1,5 @@
 #canvasContainer {
-  position: fixed;
+  position: relative;
   
   
   background-color: lightgray;

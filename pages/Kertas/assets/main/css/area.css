@@ -21,11 +21,13 @@
 		}
 
         #viewport { display: flex; flex-direction: row; width: 100vw; height: 100vh; position: relative; }
-        #center-stack { display: flex; flex-direction: column; flex: 1; min-width: 0; position: relative; }
+        #center-stack { display: flex; flex-direction: column; flex: 1; min-width: 0; position: relative; height:100%a-center; }
 
         .snap-area {
             background: var(--area-bg);
-            display: flex; flex-direction: column; align-items: stretch;
+            display: flex; 
+            
+            flex-direction: column; align-items: stretch;
             overflow: hidden; 
 /*
             transition: flex 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s; 
@@ -41,7 +43,7 @@
         body.ctrl-down .snap-area.horizontal.collapsed { flex: 0 0 var(--snap-hit-size) !important; }
         body.ctrl-down .snap-area.vertical.collapsed { flex: 0 0 var(--snap-hit-size) !important; }
 
-        .snap-area.hover-active { background: rgba(0, 120, 215, 0.3) !important; border: 2px solid var(--accent) !important; z-index: 5; }
+        .snap-area.hover-active { background: rgba(0, 120, 215, 0.3) !important; border: 2px solid var(--accent) !important; z-index: 100; }
         
         #a-center { flex: 1; min-height: 100px; color: #444; justify-content: center; align-items: center; display: flex; font-size: 12px; letter-spacing: 2px; }
 
@@ -50,7 +52,7 @@
             background: #1a1a1a; flex-direction: row;
             overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border);
             flex-shrink: 0; height: 35px;
-            position:relative;z-index:1;
+            position:relative;z-index:100;
         }
         .tab-strip::-webkit-scrollbar { display: none; }
         .snap-area:not(.collapsed) .tab-strip { display: flex; }
@@ -66,7 +68,7 @@
 			color: var(--text-color);
 			font-weight: bold; }
 
-        .resizer { background: #000; z-index: 5; position: relative; display: none; }
+        .resizer { background: #000; z-index: 100; position: relative; display: none; }
         .snap-area:not(.collapsed) + .resizer, .resizer:has(+ .snap-area:not(.collapsed)) { display: block; }
         .resizer:hover { background: var(--accent); }
         .resizer-v { width: 6px; cursor: col-resize; }
@@ -75,7 +77,7 @@
         .window-panel {
             position: absolute; width: 350px; height: 250px; min-width: 150px; min-height: 100px;
             background: var(--panel-bg); color: var(--text-color);;
-            display: flex; flex-direction: column; z-index: 5; border-radius: 8px; overflow: hidden;
+            display: flex; flex-direction: column; z-index: 100; border-radius: 8px; overflow: hidden;
         }
 
 		.window-panel button,#splash-container button{
@@ -154,7 +156,7 @@
         
         .win-resizer {
             position: absolute; right: 0; bottom: 0; width: 16px; height: 16px;
-            cursor: nwse-resize; z-index: 5;
+            cursor: nwse-resize; z-index: 100;
             background: linear-gradient(135deg, transparent 50%, #bbb 50%, #bbb 60%, transparent 60%, transparent 70%, #bbb 70%);
         }
         .is-docked .win-resizer { display: none; }
@@ -162,7 +164,7 @@
         #ctrl-indicator {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             background: var(--accent); color: white; padding: 10px 20px; border-radius: 30px;
-            opacity: 0; transition: opacity 0.2s; z-index: 5; pointer-events: none; font-weight: bold;
+            opacity: 0; transition: opacity 0.2s; z-index: 100; pointer-events: none; font-weight: bold;
         }
         body.ctrl-down #ctrl-indicator { opacity: 1; }
         body.is-interacting { cursor: grabbing !important; }

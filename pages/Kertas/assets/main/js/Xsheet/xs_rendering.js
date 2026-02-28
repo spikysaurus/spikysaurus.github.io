@@ -291,103 +291,74 @@ function setValueForTrackFrame(tt, trackIndex, frameNo, newVal) {
   track.frames.sort((a, b) => a.frame - b.frame);
 }
 
+const state = { isPlaying: false, interval: null, fps: 24 };
 
-// Animation State
-let isPlaying = false;
-let animationInterval = null;
-const fps = 24;
+// Centralized UI Update Logic
+function updateUI(target, idx, focus = false) {
+  if (!target) return;
+  const container = document.querySelector("#tableContainer");
+  const tbody = container.querySelector("tbody");
+  const thead = container.querySelector("thead");
+  
+  window.highlightCel(window.currentTT, tbody, thead, thead.querySelector("tr"), 
+    window.currentHeaders, idx, target.frame, target.value, window.currentTT.duration);
 
-function togglePlayback() {
-  if (isPlaying) {
-    stopAnimation();
-  } else {
-    playAnimation();
+  if (focus) {
+    const input = tbody.querySelectorAll("tr")[target.frame - 1]?.querySelectorAll("td")[idx + 1]?.querySelector("input");
+    input?.focus();
   }
 }
 
-function playAnimation() {
-  if (!window.currentTT || isPlaying) return;
-  
-  isPlaying = true;
-  const intervalMs = 1000 / fps;
-  const idx = window.currentHeaders.indexOf(window.activeTrack) || 0;
+function togglePlayback() {
+  state.isPlaying = !state.isPlaying;
+  if (!state.isPlaying) return state.interval = clearInterval(state.interval);
 
-  animationInterval = setInterval(() => {
-    // Use the existing changeFrame function logic to progress
+  const idx = Math.max(0, window.currentHeaders.indexOf(window.activeTrack));
+  state.interval = setInterval(() => {
     const target = changeFrame(window.currentTT, idx, window.currentTT.duration, "down");
-    
-    if (target) {
-      const tbody = document.querySelector("#tableContainer tbody");
-      const thead = document.querySelector("#tableContainer thead");
-      const headRow = thead?.querySelector("tr");
-      
-      window.highlightCel(
-        window.currentTT, 
-        tbody, 
-        thead, 
-        headRow, 
-        window.currentHeaders, 
-        idx, 
-        target.frame, 
-        target.value, 
-        window.currentTT.duration
-      );
-    }
-  }, intervalMs);
+    target ? updateUI(target, idx) : togglePlayback();
+  }, 1000 / state.fps);
 }
 
-function stopAnimation() {
-  isPlaying = false;
-  clearInterval(animationInterval);
-  animationInterval = null;
-}
-
-
-document.addEventListener("keydown", e => {
-const isEditing = isUserEditing(e);
-	if (isEditing) return;
-	
+function navigateTable(direction, type = "jump", focus = true) {
   if (!window.activeTrack || !window.currentTT) return;
-  
   const idx = window.currentHeaders.indexOf(window.activeTrack);
   if (idx < 0) return;
 
-  let target = null;
-  if (e.altKey && e.key === "1") {
-    e.preventDefault();
-    target = jumpToCel(window.currentTT, idx, window.currentTT.duration, "up");
-  } else if (e.altKey && e.key === "2") {
-    e.preventDefault();
-    target = jumpToCel(window.currentTT, idx, window.currentTT.duration, "down");
-  }
-  
-  // Next/Prev Frame (New)
-  else if (e.key === "ArrowLeft") {
-    e.preventDefault();
-    target = changeFrame(window.currentTT, idx, window.currentTT.duration, "up");
-  } else if (e.key === "ArrowRight") {
-    e.preventDefault();
-    target = changeFrame(window.currentTT, idx, window.currentTT.duration, "down");
-  }
+  const fn = type === "jump" ? jumpToCel : changeFrame;
+  const target = fn(window.currentTT, idx, window.currentTT.duration, direction);
+  updateUI(target, idx, focus);
+}
 
-// Play/Stop Shortcut
-  if (e.key === 'l') {
-    e.preventDefault();
-    togglePlayback();
-    return; // Exit so it doesn't trigger other logic
-  }
-  
-  
-  if (target) {
-    const tbody = document.querySelector("#tableContainer tbody");
-    const thead = document.querySelector("#tableContainer thead");
-    const headRow = thead.querySelector("tr");
-    
-    window.highlightCel(window.currentTT, tbody, thead, headRow, window.currentHeaders, idx, target.frame, target.value, window.currentTT.duration);
-    
-    const targetRow = tbody.querySelectorAll("tr")[target.frame - 1];
-    const targetInput = targetRow?.querySelectorAll("td")[idx + 1]?.querySelector("input");
-    if (targetInput) targetInput.focus();
-  }
+document.addEventListener("keydown", e => {
+  if (isUserEditing(e) || !window.activeTrack || !window.currentTT) return;
+
+  const keyMap = {
+    "ArrowLeft":  ["up",   "frame"],
+    "ArrowRight": ["down", "frame"],
+    "1":          ["up",   "jump",  e.altKey],
+    "2":          ["down", "jump",  e.altKey]
+  };
+
+  const config = keyMap[e.key];
+  if (!config) return;
+
+  // For '1' and '2', ensure Alt is held; for Arrows, it doesn't matter
+  const [dir, type, needsAlt] = config;
+  if (needsAlt === false) return; 
+
+  e.preventDefault();
+  navigateTable(dir, type);
 });
+
+
+document.getElementById('playAniBtn').onclick = togglePlayback;
+document.getElementById('playAniCachedBtn').onclick = () => playbackManager.toggle();
+document.getElementById('prevCelBtn').onclick = () => navigateTable("up");
+document.getElementById('nextCelBtn').onclick = () => navigateTable("down");
+document.getElementById('prevFrameBtn').onclick = () => navigateTable("up", "frame", true);
+document.getElementById('nextFrameBtn').onclick = () => navigateTable("down", "frame", true);
+
+
+
 

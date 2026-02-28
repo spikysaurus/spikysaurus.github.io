@@ -334,7 +334,6 @@ createWindow("Debug and Shortcuts (F1)", areaBottom,
 		<li style="color:yellow;">Brush Aliasing (A) : <span id="aliasingLabel"></span></li>
 		<li style="color:yellow;">Draw Behind (B) : <span id="drawBehindLabel"></span></li>
 		<li style="color:yellow;">Pixelated Canvas (Shift+R) : <span id="imageRenderingLabel"></span></li>
-		<li>Swap Colors (g)</li>
 		<li>FlipH (/)</li>
 		<li>FlipV (Shift+/)</li>
 		<li>Reset View (0)</li>
@@ -344,10 +343,6 @@ createWindow("Debug and Shortcuts (F1)", areaBottom,
 		<li>Speedlines (shift+o)</li>
 		<li>Ctrl+LMB on the cell to edit their values</li>
 		<li>Ctrl+LMB on the level name to edit their name</li>
-		<li>Jump to next/prev keyframe (Alt+1 / Alt+2)</li>
-		<li>Next/prev frame (Arrow Right / Arrow Left)</li>
-		<li>Play/Stop Animation (P) (Cached)(Only 24 Fps for now)</li>
-		<li>Play/Pause Aniamtion (L) (Not Cached)</li>
 		<li style="color:yellow;" id="activeTrackLabel">No active Track</li>
 		<li style="color:yellow;" id="activeCelLabel">No active Cel</li>
 		<li style="color:yellow;" id="activeLevelLabel">No active Level</li>
@@ -356,13 +351,7 @@ createWindow("Debug and Shortcuts (F1)", areaBottom,
 	</div
     `);
 
-createWindow("Render & Export", areaTop, 
-    `
-    <div class="flex-wrap-row">
-		<button id="flipbookBtn"><span class="bl-icons-play"></span> Flipbook</button>
-		<label> <input type="checkbox" id="includeBackdrop" checked> Include backdrop </label>
-   </div>
-    `);
+
     
     //~ <button onclick="cameraManager.addKeyframe()" class="ui-btn add-key">
 			//~ + Add Keyframe
@@ -381,6 +370,26 @@ createWindow("Camera", areaTop,
    </div>
     `);    
     
+ createWindow("Playback", areaTop, 
+    `
+    <div class="flex-wrap-row">
+		<button id="playAniCachedBtn"><span class="bl-icons-play"></span>Play Animation (cached)</button>
+		<button id="playAniBtn"><span class="bl-icons-play"></span>Play Animation</button>
+		<button id="prevCelBtn"><span class="bl-icons-prev_keyframe"></span>Prev Cel</button>
+		<button id="nextCelBtn"><span class="bl-icons-next_keyframe"></span>Next Cel</button>
+		<button id="prevFrameBtn"><span class="bl-icons-tria_left_bar"></span>Prev Frame</button>
+		<button id="nextFrameBtn"><span class="bl-icons-tria_right_bar"></span>Next Frame</button>
+   </div>
+    `);  
+
+createWindow("Render & Export", areaTop, 
+    `
+    <div class="flex-wrap-row">
+		<button id="flipbookBtn"><span class="bl-icons-play"></span> Flipbook</button>
+		<label> <input type="checkbox" id="includeBackdrop" checked> Include backdrop </label>
+   </div>
+    `);
+           
     updateLayoutStates();
 window.isAutoKeyOn = true; 
 

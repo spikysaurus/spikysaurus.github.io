@@ -62,43 +62,6 @@ const playbackManager = {
         this.canvas.style.display = "block";
         this.timer = setInterval(() => this.renderNextFrame(), 1000 / fps);
     },
-
-    //~ async generateCache(total) {
-        //~ const cache = [];
-        //~ const tempCanvas = document.createElement('canvas');
-        //~ tempCanvas.width = this.canvas.width;
-        //~ tempCanvas.height = this.canvas.height;
-        //~ const tctx = tempCanvas.getContext('2d');
-
-        //~ for (let f = 1; f <= total; f++) {
-            //~ // Update progress text
-            //~ const percent = Math.floor((f / total) * 100);
-            //~ this.updateProgress(percent);
-
-            //~ tctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
-            
-            //~ for (let i = 0; i < window.currentHeaders.length; i++) {
-                //~ const track = window.currentHeaders[i];
-                //~ const drawingName = xsheetCanvasBridge.resolveKeyframe(i, f);
-                
-                //~ if (drawingName && levels[track]) {
-                    //~ const drawing = levels[track].find(d => d.name.replace(/\.png$/, "") === drawingName);
-                    //~ if (drawing?.data) {
-                        //~ const img = await this.loadImage(drawing.data);
-                        //~ tctx.drawImage(img, 0, 0);
-                    //~ }
-                //~ }
-            //~ }
-            
-            //~ const frameImg = new Image();
-            //~ frameImg.src = tempCanvas.toDataURL('image/png');
-            //~ cache.push(frameImg);
-            
-            //~ // Short break to allow UI to actually render the text
-            //~ if (f % 5 === 0) await new Promise(r => setTimeout(r, 1));
-        //~ }
-        //~ return cache;
-    //~ }
     
     async generateCache(total) {
     const cache = [];
@@ -168,11 +131,8 @@ const playbackManager = {
 };
 
 
-/**
- * --- SHORTCUTS ---
- */
+//Shortcuts
 window.addEventListener('keydown', e => {
-    // ALT + P to Play/Stop
     if (e.key === 'p') {
         e.preventDefault();
         playbackManager.toggle();
@@ -183,6 +143,13 @@ window.addEventListener('keydown', e => {
         e.preventDefault();
         playbackManager.stop();
     }
+    
+	if (e.key === 'l') {
+		e.preventDefault();
+		togglePlayback();
+		return;
+	}
+
 });
 
-
+  

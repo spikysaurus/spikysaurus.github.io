@@ -19,6 +19,7 @@
                 <div class="cp-preview-container">
 					<div class="cp-preview-fg" id="cp-fg" style="background-color: ${this.activeColor}"></div>
                     <div class="cp-preview-bg" id="cp-bg" style="background-color: ${this.activeColorBackground}"></div>
+                    <div><button id="swapColorBtn"><span class="bl-icons-area_dock"></span></button></div>
                 </div>
                 <div class="cp-grid">${gridHtml}</div>
             </div>
@@ -57,7 +58,13 @@
             this.activeColorBackground = hex; 
             if(bgBox) bgBox.style.backgroundColor = hex; 
         };
-
+		
+		const swapColors = () => {
+            const temp = this.activeColor;
+            updateFG(this.activeColorBackground);
+            updateBG(temp);
+        };
+        
         // Handle Swatch Clicks
         win.querySelectorAll('.cp-swatch').forEach(swatch => {
             swatch.onmousedown = (e) => {
@@ -92,6 +99,14 @@
                 updateBG(temp);
             }
         });
+        
+        const swapBtn = document.getElementById('swapColorBtn');
+        if (swapBtn) {
+            swapBtn.onclick = (e) => {
+                e.preventDefault();
+                swapColors();
+            };
+        };
     }
 };
 

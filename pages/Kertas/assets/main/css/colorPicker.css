@@ -13,6 +13,10 @@
     flex-shrink: 0; 
     outline: 2px solid green;
 }
+.cp-preview-container button{
+	width:24px; height:24px;
+}
+
 
 .cp-grid {
     display: grid;

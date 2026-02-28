@@ -1,4 +1,5 @@
 window.addEventListener('keydown', (e) => {
+	 if (e.altKey || e.shiftKey) return;
   const key = e.key.toLowerCase();
 
   // 1. Trigger the switch

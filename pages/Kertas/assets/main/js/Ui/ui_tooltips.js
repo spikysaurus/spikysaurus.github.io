@@ -158,6 +158,40 @@ window.TooltipLib.assign({
         name: "Flipbook", 
         desc: "For previewing and rendering animation", 
         keys: ["Shift+P"] 
+    },
+    'playAniCachedBtn': { 
+        name: "Play Animation", 
+        desc: "(Cached)", 
+        keys: ["P"] 
+    },
+    'playAniBtn': { 
+        name: "Play Animation", 
+        desc: "Flashing Lights Warning!!", 
+        keys: ["L"] 
+    },
+    'nextCelBtn': { 
+        name: "Next Cel", 
+        desc: "Jump to next Cel", 
+        keys: ["Alt+2"] 
+    },
+    'prevCelBtn': { 
+        name: "Prev Cel", 
+        desc: "Jump to previous Cel", 
+        keys: ["Alt+1"] 
+    },
+    'prevFrameBtn': { 
+        name: "Prev Frame", 
+        desc: "Jump to previous Frame", 
+        keys: ["Arrow Left"] 
+    },
+    'nextFrameBtn': { 
+        name: "Next Frame", 
+        desc: "Jump to next Frame", 
+        keys: ["Arrow Right"] 
+    },
+    'swapColorBtn': { 
+        name: "Swap Colors", 
+        desc: "", 
+        keys: ["G"] 
     }
-    
 });
