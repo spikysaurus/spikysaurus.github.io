@@ -37,6 +37,7 @@
                <canvas id="backdropCanvas" class="canvases"></canvas>
                <canvas id="canvas"  class="canvases"></canvas>
                <canvas id="playbackCanvas" class="canvases" style="display:none; z-index: 10; pointer-events: none;"></canvas>
+               <canvas id="cameraOverlay" class="canvases"></canvas>
             </div>
             
 			</div>
@@ -48,14 +49,18 @@
     <div class="snap-area vertical collapsed" id="a-right" data-last="220px"><div class="tab-strip"></div></div>
 </div>
 
+ <canvas id="lassoFillOverlay"></canvas>
+  <canvas id="lassoSelectOverlay"></canvas>
+   <canvas id="rectOverlay"></canvas>
+   
+   
+<script src="assets/main/js/globalVariables.js"></script>
+<script src="assets/main/js/onloadVariables.js"></script>
 
 <script src="assets/main/js/Ui/ui_main.js"></script>
 <script src="assets/main/js/Windows/colorPicker.js"></script>
 <script src="assets/main/js/Windows/toolbox.js"></script>
 
-
-
-<script src="assets/main/js/Xsheet/xs_resetVariables.js"></script>
 <script src="assets/main/js/Xsheet/xs_updateVariables.js"></script>
 
 <script src="assets/main/js/Canvas/canvas.js"></script>

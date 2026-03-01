@@ -1,23 +1,16 @@
 let lassoPoints = [], isLassoDrawing = false, lassoAnimateReq;
 
-// 1. Unique Overlay Setup
-const lassoOverlay = document.createElement("canvas");
-lassoOverlay.id = "lassoFillOverlay";
-lassoOverlay.style = "position:absolute; top:0; left:0; pointer-events:none; z-index:100;";
-document.body.appendChild(lassoOverlay); // Or append to your canvas container
-const lCtx = lassoOverlay.getContext("2d");
-
 function syncOverlaySize() {
     const rect = activeCanvas.getBoundingClientRect();
     // Use internal resolution for drawing
-    lassoOverlay.width = activeCanvas.width;
-    lassoOverlay.height = activeCanvas.height;
+    lassoFillOverlay.width = activeCanvas.width;
+    lassoFillOverlay.height = activeCanvas.height;
 
     // Use CSS rect for visual alignment
-    lassoOverlay.style.width = rect.width + "px";
-    lassoOverlay.style.height = rect.height + "px";
-    lassoOverlay.style.left = rect.left + "px";
-    lassoOverlay.style.top = rect.top + "px";
+    lassoFillOverlay.style.width = rect.width + "px";
+    lassoFillOverlay.style.height = rect.height + "px";
+    lassoFillOverlay.style.left = rect.left + "px";
+    lassoFillOverlay.style.top = rect.top + "px";
 }
 
 function switchToLasso(temp = false, erase = false) {
@@ -31,38 +24,38 @@ function switchToLasso(temp = false, erase = false) {
 let dashOffset = 0;
 
 function drawLassoPreview() {
-    lCtx.clearRect(0, 0, lassoOverlay.width, lassoOverlay.height);
+    lassoFillOverlayCtx.clearRect(0, 0, lassoFillOverlay.width, lassoFillOverlay.height);
     if (lassoPoints.length < 2) {
         requestAnimationFrame(drawLassoPreview);
         return;
     }
 
-    lCtx.save();
-    lCtx.imageSmoothingEnabled = false;
+    lassoFillOverlayCtx.save();
+    lassoFillOverlayCtx.imageSmoothingEnabled = false;
 
     // Apply flips to overlay context
-    lCtx.translate(
-        flipH === -1 ? lassoOverlay.width : 0,
-        flipV === -1 ? lassoOverlay.height : 0
+    lassoFillOverlayCtx.translate(
+        flipH === -1 ? lassoFillOverlay.width : 0,
+        flipV === -1 ? lassoFillOverlay.height : 0
     );
-    lCtx.scale(flipH, flipV);
+    lassoFillOverlayCtx.scale(flipH, flipV);
 
     // Animate dash offset
     dashOffset = (dashOffset || 0) - 0.5;
 
-    lCtx.setLineDash([5, 5]);
-    lCtx.lineDashOffset = dashOffset;
-    lCtx.strokeStyle = "blue";
-    lCtx.beginPath();
-    lassoPoints.forEach((p, i) => i === 0 ? lCtx.moveTo(p.x, p.y) : lCtx.lineTo(p.x, p.y));
-    lCtx.closePath();
-    lCtx.stroke();
+    lassoFillOverlayCtx.setLineDash([5, 5]);
+    lassoFillOverlayCtx.lineDashOffset = dashOffset;
+    lassoFillOverlayCtx.strokeStyle = "blue";
+    lassoFillOverlayCtx.beginPath();
+    lassoPoints.forEach((p, i) => i === 0 ? lassoFillOverlayCtx.moveTo(p.x, p.y) : lassoFillOverlayCtx.lineTo(p.x, p.y));
+    lassoFillOverlayCtx.closePath();
+    lassoFillOverlayCtx.stroke();
 
-    lCtx.strokeStyle = "black";
-    lCtx.lineDashOffset = dashOffset + 5;
-    lCtx.stroke();
+    lassoFillOverlayCtx.strokeStyle = "black";
+    lassoFillOverlayCtx.lineDashOffset = dashOffset + 5;
+    lassoFillOverlayCtx.stroke();
 
-    lCtx.restore();
+    lassoFillOverlayCtx.restore();
     requestAnimationFrame(drawLassoPreview);
 }
 
@@ -84,7 +77,7 @@ window.addEventListener("pointerup", e => {
     if (!isLassoDrawing) return;
     isLassoDrawing = false;
     cancelAnimationFrame(lassoAnimateReq);
-    lCtx.clearRect(0, 0, lassoOverlay.width, lassoOverlay.height);
+    lassoFillOverlayCtx.clearRect(0, 0, lassoFillOverlay.width, lassoFillOverlay.height);
     
     if (lassoPoints.length > 2) {
         applyPixelatedFill(e.ctrlKey || activeTool === "ToolLassoErase");

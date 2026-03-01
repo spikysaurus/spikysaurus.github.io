@@ -1,13 +1,6 @@
 let rectStart = null, rectEnd = null, isRectDrawing = false;
 let rectAnimateReq, dashOffsetRect = 0;
 
-// 1. Unique Overlay Setup
-const rectOverlay = document.createElement("canvas");
-rectOverlay.id = "rectFillOverlay";
-rectOverlay.style = "position:absolute; top:0; left:0; pointer-events:none; z-index:100;";
-document.body.appendChild(rectOverlay);
-const rCtx = rectOverlay.getContext("2d");
-
 function syncRectOverlaySize() {
     const rect = activeCanvas.getBoundingClientRect();
     rectOverlay.width = activeCanvas.width;
@@ -27,20 +20,20 @@ function switchToRectangle(temp = false, erase = false) {
 
 // 2. Animated Preview Logic
 function drawRectPreview() {
-    rCtx.clearRect(0, 0, rectOverlay.width, rectOverlay.height);
+    rectOverlayCtx.clearRect(0, 0, rectOverlay.width, rectOverlay.height);
     if (!rectStart || !rectEnd) {
         rectAnimateReq = requestAnimationFrame(drawRectPreview);
         return;
     }
 
-    rCtx.save();
-    rCtx.imageSmoothingEnabled = false;
+    rectOverlayCtx.save();
+    rectOverlayCtx.imageSmoothingEnabled = false;
 
-    rCtx.translate(
+    rectOverlayCtx.translate(
         flipH === -1 ? rectOverlay.width : 0,
         flipV === -1 ? rectOverlay.height : 0
     );
-    rCtx.scale(flipH, flipV);
+    rectOverlayCtx.scale(flipH, flipV);
 
     dashOffsetRect = (dashOffsetRect || 0) - 0.5;
 
@@ -49,16 +42,16 @@ function drawRectPreview() {
     const w = Math.abs(rectEnd.x - rectStart.x);
     const h = Math.abs(rectEnd.y - rectStart.y);
 
-    rCtx.setLineDash([5, 5]);
-    rCtx.linedashOffsetRect = dashOffsetRect;
-    rCtx.strokeStyle = "blue";
-    rCtx.strokeRect(x, y, w, h);
+    rectOverlayCtx.setLineDash([5, 5]);
+    rectOverlayCtx.linedashOffsetRect = dashOffsetRect;
+    rectOverlayCtx.strokeStyle = "blue";
+    rectOverlayCtx.strokeRect(x, y, w, h);
 
-    rCtx.strokeStyle = "black";
-    rCtx.linedashOffsetRect = dashOffsetRect + 5;
-    rCtx.strokeRect(x, y, w, h);
+    rectOverlayCtx.strokeStyle = "black";
+    rectOverlayCtx.linedashOffsetRect = dashOffsetRect + 5;
+    rectOverlayCtx.strokeRect(x, y, w, h);
 
-    rCtx.restore();
+    rectOverlayCtx.restore();
     rectAnimateReq = requestAnimationFrame(drawRectPreview);
 }
 
@@ -97,7 +90,7 @@ window.addEventListener("pointerup", e => {
     if (!isRectDrawing) return;
     isRectDrawing = false;
     cancelAnimationFrame(rectAnimateReq);
-    rCtx.clearRect(0, 0, rectOverlay.width, rectOverlay.height);
+    rectOverlayCtx.clearRect(0, 0, rectOverlay.width, rectOverlay.height);
 
     if (rectStart && rectEnd) {
         // Pass the shiftKey state if you want to force one last snap

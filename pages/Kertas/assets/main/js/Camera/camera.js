@@ -66,19 +66,19 @@ const cameraFeature = {
     window.cameraState.rotation = this.lerp(start.rotation, end.rotation, t);
   },
 
-  clip(ctx) {
+  clip(cameraOverlayCtx) {
     const { resW, resH } = window.cameraState;
-    ctx.beginPath();
-    ctx.rect(0, 0, resW, resH);
-    ctx.clip();
+    cameraOverlayCtx.beginPath();
+    cameraOverlayCtx.rect(0, 0, resW, resH);
+    cameraOverlayCtx.clip();
   },
 
   apply(ctx) {
     const { x, y, rotation, scale, resW, resH } = window.cameraState;
-    ctx.translate(resW / 2, resH / 2);
-    ctx.scale(1 / scale, 1 / scale);
-    ctx.rotate(-rotation * Math.PI / 180);
-    ctx.translate(-resW / 2 - x, -resH / 2 - y);
+    cameraOverlayCtx.translate(resW / 2, resH / 2);
+    cameraOverlayCtx.scale(1 / scale, 1 / scale);
+    cameraOverlayCtx.rotate(-rotation * Math.PI / 180);
+    cameraOverlayCtx.translate(-resW / 2 - x, -resH / 2 - y);
   },
 
     drawUI(ctx) {
@@ -86,17 +86,17 @@ const cameraFeature = {
     
     const { resW, resH, x, y, scale, rotation, showHandles } = window.cameraState;
     
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.strokeStyle = "cyan";
-    ctx.lineWidth = 5;
+    cameraOverlayCtx.setTransform(1, 0, 0, 1, 0, 0);
+    cameraOverlayCtx.strokeStyle = "cyan";
+    cameraOverlayCtx.lineWidth = 5;
 
-    ctx.save();
+    cameraOverlayCtx.save();
     const cx = x + resW * scale / 2, cy = y + resH * scale / 2;
-    ctx.translate(cx, cy);
-    ctx.rotate(rotation * Math.PI / 180);
+    cameraOverlayCtx.translate(cx, cy);
+    cameraOverlayCtx.rotate(rotation * Math.PI / 180);
     
     // ALWAYS DRAW THE OUTLINE
-    ctx.strokeRect(-resW * scale / 2, -resH * scale / 2, resW * scale, resH * scale);
+    cameraOverlayCtx.strokeRect(-resW * scale / 2, -resH * scale / 2, resW * scale, resH * scale);
 
     // ONLY DRAW HANDLES IF showHandles IS TRUE
     if (showHandles) {
@@ -105,25 +105,22 @@ const cameraFeature = {
       this.drawHandle(ctx, 0, -resH * scale / 2 - 20); // Rotation handle
 
       if (window.cameraKeyframes[window.activeFrame]) {
-        ctx.fillStyle = "#ffcc00";
-        ctx.beginPath(); 
-        ctx.arc(-resW * scale / 2 + 20, -resH * scale / 2 + 20, 5, 0, Math.PI * 2); 
-        ctx.fill();
-        ctx.font = "12px Arial"; 
-        ctx.fillText("KEY", -resW * scale / 2 + 30, -resH * scale / 2 + 25);
+        cameraOverlayCtx.fillStyle = "#ffcc00";
+        cameraOverlayCtx.beginPath(); 
+        cameraOverlayCtx.arc(-resW * scale / 2 + 20, -resH * scale / 2 + 20, 5, 0, Math.PI * 2); 
+        cameraOverlayCtx.fill();
+        cameraOverlayCtx.font = "12px Arial"; 
+        cameraOverlayCtx.fillText("KEY", -resW * scale / 2 + 30, -resH * scale / 2 + 25);
       }
     }
     
-    ctx.restore();
+    cameraOverlayCtx.restore();
   },
 
-  
-  
-  
   drawHandle(ctx, x, y) {
-    ctx.fillStyle = "white";
-    ctx.beginPath(); ctx.arc(x, y, 8, 0, Math.PI * 2); ctx.fill();
-    ctx.stroke();
+    cameraOverlayCtx.fillStyle = "white";
+    cameraOverlayCtx.beginPath(); cameraOverlayCtx.arc(x, y, 8, 0, Math.PI * 2); cameraOverlayCtx.fill();
+    cameraOverlayCtx.stroke();
   },
 
   handleMouseDown(e) {
@@ -150,24 +147,22 @@ const cameraFeature = {
     this.startState = { ...window.cameraState };
     e.preventDefault();
     
-   
   },
 
   handleMouseMove(e) {
 	  
-    const o = document.getElementById("cameraOverlay");
-    if (!o) return;
+    if (!cameraOverlay) return;
     
     // LOCK CURSOR IF HANDLES ARE HIDDEN
     if (!window.cameraState.showHandles) {
       this.hoverType = null;
-      o.style.cursor = 'default';
+      cameraOverlay.style.cursor = 'default';
       return; 
     }
     
     
-    const r = o.getBoundingClientRect();
-    const sX = o.width / r.width, sY = o.height / r.height;
+    const r = cameraOverlay.getBoundingClientRect();
+    const sX = cameraOverlay.width / r.width, sY = cameraOverlay.height / r.height;
     const mx = (e.clientX - r.left) * sX, my = (e.clientY - r.top) * sY;
     
     const { resW, resH, x, y, scale, rotation } = window.cameraState;
@@ -183,11 +178,15 @@ const cameraFeature = {
     else this.hoverType = null;
 
     if (!this.isDraggingCamera) {
-      o.style.cursor = this.hoverType === 'pos' ? 'move' :
-                       this.hoverType === 'scale' ? 'nwse-resize' :
-                       this.hoverType === 'rot' ? 'crosshair' : 'default';
-      return;
-    }
+	  const cursorStyle =
+		this.hoverType === 'pos' ? 'move' :
+		this.hoverType === 'scale' ? 'nwse-resize' :
+		this.hoverType === 'rot' ? 'crosshair' : 'default';
+
+	  document.body.style.cursor = cursorStyle;
+	  return;
+	}
+
 
     const dxm = mx - this.startMouse.x;
     const dym = my - this.startMouse.y;
@@ -215,26 +214,20 @@ const cameraFeature = {
 
 // INIT OVERLAY
 (function() {
-  const container = document.getElementById("canvasContainer");
   if (!container) return;
-  
-  const overlay = document.createElement('canvas');
-  overlay.id = "cameraOverlay";
-  overlay.className = "canvases";
-  overlay.width = document.getElementById('canvasWidthInput').value; 
-  overlay.height = document.getElementById('canvasHeightInput').value; 
-  
-  Object.assign(overlay.style, {
-    position: "absolute", top: "0", left: "0", 
-    zIndex: "999", pointerEvents: "auto", backgroundColor: "transparent"
-  });
-  
-  container.appendChild(overlay);
-  const ctx = overlay.getContext('2d');
 
-  overlay.addEventListener("mousedown", e => cameraFeature.handleMouseDown(e));
-  window.addEventListener("mousemove", e => cameraFeature.handleMouseMove(e));
-  window.addEventListener("mouseup", () => cameraFeature.handleMouseUp());
+  cameraOverlay.width = document.getElementById('canvasWidthInput').value; 
+  cameraOverlay.height = document.getElementById('canvasHeightInput').value; 
+  
+  Object.assign(cameraOverlay.style, {
+    //~ zIndex: "100", // Start lower than tools
+    backgroundColor: "transparent"
+});
+  
+ 
+  window.addEventListener("pointerdown", e => cameraFeature.handleMouseDown(e));
+  window.addEventListener("pointermove", e => cameraFeature.handleMouseMove(e));
+  window.addEventListener("pointerup", () => cameraFeature.handleMouseUp());
 
   function loop() {
     // Only interpolate if we AREN'T currently dragging
@@ -242,14 +235,14 @@ const cameraFeature = {
         cameraFeature.updateFromKeyframes(window.activeFrame);
     }
 
-    ctx.clearRect(0, 0, overlay.width, overlay.height);
+    cameraOverlayCtx.clearRect(0, 0, cameraOverlay.width, cameraOverlay.height);
     const mainCanvas = document.getElementById("canvas");
     if (mainCanvas) {
-      overlay.style.top = mainCanvas.style.top;
-      overlay.style.left = mainCanvas.style.left;
-      overlay.style.transform = mainCanvas.style.transform;
+      cameraOverlay.style.top = mainCanvas.style.top;
+      cameraOverlay.style.left = mainCanvas.style.left;
+      cameraOverlay.style.transform = mainCanvas.style.transform;
     }
-    cameraFeature.drawUI(ctx);
+    cameraFeature.drawUI(cameraOverlayCtx );
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);

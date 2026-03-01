@@ -1,18 +1,3 @@
-// 1. CONSTANTS & INITIALIZATION
-const canvasWidthInput = document.getElementById('canvasWidthInput');
-const canvasHeightInput = document.getElementById('canvasHeightInput');
-const CANVAS_WIDTH = 2340;
-const CANVAS_HEIGHT = 1654;
-
-const activeCanvas = document.getElementById('canvas');
-const activeCanvasCtx = activeCanvas.getContext('2d');
-const backdropCanvas = document.getElementById('backdropCanvas');
-const backdropCanvasCtx = backdropCanvas.getContext('2d');
-const backgroundColorCanvas = document.getElementById('backgroundColorCanvas');
-
-const container = document.getElementById("canvasContainer");
-// Live collection: automatically includes dynamic track-layers from the bridge
-const canvases = document.getElementsByClassName("canvases");
 
 // Set internal resolution for all core canvases
 [activeCanvas, backdropCanvas, backgroundColorCanvas].forEach(c => {

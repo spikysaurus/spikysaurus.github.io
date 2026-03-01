@@ -1,23 +1,17 @@
-
-// LASSO state
 const lasso={
   points:[],pos:{x:0,y:0},active:false,dragging:false,dash:0,
-  resizing:null,handleSize:8,originalBuffer:null,transform:null,preRes:null,
+  resizing:null,handleSize:20,originalBuffer:null,transform:null,preRes:null,
   origBounds:null,rotation:0,rotating:false,startRotation:0,startAngle:0
 };
 
-// Overlay canvas
-const overlay=document.createElement('canvas');
-overlay.id="lassoOverlay";
-container.appendChild(overlay);
-
-function syncOverlay(){
-  const r=activeCanvas.getBoundingClientRect(),c=container.getBoundingClientRect();
-  overlay.width=activeCanvas.width;overlay.height=activeCanvas.height;
-  Object.assign(overlay.style,{
-    position:"absolute",left:(r.left-c.left)+"px",top:(r.top-c.top)+"px",
-    width:r.width+"px",height:r.height+"px",pointerEvents:"none",zIndex:"100",transform:"none"
-  });
+function syncOverlay() {
+  const rect = activeCanvas.getBoundingClientRect();
+  lassoSelectOverlay.width = activeCanvas.width;
+  lassoSelectOverlay.height = activeCanvas.height;
+  lassoSelectOverlay.style.width = rect.width + "px";
+  lassoSelectOverlay.style.height = rect.height + "px";
+  lassoSelectOverlay.style.left = (rect.left + window.scrollX) + "px";
+  lassoSelectOverlay.style.top = (rect.top + window.scrollY) + "px";
 }
 
 function getHandleAt(pos){
@@ -39,6 +33,7 @@ function getHandleAt(pos){
 function handleLasso(e,type){
   const pos=getMousePos(e);syncOverlay();
   if(type==='down'){
+	  syncOverlay();
     const h=getHandleAt(pos);
     if(h==='rotate'){
       lasso.rotating=true;
@@ -126,41 +121,44 @@ function commitLasso(){
 
 
 function drawLassoUI(){
-  const oCtx=overlay.getContext('2d');
-  oCtx.clearRect(0,0,overlay.width,overlay.height);
+	 if (lasso.active || lasso.originalBuffer) syncOverlay();
+	 
+  const lassoSelectOverlayCtx=lassoSelectOverlay.getContext('2d');
+  lassoSelectOverlayCtx.clearRect(0,0,lassoSelectOverlay.width,lassoSelectOverlay.height);
   if(!lasso.active&&!lasso.originalBuffer){requestAnimationFrame(drawLassoUI);return;}
-  oCtx.save();oCtx.setLineDash([5,5]);oCtx.lineDashOffset=lasso.dash-=0.5;oCtx.imageSmoothingEnabled=false;
+  lassoSelectOverlayCtx.save();lassoSelectOverlayCtx.setLineDash([5,5]);lassoSelectOverlayCtx.lineDashOffset=lasso.dash-=0.5;lassoSelectOverlayCtx.imageSmoothingEnabled=false;
   
-  if (typeof flipH !== "undefined" && typeof flipV !== "undefined") { oCtx.translate( flipH === -1 ? overlay.width : 0, flipV === -1 ? overlay.height : 0 ); oCtx.scale(flipH, flipV); }
+  if (typeof flipH !== "undefined" && typeof flipV !== "undefined") { lassoSelectOverlayCtx.translate( flipH === -1 ? lassoSelectOverlay.width : 0, flipV === -1 ? lassoSelectOverlay.height : 0 ); lassoSelectOverlayCtx.scale(flipH, flipV); }
   if(lasso.active){
-    oCtx.strokeStyle="blue";oCtx.beginPath();
-    lasso.points.forEach((p,i)=>i===0?oCtx.moveTo(p.x,p.y):oCtx.lineTo(p.x,p.y));
-    oCtx.closePath();oCtx.stroke();
+    lassoSelectOverlayCtx.strokeStyle="blue";lassoSelectOverlayCtx.beginPath();
+    lasso.points.forEach((p,i)=>i===0?lassoSelectOverlayCtx.moveTo(p.x,p.y):lassoSelectOverlayCtx.lineTo(p.x,p.y));
+    lassoSelectOverlayCtx.closePath();lassoSelectOverlayCtx.stroke();
   }
   else if(lasso.originalBuffer){
     const {x,y}=lasso.pos,{width:w,height:h}=lasso.transform;
     const cx=Math.round(x+w/2),cy=Math.round(y+h/2);
-    oCtx.translate(cx,cy);oCtx.rotate(lasso.rotation);
-    oCtx.drawImage(lasso.originalBuffer,-Math.round(w/2),-Math.round(h/2),Math.round(w),Math.round(h));
-    oCtx.strokeStyle="blue";oCtx.strokeRect(-w/2,-h/2,w,h);
-    oCtx.strokeStyle="black";oCtx.lineDashOffset+=5;oCtx.strokeRect(-w/2,-h/2,w,h);
+    lassoSelectOverlayCtx.translate(cx,cy);lassoSelectOverlayCtx.rotate(lasso.rotation);
+    lassoSelectOverlayCtx.drawImage(lasso.originalBuffer,-Math.round(w/2),-Math.round(h/2),Math.round(w),Math.round(h));
+    lassoSelectOverlayCtx.strokeStyle="blue";lassoSelectOverlayCtx.strokeRect(-w/2,-h/2,w,h);
+    lassoSelectOverlayCtx.strokeStyle="black";lassoSelectOverlayCtx.lineDashOffset+=5;lassoSelectOverlayCtx.strokeRect(-w/2,-h/2,w,h);
     const {x:ox,y:oy,w:ow,h:oh}=lasso.origBounds;const scaleX=w/ow,scaleY=h/oh;
-    oCtx.strokeStyle="blue";oCtx.beginPath();
+    lassoSelectOverlayCtx.strokeStyle="blue";lassoSelectOverlayCtx.beginPath();
     lasso.points.forEach((p,i)=>{
       const sx=(p.x-ox)*scaleX-w/2,sy=(p.y-oy)*scaleY-h/2;
-      i===0?oCtx.moveTo(sx,sy):oCtx.lineTo(sx,sy);
+      i===0?lassoSelectOverlayCtx.moveTo(sx,sy):lassoSelectOverlayCtx.lineTo(sx,sy);
     });
-    oCtx.closePath();oCtx.stroke();
+    lassoSelectOverlayCtx.closePath();lassoSelectOverlayCtx.stroke();
     // handles
-    oCtx.setLineDash([]);oCtx.fillStyle="white";oCtx.strokeStyle="black";const hs=lasso.handleSize;
+    lassoSelectOverlayCtx.setLineDash([]);lassoSelectOverlayCtx.fillStyle="white";lassoSelectOverlayCtx.strokeStyle="black";const hs=lasso.handleSize;
     [{px:-w/2,py:-h/2},{px:0,py:-h/2},{px:w/2,py:-h/2},{px:-w/2,py:0},{px:w/2,py:0},
      {px:-w/2,py:h/2},{px:0,py:h/2},{px:w/2,py:h/2}]
-      .forEach(p=>{oCtx.fillRect(p.px-hs/2,p.py-hs/2,hs,hs);oCtx.strokeRect(p.px-hs/2,p.py-hs/2,hs,hs);});
+      .forEach(p=>{lassoSelectOverlayCtx.fillRect(p.px-hs/2,p.py-hs/2,hs,hs);lassoSelectOverlayCtx.strokeRect(p.px-hs/2,p.py-hs/2,hs,hs);});
     // rotation handle
-    oCtx.beginPath();oCtx.arc(0,-h/2-30,hs/2,0,Math.PI*2);
-    oCtx.fillStyle="white";oCtx.fill();oCtx.strokeStyle="black";oCtx.stroke();
+    lassoSelectOverlayCtx.beginPath();lassoSelectOverlayCtx.arc(0,-h/2-30,hs/2,0,Math.PI*2);
+    lassoSelectOverlayCtx.fillStyle="white";lassoSelectOverlayCtx.fill();lassoSelectOverlayCtx.strokeStyle="black";lassoSelectOverlayCtx.stroke();
   }
-  oCtx.restore();requestAnimationFrame(drawLassoUI);
+  lassoSelectOverlayCtx.restore();
+  requestAnimationFrame(drawLassoUI);
 }
 drawLassoUI();
 
@@ -169,12 +167,12 @@ window.addEventListener('keydown', e=>{
   if(e.target.tagName!=='INPUT'){
     const key = e.key.toLowerCase();
 
-    // Toggle lasso tool with "L"
+    // Switch tool
     if(key==='v'){
       activeTool==="ToolLasso" ? (commitLasso(), switchTool("ToolBrush")) : switchTool("ToolLasso");
     }
 
-    // Mirror horizontally with "M"
+    // Mirror horizontal
     if(key==='m' && !e.shiftKey && lasso.originalBuffer){
       const buf = document.createElement('canvas');
       buf.width = lasso.originalBuffer.width;
@@ -193,7 +191,7 @@ window.addEventListener('keydown', e=>{
       }));
     }
 
-    // Mirror vertically with "Shift+M"
+    // Mirror vertical
     if(key==='m' && e.shiftKey && lasso.originalBuffer){
       const buf = document.createElement('canvas');
       buf.width = lasso.originalBuffer.width;
@@ -221,29 +219,18 @@ window.addEventListener('keydown', e=>{
 		lasso.pos.y + lasso.transform.height / 2
 	  );
 	  activeCanvasCtx.rotate(lasso.rotation);
-	  activeCanvasCtx.drawImage(
-		lasso.originalBuffer,
-		-Math.round(lasso.transform.width / 2),
-		-Math.round(lasso.transform.height / 2),
-		Math.round(lasso.transform.width),
-		Math.round(lasso.transform.height)
+	  activeCanvasCtx.drawImage(lasso.originalBuffer,-Math.round(lasso.transform.width / 2),-Math.round(lasso.transform.height / 2),Math.round(lasso.transform.width),Math.round(lasso.transform.height)
 	  );
 	  activeCanvasCtx.restore();
-
 	  // Reset lasso state after erasing
-	  lasso.originalBuffer = null;
-	  lasso.transform = null;
-	  lasso.origBounds = null;
-	  lasso.rotation = 0;
-
+	  lasso.originalBuffer = null;lasso.transform = null;lasso.origBounds = null;lasso.rotation = 0;
 	  if(activeDrawing) activeDrawing.data = activeCanvas.toDataURL();
 	}
 
   }
 });
 
-
-activeCanvas.addEventListener('pointerdown',e=>{
+window.addEventListener('pointerdown',e=>{
   if(activeTool==="ToolLasso"){
     const pos=getMousePos(e);
     const handle=getHandleAt(pos);
@@ -256,11 +243,11 @@ activeCanvas.addEventListener('pointerdown',e=>{
     }
     handleLasso(e,'down');
   } else if(lasso.originalBuffer){
-    commitLasso();
+commitLasso();
   }
 });
 
-activeCanvas.addEventListener('pointermove',e=>{
+window.addEventListener('pointermove',e=>{
   if(activeTool==="ToolLasso"){
     if(lasso.rotating){
       const pos=getMousePos(e);
@@ -275,7 +262,7 @@ activeCanvas.addEventListener('pointermove',e=>{
   }
 });
 
-activeCanvas.addEventListener('pointerup',e=>{
+window.addEventListener('pointerup',e=>{
   if(activeTool==="ToolLasso"){
     lasso.rotating=false;
     handleLasso(e,'up');

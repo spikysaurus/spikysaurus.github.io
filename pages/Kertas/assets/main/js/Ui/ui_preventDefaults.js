@@ -43,11 +43,3 @@ document.addEventListener('keydown', e => {
     e.preventDefault();
   }
 });
-
-
-//~ window.addEventListener('wheel', e => e.preventDefault(), { passive: false });
-//~ window.addEventListener('keydown', e => {
-  //~ if (['ArrowUp','ArrowDown','PageUp','PageDown','Home','End','Space'].includes(e.key)) {
-    //~ e.preventDefault();
-  //~ }
-//~ });

@@ -1,19 +1,15 @@
-let activeTool = "ToolBrush"; 
-let previousTool = "ToolBrush";
-let isDrawing = false;
-let isDragging = false; 
-let brush_size = 1;
-let eraser_size = 15;
-let brush_opacity = 1;
-let brush_aliasing = true;
-let drawBehind; 
+
+
+
 
 // Tool switching
 function switchTool(tool,tmp=false){
   if(tool!==activeTool){ if(!tmp) previousTool=tool; activeTool=tool; isDrawing=false; isDragging=false; strokePoints=[]; }
   if(tool==="ToolFill") activeCanvas.style.cursor="crosshair";
-  
 }
+
+
+
 
 function getMousePos(e) {
     const rect = activeCanvas.getBoundingClientRect();
@@ -68,7 +64,7 @@ window.addEventListener("pointerdown", e => {
 
 window.addEventListener("pointermove", e => {
   const isBrushOrEraser = activeTool === "ToolBrush" || activeTool === "ToolEraser";
-  const isOverCanvas = canvasContainer.contains(e.target);
+  const isOverCanvas = container.contains(e.target);
 
   if (isBrushOrEraser && isOverCanvas) {
     brushCursor.style.display = "block";
@@ -100,7 +96,7 @@ window.addEventListener("pointermove", e => {
   }
 });
 
-document.addEventListener("mousedown", e => {
+document.addEventListener("pointerdown", e => {
   if (activeTool === "ToolPan" || activeTool === "ToolZoom") {
     isDragging = true;
     startX = e.clientX;
