@@ -73,7 +73,7 @@ const cameraFeature = {
     cameraOverlayCtx.clip();
   },
 
-  apply(ctx) {
+  apply(cameraOverlayCtx) {
     const { x, y, rotation, scale, resW, resH } = window.cameraState;
     cameraOverlayCtx.translate(resW / 2, resH / 2);
     cameraOverlayCtx.scale(1 / scale, 1 / scale);
@@ -81,7 +81,7 @@ const cameraFeature = {
     cameraOverlayCtx.translate(-resW / 2 - x, -resH / 2 - y);
   },
 
-    drawUI(ctx) {
+    drawUI(cameraOverlayCtx) {
     // REMOVED: if (!window.cameraState.showHandles) return;
     
     const { resW, resH, x, y, scale, rotation, showHandles } = window.cameraState;
@@ -100,9 +100,9 @@ const cameraFeature = {
 
     // ONLY DRAW HANDLES IF showHandles IS TRUE
     if (showHandles) {
-      this.drawHandle(ctx, 0, 0); // Center handle
-      this.drawHandle(ctx, resW * scale / 2, resH * scale / 2); // Scale handle
-      this.drawHandle(ctx, 0, -resH * scale / 2 - 20); // Rotation handle
+      this.drawHandle(cameraOverlayCtx, 0, 0); // Center handle
+      this.drawHandle(cameraOverlayCtx, resW * scale / 2, resH * scale / 2); // Scale handle
+      this.drawHandle(cameraOverlayCtx, 0, -resH * scale / 2 - 20); // Rotation handle
 
       if (window.cameraKeyframes[window.activeFrame]) {
         cameraOverlayCtx.fillStyle = "#ffcc00";
@@ -117,7 +117,7 @@ const cameraFeature = {
     cameraOverlayCtx.restore();
   },
 
-  drawHandle(ctx, x, y) {
+  drawHandle(cameraOverlayCtx, x, y) {
     cameraOverlayCtx.fillStyle = "white";
     cameraOverlayCtx.beginPath(); cameraOverlayCtx.arc(x, y, 8, 0, Math.PI * 2); cameraOverlayCtx.fill();
     cameraOverlayCtx.stroke();
@@ -216,8 +216,8 @@ const cameraFeature = {
 (function() {
   if (!container) return;
 
-  cameraOverlay.width = document.getElementById('canvasWidthInput').value; 
-  cameraOverlay.height = document.getElementById('canvasHeightInput').value; 
+  cameraOverlay.width = activeCanvas.width; 
+  cameraOverlay.height = activeCanvas.height; 
   
   Object.assign(cameraOverlay.style, {
     //~ zIndex: "100", // Start lower than tools
@@ -236,11 +236,10 @@ const cameraFeature = {
     }
 
     cameraOverlayCtx.clearRect(0, 0, cameraOverlay.width, cameraOverlay.height);
-    const mainCanvas = document.getElementById("canvas");
-    if (mainCanvas) {
-      cameraOverlay.style.top = mainCanvas.style.top;
-      cameraOverlay.style.left = mainCanvas.style.left;
-      cameraOverlay.style.transform = mainCanvas.style.transform;
+    if (activeCanvas) {
+      cameraOverlay.style.top = activeCanvas.style.top;
+      cameraOverlay.style.left = activeCanvas.style.left;
+      cameraOverlay.style.transform = activeCanvas.style.transform;
     }
     cameraFeature.drawUI(cameraOverlayCtx );
     requestAnimationFrame(loop);

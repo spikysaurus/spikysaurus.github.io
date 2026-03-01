@@ -1,3 +1,14 @@
+const container = document.getElementById("canvasContainer");
+const canvasWidthInput = document.getElementById('canvasWidthInput');
+const canvasHeightInput = document.getElementById('canvasHeightInput');
+const activeCanvas = document.getElementById('canvas');
+const activeCanvasCtx = activeCanvas.getContext('2d');
+const backdropCanvas = document.getElementById('backdropCanvas');
+const backdropCanvasCtx = backdropCanvas.getContext('2d');
+const backgroundColorCanvas = document.getElementById('backgroundColorCanvas');
+const canvases = document.getElementsByClassName("canvases");
+const CANVAS_WIDTH = 2340;
+const CANVAS_HEIGHT = 1654;
 
 // Set internal resolution for all core canvases
 [activeCanvas, backdropCanvas, backgroundColorCanvas].forEach(c => {
@@ -62,8 +73,9 @@ function resizeCanvases(w, h, anchor) {
 }
 
 const canvasResizeBtn = document.getElementById('canvasResizeBtn');
+
 canvasResizeBtn.addEventListener("click", (e) => {
-resizeCanvases(canvasWidthInput.value, canvasHeightInput.value);
+resizeCanvases(window.canvasWidthInput.value, window.canvasHeightInput.value);
 });
 
 const canvasRefreshBtn = document.getElementById('canvasRefreshBtn');
