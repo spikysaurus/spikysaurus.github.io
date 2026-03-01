@@ -95,71 +95,177 @@ function handleLasso(e,type){
     lasso.active=false;lasso.dragging=false;
   }
 }
+
 function commitLasso(){
-  if(!lasso.originalBuffer)return;
+  if(!lasso.originalBuffer) return;
+
+  // --- SAFETY CHECK ---
+  // Ensure the buffer is not empty and the target transform has area
+  const tw = Math.round(lasso.transform.width);
+  const th = Math.round(lasso.transform.height);
+  const bw = lasso.originalBuffer.width;
+  const bh = lasso.originalBuffer.height;
+
+  if (bw === 0 || bh === 0 || Math.abs(tw) === 0 || Math.abs(th) === 0) {
+    console.warn("Commit aborted: Selection size is zero.");
+    resetLassoState();
+    return;
+  }
+  // --------------------
+
   activeCanvasCtx.save();
-  activeCanvasCtx.imageSmoothingEnabled=false;
-  activeCanvasCtx.globalCompositeOperation='source-over'; // draw over, not clear
-  const cx=Math.round(lasso.pos.x+lasso.transform.width/2);
-  const cy=Math.round(lasso.pos.y+lasso.transform.height/2);
-  activeCanvasCtx.translate(cx,cy);
+  activeCanvasCtx.imageSmoothingEnabled = false;
+  activeCanvasCtx.globalCompositeOperation = 'source-over'; 
+  
+  const cx = Math.round(lasso.pos.x + lasso.transform.width / 2);
+  const cy = Math.round(lasso.pos.y + lasso.transform.height / 2);
+  
+  activeCanvasCtx.translate(cx, cy);
   activeCanvasCtx.rotate(lasso.rotation);
-  activeCanvasCtx.drawImage(
-    lasso.originalBuffer,
-    -Math.round(lasso.transform.width/2),
-    -Math.round(lasso.transform.height/2),
-    Math.round(lasso.transform.width),
-    Math.round(lasso.transform.height)
-  );
+
+  try {
+    activeCanvasCtx.drawImage(
+      lasso.originalBuffer,
+      -Math.round(tw / 2),
+      -Math.round(th / 2),
+      tw,
+      th
+    );
+  } catch (e) {
+    console.error("Failed to commit lasso drawImage:", e);
+  }
+
   activeCanvasCtx.restore();
-  lasso.originalBuffer=null;
-  lasso.transform=null;
-  lasso.origBounds=null;
-  lasso.rotation=0;
-  if(activeDrawing)activeDrawing.data=activeCanvas.toDataURL();
+  
+  // Update the drawing data
+  if(activeDrawing) activeDrawing.data = activeCanvas.toDataURL();
+  
+  resetLassoState();
 }
 
+// Helper to keep code clean
+function resetLassoState() {
+  lasso.originalBuffer = null;
+  lasso.transform = null;
+  lasso.origBounds = null;
+  lasso.rotation = 0;
+}
 
-function drawLassoUI(){
-	 if (lasso.active || lasso.originalBuffer) syncOverlay();
-	 
-  const lassoSelectOverlayCtx=lassoSelectOverlay.getContext('2d');
-  lassoSelectOverlayCtx.clearRect(0,0,lassoSelectOverlay.width,lassoSelectOverlay.height);
-  if(!lasso.active&&!lasso.originalBuffer){requestAnimationFrame(drawLassoUI);return;}
-  lassoSelectOverlayCtx.save();lassoSelectOverlayCtx.setLineDash([5,5]);lassoSelectOverlayCtx.lineDashOffset=lasso.dash-=0.5;lassoSelectOverlayCtx.imageSmoothingEnabled=false;
+function drawLassoUI() {
+  if (lasso.active || lasso.originalBuffer) syncOverlay();
+
+  const lassoSelectOverlayCtx = lassoSelectOverlay.getContext('2d');
+  lassoSelectOverlayCtx.clearRect(0, 0, lassoSelectOverlay.width, lassoSelectOverlay.height);
+
+  // 1. Exit if nothing is active
+  if (!lasso.active && !lasso.originalBuffer) {
+    requestAnimationFrame(drawLassoUI);
+    return;
+  }
+
+  // 2. STRICT SIZE VALIDATION
+  // Prevents "InvalidStateError" by ensuring width/height are not 0
+  const MIN_DRAW_SIZE = 0.5; // Anything smaller than half a pixel is ignored
   
-  if (typeof flipH !== "undefined" && typeof flipV !== "undefined") { lassoSelectOverlayCtx.translate( flipH === -1 ? lassoSelectOverlay.width : 0, flipV === -1 ? lassoSelectOverlay.height : 0 ); lassoSelectOverlayCtx.scale(flipH, flipV); }
-  if(lasso.active){
-    lassoSelectOverlayCtx.strokeStyle="blue";lassoSelectOverlayCtx.beginPath();
-    lasso.points.forEach((p,i)=>i===0?lassoSelectOverlayCtx.moveTo(p.x,p.y):lassoSelectOverlayCtx.lineTo(p.x,p.y));
-    lassoSelectOverlayCtx.closePath();lassoSelectOverlayCtx.stroke();
+  let isValidSelection = false;
+  if (lasso.active && lasso.points.length > 1) {
+    isValidSelection = true; 
+  } else if (lasso.originalBuffer) {
+    const w = Math.abs(lasso.transform.width);
+    const h = Math.abs(lasso.transform.height);
+    const bw = lasso.originalBuffer.width;
+    const bh = lasso.originalBuffer.height;
+    
+    // Check if both the buffer AND the intended draw area are valid sizes
+    if (w > MIN_DRAW_SIZE && h > MIN_DRAW_SIZE && bw > 0 && bh > 0) {
+      isValidSelection = true;
+    }
   }
-  else if(lasso.originalBuffer){
-    const {x,y}=lasso.pos,{width:w,height:h}=lasso.transform;
-    const cx=Math.round(x+w/2),cy=Math.round(y+h/2);
-    lassoSelectOverlayCtx.translate(cx,cy);lassoSelectOverlayCtx.rotate(lasso.rotation);
-    lassoSelectOverlayCtx.drawImage(lasso.originalBuffer,-Math.round(w/2),-Math.round(h/2),Math.round(w),Math.round(h));
-    lassoSelectOverlayCtx.strokeStyle="blue";lassoSelectOverlayCtx.strokeRect(-w/2,-h/2,w,h);
-    lassoSelectOverlayCtx.strokeStyle="black";lassoSelectOverlayCtx.lineDashOffset+=5;lassoSelectOverlayCtx.strokeRect(-w/2,-h/2,w,h);
-    const {x:ox,y:oy,w:ow,h:oh}=lasso.origBounds;const scaleX=w/ow,scaleY=h/oh;
-    lassoSelectOverlayCtx.strokeStyle="blue";lassoSelectOverlayCtx.beginPath();
-    lasso.points.forEach((p,i)=>{
-      const sx=(p.x-ox)*scaleX-w/2,sy=(p.y-oy)*scaleY-h/2;
-      i===0?lassoSelectOverlayCtx.moveTo(sx,sy):lassoSelectOverlayCtx.lineTo(sx,sy);
-    });
-    lassoSelectOverlayCtx.closePath();lassoSelectOverlayCtx.stroke();
-    // handles
-    lassoSelectOverlayCtx.setLineDash([]);lassoSelectOverlayCtx.fillStyle="white";lassoSelectOverlayCtx.strokeStyle="black";const hs=lasso.handleSize;
-    [{px:-w/2,py:-h/2},{px:0,py:-h/2},{px:w/2,py:-h/2},{px:-w/2,py:0},{px:w/2,py:0},
-     {px:-w/2,py:h/2},{px:0,py:h/2},{px:w/2,py:h/2}]
-      .forEach(p=>{lassoSelectOverlayCtx.fillRect(p.px-hs/2,p.py-hs/2,hs,hs);lassoSelectOverlayCtx.strokeRect(p.px-hs/2,p.py-hs/2,hs,hs);});
-    // rotation handle
-    lassoSelectOverlayCtx.beginPath();lassoSelectOverlayCtx.arc(0,-h/2-30,hs/2,0,Math.PI*2);
-    lassoSelectOverlayCtx.fillStyle="white";lassoSelectOverlayCtx.fill();lassoSelectOverlayCtx.strokeStyle="black";lassoSelectOverlayCtx.stroke();
+
+  // If it's just a click or 0-size, stop here
+  if (!isValidSelection) {
+    requestAnimationFrame(drawLassoUI);
+    return;
   }
+
+  lassoSelectOverlayCtx.save();
+  lassoSelectOverlayCtx.setLineDash([5, 5]);
+  lassoSelectOverlayCtx.lineDashOffset = lasso.dash -= 0.5;
+  lassoSelectOverlayCtx.imageSmoothingEnabled = false;
+
+  if (typeof flipH !== "undefined" && typeof flipV !== "undefined") {
+    lassoSelectOverlayCtx.translate(flipH === -1 ? lassoSelectOverlay.width : 0, flipV === -1 ? lassoSelectOverlay.height : 0);
+    lassoSelectOverlayCtx.scale(flipH, flipV);
+  }
+
+  if (lasso.active) {
+    lassoSelectOverlayCtx.strokeStyle = "blue";
+    lassoSelectOverlayCtx.beginPath();
+    lasso.points.forEach((p, i) => i === 0 ? lassoSelectOverlayCtx.moveTo(p.x, p.y) : lassoSelectOverlayCtx.lineTo(p.x, p.y));
+    lassoSelectOverlayCtx.closePath();
+    lassoSelectOverlayCtx.stroke();
+  } 
+  else if (lasso.originalBuffer) {
+    const { x, y } = lasso.pos;
+    const { width: w, height: h } = lasso.transform;
+    const cx = Math.round(x + w / 2), cy = Math.round(y + h / 2);
+
+    lassoSelectOverlayCtx.translate(cx, cy);
+    lassoSelectOverlayCtx.rotate(lasso.rotation);
+
+    // Final safety check specifically for drawImage
+    try {
+        lassoSelectOverlayCtx.drawImage(lasso.originalBuffer, -Math.round(w / 2), -Math.round(h / 2), Math.round(w), Math.round(h));
+    } catch (e) {
+        console.warn("Skipping drawImage due to invalid dimensions:", e);
+    }
+
+    lassoSelectOverlayCtx.strokeStyle = "blue";
+    lassoSelectOverlayCtx.strokeRect(-w / 2, -h / 2, w, h);
+    lassoSelectOverlayCtx.strokeStyle = "black";
+    lassoSelectOverlayCtx.lineDashOffset += 5;
+    lassoSelectOverlayCtx.strokeRect(-w / 2, -h / 2, w, h);
+
+    // Path drawing logic
+    const { x: ox, y: oy, w: ow, h: oh } = lasso.origBounds;
+    if (ow > 0 && oh > 0) { // Prevent division by zero
+        const scaleX = w / ow, scaleY = h / oh;
+        lassoSelectOverlayCtx.strokeStyle = "blue";
+        lassoSelectOverlayCtx.beginPath();
+        lasso.points.forEach((p, i) => {
+            const sx = (p.x - ox) * scaleX - w / 2, sy = (p.y - oy) * scaleY - h / 2;
+            i === 0 ? lassoSelectOverlayCtx.moveTo(sx, sy) : lassoSelectOverlayCtx.lineTo(sx, sy);
+        });
+        lassoSelectOverlayCtx.closePath();
+        lassoSelectOverlayCtx.stroke();
+    }
+
+    // Handles
+    lassoSelectOverlayCtx.setLineDash([]);
+    lassoSelectOverlayCtx.fillStyle = "white";
+    lassoSelectOverlayCtx.strokeStyle = "black";
+    const hs = lasso.handleSize;
+    [{ px: -w / 2, py: -h / 2 }, { px: 0, py: -h / 2 }, { px: w / 2, py: -h / 2 }, { px: -w / 2, py: 0 }, { px: w / 2, py: 0 },
+    { px: -w / 2, py: h / 2 }, { px: 0, py: h / 2 }, { px: w / 2, py: h / 2 }]
+      .forEach(p => {
+        lassoSelectOverlayCtx.fillRect(p.px - hs / 2, p.py - hs / 2, hs, hs);
+        lassoSelectOverlayCtx.strokeRect(p.px - hs / 2, p.py - hs / 2, hs, hs);
+      });
+
+    // Rotation handle
+    lassoSelectOverlayCtx.beginPath();
+    lassoSelectOverlayCtx.arc(0, -h / 2 - 30, hs / 2, 0, Math.PI * 2);
+    lassoSelectOverlayCtx.fillStyle = "white";
+    lassoSelectOverlayCtx.fill();
+    lassoSelectOverlayCtx.strokeStyle = "black";
+    lassoSelectOverlayCtx.stroke();
+  }
+
   lassoSelectOverlayCtx.restore();
   requestAnimationFrame(drawLassoUI);
 }
+
+
 drawLassoUI();
 
 // Keyboard & Pointer
