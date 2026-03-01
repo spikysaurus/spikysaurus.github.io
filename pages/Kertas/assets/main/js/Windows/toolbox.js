@@ -1,4 +1,4 @@
- //~ window.addEventListener('DOMContentLoaded', () => {
+ window.addEventListener('DOMContentLoaded', () => {
     //~ const startX = 0, startY = 0, offset = 0;
     //~ let activeTool = 'ToolBrush'; // Set a default tool
 
@@ -68,5 +68,5 @@
     // 4. Set the initial active tool highlight
     window.switchTool(activeTool);
     if (window.TooltipLib) window.TooltipLib.applyConfig();
-    //~ return win;
-//~ });
+    return win;
+});

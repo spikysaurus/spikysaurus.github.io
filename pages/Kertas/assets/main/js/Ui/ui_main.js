@@ -437,40 +437,43 @@ window.isAutoKeyOn = true;
   const style = document.createElement('style');
   style.textContent = `
     .nav-container {
-      position: absolute;
-      top: 0px; 
-      right: 0px;
-      display: flex;
-      gap: 3px;
-      background: rgba(26, 26, 26, 0.85);
-      padding: 6px;
-      border-bottom-left-radius: 10px;
-      z-index: 10000;
-      touch-action: none;
-      pointer-events: auto;
-    }
+  position: absolute;
+  bottom: 30px; /* Moved to bottom */
+  right: 0px;
+  display: flex;
+  flex-direction: column; /* Stacked vertically */
+  gap: 3px;
+  background: rgba(26, 26, 26, 0.85);
+  padding: 3px;
+  border-top-left-radius: 10px; 
+  border-bottom-left-radius: 10px; 
+  z-index: 10000;
+  touch-action: none;
+  pointer-events: auto;
+}
 
-    .nav-btn {
-      padding: 6px 12px;
-      border: none;
-      border-radius: 6px;
-      background: #000;
-      color: #999;
-      cursor: pointer;
-      font-family: 'Segoe UI', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      transition: all 0.15s ease;
-      min-width: 30px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      -webkit-tap-highlight-color: transparent;
-    }
+.nav-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #000;
+  color: #999;
+  cursor: pointer;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  min-width: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  -webkit-tap-highlight-color: transparent;
+}
 
-    .nav-btn.active {
-      background: #4c4c4c;
-      color: #fff;
-    }
+.nav-btn.active {
+  background: #4c4c4c;
+  color: #fff;
+}
+
 
     
   `;
