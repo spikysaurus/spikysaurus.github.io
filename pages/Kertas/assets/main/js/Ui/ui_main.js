@@ -438,7 +438,7 @@ window.isAutoKeyOn = true;
   style.textContent = `
     .nav-container {
   position: absolute;
-  bottom: 30px; /* Moved to bottom */
+  bottom: 60px;
   right: 0px;
   display: flex;
   flex-direction: column; /* Stacked vertically */
