@@ -17,7 +17,7 @@ const areaRight = document.getElementById('a-right');
 const areaBottom = document.getElementById('a-bottom');
 
     // Add 'content' as a parameter with a default fallback
-function createWindow(title, targetArea = null, content = null, showResizer = true, isDockable = true, customClass = '') {
+function createWindow(title, targetArea = null, content = null, showResizer = true, isDockable = true, customClass = '',makeActive = true) {
     const win = document.createElement('div');
     win.className = 'window-panel';
     
@@ -44,7 +44,11 @@ function createWindow(title, targetArea = null, content = null, showResizer = tr
     
     setupDragging(win);
     setupFloatingResize(win);
-
+	
+	if (makeActive) {
+        win.classList.add('active-content');
+    }
+    
     if (targetArea && isDockable) { dockWindow(win, targetArea); } 
     else { win.style.left = '100px'; win.style.top = '100px'; viewport.appendChild(win); }
     
@@ -72,41 +76,64 @@ function createWindow(title, targetArea = null, content = null, showResizer = tr
 
 
     function dockWindow(win, area) {
+		 if (win.classList.contains('active-content')) {
+			area.querySelectorAll('.window-panel').forEach(w => 
+				w.classList.remove('active-content')
+			);
+		}
+		
         area.appendChild(win);
         win.classList.add('is-docked');
         refreshTabs(area);
     }
 
-    function refreshTabs(area) {
-        const strip = area.querySelector('.tab-strip');
-        if (!strip) return;
-        strip.innerHTML = '';
-        const dockedWindows = area.querySelectorAll('.window-panel');
-        
-        dockedWindows.forEach((win, idx) => {
-            const tab = document.createElement('div');
-            tab.className = 'tab-item' + (win.classList.contains('active-content') || (idx === dockedWindows.length - 1 && !area.querySelector('.active-content')) ? ' active' : '');
-            tab.innerHTML = `<span>${win.dataset.title}</span>`;
-            
-            tab.onclick = () => {
-                area.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-                area.querySelectorAll('.window-panel').forEach(w => w.classList.remove('active-content'));
-                tab.classList.add('active');
-                win.classList.add('active-content');
-            };
-
-            tab.onpointerdown = (e) => {
-				tab.click();
-				if (isCtrl) {
-						win._startDrag(e); 
-					}
-				};
-
-            strip.appendChild(tab);
-            if (tab.classList.contains('active')) win.classList.add('active-content');
-            else win.classList.remove('active-content');
-        });
+   function refreshTabs(area) {
+    const strip = area.querySelector('.tab-strip');
+    if (!strip) return;
+    strip.innerHTML = '';
+    
+    const dockedWindows = area.querySelectorAll('.window-panel');
+    
+    // 1. Identify which window SHOULD be active
+    // Priority: Existing 'active-content' class > OR the very last window in the list
+    let activeWin = area.querySelector('.active-content');
+    if (!activeWin && dockedWindows.length > 0) {
+        activeWin = dockedWindows[dockedWindows.length - 1];
     }
+
+    dockedWindows.forEach((win) => {
+        const tab = document.createElement('div');
+        const isThisActive = (win === activeWin);
+        
+        tab.className = 'tab-item' + (isThisActive ? ' active' : '');
+        tab.innerHTML = `<span>${win.dataset.title}</span>`;
+        
+        tab.onclick = () => {
+            // Remove active status from all tabs/windows in this area
+            area.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            area.querySelectorAll('.window-panel').forEach(w => w.classList.remove('active-content'));
+            
+            // Apply to clicked
+            tab.classList.add('active');
+            win.classList.add('active-content');
+        };
+
+        tab.onpointerdown = (e) => {
+            tab.click();
+            if (isCtrl) win._startDrag(e);
+        };
+
+        strip.appendChild(tab);
+
+        // 2. FORCE the content visibility to match the tab state immediately
+        if (isThisActive) {
+            win.classList.add('active-content');
+        } else {
+            win.classList.remove('active-content');
+        }
+    });
+}
+
 
     function setupDragging(win) {
         const handleMove = (e) => {
@@ -209,7 +236,11 @@ function setupFloatingResize(win) {
     
     //~ <button id="toggleOrientationBtn"><span class="bl-icons-gesture_rotate"></span></button>
 
-    createWindow("Xsheet Stuff", areaTop, 
+
+
+
+
+    createWindow("Xsheet", areaTop, 
     `
     <div class="flex-wrap-row">
     
@@ -220,20 +251,20 @@ function setupFloatingResize(win) {
 
 		<button id="addTrackBtn">Add Track</button>
 		<button id="removeTrackBtn">Remove Track</button>
-		<button id="autoRenameBtn">Auto-Rename Tracks</button>
+		<button id="autoRenameBtn">Auto-Rename</button>
 
-		<button id="reorderLeftBtn">Reorder Track to Left</button>
-		<button id="reorderRightBtn">Reorder Track to Right</button>
+		<button id="reorderLeftBtn">Reorder Left</button>
+		<button id="reorderRightBtn">Reorder Right</button>
 		
 		<label for="adjustDuration">Adjust Duration</label>
 		<input style="width:32px;text-align:center;" type="number" id="adjustDuration" value="1" min="1">
-		<button id="increaseDurationBtn">Increase</button>
-		<button id="decreaseDurationBtn">Decrease</button>
+		<button id="increaseDurationBtn">Inc</button>
+		<button id="decreaseDurationBtn">Dec</button>
 		<label>Time (<b id="durationLabel">0+0 | 00</b>)</label>
 	</div>
-    `);
+    `,true,true,'',false);
 
-createWindow("Xsheet Symbols", areaTop, 
+createWindow("Symbols", areaTop, 
 `
 	<div class="flex-wrap-row">
 	<label>Click to copy : </label>
@@ -252,7 +283,7 @@ createWindow("Xsheet Symbols", areaTop,
 `);
 
 
-createWindow("Assets Stuff", areaTop, 
+createWindow("Assets", areaTop, 
 `	<div class="flex-wrap-row">
 		<button id="loadAssetsBtn">Load Assets</button>
 		<button id="saveAssetsBtn">Save Assets</button>
@@ -271,13 +302,13 @@ createWindow("Assets Stuff", areaTop,
 		<button id="prevDrawingBtn"><span class="bl-icons-frame_prev"></span> Prev Drawing</button>
 		<button id="nextDrawingBtn"><span class="bl-icons-frame_next"></span> Next Drawing</button>
 	</div>
-`);
+`,true,true,'',false);
 
 
 createWindow("Xsheet", areaLeft, 
     `
     <div id="tableContainer"></div>
-    `,true,true,"dropZone");
+    `,true,true,"dropZone",true);
     
 createWindow("Info", areaLeft,
 `<div class="flex-wrap-column">
@@ -296,12 +327,12 @@ createWindow("Info", areaLeft,
 	<label for="memoInput">Memo</label>
 	<textarea id="memoInput">Memo</textarea>
 	</div>
-`);
+`,true,true,'',false);
     
 createWindow("Assets", areaRight, 
 `
 	<div id="levelsTree"></div>
-`,true,true,"dropZoneTree");
+`,true,true,"dropZoneTree",true);
 
 createWindow("Properties", areaRight, 
 `	<div class="flex-wrap-column">
@@ -330,9 +361,48 @@ createWindow("Properties", areaRight,
     
 
 
-`);
+`,true,true,'',false);
 
-createWindow("Debug and Shortcuts (F1)", areaBottom, 
+    //~ <button onclick="cameraManager.addKeyframe()" class="ui-btn add-key">
+			//~ + Add Keyframe
+		//~ </button>
+createWindow("Camera", areaTop, 
+    `
+    <div class="flex-wrap-row">
+		<button onclick="cameraManager.loadCameraData()" class="ui-btn load-cam">
+			Load Camera
+		</button>
+		
+		<button onclick="cameraManager.saveCameraData()" class="ui-btn save-cam">
+			Save Camera
+		</button>
+		
+   </div>
+    `,true,true,"dropZoneCamera",false);    
+    
+ createWindow("Playback", areaBottom, 
+    `
+    <div class="flex-wrap-row">
+		<button id="playAniCachedBtn"><span class="bl-icons-play"></span>Play Animation (cached)</button>
+		<button id="playAniBtn"><span class="bl-icons-play"></span>Play Animation</button>
+		<button id="prevCelBtn"><span class="bl-icons-prev_keyframe"></span>Prev Cel</button>
+		<button id="nextCelBtn"><span class="bl-icons-next_keyframe"></span>Next Cel</button>
+		<button id="prevFrameBtn"><span class="bl-icons-tria_left_bar"></span>Prev Frame</button>
+		<button id="nextFrameBtn"><span class="bl-icons-tria_right_bar"></span>Next Frame</button>
+   </div>
+    `,true,true,'',false);  
+
+createWindow("Render", areaBottom, 
+    `
+    <div class="flex-wrap-row">
+		<button id="flipbookBtn"><span class="bl-icons-play"></span> Flipbook</button>
+		<label> <input type="checkbox" id="includeBackdrop" checked> Include backdrop </label>
+   </div>
+    `,true,true,'',false);
+    
+ 
+             
+createWindow("Debug", areaLeft, 
 	`<div class="flex-wrap-column">
 		<!--<li>Toggle to Show/Hide This Bottom Area (F1)</li>-->
 		<li style="color:yellow;">Brush Size (Bracket) : <span id="brushSizeLabel"></span></li>
@@ -355,147 +425,113 @@ createWindow("Debug and Shortcuts (F1)", areaBottom,
 		<li style="color:yellow;" id="activeDrawingLabel">No active Drawing</li>
 
 	</div
-    `);
-
-
-    
-    //~ <button onclick="cameraManager.addKeyframe()" class="ui-btn add-key">
-			//~ + Add Keyframe
-		//~ </button>
-createWindow("Camera", areaTop, 
-    `
-    <div class="flex-wrap-row">
-		<button onclick="cameraManager.loadCameraData()" class="ui-btn load-cam">
-			Load Camera
-		</button>
-		
-		<button onclick="cameraManager.saveCameraData()" class="ui-btn save-cam">
-			Save Camera
-		</button>
-		
-   </div>
-    `,true,true,"dropZoneCamera");    
-    
- createWindow("Playback", areaTop, 
-    `
-    <div class="flex-wrap-row">
-		<button id="playAniCachedBtn"><span class="bl-icons-play"></span>Play Animation (cached)</button>
-		<button id="playAniBtn"><span class="bl-icons-play"></span>Play Animation</button>
-		<button id="prevCelBtn"><span class="bl-icons-prev_keyframe"></span>Prev Cel</button>
-		<button id="nextCelBtn"><span class="bl-icons-next_keyframe"></span>Next Cel</button>
-		<button id="prevFrameBtn"><span class="bl-icons-tria_left_bar"></span>Prev Frame</button>
-		<button id="nextFrameBtn"><span class="bl-icons-tria_right_bar"></span>Next Frame</button>
-   </div>
-    `);  
-
-createWindow("Render & Export", areaTop, 
-    `
-    <div class="flex-wrap-row">
-		<button id="flipbookBtn"><span class="bl-icons-play"></span> Flipbook</button>
-		<label> <input type="checkbox" id="includeBackdrop" checked> Include backdrop </label>
-   </div>
-    `);
-           
-    updateLayoutStates();
+    `,true,true,'',false);
+     
+updateLayoutStates();
 window.isAutoKeyOn = true; 
 
+//~ left: 50%;
+//~ transform: translateX(-50%);
 
-
-// 1. Setup styles
-const style = document.createElement('style');
-style.textContent = `
-  .nav-container {
-    position: fixed;
-    bottom: 0px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 5px;
-    background: #1a1a1a;
-    padding: 5px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    z-index: 10000;
-    touch-action: none;
-  }
-
-  .nav-btn {
-    padding: 5px;
-    border: none;
-    border-radius: 8px;
-    background: black;
-    color: #efefef;
-    cursor: pointer;
-    font-family: sans-serif;
-    font-size: 13px;
-    transition: all 0.15s ease;
-    min-width: 70px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  /* "Active" state represents when the element is SHOWN */
-  .nav-btn.active {
-    background: #4c4c4c;
-    color: white;
-  }
-
-  @media (max-width: 480px) {
-    .nav-container { bottom: 0px; width: 90%; justify-content: center; }
-    .nav-btn { flex: 1; padding: 12px 5px; font-size: 11px; min-width: 0; }
-  }
-`;
-document.head.appendChild(style);
-// 1. Ensure the element is hidden in the DOM initially
-if (areaBottom) areaBottom.style.display = 'none';
-
-const navItems = [
-  { label: 'Left', target: areaLeft, defaultVisible: true },
-  { label: 'Top', target: areaTop, defaultVisible: true },
-  { label: 'Bottom', target: areaBottom, defaultVisible: false }, // Set to false
-  { label: 'Right', target: areaRight, defaultVisible: true }
-];
-
-const navContainer = document.createElement('div');
-navContainer.className = 'nav-container';
-
-navItems.forEach(item => {
-  const btn = document.createElement('button');
-  
-  // 2. Initialize button state based on defaultVisible
-  if (item.defaultVisible) {
-    btn.className = 'nav-btn active';
-    // Ensure the target is actually visible if it's supposed to be
-    if (item.target) item.target.style.display = ''; 
-  } else {
-    btn.className = 'nav-btn';
-    // Ensure the target is hidden if it's NOT supposed to be visible
-    if (item.target) item.target.style.display = 'none';
-  }
-
-  btn.textContent = `${item.label}`;
-  
-  btn.addEventListener('pointerdown', (e) => {
-    e.preventDefault();
-    if (!item.target) return;
-
-    // 3. Toggle Logic
-    const isHidden = item.target.style.display === 'none';
-
-    if (isHidden) {
-      item.target.style.display = ''; // Show it
-      btn.classList.add('active');
-    } else {
-      item.target.style.display = 'none'; // Hide it
-      btn.classList.remove('active');
+  // 2. Setup styles - Absolute positioning over the canvas
+  const style = document.createElement('style');
+  style.textContent = `
+    .nav-container {
+      position: absolute;
+      bottom: 0px; 
+      left: 0px;
+      display: flex;
+      gap: 3px;
+      background: rgba(26, 26, 26, 0.85);
+      padding: 6px;
+      border-top-right-radius: 10px;
+      backdrop-filter: blur(4px);
+      z-index: 10000;
+      touch-action: none;
+      pointer-events: auto;
     }
+
+    .nav-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      background: #000;
+      color: #999;
+      cursor: pointer;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      min-width: 30px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-btn.active {
+      background: #4c4c4c;
+      color: #fff;
+    }
+
+    
+  `;
+  document.head.appendChild(style);
+
+  // 3. Define configuration
+  const navItems = [
+    { label: 'L', target: areaLeft, defaultVisible: false },
+    { label: 'T', target: areaTop, defaultVisible: true },
+    { label: 'B', target: areaBottom, defaultVisible: false },
+    { label: 'R', target: areaRight, defaultVisible: false }
+  ];
+
+  // 4. Create the container
+  const navContainer = document.createElement('div');
+  navContainer.className = 'nav-container';
+
+  // 5. Build buttons & initialize visibility
+  navItems.forEach(item => {
+    const btn = document.createElement('button');
+    
+    // Set initial display state in DOM
+    if (item.target) {
+      item.target.style.display = item.defaultVisible ? '' : 'none';
+    }
+
+    // Set initial button style
+    btn.className = item.defaultVisible ? 'nav-btn active' : 'nav-btn';
+    btn.textContent = item.label;
+
+    // Pointer event for toggle
+    btn.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      if (!item.target) return;
+
+      const isHidden = item.target.style.display === 'none';
+
+      if (isHidden) {
+        item.target.style.display = ''; // Show
+        btn.classList.add('active');
+      } else {
+        item.target.style.display = 'none'; // Hide
+        btn.classList.remove('active');
+      }
+    });
+
+    navContainer.appendChild(btn);
   });
 
-  navContainer.appendChild(btn);
-});
-
-// Use the existing viewport to prevent mobile overflow issues
-(viewport || document.body).appendChild(navContainer);
+  // 6. Append to canvasContainer
+  if (canvasContainer) {
+    // Ensure canvasContainer is the relative parent for our absolute nav
+    if (getComputedStyle(canvasContainer).position === 'static') {
+      canvasContainer.style.position = 'relative';
+    }
+    canvasContainer.appendChild(navContainer);
+  } else {
+    console.error("canvasContainer not found. Appending to body instead.");
+    document.body.appendChild(navContainer);
+  }
 
 
 

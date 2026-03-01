@@ -16,27 +16,28 @@
         
         const uiContent = `
             <div class="cp-container">
-                <div class="cp-preview-container">
+				<div class="cp-preview-container">
 					<div class="cp-preview-fg" id="cp-fg" style="background-color: ${this.activeColor}"></div>
-                    <div class="cp-preview-bg" id="cp-bg" style="background-color: ${this.activeColorBackground}"></div>
-                    <div><button id="swapColorBtn"><span class="bl-icons-area_dock"></span></button></div>
-                </div>
+					<div class="cp-preview-bg" id="cp-bg" style="background-color: ${this.activeColorBackground}"></div>
+					<div><button id="swapColorBtn"><span class="bl-icons-area_dock"></span></button></div>
+				</div>
                 <div class="cp-grid">${gridHtml}</div>
             </div>
         `;
 
         // 2. Create the window (using your existing function)
         // Params: title, targetArea, content, showResizer, isDockable
-        const win = createWindow("Color Picker", null, uiContent, true, false);
+        //~ const win = createWindow("Color Picker", null, uiContent, true, false);
+        const win = createWindow("Color Picker", areaBottom, uiContent, true, true,'',true);
         
         // 3. Force window to fit content
-        win.style.minWidth = '0px';
-        win.style.minHeight = '0px';
-        win.style.width = '148px';
-        win.style.height = 'auto';
-        win.style.left = '235px';
-        win.style.top = '10%';
-        win.style.transform = 'none'; 
+        //~ win.style.minWidth = '0px';
+        //~ win.style.minHeight = '0px';
+        //~ win.style.width = '148px';
+        //~ win.style.height = 'auto';
+        //~ win.style.left = '235px';
+        //~ win.style.top = '10%';
+        //~ win.style.transform = 'none'; 
         
         // Ensure the content container allows the grid to expand
     const contentBody = win.querySelector('.content');

@@ -2,20 +2,39 @@
     display: flex;
     flex-wrap: wrap; 
     align-items: flex-start;
-    gap: 8px;
+    gap: 0px;
     padding: 0px; 
     background: #303030;
     user-select: none;
     box-sizing: border-box;
+    margin:-10px;
 }
 
 .cp-preview-container {
+    display: grid;
+    /* Defines a 2-column grid to match the 24px width of your buttons */
+    grid-template-columns: repeat(2, 24px); 
+    /* Centers the buttons if the container is larger */
+    justify-content: center; 
+    gap: 0px;
     flex-shrink: 0; 
-    outline: 2px solid green;
 }
-.cp-preview-container button{
-	width:24px; height:24px;
+
+.cp-preview-container button {
+    width: 24px; 
+    height: 24px;
+    /* Removes default button padding/border for a perfect grid fit */
+    padding: 0;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+.cp-preview-container button span {
+    font-size: 12px; /* Replaced 'auto' with a specific size for better rendering */
+}
+
 
 
 .cp-grid {

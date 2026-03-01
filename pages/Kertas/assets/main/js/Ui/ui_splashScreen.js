@@ -17,8 +17,8 @@
                     <div class="changelog-section">
                         <h3>Click anywhere outside the box to close this</h3>
                         <ul>
-							<li>Create Drawing by go to <b>Assets Stuff > Click Add Level</b>, then <b>Click Add Drawing</b> </li>
-							<li>Create Xsheet by go to <b>Xsheet Stuff > New Xsheet</b></li>
+							<li>Create Drawing by go to top area <b>Assets > Click Add Level</b>, then <b>Click Add Drawing</b> </li>
+							<li>Create Xsheet by go to top area <b>Xsheet > New Xsheet</b></li>
 							<li>Or click this button to create all of them and start Animating! <button id="newProjectBtn">Create New Project</button></li>
 							<li><b>Ctrl+LMB</b> on the Xsheet cell to edit their values</li>
                             <li>You can load .xdts by dropping the file into <b>Xsheet Area</b></li>

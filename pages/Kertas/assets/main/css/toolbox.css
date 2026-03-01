@@ -1,8 +1,12 @@
 .toolbox {
+/*
     display: grid;
-    grid-template-columns: repeat(1, 0fr); /* 2 columns wide */
+    grid-template-columns: repeat(1, 0fr); 
+*/
+	display:flex;
     gap: 0px;
     padding: 0px;
+    margin:-10px;
     
 }
 

@@ -1,8 +1,8 @@
- window.addEventListener('DOMContentLoaded', () => {
-    const startX = 0, startY = 0, offset = 0;
+ //~ window.addEventListener('DOMContentLoaded', () => {
+    //~ const startX = 0, startY = 0, offset = 0;
     //~ let activeTool = 'ToolBrush'; // Set a default tool
 
-    const win = createWindow("Tools", null, `
+    const win = createWindow("Tools", areaTop, `
         <div id="toolbox" class="toolbox">
 			<button id="toolCameraBtn" data-tool="ToolCamera"><span class="bl-icons-outliner_ob_camera"></span></button>
             <button id="toolBrushBtn" data-tool="ToolBrush"><span class="bl-icons-greasepencil"></span></button>
@@ -14,15 +14,15 @@
             <button id="toolPanBtn" data-tool="ToolPan" ><span class="bl-icons-view_pan"></span></button>
             <button id="toolZoomBtn" data-tool="ToolZoom" ><span class="bl-icons-view_zoom"></span></button>
         </div>
-    `,false,false);
+    `,false,true,'',true);
 
-    viewport.appendChild(win);
-    win.style.minWidth = '0px';
-	win.style.minHeight = '0px';
-	win.style.width = 'auto';
-	win.style.height = 'auto';
-    win.style.left = '235px';
-    win.style.top  = '30%';
+    //~ viewport.appendChild(win);
+    //~ win.style.minWidth = '0px';
+	//~ win.style.minHeight = '0px';
+	//~ win.style.width = 'auto';
+	//~ win.style.height = 'auto';
+    //~ win.style.left = '235px';
+    //~ win.style.top  = '30%';
 
     // 1. Get the toolbox from the newly created window
     const toolbox = win.querySelector('#toolbox');
@@ -68,5 +68,5 @@
     // 4. Set the initial active tool highlight
     window.switchTool(activeTool);
     if (window.TooltipLib) window.TooltipLib.applyConfig();
-    return win;
-});
+    //~ return win;
+//~ });
