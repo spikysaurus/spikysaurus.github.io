@@ -438,14 +438,13 @@ window.isAutoKeyOn = true;
   style.textContent = `
     .nav-container {
       position: absolute;
-      bottom: 0px; 
-      left: 0px;
+      top: 0px; 
+      right: 0px;
       display: flex;
       gap: 3px;
       background: rgba(26, 26, 26, 0.85);
       padding: 6px;
-      border-top-right-radius: 10px;
-      backdrop-filter: blur(4px);
+      border-bottom-left-radius: 10px;
       z-index: 10000;
       touch-action: none;
       pointer-events: auto;
