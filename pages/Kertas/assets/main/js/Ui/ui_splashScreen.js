@@ -4,7 +4,8 @@
     
     overlay.innerHTML = `
         <div id="splash-container">
-            <!-- Content Grid (Now Single Column) -->
+        <button id="splash-close-btn" aria-label="Close">CLOSE</button>
+            <!-- Content Grid (Single Column) -->
             <div class="splash-content">
                 <div class="top-content">
                     <!-- Top: Logo & Title -->
@@ -40,47 +41,88 @@
 
     const style = document.createElement('style');
     style.textContent = `
-        #splash-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999; transition: opacity 0.4s ease;
-            /* Allow clicking through the overlay to the app below */
-            pointer-events: none; 
-        }
+    #splash-overlay {
+        position: fixed; 
+        top: 0; left: 0; 
+        width: 100vw; height: 100vh;
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+        z-index: 9999; 
+        transition: opacity 0.4s ease;
+        pointer-events: none; 
+        padding: 20px;
+        box-sizing: border-box;
+    }
 
-        #splash-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            width: 90%; max-width: 500px; height: auto;
-            background: #121218; color: #ececed;
-            border-radius: 20px; overflow: hidden;
-            border: 3px solid green;
-            /* Re-enable clicks for the box itself */
-            pointer-events: auto;
-            cursor: default;
-        }
+    #splash-container {
+    position:relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%; 
+        max-width: 500px; 
+        max-height: 90vh; 
+        background: #121218; 
+        color: #ececed;
+        border-radius: 20px; 
+        border: 3px solid green;
+        pointer-events: auto;
+        cursor: default;
+        overflow-y: auto; 
+        -webkit-overflow-scrolling: touch;
+    }
+	
+	#splash-close-btn {
+		position: absolute;
+		top: 15px;
+		right: 15px;
+		width: auto;
+		height: auto;
+		background: rgba(255, 255, 255, 0.05);
+		border: none;
+		color: #94a3b8;
+		font-size: 12px;
+		line-height: 1;
+		cursor: pointer;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 10;
+		}
 
-        .splash-content {
-            padding: 45px; display: flex; flex-direction: column; justify-content: space-between;
-        }
+		#splash-close-btn:hover {
+			background: #f43f5e;
+			color: white;
+		}
 
-        .splash-header { display: flex; align-items: center; gap: 18px; margin-bottom: 25px; }
-        .splash-header h1 { font-size: 1.6rem; margin: 0; font-weight: 700; letter-spacing: -0.5px; }
-        .splash-header span { color: #f43f5e; margin-left: 10px; font-weight: 400; opacity: 0.8; }
 
-        .changelog-section h3 { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; }
-        .changelog-section ul { padding-left: 20px; margin: 0; color: #94a3b8; font-size: 0.9rem; }
-        .changelog-section li { margin-bottom: 8px; }
+    .splash-content {
+        padding: 45px; 
+        display: flex; 
+        flex-direction: column;
+    }
 
-        .splash-credits { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 25px; margin-top: 30px; }
-        .splash-credits p { margin: 0; font-size: 0.9rem; color: #94a3b8; }
-        .splash-credits a { color: green; text-decoration: none; }
+    .splash-header { display: flex; align-items: center; gap: 18px; margin-bottom: 25px; flex-shrink: 0; }
+    .splash-header h1 { font-size: 1.6rem; margin: 0; font-weight: 700; letter-spacing: -0.5px; }
+    .splash-header span { color: #f43f5e; margin-left: 10px; font-weight: 400; opacity: 0.8; }
 
-        @media (max-width: 750px) {
-            #splash-container { width: 95%; }
-            .splash-content { padding: 30px; }
-        }
-    `;
+    .changelog-section h3 { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; }
+    .changelog-section ul { padding-left: 20px; margin: 0; color: #94a3b8; font-size: 0.9rem; }
+    .changelog-section li { margin-bottom: 8px; }
+
+    .splash-credits { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 25px; margin-top: 30px; flex-shrink: 0; }
+    .splash-credits p { margin: 0; font-size: 0.9rem; color: #94a3b8; }
+    .splash-credits a { color: green; text-decoration: none; }
+
+    /* Better handling for small mobile devices */
+    @media (max-width: 500px) {
+        #splash-overlay { padding: 10px; }
+        #splash-container { border-radius: 15px; max-height: 95vh; }
+        .splash-content { padding: 25px; }
+        .splash-header h1 { font-size: 1.3rem; }
+    }
+`;
+
 
     document.head.appendChild(style);
     document.body.appendChild(overlay);
@@ -102,6 +144,10 @@
         }
     };
 
+document.getElementById('splash-close-btn').addEventListener('pointerdown', (e) => {
+    e.stopPropagation(); // Prevent handleOutsideClick from firing twice
+    removeSplash();
+});
 
 // Attach listener to document so we catch clicks passing through the overlay
 document.addEventListener("mousedown", handleOutsideClick);

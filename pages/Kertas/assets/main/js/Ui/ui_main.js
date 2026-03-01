@@ -11,9 +11,10 @@ const viewport = document.getElementById('viewport');
     window.addEventListener('keyup', (e) => { if(e.key === 'Shift') { isCtrl = false; document.body.classList.remove('ctrl-down'); } });
 
 const areaTop = document.getElementById('a-top');
-const areaBottom = document.getElementById('a-bottom');
 const areaLeft = document.getElementById('a-left');
 const areaRight = document.getElementById('a-right');
+
+const areaBottom = document.getElementById('a-bottom');
 
     // Add 'content' as a parameter with a default fallback
 function createWindow(title, targetArea = null, content = null, showResizer = true, isDockable = true, customClass = '') {
@@ -49,18 +50,18 @@ function createWindow(title, targetArea = null, content = null, showResizer = tr
     
     
 			// Prevent drawing when mouse enters the window
-			win.addEventListener('mouseenter', () => {
+			win.addEventListener('pointerenter', () => {
 				isOverWindow = true;
 				isDrawing = false; 
 			});
 
 			// Allow drawing again when mouse leaves
-			win.addEventListener('mouseleave', () => {
+			win.addEventListener('pointerleave', () => {
 				isOverWindow = false;
 			});
 
 			// Ensure clicking the window doesn't trigger a draw start
-			win.addEventListener('mousedown', (e) => {
+			win.addEventListener('pointerdown', (e) => {
 				isDrawing = false;
 				// Optional: stop propagation so the viewport doesn't see the click
 				e.stopPropagation(); 
@@ -94,7 +95,7 @@ function createWindow(title, targetArea = null, content = null, showResizer = tr
                 win.classList.add('active-content');
             };
 
-            tab.onmousedown = (e) => {
+            tab.onpointerdown = (e) => {
 				tab.click();
 				if (isCtrl) {
 						win._startDrag(e); 
@@ -150,19 +151,19 @@ function createWindow(title, targetArea = null, content = null, showResizer = tr
                 }
                 areas.forEach(a => a.classList.remove('hover-active'));
                 updateLayoutStates();
-                window.removeEventListener('mousemove', onMove);
-                window.removeEventListener('mouseup', onUp);
+                window.removeEventListener('pointermove', onMove);
+                window.removeEventListener('pointerup', onUp);
             };
-            window.addEventListener('mousemove', onMove);
-            window.addEventListener('mouseup', onUp);
+            window.addEventListener('pointermove', onMove);
+            window.addEventListener('pointerup', onUp);
         };
-        win.querySelector('.title-bar').onmousedown = handleMove;
+        win.querySelector('.title-bar').onpointerdown = handleMove;
         win._startDrag = handleMove;
     }
 
 function setupFloatingResize(win) {
     const resizer = win.querySelector('.win-resizer');
-    resizer.onmousedown = (e) => {
+    resizer.onpointerdown = (e) => {
 		if (win.classList.contains('hide-resizer')) return;
 
         e.stopPropagation();
@@ -172,14 +173,14 @@ function setupFloatingResize(win) {
             win.style.width = (startW + (mE.clientX - startX)) + 'px';
             win.style.height = (startH + (mE.clientY - startY)) + 'px';
         };
-        const onUp = () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
-        window.addEventListener('mousemove', onMove);
-        window.addEventListener('mouseup', onUp);
+        const onUp = () => { window.removeEventListener('pointermove', onMove); window.removeEventListener('pointereup', onUp); };
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
     };
 }
 
     document.querySelectorAll('.resizer').forEach(r => {
-        r.onmousedown = (e) => {
+        r.onpointerdown = (e) => {
             const target = document.getElementById(r.dataset.target), dir = r.dataset.dir;
             const startSize = (dir === 'left' || dir === 'right') ? target.offsetWidth : target.offsetHeight;
             const startPos = (dir === 'left' || dir === 'right') ? e.clientX : e.clientY;
@@ -190,9 +191,9 @@ function setupFloatingResize(win) {
                 target.style.flex = `0 0 ${newSize}px`;
                 target.dataset.last = newSize + 'px';
             };
-            const onUp = () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
-            window.addEventListener('mousemove', onMove);
-            window.addEventListener('mouseup', onUp);
+            const onUp = () => { window.removeEventListener('pointermove', onMove); window.removeEventListener('pointerup', onUp); };
+            window.addEventListener('pointermove', onMove);
+            window.addEventListener('pointerup', onUp);
         };
     });
 
@@ -346,7 +347,7 @@ createWindow("Debug and Shortcuts (F1)", areaBottom,
 		<li>Reset Backdrop Opacity (\\)</li>
 		<li>Backdrop Opacity to Zero (Shift+\\)</li>
 		<li>Speedlines (shift+o)</li>
-		<li>Ctrl+LMB on the cell to edit their values</li>
+		<li>Ctrl+LMB/Double Click on the cell to edit their values</li>
 		<li>Ctrl+LMB on the level name to edit their name</li>
 		<li style="color:yellow;" id="activeTrackLabel">No active Track</li>
 		<li style="color:yellow;" id="activeCelLabel">No active Cel</li>
@@ -397,4 +398,104 @@ createWindow("Render & Export", areaTop,
            
     updateLayoutStates();
 window.isAutoKeyOn = true; 
+
+
+
+// 1. Setup styles
+const style = document.createElement('style');
+style.textContent = `
+  .nav-container {
+    position: fixed;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 5px;
+    background: #1a1a1a;
+    padding: 5px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    z-index: 10000;
+    touch-action: none;
+  }
+
+  .nav-btn {
+    padding: 5px;
+    border: none;
+    border-radius: 8px;
+    background: black;
+    color: #efefef;
+    cursor: pointer;
+    font-family: sans-serif;
+    font-size: 13px;
+    transition: all 0.15s ease;
+    min-width: 70px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* "Active" state represents when the element is SHOWN */
+  .nav-btn.active {
+    background: #4c4c4c;
+    color: white;
+  }
+
+  @media (max-width: 480px) {
+    .nav-container { bottom: 0px; width: 90%; justify-content: center; }
+    .nav-btn { flex: 1; padding: 12px 5px; font-size: 11px; min-width: 0; }
+  }
+`;
+document.head.appendChild(style);
+// 1. Ensure the element is hidden in the DOM initially
+if (areaBottom) areaBottom.style.display = 'none';
+
+const navItems = [
+  { label: 'Left', target: areaLeft, defaultVisible: true },
+  { label: 'Top', target: areaTop, defaultVisible: true },
+  { label: 'Bottom', target: areaBottom, defaultVisible: false }, // Set to false
+  { label: 'Right', target: areaRight, defaultVisible: true }
+];
+
+const navContainer = document.createElement('div');
+navContainer.className = 'nav-container';
+
+navItems.forEach(item => {
+  const btn = document.createElement('button');
+  
+  // 2. Initialize button state based on defaultVisible
+  if (item.defaultVisible) {
+    btn.className = 'nav-btn active';
+    // Ensure the target is actually visible if it's supposed to be
+    if (item.target) item.target.style.display = ''; 
+  } else {
+    btn.className = 'nav-btn';
+    // Ensure the target is hidden if it's NOT supposed to be visible
+    if (item.target) item.target.style.display = 'none';
+  }
+
+  btn.textContent = `${item.label}`;
+  
+  btn.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    if (!item.target) return;
+
+    // 3. Toggle Logic
+    const isHidden = item.target.style.display === 'none';
+
+    if (isHidden) {
+      item.target.style.display = ''; // Show it
+      btn.classList.add('active');
+    } else {
+      item.target.style.display = 'none'; // Hide it
+      btn.classList.remove('active');
+    }
+  });
+
+  navContainer.appendChild(btn);
+});
+
+// Use the existing viewport to prevent mobile overflow issues
+(viewport || document.body).appendChild(navContainer);
+
+
 

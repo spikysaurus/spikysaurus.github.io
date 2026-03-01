@@ -1,8 +1,10 @@
 #canvasContainer {
   position: relative;
   background-color: lightgray;
+/*
   overflow-x: auto;
   overflow-y:auto; 
+*/
   display: flex;
   align-items: center; 
   justify-content: center; 
@@ -21,6 +23,7 @@
   max-width: none; 
   background-color: transparent !important;
   image-rendering: auto; 
+  
 }
 
 

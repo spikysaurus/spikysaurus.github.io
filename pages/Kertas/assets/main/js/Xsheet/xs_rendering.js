@@ -44,7 +44,6 @@ function renderDopeSheet(data) {
     if (f % 24 === 0) tdFrame.style.borderBottom = "1px solid lightblue";
     tr.appendChild(tdFrame);
 
-// ... inside your headers.forEach loop in renderDopeSheet ...
 headers.forEach((label, idx) => {
   const td = document.createElement("td");
   const val = getValueForTrackFrame(tt, idx, f - 1);
@@ -55,50 +54,60 @@ headers.forEach((label, idx) => {
   labelSpan.textContent = displayVal;
   td.appendChild(labelSpan);
 
+  // Helper function to trigger the edit mode
+  const startEditing = () => {
+    if (td.querySelector("input")) return;
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "cellInput";
+    input.value = val;
+
+    let isSaved = false;
+
+    const saveAndExit = () => {
+      if (isSaved) return;
+      isSaved = true;
+      if (td.contains(input)) {
+        setValueForTrackFrame(tt, idx, f - 1, input.value);
+        renderDopeSheet(tt);
+      }
+    };
+
+    labelSpan.remove();
+    td.appendChild(input);
+    input.focus();
+    input.select();
+
+    input.addEventListener("blur", saveAndExit);
+    input.addEventListener("keydown", (ke) => {
+      if (ke.key === "Enter") {
+        ke.preventDefault();
+        saveAndExit();
+      }
+      if (ke.key === "Escape") {
+        isSaved = true;
+        renderDopeSheet(tt);
+      }
+    });
+  };
+
   td.addEventListener("click", (e) => {
     window.highlightCel(tt, tbody, thead, headRow, headers, idx, f, val, duration);
-
+    // Trigger edit on Ctrl/Cmd + Click
     if (e.ctrlKey || e.metaKey) {
-      if (td.querySelector("input")) return;
-
-      const input = document.createElement("input");
-      input.type = "text";
-      input.className = "cellInput";
-      input.value = val;
-
-      let isSaved = false; // Guard: prevents Enter and Blur from double-processing
-
-      const saveAndExit = () => {
-        if (isSaved) return; 
-        isSaved = true;
-
-        if (td.contains(input)) {
-          setValueForTrackFrame(tt, idx, f - 1, input.value);
-          renderDopeSheet(tt); // Re-renders the whole table
-        }
-      };
-
-      labelSpan.remove();
-      td.appendChild(input);
-      input.focus();
-      input.select();
-
-      // Listeners
-      input.addEventListener("blur", saveAndExit);
-      input.addEventListener("keydown", (ke) => {
-        if (ke.key === "Enter") {
-          ke.preventDefault();
-          saveAndExit();
-        }
-        if (ke.key === "Escape") {
-          isSaved = true; // Mark as handled so blur doesn't save
-          renderDopeSheet(tt); // Revert
-        }
-      });
+      startEditing();
     }
   });
+
+  // Trigger edit on Double Click
+  td.addEventListener("dblclick", () => {
+    startEditing();
+  });
+
   tr.appendChild(td);
 });
+
 
     tbody.appendChild(tr);
   }

@@ -43,3 +43,12 @@ document.addEventListener('keydown', e => {
     e.preventDefault();
   }
 });
+
+// Prevent the default scrolling behavior
+document.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+}, { passive: false }); // 'passive: false' is required to call preventDefault
+
+
+
+

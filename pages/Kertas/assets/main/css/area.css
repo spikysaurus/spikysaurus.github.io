@@ -9,10 +9,9 @@
             --text-color-off:lightgray;
         }
 
-		#a-bottom{display:none;}
 		
         * { box-sizing: border-box; }
-        body, html { margin: 0; padding: 0; height: 100%; width: 100%; font-family: 'Segoe UI', sans-serif; background:lightgray; overflow: hidden; touch-action: none; }
+        body, html { position:fixed; margin: 0; padding: 0; height: 100%; width: 100%; font-family: 'Segoe UI', sans-serif; background:lightgray; overflow: hidden; touch-action: none; overscroll-behavior: none;  }
 		li{margin-left:5px;}
 		li::marker {
 			
