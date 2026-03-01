@@ -9,7 +9,7 @@
                 <div class="top-content">
                     <!-- Top: Logo & Title -->
                     <header class="splash-header">
-                        <h1>Kertas<span>(2026-02-28)</span></h1>
+                        <h1>Kertas<span>(2026-03-01)</span></h1>
                     </header>
 
                     <!-- Middle: Changelog Section -->

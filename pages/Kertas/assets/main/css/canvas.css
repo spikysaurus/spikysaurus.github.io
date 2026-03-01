@@ -24,14 +24,8 @@
 }
 
 
-#lassoSelectOverlay{
-position:absolute; top:0; left:0; z-index:9;
-}
-#lassoFillOverlay{
-position:absolute; top:0; left:0; z-index:9;
-}
-#rectOverlay{
-position:absolute; top:0; left:0; z-index:9;
+#lassoSelectOverlay , #lassoFillOverlay , #rectOverlay{
+position:absolute; top:0; left:0; z-index:10;
 }
 
 #cameraOverlay {
@@ -52,10 +46,6 @@ z-index:10;
 #canvas { 
   z-index: 1;
   cursor: crosshair;
-/*
-   min-width: 1280px;
-  min-height: 720px;
-*/
 }
 
 
