@@ -10,22 +10,19 @@
                 <div class="top-content">
                     <!-- Top: Logo & Title -->
                     <header class="splash-header">
-                        <h1>Kertas<span>(2026-03-01)</span></h1>
+                        <h1>Kertas<span>(2026-03-03)</span></h1>
                     </header>
 
                     <!-- Middle: Changelog Section -->
                     <div class="changelog-section">
-                        <h3>Click anywhere outside the box to close this</h3>
+						<h3>WARNING!: THIS APP IS STILL EXPERIMENTAL!!</h3>
                         <ul>
 							<li>Create Drawing by go to top area <b>Assets > Click Add Level</b>, then <b>Click Add Drawing</b> </li>
 							<li>Create Xsheet by go to top area <b>Xsheet > New Xsheet</b></li>
 							<li>Or click this button to create all of them and start Animating! <button id="newProjectBtn">Create New Project</button></li>
-							<li><b>Ctrl+LMB</b> on the Xsheet cell to edit their values</li>
-                            <li>You can load .xdts by dropping the file into <b>Xsheet Area</b></li>
-                            <li>Dropping assets .zip file into <b>Assets Area</b> also works</li>
-							<li>You can hover over a button to display a tooltip to see its keyboard shortcut</li>
-                            <li>Press <b>F1</b> to show more shortcuts</li>
-                            <li><b>Hold Shift and Drag</b> tabs to detatch it into a floating window, <b>Hold Shift and Drag</b> the window's title bar into any areas and <b>Release LMB</b> to dock it</li>
+							
+							<li>Find <b>Debug</b> tab on the <b>Left Area</b> to see more informations !</li>
+							
                         </ul>
                     </div>
                 </div>
@@ -106,13 +103,13 @@
     .splash-header h1 { font-size: 1.6rem; margin: 0; font-weight: 700; letter-spacing: -0.5px; }
     .splash-header span { color: #f43f5e; margin-left: 10px; font-weight: 400; opacity: 0.8; }
 
-    .changelog-section h3 { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; }
+    .changelog-section h3 { font-size: 0.75rem; color: orange; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; }
     .changelog-section ul { padding-left: 20px; margin: 0; color: #94a3b8; font-size: 0.9rem; }
     .changelog-section li { margin-bottom: 8px; }
 
     .splash-credits { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 25px; margin-top: 30px; flex-shrink: 0; }
     .splash-credits p { margin: 0; font-size: 0.9rem; color: #94a3b8; }
-    .splash-credits a { color: green; text-decoration: none; }
+    .splash-credits a { color: orange; text-decoration: none; }
 
     /* Better handling for small mobile devices */
     @media (max-width: 500px) {

@@ -23,4 +23,10 @@ window.addEventListener("DOMContentLoaded", () => {
 	updateEraserSizeLabel();
 	updateAliasingLabel();
 	updateImageRenderingLabel();
+	
+	resetTransform();
+	
+	
 });
+
+

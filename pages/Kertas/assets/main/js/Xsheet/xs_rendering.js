@@ -92,6 +92,18 @@ headers.forEach((label, idx) => {
     });
   };
 
+	// Alt+Click to clear
+  let mouseDownTime = 0;
+  td.addEventListener("mouseup", (e) => {
+    if (e.altKey) {
+      if (val !== "") { // Only trigger if there is something to clear
+        setValueForTrackFrame(tt, idx, f - 1, "");
+        renderDopeSheet(tt);
+      }
+    }
+  });
+
+	// Ctrl+Click to edit
   td.addEventListener("click", (e) => {
     window.highlightCel(tt, tbody, thead, headRow, headers, idx, f, val, duration);
     // Trigger edit on Ctrl/Cmd + Click
@@ -100,7 +112,7 @@ headers.forEach((label, idx) => {
     }
   });
 
-  // Trigger edit on Double Click
+  // Double Click to Edit
   td.addEventListener("dblclick", () => {
     startEditing();
   });

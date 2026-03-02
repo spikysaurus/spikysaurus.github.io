@@ -245,9 +245,9 @@ function setupFloatingResize(win) {
     <div class="flex-wrap-row">
     
 		
-		<button id="loadXDTSbtn">Load Xsheet</button>
-		<button id="newTimesheetBtn">New Xsheet</button>
-		<button id="exportBtn" style="display:none">Save Xsheet</button>
+		<button id="loadXDTSbtn">Load</button>
+		<button id="newTimesheetBtn">New</button>
+		<button id="exportBtn" style="display:none">Save</button>
 
 		<button id="addTrackBtn">Add Track</button>
 		<button id="removeTrackBtn">Remove Track</button>
@@ -285,10 +285,10 @@ createWindow("Symbols", areaTop,
 
 createWindow("Assets", areaTop, 
 `	<div class="flex-wrap-row">
-		<button id="loadAssetsBtn">Load Assets</button>
-		<button id="saveAssetsBtn">Save Assets</button>
+		<button id="loadAssetsBtn">Load</button>
+		<button id="saveAssetsBtn">Save</button>
 		<input type="file" id="assetsInput" accept=".zip" style="display:none">
-		<button id="loadBackdropBtn">Import Backdrop</button>
+		<button id="loadBackdropBtn">Add Backdrop</button>
 		<input type="file" id="backdropInput" accept="image/*" style="display:none">
 						 
 						 
@@ -299,8 +299,6 @@ createWindow("Assets", areaTop,
 		<button id="newDrawingBtn"><span class="bl-icons-image"></span> Add Drawing</button>
 		<button id="deleteDrawingBtn"><span class="bl-icons-trash"></span> Delete Drawing</button>
 
-		<button id="prevDrawingBtn"><span class="bl-icons-frame_prev"></span> Prev Drawing</button>
-		<button id="nextDrawingBtn"><span class="bl-icons-frame_next"></span> Next Drawing</button>
 	</div>
 `,true,true,'',false);
 
@@ -370,11 +368,15 @@ createWindow("Camera", areaTop,
     `
     <div class="flex-wrap-row">
 		<button onclick="cameraManager.loadCameraData()" class="ui-btn load-cam">
-			Load Camera
+			Load
 		</button>
 		
 		<button onclick="cameraManager.saveCameraData()" class="ui-btn save-cam">
-			Save Camera
+			Save
+		</button>
+		
+		<button id="deleteCameraKeyBtn" onclick="cameraFeature.deleteKeyframe()">
+		  Delete Key
 		</button>
 		
    </div>
@@ -383,12 +385,14 @@ createWindow("Camera", areaTop,
  createWindow("Playback", areaBottom, 
     `
     <div class="flex-wrap-row">
-		<button id="playAniCachedBtn"><span class="bl-icons-play"></span>Play Animation (cached)</button>
-		<button id="playAniBtn"><span class="bl-icons-play"></span>Play Animation</button>
+		<button id="playAniCachedBtn"><span class="bl-icons-play"></span>Play/Stop (cached)</button>
+		<button id="playAniBtn"><span class="bl-icons-play"></span>Play/Stop</button>
 		<button id="prevCelBtn"><span class="bl-icons-prev_keyframe"></span>Prev Cel</button>
 		<button id="nextCelBtn"><span class="bl-icons-next_keyframe"></span>Next Cel</button>
 		<button id="prevFrameBtn"><span class="bl-icons-tria_left_bar"></span>Prev Frame</button>
 		<button id="nextFrameBtn"><span class="bl-icons-tria_right_bar"></span>Next Frame</button>
+		<button id="prevDrawingBtn"><span class="bl-icons-frame_prev"></span> Prev Drawing</button>
+		<button id="nextDrawingBtn"><span class="bl-icons-frame_next"></span> Next Drawing</button>
    </div>
     `,true,true,'',false);  
 
@@ -423,6 +427,12 @@ createWindow("Debug", areaLeft,
 		<li style="color:yellow;" id="activeCelLabel">No active Cel</li>
 		<li style="color:yellow;" id="activeLevelLabel">No active Level</li>
 		<li style="color:yellow;" id="activeDrawingLabel">No active Drawing</li>
+		
+		<li><b>Ctrl+LMB/Double Click</b> on the Xsheet cell to edit it's values</li>
+		<li><b>Alt+LMB</b> to clear it's value</li>
+		<li>(Desktop) You can load .xdts/.zip Assets/.json Camera data by dropping the file into their <b>Areas</b></li>
+		<li>You can hover over a button to display a tooltip to see its keyboard shortcut</li>
+		<li>(Desktop) <b>Hold Shift and Drag</b> tabs to detatch it into a floating window, <b>Hold Shift and Drag</b> the window's title bar into any areas and <b>Release LMB</b> to dock it</li>
 
 	</div
     `,true,true,'',false);
@@ -479,13 +489,15 @@ window.isAutoKeyOn = true;
   `;
   document.head.appendChild(style);
 
-  // 3. Define configuration
-  const navItems = [
-    { label: 'L', target: areaLeft, defaultVisible: false },
-    { label: 'T', target: areaTop, defaultVisible: true },
-    { label: 'B', target: areaBottom, defaultVisible: false },
-    { label: 'R', target: areaRight, defaultVisible: false }
-  ];
+// Check if device is desktop (has a mouse/fine pointer)
+const isDesktop = window.matchMedia('(pointer: fine)').matches;
+
+const navItems = [
+  { label: 'T', target: areaTop, defaultVisible: true },
+  { label: 'L', target: areaLeft, defaultVisible: isDesktop || false },
+  { label: 'R', target: areaRight, defaultVisible: isDesktop || false },
+  { label: 'B', target: areaBottom, defaultVisible: isDesktop || true }
+];
 
   // 4. Create the container
   const navContainer = document.createElement('div');

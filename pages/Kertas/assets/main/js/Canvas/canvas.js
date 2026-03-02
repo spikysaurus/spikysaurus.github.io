@@ -128,16 +128,31 @@ function applyTransforms() {
   }
 }
 
+
 function resetTransform() {
+  if (!activeCanvas) return;
+
   const parentRect = container.getBoundingClientRect();
-  currentScale = 1;
+  const canvasW = activeCanvas.width;
+  const canvasH = activeCanvas.height;
+
+  // Calculate scale to fit (with a small padding, e.g., 0.9 for 90% size)
+  const padding = 0.9;
+  const scaleX = (parentRect.width / canvasW) * padding;
+  const scaleY = (parentRect.height / canvasH) * padding;
+  
+  // Use the smaller scale to ensure the whole canvas fits inside
+  currentScale = Math.min(scaleX, scaleY, 1); // Remove ', 1' if you want it to upscale
+  
   flipH = 1;
   flipV = 1;
+  
+  // Center the canvas
   currentLeft = parentRect.width / 2;
   currentTop = parentRect.height / 2;
+
   applyTransforms();
 }
-
 
 
 

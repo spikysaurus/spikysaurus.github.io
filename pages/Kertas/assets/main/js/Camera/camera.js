@@ -31,6 +31,38 @@ const cameraFeature = {
     };
     console.log(`Camera Keyframe saved at frame ${frame}`);
   },
+  
+  deleteKeyframe(frame) {
+    if (frame === undefined) frame = window.activeFrame;
+    if (window.cameraKeyframes[frame]) {
+      delete window.cameraKeyframes[frame];
+      console.log(`Camera Keyframe deleted at frame ${frame}`);
+      
+      // Update camera position immediately so it reflects the deletion
+      this.updateFromKeyframes(frame, true);
+      
+      // Refresh UI if necessary
+      if (window.xsheetCanvasBridge) window.xsheetCanvasBridge.syncCanvasStack();
+    }
+  },
+  
+	updateDeleteButtonUI() {
+	  const btn = document.getElementById("deleteCameraKeyBtn");
+	  if (!btn) return; // Exit if the window/button isn't currently open
+
+	  if (window.cameraKeyframes && window.cameraKeyframes[window.activeFrame]) {
+		// ACTIVE: Keyframe detected
+		btn.style.backgroundColor = "yellow";
+		btn.style.color = "black";
+		btn.style.fontWeight = "bold";
+	  } else {
+		// INACTIVE: No keyframe
+		btn.style.backgroundColor = ""; 
+		btn.style.color = "";
+		btn.style.fontWeight = "";
+		btn.style.border = "";
+	  }
+	},
 
   updateFromKeyframes(frame, force = false) {
     // FIX: Do NOT interpolate if we are currently dragging the handles
@@ -103,17 +135,15 @@ const cameraFeature = {
       this.drawHandle(cameraOverlayCtx, 0, 0); // Center handle
       this.drawHandle(cameraOverlayCtx, resW * scale / 2, resH * scale / 2); // Scale handle
       this.drawHandle(cameraOverlayCtx, 0, -resH * scale / 2 - 20); // Rotation handle
-
-      if (window.cameraKeyframes[window.activeFrame]) {
+    }
+    if (window.cameraKeyframes[window.activeFrame]) {
         cameraOverlayCtx.fillStyle = "#ffcc00";
         cameraOverlayCtx.beginPath(); 
-        cameraOverlayCtx.arc(-resW * scale / 2 + 20, -resH * scale / 2 + 20, 5, 0, Math.PI * 2); 
+        cameraOverlayCtx.arc(-resW * scale / 2 + 20, -resH * scale / 2 + 20, 12, 0, Math.PI * 2);  //12 is Circle size
         cameraOverlayCtx.fill();
-        cameraOverlayCtx.font = "12px Arial"; 
-        cameraOverlayCtx.fillText("KEY", -resW * scale / 2 + 30, -resH * scale / 2 + 25);
+        //~ cameraOverlayCtx.font = "12px Arial"; 
+        //~ cameraOverlayCtx.fillText("KEY", -resW * scale / 2 + 30, -resH * scale / 2 + 25);
       }
-    }
-    
     cameraOverlayCtx.restore();
   },
 
@@ -241,8 +271,21 @@ const cameraFeature = {
       cameraOverlay.style.left = activeCanvas.style.left;
       cameraOverlay.style.transform = activeCanvas.style.transform;
     }
+    cameraFeature.updateDeleteButtonUI();
     cameraFeature.drawUI(cameraOverlayCtx );
     requestAnimationFrame(loop);
   }
+  
   requestAnimationFrame(loop);
 })();
+
+
+
+//~ window.addEventListener("keydown", e => {
+  //~ if (e.altKey && e.key === "Backspace") {
+    //~ cameraFeature.deleteKeyframe();
+  //~ }
+//~ });
+
+
+
