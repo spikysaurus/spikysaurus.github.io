@@ -100,22 +100,36 @@ function updateTransform() {
 const lightboxImg = document.getElementById('lightbox-img');
 
 const zoomIn_ = document.getElementById("zoomIn");
-// Start continuous zoom on press
-zoomIn_.addEventListener("pointerdown", () => {
-  zoomInterval = setInterval(zoomIn, 100); // every 100ms
+const zoomOut_ = document.getElementById("zoomOut");
+
+let zoomInterval;
+let zoomTimeout;
+
+// Zoom In
+zoomIn_.addEventListener("pointerdown", (e) => {
+  e.preventDefault();
+  zoomIn(); // single step immediately
+  zoomTimeout = setTimeout(() => {
+    zoomInterval = setInterval(zoomIn, 100); // continuous zoom after 300ms
+  }, 300);
 });
-// Stop zoom when released
+
 zoomIn_.addEventListener("pointerup", () => {
+  clearTimeout(zoomTimeout);
   clearInterval(zoomInterval);
 });
 
-const zoomOut_ = document.getElementById("zoomOut");
-// Start continuous zoom on press
-zoomOut_.addEventListener("pointerdown", () => {
-  zoomInterval = setInterval(zoomOut, 100); // every 100ms
+// Zoom Out
+zoomOut_.addEventListener("pointerdown", (e) => {
+  e.preventDefault();
+  zoomOut(); // single step immediately
+  zoomTimeout = setTimeout(() => {
+    zoomInterval = setInterval(zoomOut, 100); // continuous zoom after 300ms
+  }, 300);
 });
-// Stop zoom when released
+
 zoomOut_.addEventListener("pointerup", () => {
+  clearTimeout(zoomTimeout);
   clearInterval(zoomInterval);
 });
 
@@ -139,9 +153,8 @@ document.addEventListener('pointermove', e => {
 // Touch support
 lightboxImg.addEventListener('pointerstart', e => {
   isDragging = true;
-  const touch = e.touches[0];
-  startX = touch.clientX - translateX;
-  startY = touch.clientY - translateY;
+  startX = e.clientX - translateX;
+  startY = e.clientY - translateY;
 });
 
 document.addEventListener('pointerend', () => {
@@ -150,9 +163,8 @@ document.addEventListener('pointerend', () => {
 
 document.addEventListener('pointermove', e => {
   if (!isDragging) return;
-  const touch = e.touches[0];
-  translateX = touch.clientX - startX;
-  translateY = touch.clientY - startY;
+  translateX = e.clientX - startX;
+  translateY = e.clientY - startY;
   updateTransform();
 });
 
