@@ -1,6 +1,16 @@
 (function() {
     'use strict';
 
+
+    // --- Detect if on phone ---
+    const isPhone = /Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+
+    if (isPhone) {
+        // Do nothing: skip creating cube and overlay
+        return;
+    }
+
+
     // --- Create container elements dynamically ---
     const wrapper = document.createElement('div');
     wrapper.style.position = 'fixed';
