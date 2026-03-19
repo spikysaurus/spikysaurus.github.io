@@ -79,7 +79,8 @@
     }
 
     // Labels for 8 vertices
-    const labels = ["Create", "Limitless", "World", "Evolve", "Mankind", "Choice", "Heaven", "Hell"];
+    //~ const labels = ["Create", "Limitless", "World", "Evolve", "Mankind", "Choice", "Heaven", "Hell"];
+    const labels = ["", "", "", "", "", "", "", ""];
     for (let i = 0; i < this.vertices.length; i++) {
         let v = Project(this.vertices[i]);
         let x = v.x + dx;
