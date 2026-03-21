@@ -1,5 +1,41 @@
 {
     "Commissions and Personal":{
+		"kuronana":
+        {
+        "link":"../assets/drawings/kuronana.gif",
+        "color":""
+        },
+		"matatabi":
+        {
+        "link":"../assets/drawings/Matatabi.gif",
+        "color":""
+        },
+		"matatabi2":
+        {
+        "link":"../assets/drawings/Matatabi2.gif",
+        "color":""
+        },
+        "keroro":
+        {
+        "link":"../assets/drawings/Keroro.gif",
+        "color":""
+        },
+        "natsumi_run":
+        {
+        "link":"../assets/drawings/natsumi_run.gif",
+        "color":""
+        },
+		"crew":
+        {
+        "link":"../assets/drawings/crew.gif",
+        "color":""
+        },
+		"walk":
+        {
+        "link":"../assets/drawings/walk.gif",
+        "color":""
+        },
+        
         "Commission - Bull Transformation":
         {
         "link":"https://www.youtube.com/watch?v=9ifBDyVCeAY",
@@ -117,7 +153,7 @@
         "The Battle Cats x Sonic (PV)(Animated 0:14, 0:21, 0:22, 0:37)" :
         {
         "link":"https://www.youtube.com/watch?v=C-7V-dB5ly0",
-        "color":"lightgreen"
+        "color":"black"
         },
 
         "Digimon Ghost Game (S1:E3 & S1:E9)":
@@ -183,7 +219,7 @@
         "Starlight Re:Volvers (PV)":
         {
         "link":"https://www.youtube.com/watch?v=o8WkNXMExSw",
-        "color":"lightgreen"
+        "color":"black"
         },
 
         "Inkbound (PV)":
@@ -195,13 +231,13 @@
         "Grotto Beasts (PV)(Animated 1:32, 1:33(That Dinosaur running only))":
         {
         "link":"https://www.youtube.com/watch?v=gPm4DxaD6Wc",
-        "color":"lightgreen"
+        "color":"black"
         },
 
         "Neon White (PV)(Animated 0:25, 0:34, 0:44)":
         {
         "link":"https://www.youtube.com/watch?v=lxWmFEuE6Y0",
-        "color":"lightgreen"
+        "color":"black"
         },
 
         "Smiling Friends (S2:E3 & S2:E4)" :
@@ -213,7 +249,7 @@
         "Biggie: I Got a Story to Tell (PV)":
         {
         "link":"https://www.youtube.com/watch?v=5QBUlcajrEY",
-        "color":"lightgreen"
+        "color":"black"
         }
 
         },
@@ -243,7 +279,7 @@
         "Area 21 (MV)(FX Only)":
         {
         "link":"https://www.youtube.com/watch?v=DudZFZ2n9iI",
-        "color":"lightgreen"
+        "color":"black"
         },
 
         "Agent King":
@@ -266,7 +302,7 @@
         "Tinggal Meninggal (Movie)(Animated Ninja Cat at 1:44)":
         {
         "link":"https://youtu.be/Z_G2cU5-vSk?t=104",
-        "color":"lightgreen"
+        "color":"black"
         },
         "Wanara Teaser":
         {
@@ -276,17 +312,17 @@
         "Iklan Mie Sedap (AD)(Animated the noodles at 0:04-0:08)":
         {
         "link":"https://youtu.be/ViYURHZlNSc?si=c3zMmDNXG2JxlRDL",
-        "color":"lightgreen"
+        "color":"black"
         },
         "Yellow Claw - Amsterdamned (MV)(Animated 0:43, 2:21-2:27)":
         {
         "link":"https://www.youtube.com/watch?v=NtYPh5Lh9HA",
-        "color":"lightgreen"
+        "color":"black"
         },
         "Arus Merah (MV)(Animated 0:26-0:31, 0:48, 1:30, 1:57-2:00)":
         {
         "link":"https://www.youtube.com/watch?v=OMd0sFVKvUI",
-        "color":"lightgreen"
+        "color":"black"
         }
 
         },
@@ -294,29 +330,29 @@
         "Iklan Go Pay (AD)(Animated that one horse at 1:31)":
         {
         "link":"https://www.youtube.com/watch?v=kIRsFMsnoNY",
-        "color":"lightgreen"
+        "color":"black"
         }
         },
     "Zettai Absolute":{
         "Qtp vs T1 (Animated 0:40-0:44)":
         {
         "link":"https://www.youtube.com/watch?v=J6g1kD7Yyyo",
-        "color":"lightgreen"
+        "color":"black"
         },
         "Ambition's Journey Parody (Animated 0:47-0:53)":
         {
         "link":"https://www.youtube.com/watch?v=QdSXrlQWTX8",
-        "color":"lightgreen"
+        "color":"black"
         },
         "Ryze’s 10-Year Realm Warp (Animated 1:49)":
         {
         "link":"https://www.youtube.com/watch?v=n_-kANpqetM",
-        "color":"lightgreen"
+        "color":"black"
         },
         "LCS 2020 Spring Finals Opening Ceremony Community Animation (Animated 0:04-0:16)":
         {
         "link":"https://www.youtube.com/watch?v=Rkx_2Jybed4",
-        "color":"lightgreen"
+        "color":"black"
         }
         }
 

@@ -6,8 +6,7 @@
 <link rel="stylesheet" href="../assets/bl-icons/bl-icons.css">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <!-- <link rel="stylesheet" href="../assets/css/gallery.css"> -->
-</head>
-<body>
+
 
 <!-- Navigation Bar -->
 
@@ -21,31 +20,85 @@
   </ul>
 </nav>
 <p class="content-space"></p>
-
 <style>
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    margin: 20px;
+  }
 
-  .table{margin-right:32px;}
-  .studio{font-size:20px;}
- .item{list-style-type:none;}
-  /* Container for all cards */
+  .card {
+    padding: 15px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
 
-  .tag{border:1px solid pink;padding:5px;border-radius:10px;}
-  .tr{text-align:center;}
-  .watchBtn{margin:3px;border:1px black solid;background-color:yellow;color:black;cursor: pointer;}
-  
+  .card:hover {
+    opacity: 0.5;
+  }
+
+  .studio-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+
+  .project-label {
+    font-size: 15px;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .tag {
+    border: 1px solid pink;
+    padding: 5px;
+  }
+
+  /* Mobile view: list style with fixed height and right gap */
+  @media (max-width: 600px) {
+    .grid-container {
+      display: flex;
+      flex-direction: column; /* stack cards vertically */
+    }
+    .card {
+      height: 50px;       /* fixed height */
+      width: calc(100% - 16px); /* leave space on right side */
+      padding: 10px;
+      margin: 0 8px 0px 0; /* right gap + bottom spacing */
+      overflow: hidden;
+    }
+    .studio-title {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .project-label {
+      font-size: 13px;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 </style>
-</head>
-<body>
+
+
+
 
 <center>
 <h1>Animation Works</h1>
-<button class="tag" style="background-color:white;color:black;">My animations only</button>
+<button class="tag" style="background-color:white;color:black;">My cuts only</button>
 <button class="tag" style="background-color:orange;">TBA</button>
 <button class="tag" style="background-color:yellow;color:black;">Only Screenshot</button>
-<button class="tag" style="background-color:lightgreen;color:black;">Full project</button>
+<button class="tag" style="background-color:black;color:white;">Full project</button>
 <br><br>
 
-<div id="tb"></div>
+<div id="tb" class="grid-container"></div>
 </center>
 
 <script>
@@ -55,49 +108,61 @@ fetch('../assets/json/data_projects.json')
     const tb = document.getElementById('tb');
 
     for (const key in data) {
-        // Create card for each key
-        const table = document.createElement('div');
-        table.className = 'table';
-
-        const studio = document.createElement('p');
-        const title = document.createElement('h1');
-        title.className = 'studio';
-        title.textContent = key;
-        table.appendChild(studio);
-        studio.appendChild(title);
-
-        const projects = document.createElement('ul');
-        projects.className = 'projects';
-        studio.appendChild(projects);
-
         const val = data[key];
         for (const sub_key in val) {
             const sub_val = val[sub_key];
 
-            const item = document.createElement('li');
-            item.className = 'item';
-            item.style.backgroundColor = sub_val["color"] || "#fff";
+         // Create card
+		const card = document.createElement('div');
+		card.className = 'card';
+		card.style.backgroundColor = sub_val["color"] || "#fff";
 
-            const label = document.createElement('span');
-            label.textContent = sub_key;
-            item.appendChild(label);
+		// If background is black, make text white
+		if (sub_val["color"] === "black") {
+		  card.style.color = "white";
+		}
 
-            const watchLink = document.createElement('a');
-            const watchBtn = document.createElement('button');
-            watchBtn.className = 'watchBtn';
-            watchLink.href = sub_val["link"];
-            watchLink.target = "_blank";
-            watchBtn.textContent = "Watch";
-            item.appendChild(watchLink);
-            watchLink.appendChild(watchBtn);
+		// Check if link is a GIF
+		if (sub_val["link"] && sub_val["link"].toLowerCase().endsWith(".gif")) {
+		  // Set GIF as background
+		  card.style.backgroundImage = `url(${sub_val["link"]})`;
+		  card.style.backgroundSize = "cover";
+		  card.style.backgroundPosition = "center";
 
-            projects.appendChild(item);
+		  // Hide text for GIF cards
+		  card.style.color = "transparent";
+
+		  // Make GIF card clickable
+		  card.addEventListener('click', () => {
+			window.open(sub_val["link"], "_blank");
+		  });
+		} else {
+		  // Studio title
+		  const studioTitle = document.createElement('div');
+		  studioTitle.className = 'studio-title';
+		  studioTitle.textContent = key;
+		  card.appendChild(studioTitle);
+
+		  // Project label
+		  const label = document.createElement('span');
+		  label.className = 'project-label';
+		  label.textContent = sub_key;
+		  card.appendChild(label);
+
+		  // Make card clickable for non-GIF links
+		  card.addEventListener('click', () => {
+			window.open(sub_val["link"], "_blank");
+		  });
+		}
+
+		tb.appendChild(card);
+
+
         }
-
-        tb.appendChild(table);
     }
 });
 </script>
+
 
 
 
