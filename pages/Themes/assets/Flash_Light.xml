@@ -769,7 +769,7 @@
       <ThemeTextEditor
         line_numbers="#d0d0d0"
         line_numbers_background="#313133"
-        selected_text="#333333"
+        selected_text="#989898"
         cursor="#71a8ff"
         syntax_builtin="#ff1961"
         syntax_symbols="#ff734d"
