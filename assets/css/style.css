@@ -18,7 +18,7 @@ font-family: "Roboto Condensed", sans-serif;
 }
 
 body {
-	background: linear-gradient(to right, black, darkblue, black);
+	background: linear-gradient(to right, black, darkgreen, black);
 
 }
 
@@ -465,7 +465,7 @@ text-align:left;
 	/* bubble appears to the right of the icon */
 	max-width: 250px;
 	padding: 12px 16px;
-	background: darkblue;
+	background: darkgreen;
 	color: lightblue;
 	border-radius: 16px;
 	font-size: 18px;
