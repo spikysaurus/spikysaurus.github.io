@@ -9,204 +9,123 @@
       <link rel="stylesheet" href="assets/css/style.css">
    </head>
    <body>
-      <!-- Navigation Bar -->
-<!--
-      <nav class="nav-bar">
-         <ul>
-            <li>
-               <a href="pages/projects.html" class="wii">
-               <span class="bl-icons-file_movie"></span><label>Animations</label>
-               </a>
-            </li>
-            <li>
-               <a href="pages/Gallery/index.html" class="wii">
-               <span class="bl-icons-file_image"></span><label>Art</label>
-               </a>
-            </li>
-            <li>
-               <a href="pages/links.html" class="wii">
-               <span class="bl-icons-url"></span><label>Links</label>
-               </a>
-            </li>
-            <li>
-               <a href="pages/contact.html" class="wii">
-               <span class="bl-icons-user"></span><label>Contact</label>
-               </a>
-            </li>
-            <li>
-               <a href="pages/tools.html" class="wii">
-               <span class="bl-icons-tool_settings"></span><label>Tools</label>
-               </a>
-            </li>
-         </ul>
-      </nav>
--->
+	   
+<nav class="nav-bar">
+  <div class="nav-card">
+    <a href="pages/links.html" class="wii">
+      <label>Links</label>
+    </a>
+  </div>
+  <div class="nav-card">
+    <a href="pages/contact.html" class="wii">
+      <label>Contact</label>
+    </a>
+  </div>
+  <div class="nav-card">
+    <a href="pages/tools.html" class="wii">
+      <label>Tools</label>
+    </a>
+  </div>
+  <div class="nav-card">
+    <a href="pages/downloads.html" class="wii">
+      <label>Downloads</label>
+    </a>
+  </div>
+</nav>
+
+<div class="box-container" id="boxContainer">
+</div>
 
 
-      <nav class="nav-bar">
-         <ul>
-            <li>
-               <a href="pages/projects.html" class="wii">
-               <label>Animations</label>
-               </a>
-            </li>
-            <li>
-               <a href="pages/Gallery/index.html" class="wii">
-               <label>Art</label>
-               </a>
-            </li>
-            <li>
-               <a href="pages/links.html" class="wii">
-               <label>Links</label>
-               </a>
-            </li>
-            <li>
-               <a href="pages/contact.html" class="wii">
-               <label>Contact</label>
-               </a>
-            </li>
-            <li>
-               <a href="pages/tools.html" class="wii">
-              <label>Tools</label>
-               </a>
-            </li>
-            <li>
-               <a href="pages/downloads.html" class="wii">
-              <label>Downloads</label>
-               </a>
-            </li>
-         </ul>
-      </nav>
-      
+     <div class="container">
+
+  <div class="centered-section">
+    <h2 class="main-title">FEATURED WORKS</h2>
+    <p class="subtitle">Click the title in the playlist to play the animation<br>You can scroll down the playlist to see more</p>
+  </div>
+
+  <!-- Left side -->
+  <div class="left">
+    <div class="video-wrapper">
+      <iframe id="videoFrame" tabindex="0"
+        src="https://www.youtube.com/embed/ywGcoaYo3-k?list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ"
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+
+  <!-- Right side -->
+  <div class="right">
+    <div class="grid" id="playlist"></div>
+  </div>
+
+</div>
+
       
 
+<script>
+ const videoFrame = document.getElementById('videoFrame');
+const resetTitle = document.getElementById('resetVideo');
+const playlist = document.getElementById('playlist');
 
-      <div class="container" >
-         <!-- Left side -->
-         <div class="left">
-            <!-- Make the title clickable -->
-            <div class="section-title" id="resetVideo">Animation Reel</div>
-            <div class="video-wrapper">
-               <iframe id="videoFrame" tabindex="0"
-                  src="https://www.youtube.com/embed/ywGcoaYo3-k?list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ"
-                  title="YouTube video player"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen>
-               </iframe>
-            </div>
-         </div>
-         <!-- Right side -->
-         <div class="right">
-            <div class="section-title">Featured Works (click to play)</div>
-            <div class="grid">
-               <div class="card" data-video="https://www.youtube.com/embed/Bi_s_g2l1Yk">
-                  <img src="https://cdn.myanimelist.net/images/anime/1993/143335.jpg" alt="">
-                  <div class="overlay-genre">Anime</div>
-                  <div class="overlay-title">Kinnikuman:Perfect Origin Arc S1 E06</div>
-               </div>
-               <div class="card" data-video="https://www.youtube.com/embed/nTF6QBu7vMA">
-                  <img src="https://cdn.myanimelist.net/images/anime/1937/146622l.jpg" alt="">
-                  <div class="overlay-genre">Anime</div>
-                  <div class="overlay-title">Yaiba S1 E10</div>
-               </div>
-               <div class="card" data-video="https://www.youtube.com/embed/MSiL1tRuQiY">
-                  <img src="https://cdn.myanimelist.net/images/anime/1937/146622l.jpg" alt="">
-                  <div class="overlay-genre">Anime</div>
-                  <div class="overlay-title">Yaiba S1 E21</div>
-               </div>
-               <div class="card" data-video="">
-                  <a href="https://x.com/sadewoo0/status/1998608699368288736">
-                  <img src="https://cdn.myanimelist.net/images/anime/1885/127108.jpg" alt="">
-                  </a>
-                  <div class="overlay-genre">Anime</div>
-                  <div class="overlay-title">OPM S3 E09</div>
-               </div>
-               <div class="card" data-video="https://www.youtube.com/embed/-dxDCdMmeyI">
-                  <img src="https://image.tmdb.org/t/p/original/mkrkdyUdAyDoxi4BhkG724uqs0V.jpg" alt="">
-                  <div class="overlay-genre">Movie</div>
-                  <div class="overlay-title">Tinggal Meninggal</div>
-               </div>
-<!--
-               <div class="card tba" data-video="">
-                  <img src="https://cdn.myanimelist.net/images/anime/1679/152682.jpg" alt="">
-                  <div class="overlay-genre">Anime</div>
-                  <div class="overlay-title">Rayearth</div>
-               </div>
--->
-               <div class="card" data-video="https://www.youtube.com/embed/BLUcapqwyuU">
-                  <img src="https://m.media-amazon.com/images/M/MV5BMmMwYzZjMzAtN2I3Ny00MTdhLTg1Y2YtNDZiMzhhODY3ZjJjXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="">
-                  <div class="overlay-genre">Video Game</div>
-                  <div class="overlay-title">Friday Night Funkin</div>
-               </div>
-               <div class="card" data-video="https://www.youtube.com/embed/B_BOYNky24w">
-                  <img src="https://m.media-amazon.com/images/M/MV5BZWJlZTM2OWYtYTkxZC00OTQyLThjOWEtN2VkOGE1MTFmNGQxXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="">
-                  <div class="overlay-genre">Video Game</div>
-                  <div class="overlay-title">Hi-Fi Rush</div>
-               </div>
-               <div class="card" data-video="https://www.youtube.com/embed/akaQ1tarUQo">
-                  <img src="https://e.snmc.io/lk/f/x/edfaf7f229be0f8c28839bc97b4f82e9/10511778" alt="">
-                  <div class="overlay-genre">Video Game</div>
-                  <div class="overlay-title">Inkbound</div>
-               </div>
-               <div class="card" data-video="https://www.youtube.com/embed/iZw1_2PFsZE">
-                  <img src="https://m.media-amazon.com/images/M/MV5BYzE3ZjIxZDYtMDFjNi00OTBjLWI0NmQtY2IyM2YzZTYwMjA1XkEyXkFqcGc@._V1_.jpg" alt="">
-                  <div class="overlay-genre">Video Game</div>
-                  <div class="overlay-title">Vampire Survivors</div>
-               </div>
-               <div class="card" data-video="https://www.youtube.com/embed/YQXp2gEoevs">
-                  <img src="https://images.igdb.com/igdb/image/upload/t_cover_big/co30qj.jpg" alt="">
-                  <div class="overlay-genre">Video Game</div>
-                  <div class="overlay-title">Nova Island</div>
-               </div>
-               <div class="card" data-video="">
-                  <a href="https://sadewoo.tumblr.com/post/732936987201404928/post-animation-little-goody-two-shoes-trailer">
-                  <img src="https://m.media-amazon.com/images/M/MV5BZjkwNDkwMzEtZDZhZC00MGI1LTk0YmUtMzE0NWUzZjdlYjM1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="">
-                  </a>
-                  <div class="overlay-genre">Video Game</div>
-                  <div class="overlay-title">Little Goody Two Shoes</div>
-               </div>
-               <div class="card" data-video="https://www.youtube.com/embed/tkAB6crm764">
-                  <img src="https://m.media-amazon.com/images/M/MV5BOGExYmQ1N2QtYzE2YS00ZTE2LWEwZTItZjUwNTNhYzJiYjdlXkEyXkFqcGc@._V1_.jpg" alt="">
-                  <div class="overlay-genre">Cartoon</div>
-                  <div class="overlay-title">Animaniacs</div>
-               </div>
-               <div class="card" data-video="https://www.youtube.com/embed/ZArlzeNNAEs">
-                  <img src="https://m.media-amazon.com/images/M/MV5BM2E4MDU4NDctNjIxZC00ZWM5LTkyNDQtOGU0MTRhYWVmNzQ5XkEyXkFqcGc@._V1_.jpg" alt="">
-                  <div class="overlay-genre">Cartoon</div>
-                  <div class="overlay-title">Helluvaboss</div>
-               </div>
-               <div class="card" data-video="https://www.youtube.com/embed/p5pbg6SNWDg">
-                  <img src="https://m.media-amazon.com/images/M/MV5BYjhmNTAzYmQtMzFkMi00NzEyLWJhMzctZmM2NzRmYmE3MTU4XkEyXkFqcGc@._V1_.jpg" alt="">
-                  <div class="overlay-genre">Cartoon</div>
-                  <div class="overlay-title">Craig Before The Creek</div>
-               </div>
-               <div class="card" data-video="https://www.youtube.com/embed/IeXNLjLW2FY">
-                  <img src="https://m.media-amazon.com/images/M/MV5BZTg4MDRiMTktOWYyZS00YTIwLTg5ODItYWFmNGExZTg1NWEzXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="">
-                  <div class="overlay-genre">Cartoon</div>
-                  <div class="overlay-title">I Heart Arlo</div>
-               </div>
-<!--
-               <div class="card" data-video="https://www.youtube.com/embed/00_sb0h2mRQ">
-                  <img src="https://resizing.flixster.com/l-_w1KP9x9U4KRTaKSF9i3_FjtU=/206x305/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p21364888_b_v8_aa.jpg" alt="">
-                  <div class="overlay-genre">Cartoon</div>
-                  <div class="overlay-title">Smiling Friends</div>
-               </div>
--->
-            </div>
-         </div>
-      </div>
-      
-      
-      
+const originalLink = "https://www.youtube.com/embed/ywGcoaYo3-k?list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ";
+
+const videos = [
+  { url: "https://www.youtube.com/embed/Bi_s_g2l1Yk", genre: "Anime", title: "Kinnikuman: Perfect Origin Arc S1 E06" },
+  { url: "https://www.youtube.com/embed/nTF6QBu7vMA", genre: "Anime", title: "Yaiba S1 E10" },
+  { url: "https://www.youtube.com/embed/MSiL1tRuQiY", genre: "Anime", title: "Yaiba S1 E21" },
+  { url: "https://www.youtube.com/embed/-dxDCdMmeyI", genre: "Movie", title: "Tinggal Meninggal" },
+  { url: "https://www.youtube.com/embed/BLUcapqwyuU", genre: "Video Game", title: "Friday Night Funkin" },
+  { url: "https://www.youtube.com/embed/B_BOYNky24w", genre: "Video Game", title: "Hi-Fi Rush" },
+  { url: "https://www.youtube.com/embed/akaQ1tarUQo", genre: "Video Game", title: "Inkbound" },
+  { url: "https://www.youtube.com/embed/iZw1_2PFsZE", genre: "Video Game", title: "Vampire Survivors" },
+  { url: "https://www.youtube.com/embed/YQXp2gEoevs", genre: "Video Game", title: "Nova Island" },
+  { url: "https://www.youtube.com/embed/tkAB6crm764", genre: "Cartoon", title: "Animaniacs" },
+  { url: "https://www.youtube.com/embed/ZArlzeNNAEs", genre: "Cartoon", title: "Helluvaboss" },
+  { url: "https://www.youtube.com/embed/p5pbg6SNWDg", genre: "Cartoon", title: "Craig Before The Creek" },
+  { url: "https://www.youtube.com/embed/IeXNLjLW2FY", genre: "Cartoon", title: "I Heart Arlo" }
+];
+
+videos.forEach(video => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.video = video.url;
+
+  card.innerHTML = `
+    <div class="overlay-genre">${video.genre}</div>
+    <div class="overlay-title">${video.title}</div>
+  `;
+
+  card.addEventListener('click', () => {
+    let newVideo = video.url;
+    if (newVideo.includes("?")) {
+      newVideo += "&autoplay=1";
+    } else {
+      newVideo += "?autoplay=1";
+    }
+    videoFrame.src = newVideo;
+    videoFrame.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    videoFrame.focus();
+  });
+
+  playlist.appendChild(card);
+});
+
+resetTitle.addEventListener('click', () => {
+  videoFrame.src = originalLink;
+});
+
+   
+</script>
+
+
          <div class="profile-icon" id="profileIcon"></div>
          <div class="chat-bubble" id="chatBubble">I'm Sadewoo the Animator <br>Welcome to my website!!
          </div>
          
-         
-         
-         
-         
-         <script>
+  <script>
             const profileIcon = document.getElementById('profileIcon');
             const chatBubble = document.getElementById('chatBubble');
            
@@ -225,40 +144,33 @@
          
          
 <script>
-   const videoFrame = document.getElementById('videoFrame');
-   const cards = document.querySelectorAll('.card');
-   const resetTitle = document.getElementById('resetVideo');
-   
-   // original link
-   const originalLink = "https://www.youtube.com/embed/ywGcoaYo3-k?list=PLdk56EjsMhfjwymlCUUltcL63fZDmyZvZ";
-   
-   // swap video when card clicked
-   cards.forEach(card => {
-     card.addEventListener('click', () => {
-       let newVideo = card.getAttribute('data-video');
-       if (newVideo) {
-         // ensure autoplay param is added correctly
-         if (newVideo.includes("?")) {
-           newVideo += "&autoplay=1";
-         } else {
-           newVideo += "?autoplay=1";
-         }
-   
-         videoFrame.src = newVideo;
-   
-         // Scroll and focus on the video
-         videoFrame.scrollIntoView({ behavior: 'smooth', block: 'center' });
-         videoFrame.focus();
-       }
-     });
-   });
-   
-   // reset to original when title clicked
-   resetTitle.addEventListener('click', () => {
-     // also reset with autoplay off
-     videoFrame.src = originalLink;
-   });
-   
+// Menambahkan 3 objek data ke dalam array
+const newBoxes = [
+  { text: "Animation Works", img: "https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreicazv32xvsf4lhsfhjzpej6k3n3t23ppjjaxcalnquewonbw6dpq4", url: "pages/projects.html" },
+  { text: "Art Gallery", img: "https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:2qnen2f364chxvmjlh6xiyel/bafkreih5rnstnduppocd3n4dmnfwhnpcb74hzsmhttos6z35lxbhz66riy", url: "pages/Gallery/index.html" },
+  { text: "Blog (Under Construction)", img: "https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreibye4azf47vjrlfrcpq2mexja5r3ubi4nxzk3i54xeqg32lrghmha", url: "#" } // Kotak ke-3
+];
+
+const container = document.getElementById('boxContainer');
+
+// Mengosongkan kontainer terlebih dahulu jika Anda tidak ingin kotak HTML pertama menumpuk
+container.innerHTML = ''; 
+
+// Membuat dan memasukkan 3 kotak secara dinamis
+newBoxes.forEach(data => {
+  const boxAnchor = document.createElement('a');
+  boxAnchor.href = data.url;
+  boxAnchor.className = 'box';
+
+  boxAnchor.innerHTML = `
+    <img src="${data.img}" alt="${data.text}">
+    <div class="box-text">${data.text}</div>
+  `;
+
+  container.appendChild(boxAnchor);
+});
+
+
 </script>
 
 <script src="assets/js/starfield.js"></script>

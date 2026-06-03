@@ -120,29 +120,29 @@ overscroll-behavior-y: contain; /* stops pull-to-refresh */
   </style>
 </head>
 <body>
+	
+  
 <nav class="nav-bar">
-  <ul>
-    <li>
+    <div class="nav-card">
       <a href="../../index.html" class="wii">
         <label>‎Home</label>
       </a>
-    </li>
-     <li>
+    </div>
+     <div class="nav-card">
       <a onclick="selectTag(event, '')" class="wii">
         <label>All</label>
       </a>
-    </li>
-    <li>
+    </div>
+    <div class="nav-card">
       <a onclick="selectTag(event, 'sketch')" class="wii">
         <label>Sketch</label>
       </a>
-    </li>
-    <li>
+    </div>
+    <div class="nav-card">
       <a onclick="selectTag(event, 'settei')" class="wii">
         <label>Settei</label>
       </a>
-    </li>
-  </ul>
+    </div>
 </nav>
 	<center>
   <input type="text" id="search" placeholder="Search by tag..." />
