@@ -3,7 +3,7 @@
 
 html {
 	scroll-behavior: smooth;
-
+	
 }
 
 html,
@@ -11,8 +11,8 @@ body {
 /*
 	font-family: "Share Tech Mono", monospace;
 */
+overflow-x:hidden;width:100%;margin:0;
 font-family: "Roboto Condensed", sans-serif;
-	width: 100%;
 	margin-bottom:50px;
 
 }
