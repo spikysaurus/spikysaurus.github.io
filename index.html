@@ -76,6 +76,7 @@ const videos = [
   { url: "https://www.youtube.com/embed/Bi_s_g2l1Yk", genre: "Anime", title: "Kinnikuman: Perfect Origin Arc S1 E06" },
   { url: "https://www.youtube.com/embed/nTF6QBu7vMA", genre: "Anime", title: "Yaiba S1 E10" },
   { url: "https://www.youtube.com/embed/MSiL1tRuQiY", genre: "Anime", title: "Yaiba S1 E21" },
+  { url: "https://x.com/JCStaffSakuga/status/1998352053714686021", genre: "Anime", title: "One Punch Man S3 E9" },
   { url: "https://www.youtube.com/embed/-dxDCdMmeyI", genre: "Movie", title: "Tinggal Meninggal" },
   { url: "https://www.youtube.com/embed/BLUcapqwyuU", genre: "Video Game", title: "Friday Night Funkin" },
   { url: "https://www.youtube.com/embed/B_BOYNky24w", genre: "Video Game", title: "Hi-Fi Rush" },
@@ -99,16 +100,24 @@ videos.forEach(video => {
   `;
 
   card.addEventListener('click', () => {
-    let newVideo = video.url;
-    if (newVideo.includes("?")) {
-      newVideo += "&autoplay=1";
-    } else {
-      newVideo += "?autoplay=1";
-    }
-    videoFrame.src = newVideo;
-    videoFrame.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    videoFrame.focus();
-  });
+	  let newVideo = video.url;
+
+	  if (newVideo.includes("youtube.com")) {
+		// Handle YouTube embeds inside iframe
+		if (newVideo.includes("?")) {
+		  newVideo += "&autoplay=1";
+		} else {
+		  newVideo += "?autoplay=1";
+		}
+		videoFrame.src = newVideo;
+		videoFrame.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		videoFrame.focus();
+	  } else {
+		// Open non-YouTube links in a new tab
+		window.open(newVideo, "_blank");
+	  }
+	});
+
 
   playlist.appendChild(card);
 });
