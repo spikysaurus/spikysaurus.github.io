@@ -1,38 +1,38 @@
 {
-    "Commissions and Personal":{
+    "Commissions / Personal":{
 		"kuronana":
         {
-        "link":"../assets/drawings/kuronana.gif",
+        "link":"../../assets/drawings/kuronana.gif",
         "color":""
         },
 		"matatabi":
         {
-        "link":"../assets/drawings/Matatabi.gif",
+        "link":"../../assets/drawings/Matatabi.gif",
         "color":""
         },
 		"matatabi2":
         {
-        "link":"../assets/drawings/Matatabi2.gif",
+        "link":"../../assets/drawings/Matatabi2.gif",
         "color":""
         },
         "keroro":
         {
-        "link":"../assets/drawings/Keroro.gif",
+        "link":"../../assets/drawings/Keroro.gif",
         "color":""
         },
         "natsumi_run":
         {
-        "link":"../assets/drawings/natsumi_run.gif",
+        "link":"../../assets/drawings/natsumi_run.gif",
         "color":""
         },
 		"crew":
         {
-        "link":"../assets/drawings/crew.gif",
+        "link":"../../assets/drawings/crew.gif",
         "color":""
         },
 		"walk":
         {
-        "link":"../assets/drawings/walk.gif",
+        "link":"../../assets/drawings/walk.gif",
         "color":""
         },
         
@@ -248,7 +248,7 @@
 
         "Biggie: I Got a Story to Tell":
         {
-        "link":"https://youtu.be/l1S50vhEYtQ",
+        "link":"https://www.youtube.com/watch?v=l1S50vhEYtQ",
         "color":""
         }
 
@@ -301,7 +301,7 @@
     "Tampar Production":{
         "Tinggal Meninggal (Ninja Cat)":
         {
-        "link":"https://youtu.be/-dxDCdMmeyI",
+        "link":"https://www.youtube.com/watch?v=-dxDCdMmeyI",
         "color":""
         },
         "Wanara Teaser":

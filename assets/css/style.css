@@ -302,7 +302,7 @@ h1 {
 
 .box {
   --b: 4px;  /* tebal border */
-  --s: 20px; /* ukuran potongan sudut */
+  --s: 20px;
   
   width: 300px;
   aspect-ratio: 1.5;
@@ -311,7 +311,6 @@ h1 {
   z-index: 0;
   text-decoration: none;
   
-  /* Efek Potongan Sudut */
   clip-path: polygon(
     0 0, 
     calc(100% - var(--s)) 0, 100% var(--s), 
@@ -319,12 +318,10 @@ h1 {
     var(--s) 100%, 0 calc(100% - var(--s))
   );
 
-  /* Transisi Miring Kotak */
   transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   transform-origin: center;
 }
 
-/* Efek Miring Kiri Saat Hover */
 .box:hover {
   transform: rotate(-3deg);
 }
