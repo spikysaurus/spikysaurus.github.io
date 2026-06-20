@@ -35,12 +35,11 @@ h1 {
 	margin-top: 40px;
 }
 .nav-bar {
-  margin-top: 30px;
   display: flex;
   justify-content: center;
-  gap: 10px;
-  padding: 15px 0;
-  flex-wrap: wrap; /* allow wrapping if needed */
+  align-items: center; /* vertical centering */
+  gap: 5px;
+  flex-wrap: wrap;
 }
 
 /* default: horizontal row */
@@ -48,18 +47,25 @@ h1 {
   flex: 0 0 auto;
 }
 
-/* mobile layout */
 @media (max-width: 768px) {
   .nav-bar {
-    flex-direction: column;   /* stack vertically */
-    align-items: center;      /* center cards */
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .wii {
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 
   .nav-bar .nav-card {
-    width: 100%;              /* full width on phone */
-    max-width: 300px;         /* optional limit */
+    width: auto;
+    max-width: 300px;
+    text-align: center;
   }
 }
+
 
 
 .nav-card {
@@ -487,6 +493,8 @@ text-align:left;
 }
 
 .wii {
+display:flex;
+justify-content: center;
 	vertical-align: middle;
 	width: auto;
 	margin-top: 28px;
@@ -520,33 +528,7 @@ text-align:left;
 
 }
 
-@media (max-width: 800px) {
-	.wii {
-		font-weight: normal;
-		margin: 10px;
-		width: 100%;
-		padding: 0px 0px;
-		margin-top: 0px;
-	}
 
-	.nav-bar {
-
-		margin-top: 50px;
-		margin-left: -5%;
-		display: flex;
-		justify-content: center;
-		padding: 0px 0;
-	}
-
-	.nav-bar ul {
-		list-style: none;
-		display: inline-block;
-		flex-direction: column;
-		gap: 0px;
-		margin: 0;
-		padding: 0;
-	}
-}
 
 @media (max-width: 1300px) {
 	.profile-icon {
