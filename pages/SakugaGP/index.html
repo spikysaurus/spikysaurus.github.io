@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>SakugaGP Addon</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../../assets/bl-icons/bl-icons.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../../assets/css/style.css">
+	<style>
+ .addons-card {
+	  width: auto;
+	  max-width: 100%;
+	  border: 1px solid #ddd;
+	  border-radius: 8px;
+	  padding: 15px;
+	  margin: 20px 15px;
+	  background: #f9f9f9;
+	  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+	  font-family: Arial, sans-serif;
+	  box-sizing: border-box;
+	}
+
+  .addons-header {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    color: #333;
+    border-bottom: 2px solid #0077cc;
+    padding-bottom: 5px;
+  }
+
+  .addons-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .addons-list li {
+    margin: 8px 0;
+  }
+
+  .addons-list a {
+    text-decoration: none;
+    color: #0077cc;
+    font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  .addons-list a:hover {
+    background-color: #0077cc;
+    color: #fff;
+  }
+
+  .addons-list .num {
+    font-weight: bold;
+    margin-right: 6px;
+    color: #555;
+  }
+  
+  a{color:red;}
+  
+	#topBtn{position:fixed;bottom:20px;right:20px;display:none;padding:10px 15px;border:none;border-radius:10px;background:orange;color:#fff;cursor:pointer}
+	#topBtn:hover{background:red}
+
+@media (max-width: 600px) {
+  .addons-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  max-width: 100%;
+}
+}
+</style>
+</head>
+
+<body>
+<div class="addons-card">
+    <p><b>SakugaGP</b> is a collection of Free Grease Pencil addons made by 2D Animator for 2D Animators.</p>
+
+    <p><b>Download</b> : 
+    <a href="https://sadewoo.gumroad.com/l/SakugaGP" target="_blank">Gumroad</a> 
+    <a href="https://github.com/spikysaurus/Blender-SakugaGP/tree/main/_releases/latest" target="_blank">Github</a>
+    </p>
+    
+    
+    <p><b>Requirement</b> : Blender v5.x</p>
+</div>
+
+<div class="addons-card">
+    <p>
+		Download via Gumroad to get email update notifications, also you can ask questions or report any bug on SakugaGP's Discord Server.
+	</p>
+    
+</div>
+
+<div class="addons-card">
+  <p class="addons-header">Addons</p>
+  <ul class="addons-list">
+    <li><a href="#exporter"><span class="num">1.</span> Exporter</a></li>
+    <li><a href="#extra-tools"><span class="num">2.</span> Extra Tools</a></li>
+    <li><a href="#brush-sizes"><span class="num">3.</span> Brush Sizes</a></li>
+    <li><a href="#camera-extras"><span class="num">4.</span> Camera Extras + Overscan</a></li>
+    <li><a href="#gp-manager"><span class="num">5.</span> Grease Pencil Manager</a></li>
+    <li><a href="#gp-extras"><span class="num">6.</span> Grease Pencil Extras</a></li>
+    <li><a href="#stamps"><span class="num">7.</span> Stamps</a></li>
+  </ul>
+</div>
+
+<div id="exporter" class="addons-card">
+    <p class="addons-header">Exporter</p>
+    <ul>
+        <li>
+            Turn On/Off Antialiasing</p>
+        </li>
+        <li>
+            Quicky set render output as Video/Image with or without transparency </p>
+        </li>
+        <li>
+            Render Keyframes : This feature is for rendering the keyframes (cels) only </p>
+        </li>
+        <li>
+            You have to set render to image formats (JPG/PNG/TGA) before rendering the keyframes. </p>
+        </li>
+        <li>
+            You can change the filename for exported images as Counting Numbers or Frame Numbers. </p>
+        </li>
+        <li>
+            By default the keyframes data is referenced to layers that named "data" in every Grease Pencil Objects that you put in the list. </p>
+			<img src="assets/img/1.png"/>
+			<img src="assets/img/2.png"/>
+        </li>
+        <li>
+           You can export the keyframes data as .xdts with <b>Export XDTS</b> button, also <b>Copy Command </b>is for copying the keyframe data as text command , this command is meant to be pasted into Auto-Sheet (a Timesheet web-tool by Moaang <a href="https://moaang.github.io/auto-sheet/" class="text-Internet_20_link">https://moaang.github.io/auto-sheet</a>/ ) </p>
+        </li>
+        <li>
+            Rendered Keyframes are exported inside your project file's current folder inside "export" folder. the Exported .xdts file as well. </p>
+        </li>
+        <li>
+            <b>Render Current Layer </b>is for rendering the keyframe of active layer of the active Grease Pencil Object, the render output path for it is based on the Blender's output path in the <b>Output Properties</b> </p>
+        </li>
+    </ul>
+</div>
+ 
+ <div id="extra-tools" class="addons-card">
+    <p class="addons-header">Extra Tools</p>
+    User customizable buttons in the toolbar
+    <ul>
+        <li>
+            For first time use, try click <b>Tools &gt; Default Buttons Set</b> &amp; <b>Save JSON</b> </p>
+        </li>
+        <li>
+            Click <b>Open JSON Path </b>to find the <b>ExtraTools.json</b> &amp; <b>ExtraTools folder </b>, you can edit the json file to rearrange or add new buttons . inside the <b>ExtraTools folder </b>there are the scripts for those buttons. </p>
+        </li>
+        <li>
+            Click <b>Tools &gt; Load JSON </b>to reload the extra tools's buttons list in the toolbar </p>
+            <img src="assets/img/3.png"/>
+            <img src="assets/img/4.png"/>
+		</li>
+    </ul>
+</div>
+
+<div id="brush-sizes" class="addons-card">
+    <p class="addons-header">Brush Sizes</p>
+    Brush Sizes Palette like Krita/CSP
+    <ul>
+        <li>
+            For first time use, similar to <b>Extra Tools</b> addon, you need to create the json file first , go to N-Panel &gt; SakugaGP &gt; Brush Sizes panel) click <b>Brush Sizes &gt; New JSON</b> &amp; <b>Load JSON</b> , </p>
+        </li>
+        <li>
+            Click <b>Open JSON Path </b>to find the <b>BrushSizes.json </b>, inside the JSON contains list of brush sizes that you can add/remove/edit </p>
+        </li>
+        <li>
+            After edit &amp; saving the JSON file, click <b>Brush Sizes &gt; Load JSON </b>to reload it </p>
+            <img src="assets/img/5.png"/>
+		</li>
+    </ul>
+</div>
+
+<div id="camera-extras" class="addons-card">
+    <p class="addons-header">Camera Extras</p>
+    Adds Camera Mirror/Rotation without leaving Grease Pencil Draw Mode
+	<ul>
+		<li>
+			<b>Select Camera </b>is for selecting the Active Camera used in the scene </p>
+		</li>
+		<li>
+			Below it is a toggle and slider to control the <b>Camera's Passepartout Alpha</b> (The dark area outside canvas) </p>
+		</li>
+		<li>
+			Below it is a <b>Reset Camera Rotation</b> button (to zero) and a slider to rotate the camera, you can also rotate the camera by checking the <b>Rotation Shortcuts</b> checkbox to enable the ALT+Comma / ALT+Dot keyboard shortcuts to rotate the camera. </p>
+		</li>
+		<li>
+			The X and Y button are for mirroring the camera </p>
+			<img src="assets/img/6.png"/></li>
+	</ul>
+    <b>+ Overscan</b>
+    <ul>
+        <li>
+            <b>Switch Camera Action </b>button is for switching the Active Camera's action, between actions named "CameraAction" and "CameraOverscan" while also toggling the "Overscan" checkbox. </p>
+        </li>
+        <li>
+            <b>New X/Y </b>are your camera new size, its used for resizing the camera without removing the original camera size. </p>
+        </li>
+        <li>
+            "CameraAction" -&gt; uses original camera size, while "CameraOverscan" uses the new camera size </p>
+            <img src="assets/img/7.png"/>
+            <img src="assets/img/8.png"/>
+            </li>
+        <li>
+            This Camera Extra's <b>Overscan</b> feature is useful for those using Anime Template to switch between Camera focusing on the animation with 16:9 size for example, and the full image cel/template size for exporting the image cels. </p>
+        </li>
+    </ul>
+</div>
+
+<div id="gp-manager" class="addons-card">
+    <p class="addons-header">Grease Pencil Manager</p>
+    <ul>
+        <li>
+           Arrange the positions of Grease Pencil Object to Front/Back (Y axiis)  </p>
+        </li>
+        <li>
+           <b>Opacity </b>button to quickly add the opacity modifier to Active Greace Pencil Object, also works for imported Mesh Plane and Reference Image Objects </p>
+        </li>
+        <li>
+           <b>Freeze Frame</b> (For Shift &amp; Trace/Tap Wari) Click the colored buttons to automatically duplicate and adding Time Offset and Opacity modifier to Active Grease Pencil Object. the Time Offset Modifier is automatically set to "Fixed Frame" to current frame . (tips : you can reset Grease Pencil Objecct's Transformation with shortcuts Alt+R/Alt+G/Alt+S) </p>
+            <img src="assets/img/9.png"/>
+		</li>
+    </ul>
+ </div>
+ 
+ <div id="gp-extras" class="addons-card">
+    <p class="addons-header">Grease Pencil Extras</p>
+    Extra stuff for Grease Pencil, i temporarily put the button operators that may not fit into other SakugaGP addons in here.
+    <ul>
+        <li>
+           For now there are button operatos for : </p>
+        </li>
+        <li>
+           <b>Prev/Next buttons</b> for Keyframe Jump Cycle, for example if the current keyframe is the last key, it'll jump back to the first key. this will be useful for when making looping animations.You can skip other type of Keyframes as well </p>
+        </li>
+        <li>
+           Add Grease Pencil Object with or without all Materials- Add New Materials with one click </p>
+        </li>
+        <li>
+           Link All Materials into Active Grease Pencil Object material slots- Unlink All Materials that present in the Active Grease Pencil Object material slots </p>
+			<img src="assets/img/10.png"/>
+		</li>
+    </ul>
+</div>
+<div id="stamps" class="addons-card">
+   <p class="addons-header">Stamps (WIP)</p>
+	Draw Camera's Outline Frame & Add Text directly into Grease Pencil drawing
+</div>
+
+<button id="topBtn"><span class="bl-icons-tria_up_bar"></span>‎</button>
+
+<script>
+const b=document.getElementById("topBtn");
+window.onscroll=()=>b.style.display=(scrollY>200)?"block":"none";
+b.onclick=()=>scrollTo({top:0,behavior:"smooth"});
+</script>
+
+</body>
+
+</html>
