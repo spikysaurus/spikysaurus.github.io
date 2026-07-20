@@ -61,7 +61,7 @@
   }
   
   a{color:red;}
-  
+  video{width:640px;}
 	#topBtn{position:fixed;bottom:20px;right:20px;display:none;padding:10px 15px;border:none;border-radius:10px;background:orange;color:#fff;cursor:pointer}
 	#topBtn:hover{background:red}
 
@@ -73,6 +73,16 @@
   border-radius: 6px;
   max-width: 100%;
 }
+
+@media (max-width: 600px) {
+  .addons-card video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  max-width: 100%;
+}
+
 }
 </style>
 </head>
@@ -295,6 +305,10 @@
         </li>
         <li>
            <b>Timer</b> , when countdown is over it can play Image Sequence over the 3D Viewport and a Audio file, click the gear icon to see the preferences for change the Image Sequence/Audio , Frame Duration , Timer Duration</p>
+
+			<video controls>
+				<source src="assets/video/timer.mp4" type="video/mp4">
+			</video>
         </li>
     </ul>
 </div>
