@@ -127,14 +127,14 @@
 <div class="addons-card">
   <p class="addons-header">Addons</p>
   <ul class="addons-list">
-    <li><a href="#exporter">1. Exporter</a></li>
-    <li><a href="#importer">2. Importer (WIP)</a></li>
-    <li><a href="#extra-tools">3. Extra Tools</a></li>
-    <li><a href="#brush-sizes">4. Brush Sizes</a></li>
-    <li><a href="#camera-extras">5. Camera Extras + Overscan</a></li>
-    <li><a href="#manager">6. Manager</a></li>
-    <li><a href="#extras">7. Extras</a></li>
-    <li><a href="#stamps">8. Stamps (WIP)</a></li>
+    <li><a href="#exporter">☀️ Exporter</a></li>
+    <!--li><a href="#importer">☀️ Importer (WIP)</a></li-->
+    <li><a href="#extra-tools">☀️ Extra Tools</a></li>
+    <li><a href="#brush-sizes">☀️ Brush Sizes</a></li>
+    <li><a href="#camera">☀️ Camera</a></li>
+    <li><a href="#manager">☀️ Manager</a></li>
+    <li><a href="#extras">☀️ Extras</a></li>
+    <li><a href="#stamps">☀️ Stamps</a></li>
     <li><a href="#recommended-addons">★ Recommended Addons</a></li>
     
   </ul>
@@ -177,7 +177,7 @@
     </ul>
 </div>
  
- <div id="importer" class="addons-card">
+ <!--div id="importer" class="addons-card">
     <p class="addons-header">Importer</p>
     <img src="assets/img/importer-1.png"/>
     <ul>
@@ -192,7 +192,7 @@
 			(Planned Feature) Import image directly into grease pencil frames </p>
 		</li>
 	</ul>
-</div>
+</div-->
 
  <div id="extra-tools" class="addons-card">
     <p class="addons-header">Extra Tools</p>
@@ -229,41 +229,49 @@
     </ul>
 </div>
 
-<div id="camera-extras" class="addons-card">
-    <p class="addons-header">Camera Extras</p>
-    Adds Camera Mirror/Rotation without leaving Grease Pencil Draw Mode
+<div id="camera" class="addons-card">
+    <p class="addons-header">Camera</p>
+    Adds Camera Mirror/Rotation without leaving Grease Pencil Draw Mode and Import Animation Template
 	<ul>
 		<img src="assets/img/6.png"/></li>
 		<li>
-			<b>Select Camera </b>is for selecting the Active Camera used in the scene </p>
+			Inside the "Camera popover menu" there are button for Importing Animation Template , Switch Camera/Overscan ,  and below it are Overscan properties</p>
 		</li>
 		<li>
-			Below it is a toggle and slider to control the <b>Camera's Passepartout Alpha</b> (The dark area outside canvas) </p>
+			<b>Import Template : </b>Importing Template will create a Mesh Plane Image into 3D Viewport ,then it'll auto update the overscan value same as the image's resolution. it'll also automatically create a separate Action for normal Camera(Camera focus on animation) and Overscan (Template size) named "CameraOverscan" action.
+			</p>
+		</li>
+		
+		<li>
+			<b>Switch Camera/Overscan : </b>You can Switch Between Original Camera resolution with Camera Overscan resolution (Template size) wile also switching between camera actions named "CameraAction" and "CameraOverscan"</br>
+			<img src="assets/img/7.png"/></p>
+		</li>
+		
+		<li>
+			Tutorial How to import a Anime Template and Switch between Camera size / Overscan (Template size) : <br> 
+			<video controls>
+				<source src="assets/video/import_template.mp4" type="video/mp4">
+			</video></p>
 		</li>
 		<li>
-			Below it is a <b>Reset Camera Rotation</b> button (to zero) and a slider to rotate the camera, you can also rotate the camera by checking the <b>Rotation Shortcuts</b> checkbox to enable the ALT+Comma / ALT+Dot keyboard shortcuts to rotate the camera. </p>
+			In the panel, there are a toggle and slider for controlling <b>Camera's Passepartout Alpha</b> (The dark area outside canvas) </p>
 		</li>
 		<li>
-			The X and Y button are for mirroring the camera </p>
+			Below it is a <b>Reset Camera Rotation</b> button (to zero) and a slider to rotate the Camera</p>
+		</li>
+		<li>
+			Below the rotation reset button is a <b>Arrow button</b> for selecting the Active Camera used in the scene </p>
+		</li>
+		<li>
+			Next are <b>X</b> and <b>Y</b> buttons for mirroring the Camera Horizontal/Vertically</p>
+		</li>
+		<li>
+			The <b>L</b> and <b>R</b> button are for rotating the Camera Counter-clockwise/Clockwise</p>
+		</li>
+		
 	</ul>
-    <p><b>+ Overscan</b></p>
-    Camera resize behave like canvas resizing (the script is originally from <a href="https://projects.blender.org/pioverfour/camera_overscan" target="_blank">https://projects.blender.org/pioverfour/camera_overscan)</a>. You can find Overscan feature inside <b>Output Properties > Format > Overscan</b>
-    <ul>
-		<img src="assets/img/8.png"/>
-		<img src="assets/img/7.png"/>
-        <li>
-            <b>Switch Camera Action </b>button is for switching the Active Camera's action, between actions named "CameraAction" and "CameraOverscan" while also toggling the "Overscan" checkbox. </p>
-        </li>
-        <li>
-            <b>New X/Y </b>are your camera new size, its used for resizing the camera without removing the original camera size. </p>
-        </li>
-        <li>
-            "CameraAction" -&gt; uses original camera size, while "CameraOverscan" uses the new camera size </p>
-            </li>
-        <li>
-            This Camera Extra's <b>Overscan</b> feature is useful for those using Anime Template to switch between Camera focusing on the animation with 16:9 size for example, and the full image cel/template size for exporting the image cels. </p>
-        </li>
-    </ul>
+    <p><b>More about the Overscan feature : </b></p>
+    Overscan is a feature that makes Camera resizing behave like canvas resizing similar to other drawing programs (the Overscan script is originated from <a href="https://projects.blender.org/pioverfour/camera_overscan" target="_blank">https://projects.blender.org/pioverfour/camera_overscan)</a></b>
 </div>
 
 <div id="manager" class="addons-card">
@@ -315,13 +323,14 @@
 <div id="stamps" class="addons-card">
    <p class="addons-header">Stamps</p>
    <ul>
-	   <img src="assets/img/stamps-1.png"/>
-        <li>
-			Draw Camera's Outline Frame</p>
+		<img src="assets/img/stamps-1.png"/>
+		<li>
+			Insert Text directly into Grease Pencil or as Text Object(The Textbox supports Multi-line, You can press Shift+Enter to create a new line in the textbox)</p>
 		</li>
 		<li>
-			Add Text directly into Grease Pencil drawing</p>
+			And, Draw the Outline of Camera Into Grease Pencil (Make sure you select a Grease Pencil Object First)</p>
 		</li>
+
 	</ul>
 </div>
 
