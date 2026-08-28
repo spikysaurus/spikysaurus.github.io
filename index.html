@@ -43,8 +43,8 @@
      <div class="container">
 
   <div class="centered-section">
-    <h2 class="main-title">FEATURED WORKS</h2>
-    <p class="subtitle">Click the title in the playlist to play the animation<br>You can scroll down the playlist to see more</p>
+    <h2 class="main-title">𖤓 FEATURED ANIMATION WORKS 𖤓 </h2>
+    <!--label class="subtitle">Scroll down the playlist to see more</label-->
   </div>
 
   <!-- Left side -->
@@ -61,6 +61,7 @@
 
   <!-- Right side -->
   <div class="right">
+    <center><label class="subtitle"> ▼ ▼ ▼  Scroll down here to see more ▼ ▼ ▼ </label></center>
     <div class="grid" id="playlist"></div>
   </div>
 
@@ -149,7 +150,7 @@ resetTitle.addEventListener('click', () => {
               } else {
                 chatBubble.style.display = 'none';
               }
-            });
+            });metal
            // Hide chat bubble when it is clicked
            chatBubble.addEventListener('click', () => {
              chatBubble.style.display = 'none'; });
@@ -157,19 +158,15 @@ resetTitle.addEventListener('click', () => {
          
          
 <script>
-// Menambahkan 3 objek data ke dalam array
 const newBoxes = [
-  { text: "Animation Works", img: "https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreicazv32xvsf4lhsfhjzpej6k3n3t23ppjjaxcalnquewonbw6dpq4", url: "pages/animations/index.html" },
-  { text: "Art Gallery", img: "https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:2qnen2f364chxvmjlh6xiyel/bafkreih5rnstnduppocd3n4dmnfwhnpcb74hzsmhttos6z35lxbhz66riy", url: "pages/gallery/index.html" },
-  { text: "Blog (Under Construction)", img: "https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:rilzezic2mcf5kcalccrzwtx/bafkreibye4azf47vjrlfrcpq2mexja5r3ubi4nxzk3i54xeqg32lrghmha", url: "#" } // Kotak ke-3
+  { text: "Animasi\nAnimations\nアニメーション", img: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExODZsb2g1enBmYTdyMWlweXpxcDcxazJrcmRoNDNtbWJib283OHU2YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oEduWMXEktRl9ZfRC/giphy.gif", url: "pages/animations/index.html" },
+  { text: "Karya seni\nArtworks\nアートワーク", img: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExODZsb2g1enBmYTdyMWlweXpxcDcxazJrcmRoNDNtbWJib283OHU2YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oEduWMXEktRl9ZfRC/giphy.gif", url: "pages/gallery/Artworks_Archive_of_Sadewoo.pdf" }
 ];
 
 const container = document.getElementById('boxContainer');
 
-// Mengosongkan kontainer terlebih dahulu jika Anda tidak ingin kotak HTML pertama menumpuk
 container.innerHTML = ''; 
 
-// Membuat dan memasukkan 3 kotak secara dinamis
 newBoxes.forEach(data => {
   const boxAnchor = document.createElement('a');
   boxAnchor.href = data.url;
@@ -182,6 +179,8 @@ newBoxes.forEach(data => {
 
   container.appendChild(boxAnchor);
 });
+
+
 
 
 </script>

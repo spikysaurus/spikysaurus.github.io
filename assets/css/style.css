@@ -18,7 +18,7 @@ font-family: "Roboto Condensed", sans-serif;
 }
 
 body {
-	background: linear-gradient(to right, black, darkgreen, black);
+	background: linear-gradient(to right, black, darkblue, black);
 
 }
 
@@ -73,7 +73,7 @@ h1 {
   --b: 4px;   /* border thickness */
   --s: 12px;  /* corner cut size */
 
-  background-image: url("https://opengameart.org/sites/default/files/styles/texture_browse_preview/public/oga-textures/19845/m-003.jpg");
+  background-image: url("https://media.istockphoto.com/id/1496376295/nl/video/glitch-tv-static-noise-distorted-signal-problems-error-video-damage-retro-style-80s-vhs-test.jpg?s=170x170&k=20&c=LiWXIxzpGdANI7VIvttwJkV80cd3f9wP5D_d9o5cAec=");
   background-repeat: repeat;
   background-size: auto;
   color: white;
@@ -94,13 +94,17 @@ h1 {
   );
 }
 
-/* border frame using ::before */
 .nav-card::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: black; /* default border color */
+  background: repeating-linear-gradient(
+    22deg,
+    #fff 0px,
+    #000 5px,
+    #fff 100px
+);
   pointer-events: none;
 
   clip-path: polygon(
@@ -115,7 +119,6 @@ h1 {
   );
 }
 
-/* change border to black & white stripes on hover */
 .nav-card:hover::before {
   background: repeating-linear-gradient(
     -45deg,
@@ -142,7 +145,7 @@ h1 {
   cursor: pointer;
   color: white;
   text-shadow:
-    -2px -2px 0 black,
+    -2px -2px 0 gray,
      2px -2px 0 black,
     -2px  2px 0 black,
      2px  2px 0 black,
@@ -159,29 +162,27 @@ h1 {
 
 .container {
   display: flex;
-  flex-wrap: wrap; /* allow full-width section above */
+  flex-wrap: wrap;
   gap: 20px;
   max-width: 1200px;
-  margin: 40px auto;
+  margin: 15px auto;
   padding: 20px;
-
-  /* background texture */
-  background-image: url("https://opengameart.org/sites/default/files/styles/medium/public/container001-purple.png");
-  background-repeat: repeat;
-  background-size: auto;
-
-  /* stripey police tape border top & bottom */
+    
+  background: linear-gradient(0deg, black, darkblue 80%) no-repeat;
   border-top: 12px solid transparent;
   border-bottom: 12px solid transparent;
   border-image: repeating-linear-gradient(
     45deg,
-    black 0 20px,
-    yellow 20px 40px
+    blue 0 20px,
+    cyan 20px 40px
   ) 30;
+
+
 }
 
+
 .centered-section {
-  flex: 1 1 100%; /* full width */
+  flex: 1 1 100%;
   text-align: center;
 }
 
@@ -189,9 +190,9 @@ h1 {
   font-size: 28px;
   font-weight: bold;
   margin: 0;
-  color:yellow;
+  color:white;
   text-shadow:
-    -2px -2px 0 black,
+    -2px -2px 0 gray,
      2px -2px 0 black,
     -2px  2px 0 black,
      2px  2px 0 black,
@@ -203,7 +204,7 @@ h1 {
 
 .subtitle {
   font-size: 16px;
-  color: #666;
+  color: cyan;
   margin-top: 5px;
   color:orange;
 }
@@ -340,13 +341,17 @@ h1 {
   display: block;
 }
 
-/* Bingkai border awal (hitam) */
 .box:before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: #000; 
+ background: repeating-linear-gradient(
+    22deg,
+    #fff 0px,
+    #000 5px,
+    #fff 200px
+  );
   pointer-events: none;
   
   clip-path: polygon(
@@ -361,7 +366,6 @@ h1 {
   );
 }
 
-/* Mengubah border menjadi motif belang secara instan saat hover */
 .box:hover:before {
   background: repeating-linear-gradient(
     -45deg,
@@ -372,8 +376,8 @@ h1 {
   );
 }
 
-/* Gaya Teks */
 .box-text {
+  white-space: pre-line;
 text-align:left;
   position: absolute;
   top: 20px;
@@ -385,7 +389,7 @@ text-align:left;
   font-size: 24px;
   letter-spacing: 0.5px;
   text-shadow:
-    -2px -2px 0 black,
+    -2px -2px 0 gray,
      2px -2px 0 black,
     -2px  2px 0 black,
      2px  2px 0 black,
@@ -469,7 +473,7 @@ text-align:left;
 	/* bubble appears to the right of the icon */
 	max-width: 250px;
 	padding: 12px 16px;
-	background: darkgreen;
+	background: darkblue;
 	color: lightblue;
 	border-radius: 16px;
 	font-size: 18px;
