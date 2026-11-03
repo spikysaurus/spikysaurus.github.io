@@ -1,5 +1,5 @@
 {
-    "Commissions / Personal":{
+    "Personal / Commission":{
 		"kuronana":
         {
         "link":"../../assets/drawings/kuronana.gif",
@@ -75,52 +75,52 @@
         "HypnosisSoft - Game (PV)":
         {
         "link":"https://x.com/hypnosissoft/status/1803133436623986990",
-        "color":"orange"
+        "color":"yellow"
         }
     },
 
     "Atomic Cartoons":{
-        "Cartoon (PV)":
+        "🧙‍♀️":
         {
         "link":"TBA",
         "color":"orange"
         }
         },
     "J.C.Staff":{
-        "One-Punch man S3 (LO)":
+        "One-Punch man (S3:E9)":
         {
-        "link":"https://www.instagram.com/sadewoo0/p/DR_v7iGkzdH/",
+        "link":"credits/japan/OPM_S3-E09.jpg",
         "color":"yellow"
         }
         },
-    "???":{
-        "Anime (LO)":
+    "E&H Production":{
+        "Magic Knight Rayearth 2026 (OP)":
         {
-        "link":"TBA",
-        "color":"orange"
+        "link":"https://x.com/sadewoo0/status/2116464374227620244?a=6SWDQxdaorvpOqroYmk",
+        "color":""
         }
         },
     "Studio MAF":{
-        "Ganglion (LO)(Genga)":
+        "Ganglion (S1:E8)":
         {
-        "link":"https://www.instagram.com/sadewoo0/p/DR_tgEwE8k4/",
+        "link":"credits/japan/Ganglion_S1-E08.png",
         "color":"yellow"
         }
         },
     "Studio WIT":{
-        "Yaiba:Samurai Legend (E10)(LO)":
+        "Yaiba:Samurai Legend (S1:E10)":
         {
-        "link":"https://www.youtube.com/watch?v=nTF6QBu7vMA",
+        "link":"https://www.youtube.com/watch?v=bnTF6QBu7vMA",
         "color":""
         },
-        "Yaiba:Samurai Legend (E21)(LO)":
+        "Yaiba:Samurai Legend (S1:E21)":
         {
         "link":"https://www.youtube.com/watch?v=MSiL1tRuQiY",
         "color":""
         }
         },
     "Production I.G":{
-        "Kinnikuman (S1:E6)(LO)":
+        "Kinnikuman (S1:E6)":
         {
         "link":"https://www.youtube.com/watch?v=Bi_s_g2l1Yk",
         "color":""
@@ -144,7 +144,7 @@
 
         },
     "Studio Yotta":{
-        "Cartoon (PV)🪰" :
+        "🪰" :
         {
         "link":"TBA",
         "color":"orange"
@@ -153,18 +153,18 @@
         "The Battle Cats x Sonic (PV)(Animated 0:14, 0:21, 0:22, 0:37)" :
         {
         "link":"https://www.youtube.com/watch?v=C-7V-dB5ly0",
-        "color":"black"
+        "color":"pink"
         },
 
         "Digimon Ghost Game (S1:E3 & S1:E9)":
         {
-        "link":"https://x.com/StudioYotta/status/1467329919352901633",
+        "link":"credits/japan/DigimonGG_S1-E03_S1-E09.jpg",
         "color":"yellow"
         },
 
         "Boruto (E232)":
         {
-        "link":"https://media.licdn.com/dms/image/v2/C562DAQFIsAc_D1fv6g/profile-treasury-image-shrink_800_800/profile-treasury-image-shrink_800_800/0/1643688073585?e=1749344400&v=beta&t=-2DejMfN4qFjM7uRBrUfSm2-cRbslTrSu6xgd3Xphz4",
+        "link":"credits/japan/Boruto_S1-E232.png",
         "color":"yellow"
         },
 
@@ -216,10 +216,10 @@
         "color":""
         },
 
-        "Starlight Re:Volvers (PV)":
+        "Starlight Re:Volvers (Animated Character Transformations 0:48)":
         {
         "link":"https://www.youtube.com/watch?v=o8WkNXMExSw",
-        "color":"black"
+        "color":"pink"
         },
 
         "Inkbound (PV)":
@@ -231,13 +231,13 @@
         "Grotto Beasts (PV)(Animated 1:32, 1:33(That Dinosaur running only))":
         {
         "link":"https://www.youtube.com/watch?v=gPm4DxaD6Wc",
-        "color":"black"
+        "color":"pink"
         },
 
         "Neon White (PV)(Animated 0:25, 0:34, 0:44)":
         {
         "link":"https://www.youtube.com/watch?v=lxWmFEuE6Y0",
-        "color":"black"
+        "color":"pink"
         },
 
         "Smiling Friends (S2:E3 & S2:E4)" :
@@ -279,13 +279,13 @@
         "Area 21 (MV)(FX Only)":
         {
         "link":"https://www.youtube.com/watch?v=DudZFZ2n9iI",
-        "color":"black"
+        "color":"pink"
         },
 
-        "Agent King":
+        "Agent Elvis (S1:E05)":
         {
-        "link":"TBA",
-        "color":"orange"
+        "link":"credits/west/AgentElvis_S1-E05.png",
+        "color":"yellow"
         }
 
         },
@@ -312,52 +312,69 @@
         "Iklan Mie Sedap (AD)(Animated the noodles at 0:04-0:08)":
         {
         "link":"https://youtu.be/ViYURHZlNSc?si=c3zMmDNXG2JxlRDL",
-        "color":"black"
+        "color":"pink"
         },
         "Yellow Claw - Amsterdamned (MV)(Animated 0:43, 2:21-2:27)":
         {
         "link":"https://www.youtube.com/watch?v=NtYPh5Lh9HA",
-        "color":"black"
+        "color":"pink"
         },
         "Arus Merah (MV)(Animated 0:26-0:31, 0:48, 1:30, 1:57-2:00)":
         {
         "link":"https://www.youtube.com/watch?v=OMd0sFVKvUI",
-        "color":"black"
+        "color":"pink"
         }
 
         },
     "Cuatrodia Creative":{
-        "Iklan Toyota (AD)(Animated 1:05-1:09)":
+        "Together Forever with Toyota":
         {
-        "link":"https://www.youtube.com/watch?v=g1ehtek2IWQ",
-        "color":"black"
+        "link":"https://www.instagram.com/sadewoo0/p/Dda0Py4kw9S/",
+        "color":""
         },
         "Iklan Go Pay (AD)(Animated that one horse at 1:31)":
         {
         "link":"https://www.youtube.com/watch?v=kIRsFMsnoNY",
-        "color":"black"
+        "color":"pink"
         }
         },
+        
+     "Penguin Panic":{
+        "🛡️":
+        {
+        "link":"TBA",
+        "color":"orange"
+        }
+        },
+     
+     "???":{
+        "🤖":
+        {
+        "link":"TBA",
+        "color":"orange"
+        }
+        },
+        
     "Zettai Absolute":{
         "Qtp vs T1 (Animated 0:40-0:44)":
         {
         "link":"https://www.youtube.com/watch?v=J6g1kD7Yyyo",
-        "color":"black"
+        "color":"pink"
         },
         "Ambition's Journey Parody (Animated 0:47-0:53)":
         {
         "link":"https://www.youtube.com/watch?v=QdSXrlQWTX8",
-        "color":"black"
+        "color":"pink"
         },
         "Ryze’s 10-Year Realm Warp (Animated 1:49)":
         {
         "link":"https://www.youtube.com/watch?v=n_-kANpqetM",
-        "color":"black"
+        "color":"pink"
         },
         "LCS 2020 Spring Finals Opening Ceremony Community Animation (Animated 0:04-0:16)":
         {
         "link":"https://www.youtube.com/watch?v=Rkx_2Jybed4",
-        "color":"black"
+        "color":"pink"
         }
         }
 
