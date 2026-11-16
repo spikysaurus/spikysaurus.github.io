@@ -1,5 +1,10 @@
 {
     "Personal / Commission":{
+		"mokona":
+        {
+        "link":"../../assets/drawings/mokona.gif",
+        "color":""
+        },
 		"kuronana":
         {
         "link":"../../assets/drawings/kuronana.gif",
